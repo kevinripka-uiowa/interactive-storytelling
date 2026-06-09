@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reveal and Explore Patterns</title>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reveal and Explore Patterns - Mobile Menu</title>
   <style>
 
     :root {
@@ -25,7 +25,7 @@
     main { max-width:1120px; width:100%; margin:0 auto; padding:44px 36px 80px; }
     .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
-    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.055em; max-width:850px; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:850px; }
     .hero p, .section-group p, .pattern p { color:var(--muted); }
     .hero p { max-width:760px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
     .section-group { margin:54px 0 24px; padding-top:10px; border-top:2px solid var(--ink); }
@@ -50,7 +50,7 @@
     .accordion-trigger[aria-expanded="true"] + .accordion-panel { display:block; }
 
     .media-card { display:grid; grid-template-columns:220px 1fr; gap:18px; align-items:center; }
-    .image-box { min-height:180px; border-radius:16px; overflow:hidden; background:var(--soft); border:1px solid var(--line); }
+    .image-box { min-height:180px; aspect-ratio: 1 / 1; border-radius:16px; overflow:hidden; background:var(--soft); border:1px solid var(--line); }
     .modal-backdrop { position:fixed; inset:0; display:none; place-items:center; padding:24px; background:rgba(23,33,27,.65); z-index:10; }
     .modal-backdrop.open { display:grid; }
     .modal-dialog { width:min(720px,100%); background:#fffdf7; border-radius:22px; padding:22px; box-shadow:var(--shadow); }
@@ -62,7 +62,7 @@
     .hotpoint { position:absolute; width:28px; height:28px; border-radius:50%; transform:translate(-50%,-50%); border:3px solid #fff; background:var(--accent-2); box-shadow:0 5px 16px rgba(0,0,0,.25); padding:0; }
     .tooltip-bubble { position:absolute; display:none; transform:translate(-50%, -100%); width:max-content; max-width:220px; padding:8px 10px; border-radius:10px; background:#17211b; color:#fffdf7; font-weight:700; font-size:.9rem; box-shadow:var(--shadow); pointer-events:none; }
     .hotpoint:hover + .tooltip-bubble, .hotpoint:focus + .tooltip-bubble { display:block; }
-    .annotation-card { position:absolute; left:24px; right:24px; bottom:24px; display:none; grid-template-columns:170px 1fr; gap:16px; padding:16px; border-radius:16px; background:rgba(255,253,247,.96); border:1px solid var(--line); box-shadow:var(--shadow); }
+    .annotation-card { position:absolute; left:24px; right:24px; bottom:24px; display:none; grid-template-columns:0.9fr; gap:16px; padding:16px; border-radius:16px; background:rgba(255,253,247,.96); border:1px solid var(--line); box-shadow:var(--shadow); }
     .annotation-card.open { display:grid; }
     .annotation-card h4 { margin:0 0 4px; }
     .annotation-card p { margin:0; }
@@ -81,6 +81,12 @@
       font-size:1.3rem;
       line-height:1;
       z-index:2;
+    }
+    #nestAnnotation .image-box {
+      min-height: unset;
+      border:0;
+      background-color: transparent;
+      aspect-ratio: unset;
     }
 
     .flip-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
@@ -146,6 +152,8 @@
     .gallery-thumb img { display:block; width:100%; height:100%; object-fit:cover; }
     .gallery-thumb:hover { filter:none; border-color:var(--accent); }
     .gallery-thumb:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+
+    
 
     @media (max-width:860px) {
       .layout { grid-template-columns:1fr; }
@@ -255,11 +263,520 @@
     }
     .concept-callout strong { color:var(--ink); }
 
+  
+/* --- Responsive stability patch --- */
+html,
+body {
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+img,
+video,
+iframe,
+svg {
+  max-width:100%;
+}
+
+.layout,
+main,
+.sidebar,
+.pattern,
+.demo-frame,
+.carousel-window,
+.carousel-track,
+.media-card,
+.tab-panel,
+.bird-explorer-panel,
+.scrolly-wrap,
+.gallery,
+.spatial-canvas,
+.timeline-shell {
+  min-width:0;
+}
+
+main {
+  max-width:min(1120px, 100%);
+}
+
+.pattern-header,
+.pattern-header > div {
+  min-width:0;
+}
+
+.tag {
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+
+.demo-frame {
+  max-width:100%;
+}
+
+.image-box iframe {
+  width:100%;
+  aspect-ratio:16 / 9;
+  height:auto;
+  display:block;
+}
+
+.media-card {
+  grid-template-columns:minmax(160px, 220px) minmax(0, 1fr);
+}
+
+.tab-panel.active {
+  grid-template-columns:minmax(150px, 180px) minmax(0, 1fr);
+}
+
+.bird-explorer-panel {
+  grid-template-columns:minmax(220px, 320px) minmax(0, 1fr);
+}
+
+.carousel-window {
+  width:100%;
+}
+
+.carousel-track {
+  align-items:stretch;
+}
+
+.carousel-card {
+  flex:0 0 clamp(220px, 31%, 340px);
+  min-width:0;
+}
+
+.carousel-card .image-box {
+  aspect-ratio:4 / 3;
+  min-height:0;
+}
+
+.carousel-card h4,
+.carousel-card p {
+  overflow-wrap:break-word;
+}
+
+.slideshow-visual,
+.gallery-visual {
+  height:clamp(240px, 48vw, 420px);
+  min-height:0;
+}
+
+.spatial-canvas {
+  height:clamp(320px, 58vw, 560px);
+}
+
+.scrolly-sticky .spatial-canvas {
+  height:clamp(320px, 58vw, 560px);
+}
+
+.panzoom-stage,
+.guided-stage,
+.scrolly-stage {
+  width:min(960px, 150vw);
+  height:min(640px, 100vw);
+}
+
+.spatial-marker::after {
+  max-width:150px;
+  white-space:normal;
+  line-height:1.15;
+}
+
+.horizontal-scroll {
+  width:100%;
+  max-width:100%;
+}
+
+.horizontal-timeline {
+  min-width:max-content;
+  width:max-content;
+}
+
+.h-event {
+  flex:0 0 clamp(200px, 28vw, 230px);
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns:1fr;
+  }
+
+  .sidebar {
+    position:relative;
+    height:auto;
+    max-height:none;
+  }
+
+  .sidebar nav {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:4px 10px;
+  }
+
+  .nav-group-title {
+    grid-column:1 / -1;
+  }
+
+  main {
+    padding:24px 16px 56px;
+  }
+}
+
+@media (max-width: 760px) {
+  .hero {
+    border-radius:20px;
+  }
+
+  .pattern-header {
+    grid-template-columns:1fr;
+  }
+
+  .tag {
+    justify-self:start;
+    white-space:normal;
+  }
+
+  .media-card,
+  .tab-panel.active,
+  .annotation-card,
+  .bird-explorer-panel,
+  .scrolly-wrap {
+    grid-template-columns:1fr;
+  }
+
+  .image-box {
+    min-height:0;
+    aspect-ratio:4 / 3;
+  }
+
+  .bird-explorer-panel .image-box {
+    min-height:0;
+    aspect-ratio:4 / 3;
+  }
+
+  .flip-grid {
+    grid-template-columns:1fr;
+  }
+
+  .bird-facts {
+    grid-template-columns:1fr;
+  }
+
+  .carousel-card {
+    flex-basis:clamp(240px, 82%, 360px);
+  }
+
+  .gallery-thumbnails {
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+
+  .scrolly-text {
+    max-height:360px;
+  }
+
+  .scrolly-step {
+    min-height:240px;
+  }
+}
+
+@media (max-width: 520px) {
+  .sidebar nav {
+    grid-template-columns:1fr;
+  }
+
+  .hero h2 {
+    font-size:clamp(2rem, 12vw, 3.2rem);
+    line-height:1;
+  }
+
+  .section-group h2 {
+    font-size:clamp(1.45rem, 8vw, 2rem);
+  }
+
+  .pattern h3 {
+    font-size:clamp(1.25rem, 7vw, 1.7rem);
+  }
+
+  .demo-frame {
+    padding:14px;
+  }
+
+  .point-stage,
+  .ba-stage {
+    height:320px;
+    min-height:0;
+  }
+
+  .annotation-card {
+    left:12px;
+    right:12px;
+    bottom:12px;
+    padding:14px;
+    max-height:82%;
+    overflow:auto;
+  }
+
+  .flip-card {
+    height:280px;
+  }
+
+  .carousel-card {
+    flex-basis:88%;
+  }
+
+  .h-event {
+    flex-basis:205px;
+  }
+
+  .vertical-scroll {
+    max-height:360px;
+  }
+
+  .spatial-canvas,
+  .scrolly-sticky .spatial-canvas {
+    height:320px;
+  }
+
+  .canvas-help {
+    position:static;
+    margin:10px;
+    max-width:none;
+  }
+
+  .zoom-controls,
+  .focus-controls,
+  .slideshow-controls,
+  .carousel-controls {
+    align-items:stretch;
+  }
+}
+
+  
+/* --- Desktop sidebar + mobile before/after slider fix --- */
+
+/* Keep the left nav sticky/fixed-feeling on desktop. */
+@media (min-width: 861px) {
+  .layout {
+    display:block;
+    min-height:100vh;
+  }
+
+  .sidebar {
+    position:fixed;
+    top:0;
+    left:0;
+    width:280px;
+    height:100vh;
+    overflow-y:auto;
+    overflow-x:hidden;
+    z-index:20;
+  }
+
+  main {
+    margin-left:280px;
+    width:calc(100% - 280px);
+    max-width:none;
+  }
+
+  main > * {
+    max-width:1120px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
+
+/* Only collapse the sidebar when the page is actually in mobile/tablet layout. */
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns:1fr;
+  }
+
+  .sidebar {
+    position:relative;
+    top:auto;
+    height:auto;
+    max-height:none;
+  }
+
+  .sidebar nav {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:4px 10px;
+  }
+
+  .nav-group-title {
+    grid-column:1 / -1;
+  }
+
+  main {
+    padding:24px 16px 56px;
+  }
+}
+
+/* The before/after drag needs to capture touch gestures on phones. */
+.ba-stage,
+.ba-handle {
+  touch-action:none;
+}
+
+.ba-handle {
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+  
+/* --- Mobile fixed hamburger menu --- */
+.mobile-menu-toggle,
+.mobile-menu-backdrop {
+  display:none;
+}
+
+@media (min-width: 861px) {
+  .mobile-menu-toggle,
+  .mobile-menu-backdrop {
+    display:none !important;
+  }
+
+  .sidebar {
+    position:fixed;
+    top:0;
+    left:0;
+    width:280px;
+    height:100vh;
+    overflow-y:auto;
+    overflow-x:hidden;
+    z-index:20;
+  }
+
+  main {
+    margin-left:280px;
+    width:calc(100% - 280px);
+    max-width:none;
+  }
+
+  main > * {
+    max-width:1120px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
+
+@media (max-width: 860px) {
+  body {
+    padding-top:64px;
+  }
+
+  body.menu-open {
+    overflow:hidden;
+  }
+
+  .mobile-menu-toggle {
+    position:fixed;
+    top:12px;
+    left:12px;
+    z-index:1001;
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:10px 13px;
+    border-radius:999px;
+    background:#17211b;
+    color:#fffdf7;
+    box-shadow:0 8px 22px rgba(23,33,27,.24);
+  }
+
+  .mobile-menu-icon {
+    position:relative;
+    display:block;
+    width:18px;
+    height:12px;
+    border-top:2px solid currentColor;
+    border-bottom:2px solid currentColor;
+  }
+
+  .mobile-menu-icon::before {
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:50%;
+    border-top:2px solid currentColor;
+    transform:translateY(-50%);
+  }
+
+  .mobile-menu-text {
+    font-weight:900;
+  }
+
+  .mobile-menu-backdrop {
+    position:fixed;
+    inset:0;
+    z-index:999;
+    display:block;
+    background:rgba(23,33,27,.45);
+  }
+
+  .mobile-menu-backdrop[hidden] {
+    display:none;
+  }
+
+  .layout {
+    display:block;
+    min-height:100vh;
+  }
+
+  .sidebar {
+    position:fixed !important;
+    top:0 !important;
+    left:0;
+    bottom:0;
+    width:min(84vw, 340px);
+    height:100vh !important;
+    max-height:100vh !important;
+    padding:76px 22px 28px;
+    overflow-y:auto !important;
+    overflow-x:hidden;
+    z-index:1000;
+    transform:translateX(-105%);
+    transition:transform .24s ease;
+    box-shadow:18px 0 36px rgba(0,0,0,.22);
+  }
+
+  body.menu-open .sidebar {
+    transform:translateX(0);
+  }
+
+  .sidebar nav {
+    display:block !important;
+  }
+
+  .sidebar a {
+    padding:10px 10px;
+  }
+
+  .nav-group-title {
+    grid-column:auto;
+  }
+
+  main {
+    margin-left:0 !important;
+    width:100% !important;
+    max-width:1120px;
+    padding:24px 16px 56px;
+  }
+}
+
   </style>
 </head>
 <body>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false">
+    <span class="mobile-menu-icon" aria-hidden="true"></span>
+    <span class="mobile-menu-text">Menu</span>
+  </button>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
   <div class="layout">
-    <aside class="sidebar" aria-label="Pattern navigation">
+    <aside class="sidebar" id="siteSidebar" aria-label="Pattern navigation">
       <h1>Reveal and Explore Patterns</h1>
       <p>Encyclopedic and spatial affordance patterns for interactive storytelling.</p>
       <nav>
@@ -273,7 +790,7 @@
         <div class="nav-group-title">Select or compare</div>
         <a href="#tabs">Tabs</a>
         <a href="#before-after">Before/after comparisons</a>
-        <a href="#bird-explorer">Master-detail</a>
+        <a href="#bird-explorer">Master-Detail</a>
 
         <div class="nav-group-title">Browse a collection</div>
         <a href="#slideshows">Slideshows</a>
@@ -294,7 +811,7 @@
     <main>
       <section class="hero">
         <div class="eyebrow">Interactive storytelling demo</div>
-        <h2>Reveal and explore patterns</h2>
+        <h2>Reveal and Explore Patterns</h2>
         <p>Digital stories do not have to show everything at once. These patterns use interaction to reveal more information, compare versions, browse collections, or move through visual space.</p>
         <div class="concept-callout"><strong>Core idea:</strong> some patterns reveal hidden explanation. Others reveal another part of a larger encyclopedic or spatial structure.</div>
       </section>
@@ -317,7 +834,7 @@
         <div class="pattern-header"><div><h3>Modals/popups</h3><p>A modal opens content in an overlay above the page, temporarily focusing the reader on one piece of information. It works best for details that need more space or attention but should not require a new page, such as a short profile, explanation, image, video, warning, or source note.</p></div><span class="tag">Focused detail</span></div>
         <div class="demo-frame">
           <div class="media-card">
-            <div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder kingfisher bird image"></div>
+            <div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/8/89/McMillan_Marsh_State_Wildlife_Area.jpg" alt="Placeholder kingfisher bird image"></div>
             <div><h4>Marsh observation note</h4><p>Click the button to open a popup about why marsh birds are easier to detect by sound than by sight.</p><br><button id="openModal">Open field note</button></div>
           </div>
         </div>
@@ -326,9 +843,9 @@
         <div class="pattern-header"><div><h3>Tooltips</h3><p>A tooltip is a small label or note attached to a specific word, icon, point, or interface element. It works best for brief supporting information, such as definitions, labels, clarifications, or quick hints that do not need a full paragraph.</p></div><span class="tag">Tiny point label</span></div>
         <div class="demo-frame">
           <div class="point-stage">
-            <img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird field mark image">
-            <button class="hotpoint" style="left:58%;top:37%;" aria-label="Show tooltip for wing bar"></button>
-            <div class="tooltip-bubble" style="left:58%;top:34%;">Wing bar: a bright stripe across folded wing feathers.</div>
+            <img class="placeholder-img" src="img/spring.jpg" alt="Placeholder bird field mark image">
+            <button class="hotpoint" style="left:62%;top:55%;" aria-label="Show tooltip for wing bar"></button>
+            <div class="tooltip-bubble" style="left:58%;top:50%;">Wing bar: a bright stripe across folded wing feathers.</div>
           </div>
         </div>
       </section>
@@ -337,11 +854,11 @@
         <div class="demo-frame">
           <div class="point-stage">
             <img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder nest site image">
-            <button class="hotpoint annotation-trigger" style="left:42%;top:46%;" aria-expanded="false" aria-controls="nestAnnotation" aria-label="Open rich annotation"></button>
+            <button class="hotpoint annotation-trigger" style="left:69%;top:32%;" aria-expanded="false" aria-controls="nestAnnotation" aria-label="Open rich annotation"></button>
             <article class="annotation-card" id="nestAnnotation">
               <button class="annotation-close close-annotation" type="button" aria-label="Close annotation">&times;</button>
-              <div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder rich annotation image"></div>
-              <div><h4>Nest placement</h4><p>This annotation combines text with an image. It could also hold audio from the site, a short video clip, or a captioned archival photo.</p></div>
+              <div class="image-box"><iframe src="https://www.youtube.com/embed/5dnouQtSIL0?si=7bFM-rGdTFBW3hhE&amp;start=60" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+              <div><h4>Divers</h4><p>This annotation combines text with a video. It could also hold audio from the site, a short video clip, or a captioned archival photo.</p></div>
             </article>
           </div>
         </div>
@@ -353,33 +870,33 @@
             <button class="flip-card" type="button" aria-pressed="false">
               <span class="flip-inner">
                 <span class="flip-face flip-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird photo">
-                  <span class="flip-title">Ringed Kingfisher <small>Click for habitat notes</small></span>
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg" alt="Placeholder bird photo">
+                  <span class="flip-title">Least Sandpiper <small>Click to identify</small></span>
                 </span>
                 <span class="flip-face flip-back">
-                  <span><h4>Ringed Kingfisher</h4><p>Large kingfishers live near rivers, lakes, wetlands, and coastlines where they can dive for fish.</p><p class="hint">Click again to flip back</p></span>
+                  <span><h4>Least Sandpiper</h4><p>The smallest peep, usually browner above with a slightly drooped fine bill and yellowish-green legs.</p><p class="hint">Click again to flip back</p></span>
                 </span>
               </span>
             </button>
             <button class="flip-card" type="button" aria-pressed="false">
               <span class="flip-inner">
                 <span class="flip-face flip-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird photo">
-                  <span class="flip-title">River Hunter <small>Click for behavior notes</small></span>
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Calidris_pusilla_Quarry_02.jpg" alt="Placeholder bird photo">
+                  <span class="flip-title">Semipalmated Sandpiper <small>Click to identify</small></span>
                 </span>
                 <span class="flip-face flip-back">
-                  <span><h4>River Hunter</h4><p>Kingfishers often perch above water, watch for movement, then plunge toward fish or other small aquatic prey.</p><p class="hint">Click again to flip back</p></span>
+                  <span><h4>Semipalmated Sandpiper</h4><p>A compact gray-brown peep with black legs, a short straight bill, and a plainer, less rusty look than Western.</p><p class="hint">Click again to flip back</p></span>
                 </span>
               </span>
             </button>
             <button class="flip-card" type="button" aria-pressed="false">
               <span class="flip-inner">
                 <span class="flip-face flip-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird photo">
-                  <span class="flip-title">Wetland Specialist <small>Click for story use</small></span>
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg" alt="Placeholder bird photo">
+                  <span class="flip-title">Western Sandpiper <small>Click to identify</small></span>
                 </span>
                 <span class="flip-face flip-back">
-                  <span><h4>Wetland Specialist</h4><p>This card format works well for “guess the bird,” species profiles, vocabulary checks, or front/back comparison facts.</p><p class="hint">Click again to flip back</p></span>
+                  <span><h4>Western Sandpiper</h4><p>Slightly longer-billed and more front-heavy than Semipalmated, often showing rufous tones in the scapulars or crown and a subtly drooping bill tip.</p><p class="hint">Click again to flip back</p></span>
                 </span>
               </span>
             </button>
@@ -399,9 +916,9 @@
             <button role="tab" aria-selected="false" data-tab="tab-diet">Diet</button>
             <button role="tab" aria-selected="false" data-tab="tab-habitat">Habitat</button>
           </div>
-          <div class="tab-panel active" id="tab-field" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder cardinal image"></div><div><h4>Field marks</h4><p>Male Northern Cardinals are bright red with a crest and heavy orange bill. Females are warm brown with red highlights.</p></div></div>
-          <div class="tab-panel" id="tab-diet" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder diet image"></div><div><h4>Diet</h4><p>Cardinals eat seeds, fruit, and insects. A strong bill helps them crack sunflower seeds and other hard foods.</p></div></div>
-          <div class="tab-panel" id="tab-habitat" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder habitat image"></div><div><h4>Habitat</h4><p>They favor shrubby edges, backyards, woodlots, and thickets where cover and food are close together.</p></div></div>
+          <div class="tab-panel active" id="tab-field" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/4/47/Northern_Cardinal_from_The_Crossley_ID_Guide_Eastern_Birds.jpg" alt="Placeholder cardinal image"></div><div><h4>Field marks</h4><p>Male Northern Cardinals are bright red with a crest and heavy orange bill. Females are warm brown with red highlights.</p></div></div>
+          <div class="tab-panel" id="tab-diet" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/3/33/Guazi_%28sunflower_seeds%29.jpg" alt="Placeholder diet image"></div><div><h4>Diet</h4><p>Cardinals eat seeds, fruit, and insects. A strong bill helps them crack sunflower seeds and other hard foods.</p></div></div>
+          <div class="tab-panel" id="tab-habitat" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/6/64/Shrubland_of_the_Pruno-Crataegetum_%28close-up%29.jpg" alt="Placeholder habitat image"></div><div><h4>Habitat</h4><p>They favor shrubby edges, backyards, woodlots, and thickets where cover and food are close together.</p></div></div>
         </div>
       </section>
 <section class="pattern" id="before-after">
@@ -416,9 +933,9 @@
         </div>
       </section>
 <section class="pattern" id="bird-explorer">
-        <div class="pattern-header"><div><h3>Master-detail</h3><p>A master-detail pattern lets users select one item from a list, menu, map, table, or dropdown and view detailed information about that selected item. It works best for encyclopedia-style collections, directories, databases, profiles, product/species/place guides, or spreadsheet-backed interactives.</p></div><span class="tag">Select-to-view</span></div>
+        <div class="pattern-header"><div><h3>Master-Detail</h3><p>A master-detail pattern lets users select one item from a list, menu, map, table, or dropdown and view detailed information about that selected item. It works best for encyclopedia-style collections, directories, databases, profiles, product/species/place guides, or spreadsheet-backed interactives.</p></div><span class="tag">Select-to-view</span></div>
         <div class="demo-frame">
-          <div class="explorer-note"><strong>Teaching distinction:</strong> tabs switch between fixed categories; this pattern pulls one selected item from a collection and displays its photo and facts. The editable object in the script is the “mini spreadsheet.”</div>
+          <!-- <div class="explorer-note"><strong>Teaching distinction:</strong> tabs switch between fixed categories; this pattern pulls one selected item from a collection and displays its photo and facts. The editable object in the script is the “mini spreadsheet.”</div> -->
           <div class="bird-select-row">
             <label for="birdSelect">Bird explorer</label>
             <select id="birdSelect" aria-label="Choose a bird to explore"></select>
@@ -435,7 +952,6 @@
                 <div class="bird-fact"><strong>Story angle</strong><span id="birdExplorerAngle"></span></div>
               </div>
               <p id="birdExplorerDescription"></p>
-              <div class="code-hint">Edit the <code>birdExplorerData</code> object in the script to swap in spreadsheet-style content.</div>
             </div>
           </article>
         </div>
@@ -457,10 +973,11 @@
         <div class="pattern-header"><div><h3>Carousels</h3><p>A carousel presents multiple related items in a horizontal or rotating strip, usually with next/previous controls. It works best for compact browsing of featured items, examples, cards, profiles, recommendations, or highlights when page space is limited.</p></div><span class="tag">Browse sideways</span></div>
         <div class="demo-frame">
           <div class="carousel-window"><div class="carousel-track" id="carouselTrack">
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder heron"></div><div><h4>Great Blue Heron</h4><p>Wetland hunter.</p></div></article>
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder cardinal"></div><div><h4>Northern Cardinal</h4><p>Backyard singer.</p></div></article>
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder eagle"></div><div><h4>Bald Eagle</h4><p>River corridor raptor.</p></div></article>
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder goldfinch"></div><div><h4>American Goldfinch</h4><p>Summer seed eater.</p></div></article>
+            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Kentucky_Warbler_%28Geothlypis_formosa%29_in_the_United_States.jpg" alt="Placeholder heron"></div><div><h4>Kentucky Warbler</h4><p>The Kentucky Warbler’s loud, rolling song rings out from dense forest understories.</p></div></article>
+            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Hooded_Warbler.jpg" alt="Placeholder cardinal"></div><div><h4>Hooded Warbler</h4><p>The Hooded Warbler flits through shrubby understories in eastern forests, flicking its tail to show off its white tail feathers.</p></div></article>
+            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Canada_warbler_magee_marsh_boardwalk_5.17.23_DSC_1872-topaz-denoiseraw-sharpen.jpg" alt="Placeholder eagle"></div><div><h4>Canada Warbler</h4><p>A colorful, energetic warbler of northern forests, the Canada Warbler spends little time on its breeding grounds.</p></div></article>
+            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Magnolia_Warbler_-_May_17%2C_2025.jpg" alt="Placeholder goldfinch"></div><div><h4>Magnolia Warbler</h4><p>Many male warblers are black and yellow, but Magnolia Warblers take it up a notch, sporting a bold black necklace complete with long tassels, a black mask, and a standout white wing patch.</p></div></article>
+            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Yellow-throated_warbler_patuxent_research_refuge_north_tract_4.6.25_DSC_6733-topaz-rawdenoise.jpg" alt="Placeholder goldfinch"></div><div><h4>Yellow-throated Warbler</h4><p>The well-named Yellow-throated Warbler shows off its bright yellow throat in the canopy of forests in the southeastern United States.</p></div></article>
           </div></div><br>
           <div class="carousel-controls"><button class="secondary" id="carouselPrev">Previous</button><button id="carouselNext">Next</button></div>
         </div>
@@ -486,7 +1003,6 @@
           <span class="tag">X-axis scroll</span>
         </div>
         <div class="demo-frame">
-          <div class="spatial-note">Demo: a sideways migration timeline. Scroll horizontally inside the frame.</div>
           <div class="timeline-shell horizontal-scroll" aria-label="Horizontal bird migration timeline">
             <div class="horizontal-timeline">
               <article class="h-event"><span class="timeline-date">February</span><h4>Winter range</h4><p>Birds concentrate where food and open water are easier to find.</p></article>
@@ -508,7 +1024,6 @@
           <span class="tag">Y-axis scroll</span>
         </div>
         <div class="demo-frame">
-          <div class="spatial-note">Demo: a vertical nesting-season timeline. Scroll downward inside the frame.</div>
           <div class="timeline-shell vertical-scroll" aria-label="Vertical bird nesting timeline">
             <div class="vertical-timeline">
               <article class="v-event"><span class="timeline-date">Territory</span><h4>Claim a space</h4><p>A pair chooses or defends an area with enough food, cover, and nesting material.</p></article>
@@ -530,7 +1045,7 @@
 <section class="pattern" id="pan-zoom">
         <div class="pattern-header">
           <div>
-            <h3>Pan-and-zoom image</h3>
+            <h3>Pan-and-zoom (Slippy Canvas)</h3>
             <p>A pan-and-zoom canvas lets the reader drag around a larger visual field and zoom in or out. It works best for large images, diagrams, documents, family trees, floor plans, or detailed graphics where readers need freedom to inspect the space.</p>
           </div>
           <span class="tag">Explorable canvas</span>
@@ -569,16 +1084,16 @@
           <div class="guided-layout">
             <div class="focus-controls" aria-label="Choose a feature to focus on">
               <button class="active" data-focus="overview">Overview</button>
-              <button data-focus="head">Head</button>
-              <button data-focus="fish">Fish</button>
+              <button data-focus="back">Back</button>
               <button data-focus="wing">Wing</button>
+              <button data-focus="bill">Bill</button>
             </div>
             <div class="spatial-canvas">
               <div class="guided-stage" id="guidedStage">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird image for guided focus demo">
-                <span class="spatial-marker" style="left:38%;top:44%;" data-label="Head"></span>
-                <span class="spatial-marker" style="left:55%;top:60%;" data-label="Fish"></span>
-                <span class="spatial-marker" style="left:72%;top:50%;" data-label="Wing"></span>
+                <span class="spatial-marker" style="left:38%;top:44%;" data-label="Back"></span>
+                <span class="spatial-marker" style="left:55%;top:60%;" data-label="Wing"></span>
+                <span class="spatial-marker" style="left:72%;top:50%;" data-label="Bill"></span>
               </div>
             </div>
             <div class="focus-caption" id="focusCaption">
@@ -597,21 +1112,20 @@
           <span class="tag">Spatial scrollytelling</span>
         </div>
         <div class="demo-frame">
-          <div class="spatial-note">Demo: scroll only the step panel on the left. The image focus changes as each step becomes active inside that internal scrolling area.</div>
           <div class="scrolly-wrap">
             <div class="scrolly-text" id="scrollyText">
               <article class="scrolly-step active" data-focus="overview"><h4>1. Start with the whole scene</h4><p>The opening view gives readers orientation before asking them to inspect individual features.</p></article>
-              <article class="scrolly-step" data-focus="head"><h4>2. Focus on the head</h4><p>The frame moves closer to one feature while the text explains what to notice.</p></article>
-              <article class="scrolly-step" data-focus="fish"><h4>3. Move to the captured prey</h4><p>The image position changes again, turning spatial movement into part of the explanation.</p></article>
-              <article class="scrolly-step" data-focus="wing"><h4>4. End on motion</h4><p>The final step focuses on the wing and body position, emphasizing movement across the scene.</p></article>
+              <article class="scrolly-step" data-focus="back"><h4>2. Focus on the head</h4><p>The frame moves closer to one feature while the text explains what to notice.</p></article>
+              <article class="scrolly-step" data-focus="wing"><h4>3. Move to the captured prey</h4><p>The image position changes again, turning spatial movement into part of the explanation.</p></article>
+              <article class="scrolly-step" data-focus="bill"><h4>4. End on motion</h4><p>The final step focuses on the wing and body position, emphasizing movement across the scene.</p></article>
             </div>
             <div class="scrolly-sticky">
               <div class="spatial-canvas">
                 <div class="scrolly-stage" id="scrollyStage">
                   <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird image for scroll-driven focus demo">
-                  <span class="spatial-marker" style="left:38%;top:44%;" data-label="Head"></span>
-                  <span class="spatial-marker" style="left:55%;top:60%;" data-label="Fish"></span>
-                  <span class="spatial-marker" style="left:72%;top:50%;" data-label="Wing"></span>
+                  <span class="spatial-marker" style="left:38%;top:44%;" data-label="Back"></span>
+                  <span class="spatial-marker" style="left:55%;top:60%;" data-label="Wing"></span>
+                  <span class="spatial-marker" style="left:72%;top:50%;" data-label="Bill"></span>
                 </div>
               </div>
             </div>
@@ -624,7 +1138,7 @@
 <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-dialog">
       <header><h4 id="modalTitle">Why sound matters in a marsh</h4><button class="secondary" id="closeModal">Close</button></header>
-      <div class="media-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder kingfisher bird image"></div><p>Dense reeds can hide birds from view. Calls, songs, and movement sounds often tell a birder where to look before the bird becomes visible.</p></div>
+      <div class="media-card" style="display:flex;flex-direction:column;"><div class="image-box" style="max-height:180px;"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/4/47/MarshWrenTuleLake.jpg" alt="Placeholder kingfisher bird image"></div><iframe src="https://commons.wikimedia.org/wiki/File:Cistothorus_palustris_-_Marsh_Wren_-_XC105804.ogg?embedplayer=yes" width="320" height="40" frameborder="0" loading="lazy" allow="autoplay; picture-in-picture" allowfullscreen></iframe><p>Dense reeds can hide birds from view. Calls, songs, and movement sounds often tell a birder where to look before the bird becomes visible.</p></div>
     </div>
   </div>
 
@@ -679,15 +1193,48 @@ document.querySelectorAll('.accordion-trigger').forEach((button) => {
     const baStage = document.getElementById('baStage');
     const baHandle = document.getElementById('baHandle');
     let comparing = false;
+
     function setSplit(clientX) {
       const rect = baStage.getBoundingClientRect();
       const value = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
       baStage.style.setProperty('--split', value + '%');
     }
-    baStage.addEventListener('pointerdown', (event) => { comparing = true; baStage.setPointerCapture(event.pointerId); setSplit(event.clientX); });
-    baStage.addEventListener('pointermove', (event) => { if (comparing) setSplit(event.clientX); });
-    baStage.addEventListener('pointerup', () => comparing = false);
-    baStage.addEventListener('pointercancel', () => comparing = false);
+
+    function startCompare(event) {
+      comparing = true;
+      event.preventDefault();
+
+      if (baStage.setPointerCapture && event.pointerId !== undefined) {
+        baStage.setPointerCapture(event.pointerId);
+      }
+
+      setSplit(event.clientX);
+    }
+
+    function moveCompare(event) {
+      if (!comparing) return;
+      event.preventDefault();
+      setSplit(event.clientX);
+    }
+
+    function endCompare(event) {
+      comparing = false;
+
+      if (baStage.releasePointerCapture && event.pointerId !== undefined) {
+        try {
+          baStage.releasePointerCapture(event.pointerId);
+        } catch (error) {
+          // Ignore release errors from browsers that already released capture.
+        }
+      }
+    }
+
+    baStage.addEventListener('pointerdown', startCompare);
+    baStage.addEventListener('pointermove', moveCompare);
+    baStage.addEventListener('pointerup', endCompare);
+    baStage.addEventListener('pointercancel', endCompare);
+    baStage.addEventListener('lostpointercapture', () => comparing = false);
+
     baHandle.addEventListener('keydown', (event) => {
       const current = parseFloat(getComputedStyle(baStage).getPropertyValue('--split')) || 50;
       if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
@@ -704,34 +1251,34 @@ document.querySelectorAll('.accordion-trigger').forEach((button) => {
         id: 'ringed-kingfisher',
         name: 'Ringed Kingfisher',
         subtitle: 'A large riverside kingfisher often seen near open water.',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Megaceryle_torquata_Mart%C3%ADn_Pescador_Grande_Ringed_Kingfisher_%28female%29_%2832405025924%29.jpg',
         habitat: 'Rivers, lakes, wetlands',
         food: 'Mostly fish',
         range: 'South Texas through Central and South America',
         angle: 'Waterways as habitat corridors',
-        description: 'This entry shows how a reader can pick one bird and get a compact species profile. It is useful when the story has many comparable entries but only one needs to be visible at a time.'
+        description: ''
       },
       {
         id: 'belted-kingfisher',
         name: 'Belted Kingfisher',
         subtitle: 'A noisy bird that patrols streams, ponds, and shorelines.',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/8/81/Belted_Kingfisher_-_Megaceryle_alcyon%2C_Big_Cypress_National_Preserve%2C_Ochopee%2C_Florida%2C_December_10%2C_2023.jpg',
         habitat: 'Stream banks and shorelines',
         food: 'Fish and aquatic prey',
         range: 'Most of North America',
         angle: 'What healthy stream edges support',
-        description: 'Use this kind of entry for field marks, habitat clues, conservation context, or a short observation from a reporting trip.'
+        description: ''
       },
       {
         id: 'green-kingfisher',
         name: 'Green Kingfisher',
         subtitle: 'A smaller kingfisher associated with wooded streams.',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/024_Male_green_kingfisher_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg',
         habitat: 'Wooded creeks',
         food: 'Small fish and insects',
         range: 'Southern Texas to South America',
         angle: 'Small habitats with high biodiversity',
-        description: 'Because each option is just one object in the data list, students can duplicate an entry, change the text, and build a simple encyclopedia-style interactive.'
+        description: ''
       }
     ];
 
@@ -763,10 +1310,10 @@ document.querySelectorAll('.accordion-trigger').forEach((button) => {
     renderBirdExplorer(birdExplorerData[0].id);
 
     const slides = [
-      { img:'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22560%22%20viewBox%3D%220%200%20900%20560%22%3E%0A%3Cdefs%3E%0A%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20x2%3D%221%22%20y1%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23edf4ee%22/%3E%0A%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23fffdf7%22/%3E%0A%20%20%3C/linearGradient%3E%0A%3C/defs%3E%0A%3Crect%20width%3D%22900%22%20height%3D%22560%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Crect%20x%3D%2228%22%20y%3D%2228%22%20width%3D%22844%22%20height%3D%22504%22%20rx%3D%2230%22%20fill%3D%22none%22%20stroke%3D%22%23d9d2c2%22%20stroke-width%3D%225%22%20stroke-dasharray%3D%2216%2014%22/%3E%0A%3Ccircle%20cx%3D%22450.0%22%20cy%3D%22240.0%22%20r%3D%2270%22%20fill%3D%22%2337634e%22%20opacity%3D%220.14%22/%3E%0A%3Cpath%20d%3D%22M%20315.0%20360.0%20C%20405.0%20270.0%2C%20495.0%20270.0%2C%20585.0%20360.0%22%20fill%3D%22none%22%20stroke%3D%22%2337634e%22%20stroke-width%3D%2218%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.32%22/%3E%0A%3Ctext%20x%3D%22450.0%22%20y%3D%22285.0%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2C%20Helvetica%2C%20sans-serif%22%20font-size%3D%2240%22%20font-weight%3D%22700%22%20fill%3D%22%2317211b%22%3EEgg%3C/text%3E%0A%3Ctext%20x%3D%22450.0%22%20y%3D%22330.0%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2C%20Helvetica%2C%20sans-serif%22%20font-size%3D%2222%22%20fill%3D%22%235c675f%22%3Ereplace%20this%20image%3C/text%3E%0A%3C/svg%3E', title:'1. Egg', text:'The bird life cycle begins in the nest. Parents protect and warm the eggs until they hatch.' },
-      { img:'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22560%22%20viewBox%3D%220%200%20900%20560%22%3E%0A%3Cdefs%3E%0A%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20x2%3D%221%22%20y1%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23edf4ee%22/%3E%0A%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23fffdf7%22/%3E%0A%20%20%3C/linearGradient%3E%0A%3C/defs%3E%0A%3Crect%20width%3D%22900%22%20height%3D%22560%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Crect%20x%3D%2228%22%20y%3D%2228%22%20width%3D%22844%22%20height%3D%22504%22%20rx%3D%2230%22%20fill%3D%22none%22%20stroke%3D%22%23d9d2c2%22%20stroke-width%3D%225%22%20stroke-dasharray%3D%2216%2014%22/%3E%0A%3Ccircle%20cx%3D%22450.0%22%20cy%3D%22240.0%22%20r%3D%2270%22%20fill%3D%22%2337634e%22%20opacity%3D%220.14%22/%3E%0A%3Cpath%20d%3D%22M%20315.0%20360.0%20C%20405.0%20270.0%2C%20495.0%20270.0%2C%20585.0%20360.0%22%20fill%3D%22none%22%20stroke%3D%22%2337634e%22%20stroke-width%3D%2218%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.32%22/%3E%0A%3Ctext%20x%3D%22450.0%22%20y%3D%22285.0%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2C%20Helvetica%2C%20sans-serif%22%20font-size%3D%2240%22%20font-weight%3D%22700%22%20fill%3D%22%2317211b%22%3EHatchling%3C/text%3E%0A%3Ctext%20x%3D%22450.0%22%20y%3D%22330.0%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2C%20Helvetica%2C%20sans-serif%22%20font-size%3D%2222%22%20fill%3D%22%235c675f%22%3Ereplace%20this%20image%3C/text%3E%0A%3C/svg%3E', title:'2. Hatchling', text:'Newly hatched birds are often weak, hungry, and dependent on parents.' },
-      { img:'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22560%22%20viewBox%3D%220%200%20900%20560%22%3E%0A%3Cdefs%3E%0A%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20x2%3D%221%22%20y1%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23edf4ee%22/%3E%0A%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23fffdf7%22/%3E%0A%20%20%3C/linearGradient%3E%0A%3C/defs%3E%0A%3Crect%20width%3D%22900%22%20height%3D%22560%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Crect%20x%3D%2228%22%20y%3D%2228%22%20width%3D%22844%22%20height%3D%22504%22%20rx%3D%2230%22%20fill%3D%22none%22%20stroke%3D%22%23d9d2c2%22%20stroke-width%3D%225%22%20stroke-dasharray%3D%2216%2014%22/%3E%0A%3Ccircle%20cx%3D%22450.0%22%20cy%3D%22240.0%22%20r%3D%2270%22%20fill%3D%22%2337634e%22%20opacity%3D%220.14%22/%3E%0A%3Cpath%20d%3D%22M%20315.0%20360.0%20C%20405.0%20270.0%2C%20495.0%20270.0%2C%20585.0%20360.0%22%20fill%3D%22none%22%20stroke%3D%22%2337634e%22%20stroke-width%3D%2218%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.32%22/%3E%0A%3Ctext%20x%3D%22450.0%22%20y%3D%22285.0%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2C%20Helvetica%2C%20sans-serif%22%20font-size%3D%2240%22%20font-weight%3D%22700%22%20fill%3D%22%2317211b%22%3EFledgling%3C/text%3E%0A%3Ctext%20x%3D%22450.0%22%20y%3D%22330.0%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2C%20Helvetica%2C%20sans-serif%22%20font-size%3D%2222%22%20fill%3D%22%235c675f%22%3Ereplace%20this%20image%3C/text%3E%0A%3C/svg%3E', title:'3. Fledgling', text:'Fledglings leave the nest before they are expert flyers. Adults may still feed them nearby.' },
-      { img:'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22560%22%20viewBox%3D%220%200%20900%20560%22%3E%0A%3Cdefs%3E%0A%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20x2%3D%221%22%20y1%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23edf4ee%22/%3E%0A%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23fffdf7%22/%3E%0A%20%20%3C/linearGradient%3E%0A%3C/defs%3E%0A%3Crect%20width%3D%22900%22%20height%3D%22560%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Crect%20x%3D%2228%22%20y%3D%2228%22%20width%3D%22844%22%20height%3D%22504%22%20rx%3D%2230%22%20fill%3D%22none%22%20stroke%3D%22%23d9d2c2%22%20stroke-width%3D%225%22%20stroke-dasharray%3D%2216%2014%22/%3E%0A%3Ccircle%20cx%3D%22450.0%22%20cy%3D%22240.0%22%20r%3D%2270%22%20fill%3D%22%2337634e%22%20opacity%3D%220.14%22/%3E%0A%3Cpath%20d%3D%22M%20315.0%20360.0%20C%20405.0%20270.0%2C%20495.0%20270.0%2C%20585.0%20360.0%22%20fill%3D%22none%22%20stroke%3D%22%2337634e%22%20stroke-width%3D%2218%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.32%22/%3E%0A%3Ctext%20x%3D%22450.0%22%20y%3D%22285.0%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2C%20Helvetica%2C%20sans-serif%22%20font-size%3D%2240%22%20font-weight%3D%22700%22%20fill%3D%22%2317211b%22%3EAdult%20bird%3C/text%3E%0A%3Ctext%20x%3D%22450.0%22%20y%3D%22330.0%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2C%20Helvetica%2C%20sans-serif%22%20font-size%3D%2222%22%20fill%3D%22%235c675f%22%3Ereplace%20this%20image%3C/text%3E%0A%3C/svg%3E', title:'4. Adult', text:'Adults find mates, defend territory, migrate, and raise the next generation.' }
+      { img:'https://upload.wikimedia.org/wikipedia/commons/9/9b/Bird-nest-with-eggs-Sitia-Crete.jpg', title:'1. Egg', text:'The bird life cycle begins in the nest. Parents protect and warm the eggs until they hatch.' },
+      { img:'https://upload.wikimedia.org/wikipedia/commons/4/4a/Bird-Nest-Chicks-Sitia-Lasithi-Crete-Greece.jpg', title:'2. Hatchling', text:'Newly hatched birds are often weak, hungry, and dependent on parents.' },
+      { img:'https://upload.wikimedia.org/wikipedia/commons/a/a2/Fledgling_-_Pycnonotus_xanthopygos_01.jpg', title:'3. Fledgling', text:'Fledglings leave the nest before they are expert flyers. Adults may still feed them nearby.' },
+      { img:'https://upload.wikimedia.org/wikipedia/commons/2/26/Pycnonotus_xanthopygos_-_White-spectacled_Bulbul_14.jpg', title:'4. Adult', text:'Adults find mates, defend territory, migrate, and raise the next generation.' }
     ];
     let slideIndex = 0;
     function renderSlide() {
@@ -780,40 +1327,95 @@ document.querySelectorAll('.accordion-trigger').forEach((button) => {
     document.getElementById('nextSlide').addEventListener('click', () => { slideIndex = (slideIndex + 1) % slides.length; renderSlide(); });
     renderSlide();
 
-    let carouselIndex = 0;
-    const carouselTrack = document.getElementById('carouselTrack');
-    function renderCarousel() {
-      const card = carouselTrack.querySelector('.carousel-card');
-      const width = card.getBoundingClientRect().width + 16;
-      carouselTrack.style.transform = `translateX(${-carouselIndex * width}px)`;
-    }
-    document.getElementById('carouselPrev').addEventListener('click', () => { carouselIndex = Math.max(0, carouselIndex - 1); renderCarousel(); });
-    document.getElementById('carouselNext').addEventListener('click', () => { carouselIndex = Math.min(1, carouselIndex + 1); renderCarousel(); });
-    window.addEventListener('resize', renderCarousel);
+    // let carouselIndex = 0;
+    // const carouselTrack = document.getElementById('carouselTrack');
+    // function renderCarousel() {
+    //   const card = carouselTrack.querySelector('.carousel-card');
+    //   const width = card.getBoundingClientRect().width + 16;
+    //   carouselTrack.style.transform = `translateX(${-carouselIndex * width}px)`;
+    // }
+    // document.getElementById('carouselPrev').addEventListener('click', () => { carouselIndex = Math.max(0, carouselIndex - 1); renderCarousel(); });
+    // document.getElementById('carouselNext').addEventListener('click', () => { carouselIndex = Math.min(1, carouselIndex + 1); renderCarousel(); });
+    // window.addEventListener('resize', renderCarousel);
+
+ let carouselIndex = 0;
+const carouselTrack = document.getElementById('carouselTrack');
+const carouselWindow = carouselTrack.parentElement;
+
+function getCardStep() {
+  const card = carouselTrack.querySelector('.carousel-card');
+  if (!card) return 0;
+
+  const styles = window.getComputedStyle(carouselTrack);
+  const gap = parseFloat(styles.columnGap || styles.gap || 0);
+
+  return card.getBoundingClientRect().width + gap;
+}
+
+function getMaxTranslate() {
+  return Math.max(0, carouselTrack.scrollWidth - carouselWindow.clientWidth);
+}
+
+function getMaxCarouselIndex() {
+  const step = getCardStep();
+  if (!step) return 0;
+
+  return Math.max(0, Math.ceil(getMaxTranslate() / step));
+}
+
+function renderCarousel() {
+  const step = getCardStep();
+  if (!step) return;
+
+  const maxIndex = getMaxCarouselIndex();
+  carouselIndex = Math.max(0, Math.min(carouselIndex, maxIndex));
+
+  const desiredTranslate = carouselIndex * step;
+  const actualTranslate = Math.min(desiredTranslate, getMaxTranslate());
+
+  carouselTrack.style.transform = `translateX(${-actualTranslate}px)`;
+}
+
+document.getElementById('carouselPrev').addEventListener('click', () => {
+  carouselIndex = Math.max(0, carouselIndex - 1);
+  renderCarousel();
+});
+
+document.getElementById('carouselNext').addEventListener('click', () => {
+  carouselIndex = Math.min(getMaxCarouselIndex(), carouselIndex + 1);
+  renderCarousel();
+});
+
+window.addEventListener('resize', renderCarousel);
+window.addEventListener('load', renderCarousel);
+carouselTrack.querySelectorAll('img').forEach((img) => {
+  img.addEventListener('load', renderCarousel);
+});
+renderCarousel();
 
     const galleryItems = [
       {
-        img: 'https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4',
-        thumb: 'https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4',
-        title: 'Wetland observation',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/6/66/Great_Blue_Heron_%28Ardea_herodias%29%2C_hunting.jpg',
+        thumb: 'https://upload.wikimedia.org/wikipedia/commons/6/66/Great_Blue_Heron_%28Ardea_herodias%29%2C_hunting.jpg',
+        title: 'Great Blue Heron',
         text: 'A gallery lets the reader choose from thumbnails and inspect one larger image with a caption.'
       },
       {
-        img: 'https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4',
-        thumb: 'https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4',
-        title: 'Woodland observation',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/9/95/American_bittern_%2871223%29.jpg',
+        thumb: 'https://upload.wikimedia.org/wikipedia/commons/9/95/American_bittern_%2871223%29.jpg',
+        title: 'American Bittern',
         text: 'Each thumbnail can represent a different image, scene, document, example, or archival item.'
       },
       {
-        img: 'https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4',
-        thumb: 'https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4',
-        title: 'Prairie observation',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/4/42/20250703_snowy_egret_long_wharf_pier_PD207304.jpg',
+        thumb: 'https://upload.wikimedia.org/wikipedia/commons/4/42/20250703_snowy_egret_long_wharf_pier_PD207304.jpg',
+        title: 'Snowy Egret',
         text: 'This pattern works well when the collection itself matters and readers should choose what to look at.'
       },
       {
-        img: 'https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4',
-        thumb: 'https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4',
-        title: 'River observation',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Reddish_Egret_%28Egretta_rufescens%29_%2852873507438%29.jpg',
+        thumb: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Reddish_Egret_%28Egretta_rufescens%29_%2852873507438%29.jpg',
+        title: 'Reddish Egret',
         text: 'Replace the image URLs, titles, and captions in the galleryItems object to customize the gallery.'
       }
     ];
@@ -852,17 +1454,17 @@ const focusViews = {
         title: 'Overview',
         text: 'The full frame gives the reader orientation before focusing on individual details.'
       },
-      head: {
+      back: {
         x: -34, y: -42, scale: 1.9,
         title: 'Head',
         text: 'A guided focus can move directly to the visual evidence the reader needs to inspect.'
       },
-      fish: {
+      wing: {
         x: -54, y: -60, scale: 2.05,
         title: 'Fish',
         text: 'The author controls the route, so readers do not have to search the image on their own.'
       },
-      wing: {
+      bill: {
         x: -72, y: -50, scale: 1.8,
         title: 'Wing',
         text: 'The same pattern can guide attention through any large image, graphic, or diagram.'
@@ -973,6 +1575,37 @@ const focusViews = {
     }, { passive: true });
 
     setScrollyFocus('overview');
+  
+    // Mobile hamburger menu
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+    const siteSidebar = document.getElementById('siteSidebar');
+
+    function setMobileMenu(open) {
+      document.body.classList.toggle('menu-open', open);
+      mobileMenuToggle.setAttribute('aria-expanded', String(open));
+      mobileMenuBackdrop.hidden = !open;
+    }
+
+    mobileMenuToggle.addEventListener('click', () => {
+      const open = !document.body.classList.contains('menu-open');
+      setMobileMenu(open);
+    });
+
+    mobileMenuBackdrop.addEventListener('click', () => setMobileMenu(false));
+
+    siteSidebar.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setMobileMenu(false));
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setMobileMenu(false);
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 860) setMobileMenu(false);
+    });
+
   </script>
 </body>
 </html>
