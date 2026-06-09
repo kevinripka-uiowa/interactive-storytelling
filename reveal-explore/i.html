@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reveal and Explore Patterns - Mobile Menu</title>
+  <title>Reveal and Explore Patterns - Optimized Images</title>
   <style>
+    /* Wikimedia Commons images have been changed to context-sized thumbnail URLs where possible. */
 
     :root {
       --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
@@ -767,42 +768,6 @@ main {
   }
 }
 
-.annotation-card {
-  max-height:calc(100% - 48px);
-  overflow:auto;
-}
-
-.annotation-video {
-  width:100%;
-  max-width:300px;
-  aspect-ratio:16 / 9;
-  overflow:hidden;
-  border-radius:12px;
-  background:#000;
-}
-
-.annotation-video iframe {
-  width:100%;
-  height:100%;
-  display:block;
-  border:0;
-}
-
-.gallery-visual {
-  width:100%;
-  min-height:0;
-  height:auto;
-  background:#f6f1e7;
-  overflow:hidden;
-}
-
-.gallery-visual img {
-  width:100%;
-  height:auto;
-  display:block;
-  object-fit:unset;
-}
-
   </style>
 </head>
 <body>
@@ -870,7 +835,7 @@ main {
         <div class="pattern-header"><div><h3>Modals/popups</h3><p>A modal opens content in an overlay above the page, temporarily focusing the reader on one piece of information. It works best for details that need more space or attention but should not require a new page, such as a short profile, explanation, image, video, warning, or source note.</p></div><span class="tag">Focused detail</span></div>
         <div class="demo-frame">
           <div class="media-card">
-            <div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/McMillan_Marsh_State_Wildlife_Area.jpg/960px-McMillan_Marsh_State_Wildlife_Area.jpg" alt="Placeholder kingfisher bird image"></div>
+            <div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/McMillan_Marsh_State_Wildlife_Area.jpg/640px-McMillan_Marsh_State_Wildlife_Area.jpg" alt="Placeholder kingfisher bird image"></div>
             <div><h4>Marsh observation note</h4><p>Click the button to open a popup about why marsh birds are easier to detect by sound than by sight.</p><br><button id="openModal">Open field note</button></div>
           </div>
         </div>
@@ -889,11 +854,11 @@ main {
         <div class="pattern-header"><div><h3>Rich annotations</h3><p>A rich annotation attaches deeper explanatory content to a specific part of an image, graphic, map, document, or scene. It works best when a reader needs to inspect a particular point and see more than a label, such as a photo, caption, audio clip, video, quote, source, or extended explanation.</p></div><span class="tag">Rich point detail</span></div>
         <div class="demo-frame">
           <div class="point-stage">
-            <img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder nest site image">
+            <img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg/960px-003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg" alt="Placeholder nest site image">
             <button class="hotpoint annotation-trigger" style="left:69%;top:32%;" aria-expanded="false" aria-controls="nestAnnotation" aria-label="Open rich annotation"></button>
             <article class="annotation-card" id="nestAnnotation">
               <button class="annotation-close close-annotation" type="button" aria-label="Close annotation">&times;</button>
-              <div class="annotation-video"><iframe height="180px" src="https://www.youtube.com/embed/5dnouQtSIL0?si=7bFM-rGdTFBW3hhE&amp;start=60" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+              <div class="image-box"><iframe src="https://www.youtube.com/embed/5dnouQtSIL0?si=7bFM-rGdTFBW3hhE&amp;start=60" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
               <div><h4>Divers</h4><p>This annotation combines text with a video. It could also hold audio from the site, a short video clip, or a captioned archival photo.</p></div>
             </article>
           </div>
@@ -906,7 +871,7 @@ main {
             <button class="flip-card" type="button" aria-pressed="false">
               <span class="flip-inner">
                 <span class="flip-face flip-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg/960px-Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg" alt="Placeholder bird photo">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg/640px-Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg" alt="Placeholder bird photo">
                   <span class="flip-title">Least Sandpiper <small>Click to identify</small></span>
                 </span>
                 <span class="flip-face flip-back">
@@ -917,7 +882,7 @@ main {
             <button class="flip-card" type="button" aria-pressed="false">
               <span class="flip-inner">
                 <span class="flip-face flip-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Semipalmated_sandpiper_%2832560%29.jpg/960px-Semipalmated_sandpiper_%2832560%29.jpg" alt="Placeholder bird photo">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Calidris_pusilla_Quarry_02.jpg/640px-Calidris_pusilla_Quarry_02.jpg" alt="Placeholder bird photo">
                   <span class="flip-title">Semipalmated Sandpiper <small>Click to identify</small></span>
                 </span>
                 <span class="flip-face flip-back">
@@ -928,7 +893,7 @@ main {
             <button class="flip-card" type="button" aria-pressed="false">
               <span class="flip-inner">
                 <span class="flip-face flip-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg/960px-Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg" alt="Placeholder bird photo">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg/640px-Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg" alt="Placeholder bird photo">
                   <span class="flip-title">Western Sandpiper <small>Click to identify</small></span>
                 </span>
                 <span class="flip-face flip-back">
@@ -952,9 +917,9 @@ main {
             <button role="tab" aria-selected="false" data-tab="tab-diet">Diet</button>
             <button role="tab" aria-selected="false" data-tab="tab-habitat">Habitat</button>
           </div>
-          <div class="tab-panel active" id="tab-field" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/4/47/Northern_Cardinal_from_The_Crossley_ID_Guide_Eastern_Birds.jpg" alt="Placeholder cardinal image"></div><div><h4>Field marks</h4><p>Male Northern Cardinals are bright red with a crest and heavy orange bill. Females are warm brown with red highlights.</p></div></div>
-          <div class="tab-panel" id="tab-diet" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/3/33/Guazi_%28sunflower_seeds%29.jpg" alt="Placeholder diet image"></div><div><h4>Diet</h4><p>Cardinals eat seeds, fruit, and insects. A strong bill helps them crack sunflower seeds and other hard foods.</p></div></div>
-          <div class="tab-panel" id="tab-habitat" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/6/64/Shrubland_of_the_Pruno-Crataegetum_%28close-up%29.jpg" alt="Placeholder habitat image"></div><div><h4>Habitat</h4><p>They favor shrubby edges, backyards, woodlots, and thickets where cover and food are close together.</p></div></div>
+          <div class="tab-panel active" id="tab-field" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Northern_Cardinal_from_The_Crossley_ID_Guide_Eastern_Birds.jpg/640px-Northern_Cardinal_from_The_Crossley_ID_Guide_Eastern_Birds.jpg" alt="Placeholder cardinal image"></div><div><h4>Field marks</h4><p>Male Northern Cardinals are bright red with a crest and heavy orange bill. Females are warm brown with red highlights.</p></div></div>
+          <div class="tab-panel" id="tab-diet" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Guazi_%28sunflower_seeds%29.jpg/640px-Guazi_%28sunflower_seeds%29.jpg" alt="Placeholder diet image"></div><div><h4>Diet</h4><p>Cardinals eat seeds, fruit, and insects. A strong bill helps them crack sunflower seeds and other hard foods.</p></div></div>
+          <div class="tab-panel" id="tab-habitat" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Shrubland_of_the_Pruno-Crataegetum_%28close-up%29.jpg/640px-Shrubland_of_the_Pruno-Crataegetum_%28close-up%29.jpg" alt="Placeholder habitat image"></div><div><h4>Habitat</h4><p>They favor shrubby edges, backyards, woodlots, and thickets where cover and food are close together.</p></div></div>
         </div>
       </section>
 <section class="pattern" id="before-after">
@@ -1009,11 +974,11 @@ main {
         <div class="pattern-header"><div><h3>Carousels</h3><p>A carousel presents multiple related items in a horizontal or rotating strip, usually with next/previous controls. It works best for compact browsing of featured items, examples, cards, profiles, recommendations, or highlights when page space is limited.</p></div><span class="tag">Browse sideways</span></div>
         <div class="demo-frame">
           <div class="carousel-window"><div class="carousel-track" id="carouselTrack">
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Kentucky_Warbler_%28Geothlypis_formosa%29_in_the_United_States.jpg/960px-Kentucky_Warbler_%28Geothlypis_formosa%29_in_the_United_States.jpg" alt="Placeholder heron"></div><div><h4>Kentucky Warbler</h4><p>The Kentucky Warbler’s loud, rolling song rings out from dense forest understories.</p></div></article>
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Hooded_Warbler.jpg/960px-Hooded_Warbler.jpg" alt="Placeholder cardinal"></div><div><h4>Hooded Warbler</h4><p>The Hooded Warbler flits through shrubby understories in eastern forests, flicking its tail to show off its white tail feathers.</p></div></article>
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Canada_warbler_magee_marsh_boardwalk_5.17.23_DSC_1872-topaz-denoiseraw-sharpen.jpg/960px-Canada_warbler_magee_marsh_boardwalk_5.17.23_DSC_1872-topaz-denoiseraw-sharpen.jpg" alt="Placeholder eagle"></div><div><h4>Canada Warbler</h4><p>A colorful, energetic warbler of northern forests, the Canada Warbler spends little time on its breeding grounds.</p></div></article>
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Magnolia_Warbler_-_May_17%2C_2025.jpg/960px-Magnolia_Warbler_-_May_17%2C_2025.jpg" alt="Placeholder goldfinch"></div><div><h4>Magnolia Warbler</h4><p>Many male warblers are black and yellow, but Magnolia Warblers take it up a notch, sporting a bold black necklace complete with long tassels, a black mask, and a standout white wing patch.</p></div></article>
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Yellow-throated_warbler_patuxent_research_refuge_north_tract_4.6.25_DSC_6733-topaz-rawdenoise.jpg/960px-Yellow-throated_warbler_patuxent_research_refuge_north_tract_4.6.25_DSC_6733-topaz-rawdenoise.jpg" alt="Placeholder goldfinch"></div><div><h4>Yellow-throated Warbler</h4><p>The well-named Yellow-throated Warbler shows off its bright yellow throat in the canopy of forests in the southeastern United States.</p></div></article>
+            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Kentucky_Warbler_%28Geothlypis_formosa%29_in_the_United_States.jpg/640px-Kentucky_Warbler_%28Geothlypis_formosa%29_in_the_United_States.jpg" alt="Placeholder heron"></div><div><h4>Kentucky Warbler</h4><p>The Kentucky Warbler’s loud, rolling song rings out from dense forest understories.</p></div></article>
+            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Hooded_Warbler.jpg/640px-Hooded_Warbler.jpg" alt="Placeholder cardinal"></div><div><h4>Hooded Warbler</h4><p>The Hooded Warbler flits through shrubby understories in eastern forests, flicking its tail to show off its white tail feathers.</p></div></article>
+            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Canada_warbler_magee_marsh_boardwalk_5.17.23_DSC_1872-topaz-denoiseraw-sharpen.jpg/640px-Canada_warbler_magee_marsh_boardwalk_5.17.23_DSC_1872-topaz-denoiseraw-sharpen.jpg" alt="Placeholder eagle"></div><div><h4>Canada Warbler</h4><p>A colorful, energetic warbler of northern forests, the Canada Warbler spends little time on its breeding grounds.</p></div></article>
+            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Magnolia_Warbler_-_May_17%2C_2025.jpg/640px-Magnolia_Warbler_-_May_17%2C_2025.jpg" alt="Placeholder goldfinch"></div><div><h4>Magnolia Warbler</h4><p>Many male warblers are black and yellow, but Magnolia Warblers take it up a notch, sporting a bold black necklace complete with long tassels, a black mask, and a standout white wing patch.</p></div></article>
+            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Yellow-throated_warbler_patuxent_research_refuge_north_tract_4.6.25_DSC_6733-topaz-rawdenoise.jpg/640px-Yellow-throated_warbler_patuxent_research_refuge_north_tract_4.6.25_DSC_6733-topaz-rawdenoise.jpg" alt="Placeholder goldfinch"></div><div><h4>Yellow-throated Warbler</h4><p>The well-named Yellow-throated Warbler shows off its bright yellow throat in the canopy of forests in the southeastern United States.</p></div></article>
           </div></div><br>
           <div class="carousel-controls"><button class="secondary" id="carouselPrev">Previous</button><button id="carouselNext">Next</button></div>
         </div>
@@ -1094,7 +1059,7 @@ main {
           </div>
           <div class="spatial-canvas" id="panzoomCanvas">
             <div class="panzoom-stage" id="panzoomStage">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird image for pan and zoom demo">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg/1600px-003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg" alt="Placeholder bird image for pan and zoom demo">
               <span class="spatial-marker" style="left:38%;top:44%;" data-label="Head"></span>
               <span class="spatial-marker" style="left:55%;top:60%;" data-label="Fish"></span>
               <span class="spatial-marker" style="left:72%;top:50%;" data-label="Wing"></span>
@@ -1126,7 +1091,7 @@ main {
             </div>
             <div class="spatial-canvas">
               <div class="guided-stage" id="guidedStage">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird image for guided focus demo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg/1600px-003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg" alt="Placeholder bird image for guided focus demo">
                 <span class="spatial-marker" style="left:38%;top:44%;" data-label="Back"></span>
                 <span class="spatial-marker" style="left:55%;top:60%;" data-label="Wing"></span>
                 <span class="spatial-marker" style="left:72%;top:50%;" data-label="Bill"></span>
@@ -1151,14 +1116,14 @@ main {
           <div class="scrolly-wrap">
             <div class="scrolly-text" id="scrollyText">
               <article class="scrolly-step active" data-focus="overview"><h4>1. Start with the whole scene</h4><p>The opening view gives readers orientation before asking them to inspect individual features.</p></article>
-              <article class="scrolly-step" data-focus="back"><h4>2. Zoom in on something</h4><p>The frame moves closer to one feature while the text explains what to notice.</p></article>
-              <article class="scrolly-step" data-focus="wing"><h4>3. Move again</h4><p>The image position changes again, turning spatial movement into part of the explanation.</p></article>
-              <article class="scrolly-step" data-focus="bill"><h4>4. Zoomy zoom</h4><p>End on something.</p></article>
+              <article class="scrolly-step" data-focus="back"><h4>2. Focus on the head</h4><p>The frame moves closer to one feature while the text explains what to notice.</p></article>
+              <article class="scrolly-step" data-focus="wing"><h4>3. Move to the captured prey</h4><p>The image position changes again, turning spatial movement into part of the explanation.</p></article>
+              <article class="scrolly-step" data-focus="bill"><h4>4. End on motion</h4><p>The final step focuses on the wing and body position, emphasizing movement across the scene.</p></article>
             </div>
             <div class="scrolly-sticky">
               <div class="spatial-canvas">
                 <div class="scrolly-stage" id="scrollyStage">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird image for scroll-driven focus demo">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg/1600px-003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg" alt="Placeholder bird image for scroll-driven focus demo">
                   <span class="spatial-marker" style="left:38%;top:44%;" data-label="Back"></span>
                   <span class="spatial-marker" style="left:55%;top:60%;" data-label="Wing"></span>
                   <span class="spatial-marker" style="left:72%;top:50%;" data-label="Bill"></span>
@@ -1174,7 +1139,7 @@ main {
 <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-dialog">
       <header><h4 id="modalTitle">Why sound matters in a marsh</h4><button class="secondary" id="closeModal">Close</button></header>
-      <div class="media-card" style="display:flex;flex-direction:column;"><div class="image-box" style="max-height:180px;"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/4/47/MarshWrenTuleLake.jpg" alt="Placeholder kingfisher bird image"></div><iframe src="https://commons.wikimedia.org/wiki/File:Cistothorus_palustris_-_Marsh_Wren_-_XC105804.ogg?embedplayer=yes" width="320" height="40" frameborder="0" loading="lazy" allow="autoplay; picture-in-picture" allowfullscreen></iframe><p>Dense reeds can hide birds from view. Calls, songs, and movement sounds often tell a birder where to look before the bird becomes visible.</p></div>
+      <div class="media-card" style="display:flex;flex-direction:column;"><div class="image-box" style="max-height:180px;"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/MarshWrenTuleLake.jpg/640px-MarshWrenTuleLake.jpg" alt="Placeholder kingfisher bird image"></div><iframe src="https://commons.wikimedia.org/wiki/File:Cistothorus_palustris_-_Marsh_Wren_-_XC105804.ogg?embedplayer=yes" width="320" height="40" frameborder="0" loading="lazy" allow="autoplay; picture-in-picture" allowfullscreen></iframe><p>Dense reeds can hide birds from view. Calls, songs, and movement sounds often tell a birder where to look before the bird becomes visible.</p></div>
     </div>
   </div>
 
@@ -1287,7 +1252,7 @@ document.querySelectorAll('.accordion-trigger').forEach((button) => {
         id: 'ringed-kingfisher',
         name: 'Ringed Kingfisher',
         subtitle: 'A large riverside kingfisher often seen near open water.',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Megaceryle_torquata_Mart%C3%ADn_Pescador_Grande_Ringed_Kingfisher_%28female%29_%2832405025924%29.jpg/960px-Megaceryle_torquata_Mart%C3%ADn_Pescador_Grande_Ringed_Kingfisher_%28female%29_%2832405025924%29.jpg',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Megaceryle_torquata_Mart%C3%ADn_Pescador_Grande_Ringed_Kingfisher_%28female%29_%2832405025924%29.jpg/640px-Megaceryle_torquata_Mart%C3%ADn_Pescador_Grande_Ringed_Kingfisher_%28female%29_%2832405025924%29.jpg',
         habitat: 'Rivers, lakes, wetlands',
         food: 'Mostly fish',
         range: 'South Texas through Central and South America',
@@ -1298,7 +1263,7 @@ document.querySelectorAll('.accordion-trigger').forEach((button) => {
         id: 'belted-kingfisher',
         name: 'Belted Kingfisher',
         subtitle: 'A noisy bird that patrols streams, ponds, and shorelines.',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Belted_Kingfisher_-_Megaceryle_alcyon%2C_Big_Cypress_National_Preserve%2C_Ochopee%2C_Florida%2C_December_10%2C_2023.jpg/1280px-Belted_Kingfisher_-_Megaceryle_alcyon%2C_Big_Cypress_National_Preserve%2C_Ochopee%2C_Florida%2C_December_10%2C_2023.jpg',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Belted_Kingfisher_-_Megaceryle_alcyon%2C_Big_Cypress_National_Preserve%2C_Ochopee%2C_Florida%2C_December_10%2C_2023.jpg/640px-Belted_Kingfisher_-_Megaceryle_alcyon%2C_Big_Cypress_National_Preserve%2C_Ochopee%2C_Florida%2C_December_10%2C_2023.jpg',
         habitat: 'Stream banks and shorelines',
         food: 'Fish and aquatic prey',
         range: 'Most of North America',
@@ -1309,7 +1274,7 @@ document.querySelectorAll('.accordion-trigger').forEach((button) => {
         id: 'green-kingfisher',
         name: 'Green Kingfisher',
         subtitle: 'A smaller kingfisher associated with wooded streams.',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/024_Male_green_kingfisher_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg/1280px-024_Male_green_kingfisher_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/024_Male_green_kingfisher_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg/640px-024_Male_green_kingfisher_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg',
         habitat: 'Wooded creeks',
         food: 'Small fish and insects',
         range: 'Southern Texas to South America',
@@ -1346,10 +1311,10 @@ document.querySelectorAll('.accordion-trigger').forEach((button) => {
     renderBirdExplorer(birdExplorerData[0].id);
 
     const slides = [
-      { img:'https://upload.wikimedia.org/wikipedia/commons/9/9b/Bird-nest-with-eggs-Sitia-Crete.jpg', title:'1. Egg', text:'The bird life cycle begins in the nest. Parents protect and warm the eggs until they hatch.' },
-      { img:'https://upload.wikimedia.org/wikipedia/commons/4/4a/Bird-Nest-Chicks-Sitia-Lasithi-Crete-Greece.jpg', title:'2. Hatchling', text:'Newly hatched birds are often weak, hungry, and dependent on parents.' },
-      { img:'https://upload.wikimedia.org/wikipedia/commons/a/a2/Fledgling_-_Pycnonotus_xanthopygos_01.jpg', title:'3. Fledgling', text:'Fledglings leave the nest before they are expert flyers. Adults may still feed them nearby.' },
-      { img:'https://upload.wikimedia.org/wikipedia/commons/2/26/Pycnonotus_xanthopygos_-_White-spectacled_Bulbul_14.jpg', title:'4. Adult', text:'Adults find mates, defend territory, migrate, and raise the next generation.' }
+      { img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Bird-nest-with-eggs-Sitia-Crete.jpg/640px-Bird-nest-with-eggs-Sitia-Crete.jpg', title:'1. Egg', text:'The bird life cycle begins in the nest. Parents protect and warm the eggs until they hatch.' },
+      { img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Bird-Nest-Chicks-Sitia-Lasithi-Crete-Greece.jpg/640px-Bird-Nest-Chicks-Sitia-Lasithi-Crete-Greece.jpg', title:'2. Hatchling', text:'Newly hatched birds are often weak, hungry, and dependent on parents.' },
+      { img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Fledgling_-_Pycnonotus_xanthopygos_01.jpg/640px-Fledgling_-_Pycnonotus_xanthopygos_01.jpg', title:'3. Fledgling', text:'Fledglings leave the nest before they are expert flyers. Adults may still feed them nearby.' },
+      { img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Pycnonotus_xanthopygos_-_White-spectacled_Bulbul_14.jpg/640px-Pycnonotus_xanthopygos_-_White-spectacled_Bulbul_14.jpg', title:'4. Adult', text:'Adults find mates, defend territory, migrate, and raise the next generation.' }
     ];
     let slideIndex = 0;
     function renderSlide() {
@@ -1431,26 +1396,26 @@ renderCarousel();
 
     const galleryItems = [
       {
-        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Great_Blue_Heron_%28Ardea_herodias%29%2C_hunting.jpg/1280px-Great_Blue_Heron_%28Ardea_herodias%29%2C_hunting.jpg',
-        thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Great_Blue_Heron_%28Ardea_herodias%29%2C_hunting.jpg/1280px-Great_Blue_Heron_%28Ardea_herodias%29%2C_hunting.jpg',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Great_Blue_Heron_%28Ardea_herodias%29%2C_hunting.jpg/320px-Great_Blue_Heron_%28Ardea_herodias%29%2C_hunting.jpg',
+        thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Great_Blue_Heron_%28Ardea_herodias%29%2C_hunting.jpg/320px-Great_Blue_Heron_%28Ardea_herodias%29%2C_hunting.jpg',
         title: 'Great Blue Heron',
         text: 'A gallery lets the reader choose from thumbnails and inspect one larger image with a caption.'
       },
       {
-        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/American_bittern_%2871223%29.jpg/1280px-American_bittern_%2871223%29.jpg',
-        thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/American_bittern_%2871223%29.jpg/1280px-American_bittern_%2871223%29.jpg',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/American_bittern_%2871223%29.jpg/320px-American_bittern_%2871223%29.jpg',
+        thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/American_bittern_%2871223%29.jpg/320px-American_bittern_%2871223%29.jpg',
         title: 'American Bittern',
         text: 'Each thumbnail can represent a different image, scene, document, example, or archival item.'
       },
       {
-        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/20250703_snowy_egret_long_wharf_pier_PD207304.jpg/1280px-20250703_snowy_egret_long_wharf_pier_PD207304.jpg',
-        thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/20250703_snowy_egret_long_wharf_pier_PD207304.jpg/1280px-20250703_snowy_egret_long_wharf_pier_PD207304.jpg',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/20250703_snowy_egret_long_wharf_pier_PD207304.jpg/320px-20250703_snowy_egret_long_wharf_pier_PD207304.jpg',
+        thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/20250703_snowy_egret_long_wharf_pier_PD207304.jpg/320px-20250703_snowy_egret_long_wharf_pier_PD207304.jpg',
         title: 'Snowy Egret',
         text: 'This pattern works well when the collection itself matters and readers should choose what to look at.'
       },
       {
-        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Reddish_Egret_%28Egretta_rufescens%29_%2852873507438%29.jpg/1280px-Reddish_Egret_%28Egretta_rufescens%29_%2852873507438%29.jpg',
-        thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Reddish_Egret_%28Egretta_rufescens%29_%2852873507438%29.jpg/1280px-Reddish_Egret_%28Egretta_rufescens%29_%2852873507438%29.jpg',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Reddish_Egret_%28Egretta_rufescens%29_%2852873507438%29.jpg/320px-Reddish_Egret_%28Egretta_rufescens%29_%2852873507438%29.jpg',
+        thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Reddish_Egret_%28Egretta_rufescens%29_%2852873507438%29.jpg/320px-Reddish_Egret_%28Egretta_rufescens%29_%2852873507438%29.jpg',
         title: 'Reddish Egret',
         text: 'Replace the image URLs, titles, and captions in the galleryItems object to customize the gallery.'
       }
