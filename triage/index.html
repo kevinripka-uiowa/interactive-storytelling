@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interactive Publishing Triage Tree</title>
+  <style>
+    :root{
+      --bg:#fffef5;
+      --panel:#ffffff;
+      --ink:#1d1b16;
+      --muted:#6d6659;
+      --line:#ded6c7;
+      --soft:#f3efe3;
+      --accent:#8D0808;
+      --accent2:#153b50;
+      --good:#265c3b;
+      --warn:#8a4b00;
+      --shadow:0 14px 40px rgba(0,0,0,.08);
+      --radius:22px;
+      --max:1180px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height:1.5;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 12% 5%, rgba(141,8,8,.08), transparent 28rem),
+        radial-gradient(circle at 88% 18%, rgba(21,59,80,.09), transparent 24rem),
+        var(--bg);
+    }
+    header{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:54px 22px 24px;
+    }
+    h1{
+      margin:0;
+      font-size:clamp(2.1rem, 5vw, 4.8rem);
+      line-height:.98;
+      letter-spacing:-.02em;
+      max-width:930px;
+    }
+    .lede{
+      margin:20px 0 0;
+      max-width:780px;
+      font-size:clamp(1.05rem, 1.7vw, 1.35rem);
+      color:var(--muted);
+    }
+    .shell{
+      max-width:var(--max);
+      margin:0 auto 70px;
+      padding:18px 22px 40px;
+      display:grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap:22px;
+      align-items:start;
+    }
+    main, aside{min-width:0}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .stage{
+      padding:28px;
+      min-height:520px;
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:.76rem;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:var(--muted);
+      font-weight:800;
+    }
+    .eyebrow::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:var(--accent);
+    }
+    h2{
+      margin:12px 0 10px;
+      font-size:clamp(1.7rem, 3vw, 3rem);
+      line-height:1.04;
+      letter-spacing:-.01em;
+    }
+    h3{
+      margin:0 0 8px;
+      font-size:1.1rem;
+      line-height:1.16;
+    }
+    p{margin:0 0 14px}
+    .muted{color:var(--muted)}
+    .choices{
+      display:grid;
+      gap:14px;
+      margin-top:24px;
+    }
+    .choice{
+      width:100%;
+      text-align:left;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:18px;
+      padding:18px 18px;
+      cursor:pointer;
+      color:var(--ink);
+      font:inherit;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    }
+    .choice:hover, .choice:focus-visible{
+      transform:translateY(-2px);
+      border-color:rgba(141,8,8,.45);
+      box-shadow:0 10px 26px rgba(0,0,0,.08);
+      outline:none;
+    }
+    .choice strong{display:block;font-size:1.06rem;margin-bottom:4px}
+    .choice span{display:block;color:var(--muted);font-size:.96rem}
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:24px;
+    }
+    .btn{
+      border:0;
+      border-radius:999px;
+      background:var(--ink);
+      color:#fff;
+      padding:12px 16px;
+      font-weight:800;
+      cursor:pointer;
+      font:inherit;
+    }
+    .btn.secondary{
+      background:var(--soft);
+      color:var(--ink);
+      border:1px solid var(--line);
+    }
+    .btn.accent{background:var(--accent)}
+    aside{
+      position:sticky;
+      top:18px;
+      display:grid;
+      gap:16px;
+    }
+    .side-card{
+      padding:18px;
+    }
+    .side-card h3{
+      font-size:.96rem;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      color:var(--muted);
+      margin-bottom:12px;
+    }
+    .path-list{
+      list-style:none;
+      margin:0;
+      padding:0;
+      display:grid;
+      gap:10px;
+    }
+    .path-list li{
+      padding:10px 12px;
+      background:var(--soft);
+      border:1px solid var(--line);
+      border-radius:14px;
+      font-size:.92rem;
+    }
+    .path-list b{display:block;color:var(--ink)}
+    .path-list span{color:var(--muted)}
+    .meter{
+      display:grid;
+      gap:8px;
+    }
+    .meter-row{
+      display:grid;
+      grid-template-columns:92px 1fr;
+      gap:10px;
+      align-items:center;
+      font-size:.9rem;
+      color:var(--muted);
+    }
+    .bar{
+      height:10px;
+      background:var(--soft);
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid var(--line);
+    }
+    .fill{height:100%;background:var(--accent2);width:20%}
+    .result-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin-top:22px;
+    }
+    .info-box{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      padding:18px;
+    }
+    .info-box.full{grid-column:1/-1}
+    ul.clean{
+      margin:10px 0 0;
+      padding-left:1.1rem;
+    }
+    ul.clean li{margin:.38rem 0}
+    .diagram{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+    .node{
+      border:2px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:var(--soft);
+    }
+    .node strong{display:block}
+    .node span{color:var(--muted);font-size:.92rem}
+    .arrow{
+      text-align:center;
+      color:var(--muted);
+      font-weight:900;
+      letter-spacing:.08em;
+    }
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .pill{
+      border:1px solid var(--line);
+      background:var(--soft);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:.84rem;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .notice{
+      padding:16px;
+      border-radius:18px;
+      background:#fff8e8;
+      border:1px solid #eed9a9;
+      color:#4b3310;
+      margin-top:18px;
+    }
+    .reference{
+      max-width:var(--max);
+      margin:0 auto 80px;
+      padding:0 22px;
+    }
+    .reference .card{padding:24px;overflow:auto}
+    table{
+      border-collapse:collapse;
+      width:100%;
+      min-width:760px;
+      font-size:.93rem;
+    }
+    th,td{
+      border-bottom:1px solid var(--line);
+      padding:12px;
+      vertical-align:top;
+      text-align:left;
+    }
+    th{
+      background:var(--soft);
+      font-size:.78rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--muted);
+    }
+    .small{font-size:.9rem;color:var(--muted)}
+    @media (max-width:900px){
+      .shell{grid-template-columns:1fr}
+      aside{position:static;order:-1}
+      .stage{min-height:auto;padding:22px}
+      .result-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">Interactive publishing triage</div>
+    <h1>How should this interactive get into the story?</h1>
+    <p class="lede">Use this guided decision tree to choose the least complicated workflow that still gives you enough control. The goal is not to code everything. The goal is to understand the tradeoff between convenience, constraint, control, and responsibility.</p>
+  </header>
+
+  <div class="shell">
+    <main class="card stage" id="app" aria-live="polite"></main>
+
+    <aside>
+      <section class="card side-card">
+        <h3>Your path</h3>
+        <ol class="path-list" id="pathList">
+          <li><b>Start</b><span>No choices yet.</span></li>
+        </ol>
+      </section>
+      <section class="card side-card">
+        <h3>Triage tradeoff</h3>
+        <div class="meter">
+          <div class="meter-row"><span>Convenience</span><div class="bar"><div class="fill" id="conv" style="width:80%"></div></div></div>
+          <div class="meter-row"><span>Control</span><div class="bar"><div class="fill" id="ctrl" style="width:25%"></div></div></div>
+          <div class="meter-row"><span>Responsibility</span><div class="bar"><div class="fill" id="resp" style="width:25%"></div></div></div>
+        </div>
+        <p class="small" style="margin-top:12px">As control rises, responsibility usually rises too: assets, paths, optimization, testing, and troubleshooting.</p>
+      </section>
+    </aside>
+  </div>
+
+  <section class="reference">
+    <div class="card">
+      <h2 style="font-size:2rem">Reference: the triage ladder</h2>
+      <p class="muted">Start at the top. Move down only when the easier option cannot do the job.</p>
+      <table>
+        <thead>
+          <tr><th>Workflow</th><th>Use when</th><th>How it gets into the story</th><th>Asset responsibility</th><th>Main risk</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Native builder block</strong></td>
+            <td>The host platform already has a block that does the job.</td>
+            <td>Add the block directly inside Shorthand, Tilda, Wix, Webflow, etc.</td>
+            <td>Mostly handled by the builder, but still use reasonable file sizes.</td>
+            <td>Convenient but constrained.</td>
+          </tr>
+          <tr>
+            <td><strong>Embedded external tool</strong></td>
+            <td>A tool like Flourish, Datawrapper, Genially, or Knight Lab can make the interactive.</td>
+            <td>Publish in that tool, copy embed code, paste into the story platform.</td>
+            <td>Mostly handled by the external tool; check mobile and iframe sizing.</td>
+            <td>The embed is a separate webpage inside your page.</td>
+          </tr>
+          <tr>
+            <td><strong>Custom code inside builder</strong></td>
+            <td>You need a small custom widget and the builder allows HTML/CSS/JS.</td>
+            <td>Paste code into an HTML/embed/custom-code block.</td>
+            <td>Mixed. Assets often need public URLs or must be uploaded to the builder.</td>
+            <td>Builders can restrict JavaScript or cause CSS conflicts.</td>
+          </tr>
+          <tr>
+            <td><strong>Custom hosted interactive</strong></td>
+            <td>The interactive needs its own HTML, CSS, JS, assets, data, or libraries.</td>
+            <td>Host on GitHub Pages/Netlify/Vercel, then iframe it into the story.</td>
+            <td>You handle optimization, file paths, folders, and testing.</td>
+            <td>More control, more things that can break.</td>
+          </tr>
+          <tr>
+            <td><strong>Full custom site</strong></td>
+            <td>The entire story needs custom structure and the builder would get in the way.</td>
+            <td>The story itself is an HTML/CSS/JS site hosted as files.</td>
+            <td>You handle nearly everything.</td>
+            <td>Highest control and highest responsibility.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+<script>
+const app = document.getElementById('app');
+const pathList = document.getElementById('pathList');
+const meters = {
+  conv: document.getElementById('conv'),
+  ctrl: document.getElementById('ctrl'),
+  resp: document.getElementById('resp')
+};
+
+const state = { path: [] };
+
+const screens = {
+  start: {
+    eyebrow: 'Step 1',
+    title: 'Where is the main story hosted?',
+    text: 'First decide the container. The story either lives in a builder/CMS, or it lives as a folder of custom files published to the web.',
+    meter: [70,30,30],
+    choices: [
+      { label:'In a builder or CMS', sub:'Examples: Shorthand, Tilda, Wix, Webflow, WordPress, Squarespace.', next:'builderNative', tag:'Main story: builder/CMS' },
+      { label:'As custom files', sub:'Examples: HTML/CSS/JS files hosted on GitHub Pages, Netlify, Vercel, or similar.', next:'filesMain', tag:'Main story: custom files' }
+    ]
+  },
+
+  builderNative: {
+    eyebrow: 'Step 2',
+    title: 'Does the builder have a native block that already does the job?',
+    text: 'Start with the most convenient option. Native blocks are usually easiest because the builder handles layout, publishing, and many assets.',
+    meter: [85,25,25],
+    choices: [
+      { label:'Yes, there is a native block', sub:'Example: built-in accordion, gallery, slider, map, scroll section, popup, or animation block.', next:'nativeEnough', tag:'Native block exists' },
+      { label:'No, not really', sub:'The builder does not have a built-in block for this interactive.', next:'externalTool', tag:'No native block' },
+      { label:'I am not sure', sub:'Try the closest native block first. If it cannot do the important job, move down the ladder.', next:'nativeTry', tag:'Need to test native block' }
+    ]
+  },
+
+  nativeTry: {
+    eyebrow: 'Try first',
+    title: 'Prototype the closest native block before adding complexity.',
+    text: 'This is a triage system: begin with convenience. If the native block can do the communication job, use it. If the block lacks an essential ability, move to an embedded tool.',
+    meter: [85,25,25],
+    result: 'Native block test',
+    diagram: ['Main story: builder/CMS', 'Native block inside builder', 'Assets: builder media library', 'Publishing/optimization: mostly builder-handled'],
+    sections: [
+      ['Do this next', ['Build a rough version with the closest native block.', 'Test the key interaction, not just the visual style.', 'Ask: does this actually let the reader reveal, compare, annotate, inspect, or progress through the content?']],
+      ['Move on if', ['It cannot handle the required annotation depth.', 'It cannot hold the media you need.', 'It does not work well on mobile.', 'It forces a design that changes the meaning of the story.']]
+    ],
+    nextActions: [{label:'The native block is enough', next:'nativeResult'}, {label:'It is too limited', next:'externalTool'}, {label:'Start over', next:'start'}]
+  },
+
+  nativeEnough: {
+    eyebrow: 'Step 3',
+    title: 'Does that native block do all the important things you need?',
+    text: 'Do not ask whether it is perfect. Ask whether it is sufficient. If you only need a standard reveal, gallery, slider, or scroll effect, the native block is probably the right choice.',
+    meter: [85,25,25],
+    choices: [
+      { label:'Yes, it does the job', sub:'The interaction is standard and the platform block supports it.', next:'nativeResult', tag:'Native block sufficient' },
+      { label:'No, I need more ability', sub:'Examples: custom annotations, unusual layout, richer popups, better control, data-driven content, custom animation.', next:'externalTool', tag:'Native block too limited' }
+    ]
+  },
+
+  externalTool: {
+    eyebrow: 'Step 4',
+    title: 'Can a specialized external tool make this interactive?',
+    text: 'Before writing custom code, check whether a tool already exists for the job. This is often the best middle ground between convenience and control.',
+    meter: [72,45,38],
+    choices: [
+      { label:'Yes, an external tool fits', sub:'Examples: Flourish for data/scrolly, Datawrapper for charts/maps, Genially for hotspots, Knight Lab for timelines.', next:'embedEnough', tag:'External tool exists' },
+      { label:'No, I need something more custom', sub:'The available tools do not support the structure, styling, behavior, or media I need.', next:'customInside', tag:'External tool not enough' },
+      { label:'I need to test a tool first', sub:'Try the closest tool, then decide if its constraints are acceptable.', next:'embedTry', tag:'Need to test external tool' }
+    ]
+  },
+
+  embedTry: {
+    eyebrow: 'Try second',
+    title: 'Prototype the closest embedded tool.',
+    text: 'External builders are useful when they match the type of interactive: chart, map, timeline, hotspot graphic, quiz, or scrolly sequence. The main question is whether the tool’s constraints are acceptable.',
+    meter: [72,45,38],
+    result: 'External tool test',
+    diagram: ['Main story: builder/CMS', 'Interactive: external tool', 'Connection: embed code / iframe', 'Assets/data: usually managed inside external tool'],
+    sections: [
+      ['Do this next', ['Build one rough version in the external tool.', 'Publish or preview it.', 'Copy the embed code into the story platform.', 'Test width, height, scrolling, and mobile behavior.']],
+      ['Move on if', ['The iframe sizing does not work.', 'The design cannot match the story enough.', 'The free plan adds unacceptable limits.', 'The interaction cannot do the essential job.', 'The tool will not support the media or data structure.']]
+    ],
+    nextActions: [{label:'The external embed works', next:'embedResult'}, {label:'It is too limited', next:'customInside'}, {label:'Start over', next:'start'}]
+  },
+
+  embedEnough: {
+    eyebrow: 'Step 5',
+    title: 'Does the embedded tool satisfy the important requirements?',
+    text: 'An embed is usually worth using when it gives you the needed behavior without making you manage a custom project folder.',
+    meter: [72,45,38],
+    choices: [
+      { label:'Yes, the embedded tool works', sub:'The tool can make the interactive and provides embed code.', next:'embedResult', tag:'Use external embed' },
+      { label:'No, it is too limited', sub:'The tool cannot handle the behavior, design, data, media, or responsiveness I need.', next:'customInside', tag:'External embed too limited' }
+    ]
+  },
+
+  customInside: {
+    eyebrow: 'Step 6',
+    title: 'Can the custom code live safely inside the builder?',
+    text: 'Small custom widgets can sometimes be pasted into an HTML/code block. Bigger projects usually need to be hosted separately.',
+    meter: [52,70,62],
+    choices: [
+      { label:'Yes, it is a small self-contained widget', sub:'Example: a simple custom accordion, small calculator, custom button behavior, or small annotation block.', next:'customInsideResult', tag:'Custom code inside builder' },
+      { label:'No, it needs its own files or libraries', sub:'Example: custom map, 360 viewer, D3 graphic, CSV/JSON data, multiple images, complex JavaScript, or outside libraries.', next:'hostedCustomResult', tag:'Needs separate custom host' },
+      { label:'I am not sure', sub:'If it needs multiple files, a data folder, several images, external scripts, or debugging tools, treat it as a separate hosted interactive.', next:'customCheck', tag:'Need custom-code check' }
+    ]
+  },
+
+  customCheck: {
+    eyebrow: 'Custom-code check',
+    title: 'Use this rule of thumb.',
+    text: 'A custom code block is for small widgets. A GitHub-hosted interactive is for mini websites.',
+    meter: [48,75,68],
+    result: 'Choose custom-code placement',
+    diagram: ['Small widget: paste into builder code block', 'Larger mini-site: host separately', 'Embed hosted mini-site with iframe'],
+    sections: [
+      ['Use a builder code block if', ['The code is short and self-contained.', 'It does not need a folder of assets.', 'It does not need CSV/JSON loading.', 'It does not rely on several external libraries.', 'It works when pasted into the builder preview.']],
+      ['Host separately if', ['It has index.html, style.css, script.js, images, icons, or data files.', 'It needs a library such as Mapbox, Leaflet, D3, Pannellum, or Three.js.', 'The builder strips or blocks JavaScript.', 'You need full control over layout and troubleshooting.']]
+    ],
+    nextActions: [{label:'Small widget: use builder code block', next:'customInsideResult'}, {label:'Mini-site: host separately', next:'hostedCustomResult'}, {label:'Start over', next:'start'}]
+  },
+
+  filesMain: {
+    eyebrow: 'Step 2',
+    title: 'Since the story is custom files, can you build the interactive directly into the page?',
+    text: 'If the main story is already an HTML/CSS/JS project, you do not need to iframe your own interactive unless there is a reason to isolate it. You can usually build it directly into the story files.',
+    meter: [38,88,85],
+    choices: [
+      { label:'Yes, build it directly into the custom site', sub:'The story and interactive can share the same HTML, CSS, JS, assets, and data folders.', next:'fullCustomResult', tag:'Build directly in custom site' },
+      { label:'No, I want to use an external tool', sub:'Example: embedding a Datawrapper chart or Flourish graphic inside the custom page.', next:'customSiteEmbedResult', tag:'External embed in custom site' }
+    ]
+  },
+
+  nativeResult: {
+    eyebrow: 'Recommendation',
+    title: 'Use the native builder block.',
+    text: 'This is the best choice when the built-in block does the communication job. Do not add custom code just to make the project more complicated.',
+    meter: [90,25,20],
+    result: 'Native builder block',
+    diagram: ['Main story: builder/CMS', 'Interactive: native block inside builder', 'Assets: builder media library', 'Optimization/publishing: mostly builder-handled'],
+    sections: [
+      ['How to put it in the story', ['Add the block directly in the builder.', 'Configure the content, labels, media, and interaction settings.', 'Preview on desktop and mobile.', 'Publish through the builder.']],
+      ['Where assets go', ['Upload images/icons/media to the builder’s media library.', 'Use the builder’s image settings, crops, alt text, and responsive options.', 'For video, prefer Vimeo/YouTube embeds unless the builder has a strong native video workflow.']],
+      ['Optimization responsibility', ['The builder usually handles some resizing and compression.', 'Still avoid huge files. Start with reasonably sized images.', 'Check load time and mobile crops.']],
+      ['What can break', ['The block may not provide enough customization.', 'The free plan may limit features.', 'The block may look or behave differently on mobile.', 'The design may become platform-shaped instead of story-shaped.']]
+    ]
+  },
+
+  embedResult: {
+    eyebrow: 'Recommendation',
+    title: 'Use an embedded external tool.',
+    text: 'This is the best choice when a specialized tool can make the interactive faster and more reliably than you can build it yourself.',
+    meter: [76,46,38],
+    result: 'External embed',
+    diagram: ['Main story: builder/CMS', 'Interactive: Flourish/Datawrapper/Genially/etc.', 'Connection: embed code or iframe', 'Assets/data: managed mostly in the external tool'],
+    sections: [
+      ['How to put it in the story', ['Build the interactive in the external tool.', 'Publish or set it to public/unlisted as needed.', 'Copy the embed code.', 'Paste it into the builder’s embed/custom-code block.', 'Test iframe height, width, scrolling, and mobile behavior.']],
+      ['Where assets go', ['Upload chart/map/hotspot assets into the external tool.', 'Keep source spreadsheets or images organized separately.', 'If the tool uses a public Google Sheet or data source, make sure permissions allow it to load.']],
+      ['Optimization responsibility', ['The external tool often handles much of the rendering.', 'You still need to keep uploaded images reasonable.', 'Avoid using huge images inside Genially/hotspots unless needed.']],
+      ['What can break', ['Iframe height can be wrong.', 'The embed may not match the story design.', 'Mobile behavior can be awkward.', 'Free plans may add branding or limits.', 'The embedded project is separate from the main story.']]
+    ]
+  },
+
+  customInsideResult: {
+    eyebrow: 'Recommendation',
+    title: 'Use custom HTML/CSS/JS inside the builder.',
+    text: 'This is a middle path. Use it when the interaction is small enough to live inside one code block, but the native block and external tools are too limited.',
+    meter: [52,70,62],
+    result: 'Custom code block inside builder',
+    diagram: ['Main story: builder/CMS', 'Interactive: custom code block', 'Assets: builder media library or public URLs', 'Optimization: mixed responsibility'],
+    sections: [
+      ['How to put it in the story', ['Create the small widget in HTML/CSS/JS.', 'Paste it into the builder’s custom HTML/code block.', 'Scope CSS carefully so it does not affect the rest of the page.', 'Test the builder preview and the published page.']],
+      ['Where assets go', ['Upload images/icons to the builder when possible and use their public URLs.', 'For small SVG icons, you may paste inline SVG directly into the code.', 'Avoid relying on local file paths from your computer. The browser cannot access those after publishing.']],
+      ['Optimization responsibility', ['The builder may optimize uploaded media.', 'You are responsible for any external assets or pasted code.', 'Compress images before upload if they are large.']],
+      ['What can break', ['The builder may strip scripts.', 'CSS from the builder may conflict with your widget.', 'The widget may work locally but fail after publishing.', 'Responsive behavior needs manual testing.']]
+    ]
+  },
+
+  hostedCustomResult: {
+    eyebrow: 'Recommendation',
+    title: 'Build a separate custom interactive and host it on GitHub Pages.',
+    text: 'Use this when the interaction needs its own files, assets, data, libraries, or layout control. The custom interactive becomes a mini website embedded inside the main story.',
+    meter: [34,90,92],
+    result: 'GitHub-hosted custom interactive',
+    diagram: ['Main story: builder/CMS', 'Embedded iframe', 'Custom interactive: GitHub Pages', 'Project folder: index.html, style.css, script.js, images/, data/'],
+    sections: [
+      ['How to put it in the story', ['Build the interactive as a standalone HTML project.', 'Publish it with GitHub Pages, Netlify, Vercel, or another static host.', 'Copy the public URL.', 'Embed that URL in the story platform using an iframe/embed block.', 'Set the iframe height and test on mobile.']],
+      ['Where assets go', ['Put project assets inside the project folder.', 'Use folders such as images/, icons/, data/, audio/.', 'Use relative paths such as images/hero.jpg or data/timeline.json.', 'Use lowercase hyphenated file names. Avoid spaces and special characters.']],
+      ['Optimization responsibility', ['GitHub Pages does not optimize your files. It publishes what you give it.', 'Resize and compress images before uploading.', 'Use JPG/WebP for photos, SVG for icons/logos, PNG only when transparency or crisp raster graphics are needed.', 'Host large video on Vimeo/YouTube rather than inside the GitHub repo unless there is a specific reason.']],
+      ['What can break', ['Wrong file paths.', 'Capitalization mismatches in file names.', 'Huge images that slow the page.', 'Iframe height problems.', 'Links opening inside the iframe instead of the parent page.', 'External libraries failing to load.', 'Mobile layout issues.']]
+    ],
+    notice: 'Key phrase: GitHub Pages does not fix your files. It publishes your files.'
+  },
+
+  fullCustomResult: {
+    eyebrow: 'Recommendation',
+    title: 'Build the interactive directly into the custom site.',
+    text: 'Since the main story already lives as custom files, the cleanest option is usually to build the interactive directly into that project.',
+    meter: [32,95,92],
+    result: 'Full custom static site',
+    diagram: ['Main story: HTML/CSS/JS files', 'Interactive: built into the same page or project', 'Assets/data: project folders', 'Host: GitHub Pages/Netlify/Vercel'],
+    sections: [
+      ['How to put it in the story', ['Add the interactive HTML to the page.', 'Connect styles in CSS and behavior in JavaScript.', 'Keep data in JS, JSON, or CSV depending on scale.', 'Publish the full project folder to GitHub Pages or another static host.']],
+      ['Where assets go', ['Use organized folders: images/, icons/, data/, audio/, video/.', 'Use relative paths in your HTML/CSS/JS.', 'Keep filenames lowercase and hyphenated.']],
+      ['Optimization responsibility', ['You handle image compression, file size, paths, testing, and performance.', 'Resize images to the approximate display need.', 'Avoid putting large raw video files directly in the repo.']],
+      ['What can break', ['Missing files.', 'Wrong paths.', 'Oversized assets.', 'JavaScript errors.', 'Mobile layout issues.', 'External scripts or APIs not loading.']]
+    ]
+  },
+
+  customSiteEmbedResult: {
+    eyebrow: 'Recommendation',
+    title: 'Embed the external tool inside the custom site.',
+    text: 'A custom site can still use external tools. This is useful when a specialized platform is faster or more reliable for a chart, map, timeline, or scrolly graphic.',
+    meter: [55,70,68],
+    result: 'External embed inside custom site',
+    diagram: ['Main story: custom HTML/CSS/JS', 'Interactive: external tool', 'Connection: iframe/embed code', 'Assets/data: managed by external tool'],
+    sections: [
+      ['How to put it in the story', ['Build and publish the interactive in the external tool.', 'Copy the embed code.', 'Paste the iframe/embed code into your HTML.', 'Style the surrounding container in your CSS.', 'Test responsiveness.']],
+      ['Where assets go', ['Assets for the embedded interactive usually live in the external tool.', 'Assets for the story itself live in your project folder.']],
+      ['Optimization responsibility', ['The external tool handles its own rendering.', 'You handle the surrounding page assets and performance.']],
+      ['What can break', ['Iframe height and width.', 'Mobile behavior.', 'Design mismatch.', 'Free-plan limits or branding.', 'Permissions on external data sources.']]
+    ]
+  }
+};
+
+function render(id){
+  const s = screens[id];
+  if(!s) return;
+  setMeters(s.meter || [50,50,50]);
+  let html = `<div class="eyebrow">${s.eyebrow}</div><h2>${s.title}</h2><p class="muted">${s.text}</p>`;
+
+  if(s.choices){
+    html += '<div class="choices">';
+    s.choices.forEach(c=>{
+      html += `<button class="choice" data-next="${c.next}" data-tag="${escapeHtml(c.tag)}"><strong>${c.label}</strong><span>${c.sub}</span></button>`;
+    });
+    html += '</div>';
+  }
+
+  if(s.result){
+    html += resultHtml(s);
+  }
+
+  html += `<div class="actions"><button class="btn secondary" data-reset="true">Start over</button>`;
+  if(state.path.length){ html += `<button class="btn secondary" data-back="true">Back</button>`; }
+  html += `</div>`;
+
+  app.innerHTML = html;
+  app.querySelectorAll('[data-next]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const tag = btn.getAttribute('data-tag');
+      state.path.push({screen:id, tag});
+      render(btn.getAttribute('data-next'));
+      updatePath();
+    });
+  });
+  app.querySelectorAll('[data-reset]').forEach(btn=>btn.addEventListener('click', reset));
+  app.querySelectorAll('[data-back]').forEach(btn=>btn.addEventListener('click', back));
+  updatePath();
+}
+
+function resultHtml(s){
+  let html = `<div class="result-grid">`;
+  html += `<section class="info-box full"><h3>Recommended workflow</h3><p><strong>${s.result}</strong></p><div class="pill-row"><span class="pill">Convenience</span><span class="pill">Constraint</span><span class="pill">Control</span><span class="pill">Responsibility</span></div></section>`;
+  if(s.diagram){
+    html += `<section class="info-box"><h3>Architecture</h3><div class="diagram">`;
+    s.diagram.forEach((d,i)=>{
+      html += `<div class="node"><strong>${d.split(':')[0]}</strong><span>${d.includes(':') ? d.substring(d.indexOf(':')+1).trim() : ''}</span></div>`;
+      if(i < s.diagram.length-1) html += `<div class="arrow">↓</div>`;
+    });
+    html += `</div></section>`;
+  }
+  if(s.sections){
+    s.sections.forEach(sec=>{
+      html += `<section class="info-box"><h3>${sec[0]}</h3><ul class="clean">${sec[1].map(item=>`<li>${item}</li>`).join('')}</ul></section>`;
+    });
+  }
+  if(s.notice){ html += `<section class="info-box full"><div class="notice"><strong>${s.notice}</strong></div></section>`; }
+  if(s.nextActions){
+    html += `<section class="info-box full"><h3>Choose the next branch</h3><div class="actions">${s.nextActions.map(a=>`<button class="btn accent" data-next="${a.next}" data-tag="${escapeHtml(a.label)}">${a.label}</button>`).join('')}</div></section>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+function updatePath(){
+  if(!state.path.length){
+    pathList.innerHTML = '<li><b>Start</b><span>No choices yet.</span></li>';
+    return;
+  }
+  pathList.innerHTML = state.path.map((p,i)=>`<li><b>${i+1}. Choice</b><span>${p.tag}</span></li>`).join('');
+}
+
+function setMeters(vals){
+  meters.conv.style.width = vals[0] + '%';
+  meters.ctrl.style.width = vals[1] + '%';
+  meters.resp.style.width = vals[2] + '%';
+}
+
+function reset(){ state.path = []; render('start'); }
+function back(){
+  const last = state.path.pop();
+  if(last){ render(last.screen); } else { render('start'); }
+}
+function escapeHtml(str){
+  return String(str).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+}
+
+render('start');
+</script>
+</body>
+</html>
