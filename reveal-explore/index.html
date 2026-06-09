@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reveal and Explore Patterns - Mobile Menu</title>
+  <title>Reveal and Explore Patterns - Hover Cards</title>
   <style>
 
     :root {
@@ -103,6 +103,83 @@
     .flip-back p { margin:0 0 10px; color:var(--muted); }
     .flip-back .hint { font-size:.85rem; color:#7a7165; font-weight:800; text-transform:uppercase; letter-spacing:.06em; }
 
+    .hover-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .hover-card {
+      position:relative;
+      display:block;
+      height:300px;
+      width:100%;
+      overflow:hidden;
+      background:#eef3ef;
+      color:var(--ink);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:0;
+      text-align:left;
+      box-shadow:0 8px 20px rgba(23,33,27,.08);
+    }
+    .hover-inner,
+    .hover-face,
+    .hover-front {
+      display:block;
+      width:100%;
+      height:100%;
+    }
+    .hover-front img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transform:scale(1);
+      transition:transform .28s ease;
+    }
+    .hover-card .flip-title {
+      transition:opacity .24s ease, transform .24s ease;
+    }
+    .hover-overlay {
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:end stretch;
+      padding:18px;
+      background:linear-gradient(to top, rgba(23,33,27,.94), rgba(23,33,27,.76), rgba(23,33,27,.18));
+      color:#fffdf7;
+      opacity:0;
+      transform:translateY(12px);
+      transition:opacity .24s ease, transform .24s ease;
+      pointer-events:none;
+    }
+    .hover-overlay h4 {
+      margin:0 0 8px;
+      font-size:1.25rem;
+      color:#fffdf7;
+    }
+    .hover-overlay p {
+      margin:0 0 10px;
+      color:rgba(255,253,247,.84);
+    }
+    .hover-overlay .hint {
+      font-size:.78rem;
+      color:rgba(255,253,247,.7);
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .hover-card:hover .hover-overlay,
+    .hover-card:focus-visible .hover-overlay {
+      opacity:1;
+      transform:translateY(0);
+    }
+    .hover-card:hover .hover-front img,
+    .hover-card:focus-visible .hover-front img {
+      transform:scale(1.04);
+    }
+    .hover-card:hover .flip-title,
+    .hover-card:focus-visible .flip-title {
+      opacity:0;
+      transform:translateY(8px);
+    }
+
     .tabs, .switch-controls, .toggle-controls, .gallery-thumbs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
     .tabs button[aria-selected="true"], .switch-controls button.active, .toggle-controls button.active, .gallery-thumbs button.active { background:var(--accent-2); color:#1b160f; }
     .tab-panel { display:none; border:1px solid var(--line); border-radius:16px; padding:18px; background:#fffdf7; }
@@ -162,7 +239,7 @@
       .nav-group-title { grid-column:1/-1; }
       main { padding:24px 16px 56px; }
       .pattern-header, .media-card, .tab-panel.active, .annotation-card, .gallery { grid-template-columns:1fr; }
-      .flip-grid, .bird-explorer-panel, .bird-facts { grid-template-columns:1fr; }
+      .flip-grid, .hover-grid, .bird-explorer-panel, .bird-facts { grid-template-columns:1fr; }
       .carousel-card { flex-basis:86%; }
       .gallery-thumbnails { grid-template-columns:repeat(2,minmax(0,1fr)); }
     }
@@ -455,7 +532,8 @@ main {
     aspect-ratio:4 / 3;
   }
 
-  .flip-grid {
+  .flip-grid,
+  .hover-grid {
     grid-template-columns:1fr;
   }
 
@@ -517,7 +595,8 @@ main {
     overflow:auto;
   }
 
-  .flip-card {
+  .flip-card,
+  .hover-card {
     height:280px;
   }
 
@@ -822,6 +901,7 @@ main {
         <a href="#tooltips">Tooltips</a>
         <a href="#annotations">Rich annotations</a>
         <a href="#flip-cards">Flip cards</a>
+        <a href="#hover-cards">Hover cards</a>
 
         <div class="nav-group-title">Select or compare</div>
         <a href="#tabs">Tabs</a>
@@ -933,6 +1013,46 @@ main {
                 </span>
                 <span class="flip-face flip-back">
                   <span><h4>Western Sandpiper</h4><p>Slightly longer-billed and more front-heavy than Semipalmated, often showing rufous tones in the scapulars or crown and a subtly drooping bill tip.</p><p class="hint">Click again to flip back</p></span>
+                </span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+<section class="pattern" id="hover-cards">
+        <div class="pattern-header"><div><h3>Hover cards</h3><p>A hover card reveals supporting information when the reader hovers over or focuses on a card. It works best for quick previews, captions, labels, short descriptions, or lightweight explanations that should appear without opening a new panel.</p></div><span class="tag">Hover reveal</span></div>
+        <div class="demo-frame">
+          <div class="hover-grid">
+            <button class="hover-card" type="button">
+              <span class="hover-inner">
+                <span class="hover-face hover-front">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg/960px-Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg" alt="Placeholder bird photo">
+                  <span class="flip-title">Least Sandpiper <small>Hover to identify</small></span>
+                </span>
+                <span class="hover-overlay">
+                  <span><h4>Least Sandpiper</h4><p>The smallest peep, usually browner above with a slightly drooped fine bill and yellowish-green legs.</p><p class="hint">Hover or focus to reveal</p></span>
+                </span>
+              </span>
+            </button>
+            <button class="hover-card" type="button">
+              <span class="hover-inner">
+                <span class="hover-face hover-front">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Semipalmated_sandpiper_%2832560%29.jpg/960px-Semipalmated_sandpiper_%2832560%29.jpg" alt="Placeholder bird photo">
+                  <span class="flip-title">Semipalmated Sandpiper <small>Hover to identify</small></span>
+                </span>
+                <span class="hover-overlay">
+                  <span><h4>Semipalmated Sandpiper</h4><p>A compact gray-brown peep with black legs, a short straight bill, and a plainer, less rusty look than Western.</p><p class="hint">Hover or focus to reveal</p></span>
+                </span>
+              </span>
+            </button>
+            <button class="hover-card" type="button">
+              <span class="hover-inner">
+                <span class="hover-face hover-front">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg/960px-Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg" alt="Placeholder bird photo">
+                  <span class="flip-title">Western Sandpiper <small>Hover to identify</small></span>
+                </span>
+                <span class="hover-overlay">
+                  <span><h4>Western Sandpiper</h4><p>Slightly longer-billed and more front-heavy than Semipalmated, often showing rufous tones in the scapulars or crown and a subtly drooping bill tip.</p><p class="hint">Hover or focus to reveal</p></span>
                 </span>
               </span>
             </button>
