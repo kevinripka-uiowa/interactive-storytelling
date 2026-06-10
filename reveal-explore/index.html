@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reveal and Explore Patterns - Focused Markers</title>
+  <title>Reveal and Explore Patterns - Stable Scroll Focus</title>
   <style>
 
     :root {
@@ -883,7 +883,7 @@ main {
 }
 
   
-/* --- Contained image-only scroll focus --- */
+/* --- Contained image-only scroll focus: stable four-stop version --- */
 .image-scroll-focus {
   position:relative;
   height:560px;
@@ -892,7 +892,8 @@ main {
   border:1px solid var(--line);
   border-radius:16px;
   background:#111;
-  scroll-snap-type:y mandatory;
+  scroll-snap-type:none;
+  overscroll-behavior:contain;
 }
 
 .image-scroll-stage {
@@ -918,7 +919,6 @@ main {
 .image-scroll-spacer span {
   display:block;
   height:560px;
-  scroll-snap-align:start;
   padding:14px;
   color:transparent;
 }
@@ -964,7 +964,6 @@ main {
   }
 }
 
-  
 /* --- Scroll focus markers only show when active --- */
 #scroll-guided .scroll-focus-marker {
   opacity:0;
@@ -1373,7 +1372,7 @@ main {
             <h3>Scroll-driven focus</h3>
             <p>The image area scrolls through a guided sequence. It starts with the full overview, then moves to each marked point.</p>
           </div>
-          <span class="tag">Image scroll focus</span>
+          <span class="tag">Scroll focus</span>
         </div>
         <div class="demo-frame">
           <div class="image-scroll-focus" id="imageScrollFocus" aria-label="Scroll through image focus points">
@@ -1718,17 +1717,17 @@ const focusViews = {
         text: 'The full frame gives the reader orientation before focusing on individual details.'
       },
       back: {
-        x: -34, y: -42, scale: 1.9,
+        x: -34, y: -42, scale: 2.5,
         title: 'Head',
         text: 'A guided focus can move directly to the visual evidence the reader needs to inspect.'
       },
       wing: {
-        x: -54, y: -60, scale: 2.05,
+        x: -54, y: -60, scale: 3.3,
         title: 'Fish',
         text: 'The author controls the route, so readers do not have to search the image on their own.'
       },
       bill: {
-        x: -72, y: -50, scale: 1.8,
+        x: -72, y: -50, scale: 2.5,
         title: 'Wing',
         text: 'The same pattern can guide attention through any large image, graphic, or diagram.'
       }
@@ -1805,18 +1804,6 @@ const focusViews = {
       { key: 'bill', view: focusViews.bill }
     ];
 
-    function mixView(start, end, amount) {
-      return {
-        x: start.x + (end.x - start.x) * amount,
-        y: start.y + (end.y - start.y) * amount,
-        scale: start.scale + (end.scale - start.scale) * amount
-      };
-    }
-
-    function smoothStep(amount) {
-      return amount * amount * (3 - 2 * amount);
-    }
-
     function setActiveScrollMarker(key) {
       scrollFocusMarkers.forEach((marker) => {
         marker.classList.toggle('is-active', marker.dataset.focus === key);
@@ -1826,34 +1813,38 @@ const focusViews = {
     function updateImageScrollFocus() {
       if (!imageScrollFocus || !scrollyStage) return;
 
-      const maxScroll = imageScrollFocus.scrollHeight - imageScrollFocus.clientHeight;
-      const progress = maxScroll > 0 ? imageScrollFocus.scrollTop / maxScroll : 0;
-
-      const segmentCount = imageScrollViews.length - 1;
-      const scaled = Math.min(segmentCount, progress * segmentCount);
-      const index = Math.min(segmentCount - 1, Math.floor(scaled));
-      const local = smoothStep(scaled - index);
-
-      const start = imageScrollViews[index];
-      const end = imageScrollViews[index + 1];
-      const view = mixView(start.view, end.view, local);
+      const stopHeight = imageScrollFocus.clientHeight || 1;
+      const rawIndex = imageScrollFocus.scrollTop / stopHeight;
 
       /*
-        Keep the first part as a clean overview. Once the scroll is mostly
-        into a target segment, show only that target marker.
+        Four stable zones:
+        0 = overview, 1 = back, 2 = wing, 3 = bill.
+        This avoids the top overview immediately interpolating toward point 1.
       */
-      const activeKey = progress < 0.18 ? 'overview' : end.key;
+      const index = Math.max(
+        0,
+        Math.min(imageScrollViews.length - 1, Math.round(rawIndex))
+      );
 
-      applyStageTransform(scrollyStage, view);
-      setActiveScrollMarker(activeKey);
+      const active = imageScrollViews[index];
+      applyStageTransform(scrollyStage, active.view);
+      setActiveScrollMarker(active.key);
     }
 
     imageScrollFocus.addEventListener('scroll', updateImageScrollFocus, { passive: true });
     window.addEventListener('resize', updateImageScrollFocus);
-    applyStageTransform(scrollyStage, focusViews.overview);
-    setActiveScrollMarker('overview');
-    updateImageScrollFocus();
-  
+
+    /*
+      Force a true overview start. requestAnimationFrame prevents browsers
+      from restoring the internal scroll container to its previous position.
+    */
+    requestAnimationFrame(() => {
+      imageScrollFocus.scrollTop = 0;
+      applyStageTransform(scrollyStage, focusViews.overview);
+      setActiveScrollMarker('overview');
+      updateImageScrollFocus();
+    });
+
     // Mobile hamburger menu
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
     const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
