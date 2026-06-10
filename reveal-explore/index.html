@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reveal and Explore Patterns - Hover Cards</title>
+  <title>Reveal and Explore Patterns - Focused Markers</title>
   <style>
 
     :root {
@@ -258,7 +258,7 @@
     .horizontal-timeline { display:flex; gap:18px; min-width:1080px; position:relative; padding:34px 0 14px; }
     .horizontal-timeline::before { content:""; position:absolute; left:0; right:0; top:50px; height:4px; background:var(--line); border-radius:999px; }
     .h-event { position:relative; flex:0 0 230px; scroll-snap-align:start; background:#fff; border:1px solid var(--line); border-radius:16px; padding:42px 16px 16px; box-shadow:0 8px 20px rgba(23,33,27,.06); }
-    .h-event::before { content:""; position:absolute; top:22px; left:18px; width:18px; height:18px; border-radius:50%; background:var(--accent-2); border:4px solid #fff; box-shadow:0 0 0 2px var(--accent-2); }
+    .h-event::before { content:""; position:absolute; top:12px; left:18px; width:18px; height:18px; border-radius:50%; background:var(--accent-2); border:4px solid #fff; box-shadow:0 0 0 2px var(--accent-2); }
     .timeline-date { display:inline-block; margin:0 0 8px; color:var(--accent); font-weight:900; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em; }
     .h-event h4, .v-event h4 { margin:0 0 6px; }
     .h-event p, .v-event p { margin:0; color:var(--muted); }
@@ -882,6 +882,112 @@ main {
   object-fit:unset;
 }
 
+  
+/* --- Contained image-only scroll focus --- */
+.image-scroll-focus {
+  position:relative;
+  height:560px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#111;
+  scroll-snap-type:y mandatory;
+}
+
+.image-scroll-stage {
+  position:sticky;
+  top:0;
+  height:560px;
+  overflow:hidden;
+  background:#111;
+}
+
+.image-scroll-stage .scrolly-stage {
+  width:960px;
+  height:640px;
+}
+
+.image-scroll-spacer {
+  position:relative;
+  z-index:2;
+  height:2240px;
+  pointer-events:none;
+}
+
+.image-scroll-spacer span {
+  display:block;
+  height:560px;
+  scroll-snap-align:start;
+  padding:14px;
+  color:transparent;
+}
+
+@media (max-width: 860px) {
+  .image-scroll-focus {
+    height:420px;
+  }
+
+  .image-scroll-stage {
+    height:420px;
+  }
+
+  .image-scroll-stage .scrolly-stage {
+    width:760px;
+    height:506px;
+  }
+
+  .image-scroll-spacer {
+    height:1680px;
+  }
+
+  .image-scroll-spacer span {
+    height:420px;
+  }
+}
+
+@media (max-width: 520px) {
+  .image-scroll-focus {
+    height:340px;
+  }
+
+  .image-scroll-stage {
+    height:340px;
+  }
+
+  .image-scroll-spacer {
+    height:1360px;
+  }
+
+  .image-scroll-spacer span {
+    height:340px;
+  }
+}
+
+  
+/* --- Scroll focus markers only show when active --- */
+#scroll-guided .scroll-focus-marker {
+  opacity:0;
+  transform:translate(-50%, -50%) scale(.72);
+  transition:opacity .2s ease, transform .2s ease;
+}
+
+#scroll-guided .scroll-focus-marker::after {
+  opacity:0;
+  transform:translateY(-50%) translateX(-6px);
+  transition:opacity .2s ease, transform .2s ease;
+}
+
+#scroll-guided .scroll-focus-marker.is-active {
+  opacity:1;
+  transform:translate(-50%, -50%) scale(1);
+}
+
+#scroll-guided .scroll-focus-marker.is-active::after {
+  opacity:1;
+  transform:translateY(-50%) translateX(0);
+}
+
   </style>
 </head>
 <body>
@@ -1263,27 +1369,26 @@ main {
         <div class="pattern-header">
           <div>
             <h3>Scroll-driven focus</h3>
-            <p>Scroll-driven focus changes the visual frame as the reader moves through text. It works best for guided explainers where the written sequence controls what part of an image, diagram, or graphic should receive attention.</p>
+            <p>The image area scrolls through a guided sequence. It starts with the full overview, then moves to each marked point.</p>
           </div>
-          <span class="tag">Spatial scrollytelling</span>
+          <span class="tag">Image scroll focus</span>
         </div>
         <div class="demo-frame">
-          <div class="scrolly-wrap">
-            <div class="scrolly-text" id="scrollyText">
-              <article class="scrolly-step active" data-focus="overview"><h4>1. Start with the whole scene</h4><p>The opening view gives readers orientation before asking them to inspect individual features.</p></article>
-              <article class="scrolly-step" data-focus="back"><h4>2. Zoom in on something</h4><p>The frame moves closer to one feature while the text explains what to notice.</p></article>
-              <article class="scrolly-step" data-focus="wing"><h4>3. Move again</h4><p>The image position changes again, turning spatial movement into part of the explanation.</p></article>
-              <article class="scrolly-step" data-focus="bill"><h4>4. Zoomy zoom</h4><p>End on something.</p></article>
-            </div>
-            <div class="scrolly-sticky">
-              <div class="spatial-canvas">
-                <div class="scrolly-stage" id="scrollyStage">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird image for scroll-driven focus demo">
-                  <span class="spatial-marker" style="left:38%;top:44%;" data-label="Back"></span>
-                  <span class="spatial-marker" style="left:55%;top:60%;" data-label="Wing"></span>
-                  <span class="spatial-marker" style="left:72%;top:50%;" data-label="Bill"></span>
-                </div>
+          <div class="image-scroll-focus" id="imageScrollFocus" aria-label="Scroll through image focus points">
+            <div class="image-scroll-stage" id="imageScrollStage">
+              <div class="scrolly-stage" id="scrollyStage">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird image for scroll-driven focus demo">
+                <span class="spatial-marker scroll-focus-marker" data-focus="back" style="left:38%;top:44%;" data-label="Back"></span>
+                <span class="spatial-marker scroll-focus-marker" data-focus="wing" style="left:55%;top:60%;" data-label="Wing"></span>
+                <span class="spatial-marker scroll-focus-marker" data-focus="bill" style="left:72%;top:50%;" data-label="Bill"></span>
               </div>
+            </div>
+
+            <div class="image-scroll-spacer" aria-hidden="true">
+              <span>Overview</span>
+              <span>Point 1</span>
+              <span>Point 2</span>
+              <span>Point 3</span>
             </div>
           </div>
         </div>
@@ -1688,49 +1793,64 @@ const focusViews = {
     renderGuidedFocus('overview');
 
     const scrollyStage = document.getElementById('scrollyStage');
-    const scrollyText = document.getElementById('scrollyText');
-    const scrollySteps = document.querySelectorAll('.scrolly-step');
+    const imageScrollFocus = document.getElementById('imageScrollFocus');
+    const scrollFocusMarkers = document.querySelectorAll('#scroll-guided .scroll-focus-marker');
 
-    function setScrollyFocus(key) {
-      const view = focusViews[key] || focusViews.overview;
-      applyStageTransform(scrollyStage, view);
-      scrollySteps.forEach((step) => step.classList.toggle('active', step.dataset.focus === key));
+    const imageScrollViews = [
+      { key: 'overview', view: focusViews.overview },
+      { key: 'back', view: focusViews.back },
+      { key: 'wing', view: focusViews.wing },
+      { key: 'bill', view: focusViews.bill }
+    ];
+
+    function mixView(start, end, amount) {
+      return {
+        x: start.x + (end.x - start.x) * amount,
+        y: start.y + (end.y - start.y) * amount,
+        scale: start.scale + (end.scale - start.scale) * amount
+      };
     }
 
-    const observer = new IntersectionObserver((entries) => {
-      const visibleEntries = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+    function smoothStep(amount) {
+      return amount * amount * (3 - 2 * amount);
+    }
 
-      if (visibleEntries.length > 0) {
-        setScrollyFocus(visibleEntries[0].target.dataset.focus);
-      }
-    }, {
-      root: scrollyText,
-      threshold: [0.35, 0.5, 0.7, 0.9]
-    });
-
-    scrollySteps.forEach((step) => observer.observe(step));
-    scrollyText.addEventListener('scroll', () => {
-      let bestStep = scrollySteps[0];
-      let bestDistance = Infinity;
-      const containerRect = scrollyText.getBoundingClientRect();
-      const containerCenter = containerRect.top + containerRect.height / 2;
-
-      scrollySteps.forEach((step) => {
-        const rect = step.getBoundingClientRect();
-        const stepCenter = rect.top + rect.height / 2;
-        const distance = Math.abs(containerCenter - stepCenter);
-        if (distance < bestDistance) {
-          bestDistance = distance;
-          bestStep = step;
-        }
+    function setActiveScrollMarker(key) {
+      scrollFocusMarkers.forEach((marker) => {
+        marker.classList.toggle('is-active', marker.dataset.focus === key);
       });
+    }
 
-      setScrollyFocus(bestStep.dataset.focus);
-    }, { passive: true });
+    function updateImageScrollFocus() {
+      if (!imageScrollFocus || !scrollyStage) return;
 
-    setScrollyFocus('overview');
+      const maxScroll = imageScrollFocus.scrollHeight - imageScrollFocus.clientHeight;
+      const progress = maxScroll > 0 ? imageScrollFocus.scrollTop / maxScroll : 0;
+
+      const segmentCount = imageScrollViews.length - 1;
+      const scaled = Math.min(segmentCount, progress * segmentCount);
+      const index = Math.min(segmentCount - 1, Math.floor(scaled));
+      const local = smoothStep(scaled - index);
+
+      const start = imageScrollViews[index];
+      const end = imageScrollViews[index + 1];
+      const view = mixView(start.view, end.view, local);
+
+      /*
+        Keep the first part as a clean overview. Once the scroll is mostly
+        into a target segment, show only that target marker.
+      */
+      const activeKey = progress < 0.18 ? 'overview' : end.key;
+
+      applyStageTransform(scrollyStage, view);
+      setActiveScrollMarker(activeKey);
+    }
+
+    imageScrollFocus.addEventListener('scroll', updateImageScrollFocus, { passive: true });
+    window.addEventListener('resize', updateImageScrollFocus);
+    applyStageTransform(scrollyStage, focusViews.overview);
+    setActiveScrollMarker('overview');
+    updateImageScrollFocus();
   
     // Mobile hamburger menu
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
