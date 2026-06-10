@@ -1046,7 +1046,9 @@ main {
         <div class="pattern-header"><div><h3>Accordions</h3><p>An accordion stacks sections vertically and lets users expand one or more sections to reveal hidden content. It works best for grouped information where readers may only need some parts, such as FAQs, definitions, steps, background context, or categorized details.</p></div><span class="tag">Grouped details</span></div>
         <div class="demo-frame">
           <div class="accordion">
-            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>How do you identify a Red-winged Blackbird?</span><span>+</span></button><div class="accordion-panel">Look for a glossy black male with red-and-yellow shoulder patches. Females are brown and heavily streaked.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>How do you identify a Red-winged Blackbird?</span><span>+</span></button><div class="accordion-panel">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Agelaius_phoeniceus_0110_taxo.jpg/960px-Agelaius_phoeniceus_0110_taxo.jpg" alt="male red-winged blackbird" style="max-width:200px" />
+             <p>Look for a glossy black male with red-and-yellow shoulder patches. Females are brown and heavily streaked.</p></div></div>
             <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Where should you look for them?</span><span>+</span></button><div class="accordion-panel">They are common in marshes, roadside ditches, wet meadows, and cattail edges.</div></div>
             <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>What behavior confirms the ID?</span><span>+</span></button><div class="accordion-panel">During breeding season, males flash their shoulder patches while singing and defending territory.</div></div>
           </div>
@@ -1571,10 +1573,10 @@ document.querySelectorAll('.accordion-trigger').forEach((button) => {
     renderBirdExplorer(birdExplorerData[0].id);
 
     const slides = [
-      { img:'https://upload.wikimedia.org/wikipedia/commons/9/9b/Bird-nest-with-eggs-Sitia-Crete.jpg', title:'1. Egg', text:'The bird life cycle begins in the nest. Parents protect and warm the eggs until they hatch.' },
-      { img:'https://upload.wikimedia.org/wikipedia/commons/4/4a/Bird-Nest-Chicks-Sitia-Lasithi-Crete-Greece.jpg', title:'2. Hatchling', text:'Newly hatched birds are often weak, hungry, and dependent on parents.' },
-      { img:'https://upload.wikimedia.org/wikipedia/commons/a/a2/Fledgling_-_Pycnonotus_xanthopygos_01.jpg', title:'3. Fledgling', text:'Fledglings leave the nest before they are expert flyers. Adults may still feed them nearby.' },
-      { img:'https://upload.wikimedia.org/wikipedia/commons/2/26/Pycnonotus_xanthopygos_-_White-spectacled_Bulbul_14.jpg', title:'4. Adult', text:'Adults find mates, defend territory, migrate, and raise the next generation.' }
+      { img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Bird-nest-with-eggs-Sitia-Crete.jpg/1280px-Bird-nest-with-eggs-Sitia-Crete.jpg', title:'1. Egg', text:'The bird life cycle begins in the nest. Parents protect and warm the eggs until they hatch.' },
+      { img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Bird-Nest-Chicks-Sitia-Lasithi-Crete-Greece.jpg/1280px-Bird-Nest-Chicks-Sitia-Lasithi-Crete-Greece.jpg', title:'2. Hatchling', text:'Newly hatched birds are often weak, hungry, and dependent on parents.' },
+      { img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Fledgling_-_Pycnonotus_xanthopygos_01.jpg/1280px-Fledgling_-_Pycnonotus_xanthopygos_01.jpg', title:'3. Fledgling', text:'Fledglings leave the nest before they are expert flyers. Adults may still feed them nearby.' },
+      { img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Pycnonotus_xanthopygos_-_White-spectacled_Bulbul_14.jpg/1280px-Pycnonotus_xanthopygos_-_White-spectacled_Bulbul_14.jpg', title:'4. Adult', text:'Adults find mates, defend territory, migrate, and raise the next generation.' }
     ];
     let slideIndex = 0;
     function renderSlide() {
