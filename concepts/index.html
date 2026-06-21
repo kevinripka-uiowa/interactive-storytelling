@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Media Concepts: Critical Vocabulary</title>
+  <style>
+    :root {
+      --bg:#f7f4ec;
+      --panel:#fffdf7;
+      --ink:#17211b;
+      --muted:#5c675f;
+      --line:#d9d2c2;
+      --accent:#37634e;
+      --accent-2:#d8893a;
+      --soft:#edf4ee;
+      --warn:#fff8ed;
+      --shadow:0 14px 35px rgba(23,33,27,.12);
+      --radius:18px;
+    }
+
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      line-height:1.5;
+      overflow-x:hidden;
+    }
+    a { color:inherit; }
+    img, svg, iframe, video { max-width:100%; }
+
+    .layout { min-height:100vh; }
+    .sidebar {
+      position:fixed;
+      top:0;
+      left:0;
+      width:280px;
+      height:100vh;
+      overflow:auto;
+      padding:28px 22px;
+      background:#17211b;
+      color:#fffdf7;
+      z-index:20;
+    }
+    .sidebar h1 {
+      margin:0 0 8px;
+      font-size:1.35rem;
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+    .sidebar p {
+      margin:0 0 24px;
+      color:rgba(255,255,255,.72);
+      font-size:.92rem;
+    }
+    .nav-group-title {
+      margin:24px 0 8px;
+      color:#83e4b6;
+      text-transform:uppercase;
+      font-size:.72rem;
+      letter-spacing:.08em;
+      font-weight:800;
+    }
+    .sidebar a {
+      display:block;
+      padding:8px 10px;
+      margin:2px 0;
+      border-radius:10px;
+      text-decoration:none;
+      color:rgba(255,255,255,.88);
+      font-size:.94rem;
+    }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+
+    main {
+      margin-left:280px;
+      width:calc(100% - 280px);
+      padding:44px 36px 80px;
+    }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+
+    .hero {
+      background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:clamp(28px,5vw,56px);
+      box-shadow:var(--shadow);
+      margin-bottom:34px;
+    }
+    .eyebrow {
+      display:inline-flex;
+      margin:0 0 12px;
+      color:var(--accent);
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-size:.78rem;
+    }
+    .hero h2 {
+      margin:0 0 14px;
+      font-size:clamp(2rem,5vw,4.4rem);
+      line-height:.98;
+      letter-spacing:-.02em;
+      max-width:900px;
+    }
+    .hero p, .section-group p, .pattern p, .muted { color:var(--muted); }
+    .hero p { max-width:790px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+
+    .framework-strip {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+      margin-top:26px;
+    }
+    .framework-pill {
+      padding:16px;
+      border-radius:18px;
+      background:#fffdf7;
+      border:1px solid var(--line);
+    }
+    .framework-pill strong { display:block; font-size:1.15rem; margin-bottom:4px; }
+    .framework-pill span { color:var(--muted); font-size:.95rem; }
+
+    .section-group {
+      margin:54px auto 24px;
+      padding-top:10px;
+      border-top:2px solid var(--ink);
+    }
+    .section-group h2 {
+      margin:0 0 8px;
+      font-size:clamp(1.55rem,3vw,2.2rem);
+      letter-spacing:-.03em;
+      color:var(--accent);
+    }
+    .section-group p { margin:0; max-width:780px; }
+
+    .pattern {
+      scroll-margin-top:24px;
+      margin:26px auto 42px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:clamp(20px,3vw,30px);
+      box-shadow:0 8px 20px rgba(23,33,27,.06);
+    }
+    .pattern-header {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:16px;
+      align-items:start;
+      margin-bottom:18px;
+    }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0; }
+    .tag {
+      display:inline-block;
+      white-space:nowrap;
+      padding:6px 10px;
+      border-radius:999px;
+      background:var(--soft);
+      color:var(--accent);
+      font-weight:800;
+      font-size:.78rem;
+    }
+    .demo-frame {
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      padding:clamp(16px,3vw,24px);
+      overflow:hidden;
+    }
+
+    button, .button {
+      border:0;
+      background:var(--accent);
+      color:white;
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:800;
+      cursor:pointer;
+      font:inherit;
+    }
+    button.secondary { background:#eef3ef; color:var(--ink); border:1px solid var(--line); }
+    button:hover { filter:brightness(.96); }
+    button:focus-visible, .button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+
+    .concept-callout {
+      margin:22px 0 0;
+      padding:16px 18px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:#fff8ed;
+      color:var(--muted);
+      max-width:850px;
+    }
+    .concept-callout strong { color:var(--ink); }
+
+    .card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .card-grid.two { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .info-card {
+      padding:18px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fffdf7;
+      min-width:0;
+    }
+    .info-card h4 { margin:0 0 8px; font-size:1.12rem; }
+    .info-card p { margin:0; color:var(--muted); }
+    .info-card ul { margin:10px 0 0; padding-left:1.1rem; color:var(--muted); }
+    .info-card li + li { margin-top:4px; }
+
+    .accordion-item { border-top:1px solid var(--line); }
+    .accordion-item:first-child { border-top:0; }
+    .accordion-trigger {
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:16px 0;
+      background:transparent;
+      color:var(--ink);
+      border-radius:0;
+      text-align:left;
+    }
+    .accordion-trigger span:first-child { font-weight:900; }
+    .accordion-panel { display:none; padding:0 0 18px; color:var(--muted); }
+    .accordion-trigger[aria-expanded="true"] + .accordion-panel { display:block; }
+    .accordion-tools {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:flex-end;
+      margin:0 0 10px;
+    }
+    .accordion-tools button {
+      padding:7px 11px;
+      font-size:.86rem;
+    }
+
+    .tabs, .switch-controls, .step-controls { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .tabs button[aria-selected="true"], .switch-controls button.active, .step-controls button.active { background:var(--accent-2); color:#1b160f; }
+    .tab-panel { display:none; border:1px solid var(--line); border-radius:16px; padding:18px; background:#fffdf7; }
+    .tab-panel.active { display:block; }
+    .tab-panel h4 { margin:0 0 8px; font-size:1.35rem; }
+    .tab-panel ul, .tab-panel ol { margin:10px 0 0; padding-left:1.2rem; color:var(--muted); }
+
+    .agency-scale {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .agency-item {
+      position:relative;
+      border:1px solid var(--line);
+      border-radius:15px;
+      padding:14px;
+      background:#fffdf7;
+      min-height:150px;
+    }
+    .agency-item strong { display:block; margin-bottom:8px; }
+    .agency-item span { display:block; font-size:.9rem; color:var(--muted); }
+    .agency-item::before {
+      content:attr(data-step);
+      display:inline-grid;
+      place-items:center;
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      background:var(--accent-2);
+      color:#1b160f;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .matrix-wrap { overflow-x:auto; }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      min-width:720px;
+      background:#fffdf7;
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+    }
+    th, td {
+      padding:13px 14px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align:top;
+    }
+    th { background:var(--soft); color:var(--accent); font-size:.82rem; text-transform:uppercase; letter-spacing:.06em; }
+    tr:last-child td { border-bottom:0; }
+    td:first-child { font-weight:900; color:var(--ink); }
+
+    .story-builder {
+      display:grid;
+      grid-template-columns:minmax(260px, 36%) minmax(0,1fr);
+      gap:18px;
+      align-items:stretch;
+    }
+    .builder-form {
+      padding:18px;
+      border-radius:16px;
+      background:#f6f1e7;
+      border:1px solid var(--line);
+    }
+    .field { margin-bottom:14px; }
+    .field label { display:block; font-weight:900; margin-bottom:6px; }
+    select, textarea, input {
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fffdf7;
+      color:var(--ink);
+      font:inherit;
+    }
+    textarea { min-height:95px; resize:vertical; }
+    .builder-output {
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:20px;
+      background:#fffdf7;
+    }
+    .builder-output h4 { margin:0 0 10px; font-size:1.4rem; }
+    .output-row { margin:12px 0; padding:12px; border-radius:14px; background:var(--soft); }
+    .output-row strong { display:block; color:var(--accent); text-transform:uppercase; letter-spacing:.06em; font-size:.78rem; }
+
+    .mini-quiz { display:grid; gap:12px; }
+    .quiz-card {
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fffdf7;
+    }
+    .quiz-card h4 { margin:0 0 10px; }
+    .quiz-options { display:flex; flex-wrap:wrap; gap:8px; }
+    .quiz-feedback { display:none; margin-top:12px; padding:12px; border-radius:14px; background:#fff8ed; color:var(--muted); }
+    .quiz-feedback.show { display:block; }
+
+    .checklist { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .check-item {
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fffdf7;
+      color:var(--muted);
+    }
+    .check-item input { width:auto; margin-top:4px; }
+    .check-item strong { display:block; color:var(--ink); }
+
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+
+    @media (max-width: 980px) {
+      .card-grid { grid-template-columns:1fr 1fr; }
+      .story-builder { grid-template-columns:1fr; }
+    }
+
+    @media (max-width: 860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle {
+        position:fixed;
+        top:12px;
+        left:12px;
+        z-index:1001;
+        display:inline-flex;
+        align-items:center;
+        gap:9px;
+        padding:10px 13px;
+        border-radius:999px;
+        background:#17211b;
+        color:#fffdf7;
+        box-shadow:0 8px 22px rgba(23,33,27,.24);
+      }
+      .mobile-menu-icon {
+        position:relative;
+        display:block;
+        width:18px;
+        height:12px;
+        border-top:2px solid currentColor;
+        border-bottom:2px solid currentColor;
+      }
+      .mobile-menu-icon::before {
+        content:"";
+        position:absolute;
+        left:0;
+        right:0;
+        top:50%;
+        border-top:2px solid currentColor;
+        transform:translateY(-50%);
+      }
+      .mobile-menu-backdrop {
+        position:fixed;
+        inset:0;
+        z-index:999;
+        display:block;
+        background:rgba(23,33,27,.45);
+      }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar {
+        position:fixed !important;
+        top:0 !important;
+        left:0;
+        bottom:0;
+        width:min(84vw, 340px);
+        height:100vh !important;
+        max-height:100vh !important;
+        padding:76px 22px 28px;
+        overflow-y:auto !important;
+        overflow-x:hidden;
+        z-index:1000;
+        transform:translateX(-105%);
+        transition:transform .24s ease;
+        box-shadow:18px 0 36px rgba(0,0,0,.22);
+      }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main {
+        margin-left:0 !important;
+        width:100% !important;
+        max-width:1120px;
+        padding:24px 16px 56px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .framework-strip, .card-grid, .card-grid.two, .checklist, .agency-scale { grid-template-columns:1fr; }
+      .pattern-header { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+      .hero { border-radius:20px; }
+      .hero h2 { font-size:clamp(2rem, 12vw, 3.2rem); line-height:1; }
+      .demo-frame { padding:14px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior:auto !important;
+        transition-duration:.001ms !important;
+        animation-duration:.001ms !important;
+      }
+    }
+  
+    .five-as-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 1000px) { .five-as-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 640px) { .five-as-grid { grid-template-columns:1fr; } }
+
+    .subsection-divide {
+      font-size: 1.2rem;
+      border-top: 3px solid #000;
+      margin-bottom: 0;
+      padding-top: 1rem;
+    }
+    .push {
+      margin-bottom: 1rem!important;
+    }
+
+  </style>
+</head>
+<body>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false">
+    <span class="mobile-menu-icon" aria-hidden="true"></span>
+    <span class="mobile-menu-text">Menu</span>
+  </button>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="siteSidebar" aria-label="Critical vocabulary navigation">
+      <h1>Interactive Media Concepts</h1>
+      <p>Critical vocabulary for the 3P framework: Purpose → Pattern → Production.</p>
+      <nav>
+        <div class="nav-group-title">Start here</div>
+        <a href="#framework">3P Framework</a>
+        <div class="nav-group-title">Purpose</div>
+        <a href="#purpose">Purpose parts</a>
+        <a href="#takeaway-terms">Takeaway / Experience</a>
+        <a href="#story-role">Story role</a>
+        <a href="#monarch-purpose">Monarch example</a>
+        <div class="nav-group-title">Pattern</div>
+        <a href="#affordances">Affordances</a>
+        <a href="#story-job">Story job</a>
+        <a href="#agency">Agency</a>
+        <a href="#forms">Forms</a>
+        <a href="#monarch-pattern">Monarch choice-making example</a>
+        <div class="nav-group-title">Production</div>
+        <a href="#build-approaches">Build approaches</a>
+        <a href="#control-matrix">Control vs. responsibility</a>
+        <a href="#five-as">5 A's overview</a>
+        <a href="#appearance">Appearance</a>
+        <a href="#asset-optimization">Asset optimization</a>
+        <a href="#all-devices">All devices</a>
+        <a href="#accessibility">Accessibility</a>
+        <a href="#attribution-disclosure">Attribution & disclosure</a>
+      </nav>
+    </aside>
+
+    <main>
+      <section class="hero" id="framework">
+        <div class="eyebrow">Critical Vocabulary</div>
+        <h2>Interactive Media<br />3P Framework</h2>
+        <p>This interactive guide turns the critical vocabulary deck into a reference page students can click through, revisit, and use while planning story elements.</p>
+        <div class="framework-strip" aria-label="The 3P framework">
+          <div class="framework-pill"><strong>Purpose</strong><span>What should the viewer understand, feel, notice, compare, or explain?</span></div>
+          <div class="framework-pill"><strong>Pattern</strong><span>What kind of interaction best creates that takeaway?</span></div>
+          <div class="framework-pill"><strong>Production</strong><span>How will the element be built responsibly on the web?</span></div>
+        </div>
+        <div class="concept-callout"><strong>Core rule:</strong> Do not start with “I want to make a map.” Start with “What should the viewer understand?” Then choose the form that fits.</div>
+      </section>
+
+      <section class="section-group" id="purpose">
+        <h2>Purpose</h2>
+        <p>Purpose defines why the interactive exists. It has three parts: information, takeaway or experience, and story role.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>The three parts of purpose</h3><p>Before choosing a form, identify the material, the desired takeaway, and how the element fits into the larger piece.</p></div><span class="tag">Start here</span></div>
+        <div class="demo-frame card-grid">
+          <article class="info-card"><h4>Information</h4><p>The material your interactive is built from: facts, data, places, people, events, steps, systems, relationships, categories, images, audio, video, or documents.</p></article>
+          <article class="info-card"><h4>Takeaway / Experience</h4><p>What should stick with the viewer after they use it? This could involve scale, change, time, connection, comparison, pattern, distribution, consequence, process, or perspective.</p></article>
+          <article class="info-card"><h4>Story Role</h4><p>Where does the element fit? It might be a sidebar element, an inline element, or the main structure of the story.</p></article>
+        </div>
+      </section>
+
+      <section class="pattern" id="takeaway-terms">
+        <div class="pattern-header"><div><h3>Takeaway / Experience</h3><p>These terms describe what the viewer should understand, feel, notice, or be able to explain after using the interactive.</p></div><span class="tag">Purpose vocabulary</span></div>
+        <div class="demo-frame">
+          <div class="accordion">
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Scale</span><span>+</span></button><div class="accordion-panel">How big, far, much, intense, rare, common, or significant something is.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Change</span><span>+</span></button><div class="accordion-panel">What shifts over time, between conditions, across places, or before and after an event.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Time</span><span>+</span></button><div class="accordion-panel">When something happens, how long it lasts, what order it follows, or how events sequence across a timeline.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Connection</span><span>+</span></button><div class="accordion-panel">How people, places, causes, systems, events, or categories are linked.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Comparison</span><span>+</span></button><div class="accordion-panel">How two or more things are similar or different, including side-by-side contrasts and before/after relationships.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Pattern</span><span>+</span></button><div class="accordion-panel">A trend, repetition, cluster, anomaly, or recurring relationship the viewer should notice.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Distribution</span><span>+</span></button><div class="accordion-panel">Where something is concentrated, spread out, absent, overrepresented, or unevenly distributed.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Consequence</span><span>+</span></button><div class="accordion-panel">Why the information matters and what effects, stakes, risks, or outcomes follow from it.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Process</span><span>+</span></button><div class="accordion-panel">How something works, what steps it follows, or how parts of a system produce an outcome.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Perspective</span><span>+</span></button><div class="accordion-panel">What something feels like, looks like, or means from a specific position, role, location, or point of view.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pattern" id="story-role">
+        <div class="pattern-header"><div><h3>Story role</h3><p>Story role asks how the interactive fits into the larger piece. The same interactive form can play different roles depending on where it appears and what the surrounding story needs it to do.</p></div><span class="tag">Purpose vocabulary</span></div>
+        <div class="demo-frame">
+          <div class="accordion">
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Sidebar element</span><span>+</span></button><div class="accordion-panel">A sidebar element provides useful extra context next to a related story. It supports the main piece without carrying the full explanation by itself. Use this when the interaction gives background, a reference, a definition set, a small comparison, or optional context.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Inline element</span><span>+</span></button><div class="accordion-panel">An inline element appears inside the story flow and helps explain one part of the main story. It should arrive at the moment the viewer needs it. For this course, every interactive you make is treated as an inline element: it should connect directly to the surrounding text, visuals, and explanation.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Main structure</span><span>+</span></button><div class="accordion-panel">A main-structure interactive functions as the story itself. The viewer moves through the piece primarily by using the interaction. This role requires stronger organization, clearer instructions, more complete context, and more careful testing because the interactive carries the whole experience.</div></div>
+          </div>
+
+          <div class="subsection-block" id="inline-role-questions">
+            <h4 class="subsection-divide">Inline element planning questions</h4>
+            <p class="push">Because every interactive in this class is treated as an inline element, students should answer these questions before building.</p>
+            <div class="card-grid">
+              <article class="info-card"><h4>What does it do differently?</h4><p>What does this element provide that the text, photos, video, audio, or static graphics do not? A strong interactive should add a useful digital capability: revealing, comparing, locating, exploring, explaining, participating, or experiencing.</p></article>
+              <article class="info-card"><h4>When does it appear?</h4><p>Where does this element belong in the story: beginning, middle, or end? What does the viewer need to know before reaching it?</p></article>
+              <article class="info-card"><h4>How does it connect?</h4><p>How does this element connect to the text, visuals, and other interactive elements around it? The headline, deck, instructions, labels, captions, annotations, and surrounding paragraphs should make the connection clear.</p></article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="pattern" id="monarch-purpose">
+        <div class="pattern-header"><div><h3>Purpose Example: Monarch Migration Route</h3><p>The same information can lead to several different patterns, depending on what the viewer needs to understand.</p></div><span class="tag">Example</span></div>
+        <div class="demo-frame">
+          <div class="tabs" role="tablist" aria-label="Monarch purpose tabs">
+            <button role="tab" aria-selected="true" aria-controls="monarch-info" id="tab-monarch-info">Information</button>
+            <button role="tab" aria-selected="false" aria-controls="monarch-takeaway" id="tab-monarch-takeaway">Takeaway</button>
+            <button role="tab" aria-selected="false" aria-controls="monarch-role" id="tab-monarch-role">Story role</button>
+          </div>
+          <article class="tab-panel active" id="monarch-info" role="tabpanel" aria-labelledby="tab-monarch-info"><h4>Information</h4><p>Where monarch butterflies travel during migration, including major movement paths between breeding areas in the United States and Canada and overwintering sites in Mexico.</p></article>
+          <article class="tab-panel" id="monarch-takeaway" role="tabpanel" aria-labelledby="tab-monarch-takeaway"><h4>Takeaway / Experience</h4><p>The viewer should understand that monarch migration is a multi-generational journey spanning thousands of miles. The experience should convey scale, time, connection, consequence, and fragility.</p></article>
+          <article class="tab-panel" id="monarch-role" role="tabpanel" aria-labelledby="tab-monarch-role"><h4>Story role</h4><p>This element belongs near the beginning of the explainer because it establishes the scale of the migration. Without it, viewers would have a harder time understanding why habitat loss, weather, and conservation across regions matter.</p></article>
+        </div>
+      </section>
+
+      <section class="section-group" id="affordances">
+        <h2>Pattern</h2>
+        <p>Pattern connects the story need to digital media’s capabilities, the viewer’s agency, and the final form.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Affordances</h3><p>An affordance is what a medium, object, or interface makes possible for a user. For this course, affordances help students describe why an interactive form fits the story need.</p></div><span class="tag">Digital capability</span></div>
+        <div class="demo-frame">
+          <div class="accordion">
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Encyclopedic</span><span>+</span></button><div class="accordion-panel">Computers can hold and organize far more material than physical media. This supports layered information, databases, archives, annotations, and expandable context.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Spatial</span><span>+</span></button><div class="accordion-panel">Digital media can let users move through material in different orders. This supports maps, 360 scenes, pan-and-zoom images, and nonlinear browsing.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Procedural</span><span>+</span></button><div class="accordion-panel">A system can execute rules: if this, do this; if that, do that. This supports calculators, quizzes, filters, step logic, animation, and input-driven results.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Participatory</span><span>+</span></button><div class="accordion-panel">People can interact with the medium. This supports clicking, choosing, filtering, submitting, comparing, navigating, and shaping what appears next.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Motion</span><span>+</span></button><div class="accordion-panel">Motion is not one of Janet H. Murray’s four main affordances, but it is useful to treat as a practical digital capability. Motion can guide attention, show change over time, explain sequence, provide feedback, and create mood or experience.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pattern" id="story-job">
+        <div class="pattern-header"><div><h3>Story job terms</h3><p>Story job asks what the element helps the viewer do. One element can have more than one job, but a primary job keeps the design focused.</p></div><span class="tag">Reader task</span></div>
+        <div class="demo-frame">
+          <div class="accordion">
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Reveal</span><span>+</span></button><div class="accordion-panel">Uncover hidden, layered, collapsed, or attached information. Common forms include accordions, hotspots, annotations, flip cards, modals, and tooltips.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Compare</span><span>+</span></button><div class="accordion-panel">Help viewers understand differences or similarities. Common forms include before/after sliders, toggles, tabs, side-by-side cards, and sortable comparisons.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Explain</span><span>+</span></button><div class="accordion-panel">Help viewers understand how something works, why something happens, or how parts fit together. Common forms include steppers, scrolly sequences, annotation graphics, and animated explainers.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Locate</span><span>+</span></button><div class="accordion-panel">Help viewers understand where something happens and why geography or spatial position matters. Common forms include locator maps, guided maps, scrolly maps, and layered maps.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Explore</span><span>+</span></button><div class="accordion-panel">Let viewers investigate a set of material. Common forms include searchable cards, filterable databases, browsable galleries, maps, and collections.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Participate</span><span>+</span></button><div class="accordion-panel">Let viewers contribute choices or input that shape the result. Common forms include quizzes, calculators, decision paths, polls, and personalized outputs.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Experience</span><span>+</span></button><div class="accordion-panel">Help viewers feel, move through, or perceive something from a particular point of view. Common forms include 360 scenes, 3D viewers, audio-guided sequences, and immersive scrolly sections.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pattern" id="agency">
+        <div class="pattern-header"><div><h3>Levels of viewer agency</h3><p>Agency describes how much control the viewer has. The right amount depends on the story need.</p></div><span class="tag">Control level</span></div>
+        <div class="demo-frame agency-scale">
+          <div class="agency-item" data-step="1"><strong>None</strong><span>The viewer watches. Example: looping animation or video-like explainer.</span></div>
+          <div class="agency-item" data-step="2"><strong>Guided</strong><span>The viewer advances through a designed sequence, such as a stepper, scrolly, slideshow, or timeline.</span></div>
+          <div class="agency-item" data-step="3"><strong>Limited choice</strong><span>The viewer chooses among a small set of options, such as tabs, toggles, or category buttons.</span></div>
+          <div class="agency-item" data-step="4"><strong>Exploratory</strong><span>The viewer can search, filter, sort, pan, zoom, browse, or inspect.</span></div>
+          <div class="agency-item" data-step="5"><strong>Participatory</strong><span>The viewer contributes information or makes choices that shape the result.</span></div>
+          <div class="agency-item" data-step="6"><strong>Hybrid</strong><span>The piece combines guided explanation with exploratory or participatory sections.</span></div>
+        </div>
+      </section>
+
+
+      <section class="pattern" id="forms">
+        <div class="pattern-header"><div><h3>Forms are chosen last</h3><p>The form is the specific structure that delivers the purpose, affordance, story job, and agency level.</p></div><span class="tag">Do not start here</span></div>
+        <div class="demo-frame">
+          <div class="switch-controls" role="group" aria-label="Form category filters">
+            <button class="form-filter active" type="button" data-filter="all">All</button>
+            <button class="form-filter secondary" type="button" data-filter="reveal">Reveal</button>
+            <button class="form-filter secondary" type="button" data-filter="sequence">Sequence</button>
+            <button class="form-filter secondary" type="button" data-filter="explore">Explore</button>
+            <button class="form-filter secondary" type="button" data-filter="input">Input</button>
+          </div>
+          <div class="card-grid" id="formGrid">
+            <article class="info-card" data-kind="reveal"><h4>Hotspot image</h4><p>Click points on an image to reveal context.</p></article>
+            <article class="info-card" data-kind="reveal"><h4>Annotation graphic</h4><p>Layer explanation directly onto a visual.</p></article>
+            <article class="info-card" data-kind="reveal"><h4>Before/after slider</h4><p>Compare two states or versions.</p></article>
+            <article class="info-card" data-kind="reveal"><h4>Toggle / Tabs / Accordion</h4><p>Reveal categories, definitions, or grouped details.</p></article>
+            <article class="info-card" data-kind="sequence"><h4>Timeline / Stepper</h4><p>Guide viewers through time, steps, or stages.</p></article>
+            <article class="info-card" data-kind="sequence"><h4>Scrolly sequence</h4><p>Move through a controlled explanation as the viewer scrolls.</p></article>
+            <article class="info-card" data-kind="explore"><h4>Map</h4><p>Help viewers understand where something happens.</p></article>
+            <article class="info-card" data-kind="explore"><h4>Filterable database</h4><p>Let viewers investigate a set of items.</p></article>
+            <article class="info-card" data-kind="explore"><h4>Searchable cards</h4><p>Support browsing, filtering, and inspection.</p></article>
+            <article class="info-card" data-kind="input"><h4>Calculator</h4><p>Generate an answer based on input.</p></article>
+            <article class="info-card" data-kind="input"><h4>Quiz / decision path</h4><p>Let choices shape the next step.</p></article>
+            <article class="info-card" data-kind="explore"><h4>360 scene / 3D viewer</h4><p>Create spatial inspection or experience.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="pattern" id="monarch-pattern">
+        <div class="pattern-header"><div><h3>Pattern Choice-Making Example: Monarch Migration Route</h3><p>This example shows how a purpose statement turns into pattern decisions. The point is not “make a map” first. The point is to decide what the viewer needs to understand, then choose the form that best creates that understanding.</p></div><span class="tag">Purpose → pattern</span></div>
+        <div class="demo-frame">
+          <div class="tabs" role="tablist" aria-label="Monarch pattern choice tabs">
+            <button role="tab" aria-selected="true" aria-controls="monarch-pattern-start" id="tab-monarch-pattern-start">Starting point</button>
+            <button role="tab" aria-selected="false" aria-controls="monarch-pattern-job" id="tab-monarch-pattern-job">Job</button>
+            <button role="tab" aria-selected="false" aria-controls="monarch-pattern-agency" id="tab-monarch-pattern-agency">Agency</button>
+            <button role="tab" aria-selected="false" aria-controls="monarch-pattern-forms" id="tab-monarch-pattern-forms">Possible forms</button>
+          </div>
+
+          <article class="tab-panel active" id="monarch-pattern-start" role="tabpanel" aria-labelledby="tab-monarch-pattern-start">
+            <h4>Start with the purpose</h4>
+            <p><strong>Information:</strong> where monarch butterflies travel during migration, including major movement paths between breeding areas in the United States and Canada and overwintering sites in Mexico.</p>
+            <p><strong>Takeaway / Experience:</strong> the viewer should understand that monarch migration is a multi-generational journey spanning thousands of miles. The experience should convey scale, time, connection, consequence, and fragility.</p>
+          </article>
+
+          <article class="tab-panel" id="monarch-pattern-job" role="tabpanel" aria-labelledby="tab-monarch-pattern-job">
+            <h4>Choose the story job</h4>
+            <p><strong>Locate:</strong> help the viewer understand where the migration happens and why geography matters to the story.</p>
+            <p><strong>Explain:</strong> help the viewer understand how threats in different regions can affect the overall migration.</p>
+          </article>
+
+          <article class="tab-panel" id="monarch-pattern-agency" role="tabpanel" aria-labelledby="tab-monarch-pattern-agency">
+            <h4>Choose the agency level</h4>
+            <p>A good fit would be <strong>guided</strong>, with possible <strong>limited choice</strong>. The viewer should move through the migration path in a designed sequence, with selected stops that explain specific challenges in the geographic trip and timeline.</p>
+            <p>This keeps the interaction focused. The viewer gets some control, but the story still guides attention toward the main takeaway.</p>
+          </article>
+
+          <article class="tab-panel" id="monarch-pattern-forms" role="tabpanel" aria-labelledby="tab-monarch-pattern-forms">
+            <h4>Possible forms</h4>
+            <div class="card-grid two">
+              <article class="info-card"><h4>Guided map</h4><p>The viewer moves step-by-step along the migration path, with stops for breeding areas, migration corridors, threats, and overwintering sites.</p></article>
+              <article class="info-card"><h4>Scrolly map</h4><p>As the viewer scrolls, the map moves through the route and reveals key moments, regions, and challenges.</p></article>
+              <article class="info-card"><h4>Animated explainer</h4><p>The migration path animates across the map while short text explains what is happening at each stage.</p></article>
+              <article class="info-card"><h4>Timeline-controlled map</h4><p>A timeline controls the map, showing where monarchs are during different stages of the migration cycle.</p></article>
+              <article class="info-card"><h4>Layered interactive map</h4><p>The viewer turns layers on and off to see habitat loss, weather risk, pesticide exposure, or overwintering threats along the route.</p></article>
+              <article class="info-card"><h4>Carousel or flip/hover cards</h4><p>A sequence of cards shows important places along the route, with a small map, photo, and explanation for each stop.</p></article>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-group" id="build-approaches">
+        <h2>Production</h2>
+        <p>Production covers the practical responsibility of building a web-based interactive. Students should know the purpose and pattern before they start building.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>First production question: where is the page built?</h3><p>The build environment shapes what is easy, what is possible, and what the student is responsible for.</p></div><span class="tag">Build context</span></div>
+        <div class="demo-frame card-grid">
+          <article class="info-card"><h4>Storytelling builder</h4><p>Tilda, Vev, Shorthand, and similar platforms designed for visual storytelling pages.</p></article>
+          <article class="info-card"><h4>General builder</h4><p>Wix, WordPress, Squarespace, and similar site-building systems.</p></article>
+          <article class="info-card"><h4>Code-based</h4><p>Plain HTML/CSS/JavaScript, React, Vue, Svelte, or another code framework.</p></article>
+        </div>
+      </section>
+
+      <section class="pattern" id="control-matrix">
+        <div class="pattern-header"><div><h3>Build approaches: control vs. responsibility</h3><p>More control usually means more responsibility. The best choice is not always the most powerful choice.</p></div><span class="tag">Trade-off</span></div>
+        <div class="demo-frame matrix-wrap">
+          <table>
+            <thead><tr><th>Production choice</th><th>Control</th><th>Responsibility</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td>Native Block</td><td>Low</td><td>Low</td><td>Common patterns the platform already handles well.</td></tr>
+              <tr><td>Embedded Builder</td><td>Medium</td><td>Medium</td><td>Data visualizations, maps, timelines, quizzes, or graphics built in specialized tools.</td></tr>
+              <tr><td>Custom Code Block</td><td>High</td><td>High</td><td>Custom behavior inside a larger story platform.</td></tr>
+              <tr><td>Hosted Code</td><td>Highest</td><td>Highest</td><td>Full control over layout, performance, responsiveness, and interaction.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="pattern" id="five-as">
+        <div class="pattern-header"><div><h3>The 5 A's of production responsibility</h3><p>These are the practical choices students must make when producing an interactive web element. A builder may handle some of them, but the student remains responsible for the final result.</p></div><span class="tag">Production responsibility</span></div>
+        <div class="demo-frame card-grid five-as-grid">
+          <article class="info-card"><h4>Appearance</h4><p>What it looks like, how it is organized, and how the attendant text frames the element.</p></article>
+          <article class="info-card"><h4>Asset Optimization</h4><p>How responsibly the media files are prepared and served over the internet.</p></article>
+          <article class="info-card"><h4>All Devices</h4><p>How well the interactive works across screen sizes and interaction modes.</p></article>
+          <article class="info-card"><h4>Accessibility</h4><p>How well people can use and understand the interactive across viewing, hearing, mobility, and device conditions.</p></article>
+          <article class="info-card"><h4>Attribution & Disclosure</h4><p>How clearly the project credits data, information, media, and meaningful AI use.</p></article>
+        </div>
+      </section>
+
+      <section class="pattern" id="appearance">
+        <div class="pattern-header"><div><h3>Appearance</h3><p>Appearance is the design and framing of the interactive. It includes layout, typography, color, spacing, hierarchy, polish, and the words that help viewers understand what they are seeing.</p></div><span class="tag">Design + framing</span></div>
+        <div class="demo-frame">
+          <div class="accordion">
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Design</span><span>+</span></button><div class="accordion-panel">Design includes layout, typography, color, spacing, hierarchy, and polish. In a builder, students may choose from themes or visual settings. In code, students control those choices through CSS.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Structural design</span><span>+</span></button><div class="accordion-panel">Structural design covers organization, hierarchy, page patterns, and interaction patterns. For this course, clean and consistent structure matters more than decorative flair.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Expressive design</span><span>+</span></button><div class="accordion-panel">Expressive design covers visual language, emotional tone, cognitive guidance, and interaction behaviors. It shapes how the piece feels, but it should support the story purpose rather than distract from it.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Attendant text</span><span>+</span></button><div class="accordion-panel">Attendant text is the writing that helps a viewer read, use, and interpret a graphic. It can include the headline, deck, intro, instructions, labels, captions, annotations, tooltip or popup text, takeaway text, and source notes.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Course standard</span><span>+</span></button><div class="accordion-panel">Students do not need elaborate expressive design. The target is clean, consistent structural design: clear hierarchy, sensible grouping, usable pattern variants, and consistent typography and colors.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pattern" id="asset-optimization">
+        <div class="pattern-header"><div><h3>Asset Optimization</h3><p>Asset optimization means preparing files so the page loads responsibly. Media should be saved in the smallest useful version, not uploaded as oversized originals.</p></div><span class="tag">Performance</span></div>
+        <div class="demo-frame card-grid two">
+          <article class="info-card"><h4>Images</h4><p>Images should be resized and compressed for web use. Students should not use large original files when the page only needs a smaller display size.</p></article>
+          <article class="info-card"><h4>Video and audio</h4><p>Video and audio should be compressed and served in a way that does not make the page unnecessarily slow or heavy.</p></article>
+          <article class="info-card"><h4>3D models</h4><p>3D models should be simplified or decimated when needed so the viewer is not forced to download an unnecessarily large file.</p></article>
+          <article class="info-card"><h4>Builder vs. code responsibility</h4><p>Builders often generate resized or compressed versions automatically. With custom code, students are responsible for preparing and linking the correct files themselves.</p></article>
+        </div>
+      </section>
+
+      <section class="pattern" id="all-devices">
+        <div class="pattern-header"><div><h3>All Devices</h3><p>All Devices means the interactive should work across desktop, tablet, and phone sizes, and across different interaction modes.</p></div><span class="tag">Responsiveness</span></div>
+        <div class="demo-frame">
+          <div class="accordion">
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Responsive sizing</span><span>+</span></button><div class="accordion-panel">The element should adapt to different screen widths. Text, images, controls, and panels should not overflow or require awkward horizontal scrolling unless horizontal exploration is the intended pattern.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Desktop vs. mobile interaction</span><span>+</span></button><div class="accordion-panel">Desktop interactions often assume a mouse and larger screen. Mobile interactions rely on taps, swipes, scrolling, and smaller viewports. A hover-only interaction needs an alternative for touch devices.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Builder vs. code responsibility</span><span>+</span></button><div class="accordion-panel">Builders usually provide responsive defaults or settings. With code, students must build responsive sizing and test breakpoints themselves.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Basic rule</span><span>+</span></button><div class="accordion-panel">A working desktop version is not enough. The interactive should remain usable and understandable on a phone.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pattern" id="accessibility">
+        <div class="pattern-header"><div><h3>Accessibility</h3><p>Accessibility means people can use and understand the interactive in different viewing, hearing, mobility, and device conditions. Builders may help, but students are still responsible for choices, labels, instructions, and testing.</p></div><span class="tag">Access</span></div>
+        <div class="demo-frame">
+          <div class="accordion">
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Alt text</span><span>+</span></button><div class="accordion-panel">Alt text describes meaningful images for people who cannot see them. Use it for photos, charts, maps, diagrams, and figures. Describe the information the image provides, not every visual detail.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Captions / transcripts</span><span>+</span></button><div class="accordion-panel">Video and audio need text alternatives. Use captions for video and transcripts for audio or long video/audio content. Viewers should still get the meaning without sound.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Correct HTML elements</span><span>+</span></button><div class="accordion-panel">Use headings for section structure, buttons for actions, links for navigation, and lists for grouped items. Use the HTML elements in a semantic way.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Readability & color contrast</span><span>+</span></button><div class="accordion-panel">Check font size, line spacing, and contrast. If viewers have to strain to read it, the design is not working.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Keyboard access</span><span>+</span></button><div class="accordion-panel">Some users navigate without a mouse. They should be able to tab through controls, activate buttons and links, avoid getting trapped, and understand where focus is.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Reduced motion concerns</span><span>+</span></button><div class="accordion-panel">Motion can guide attention, show change, explain sequence, provide feedback, or create mood. But viewers should not be forced to watch motion to understand the story. Provide pause, stop, replay, next/previous controls, reduced-motion support, or a static summary when needed.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Non-color-only meaning</span><span>+</span></button><div class="accordion-panel">Do not rely only on color to communicate information. Add labels, icons, patterns, text, position, or shape. Color can reinforce meaning, but it should not carry meaning alone.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Clear instructions</span><span>+</span></button><div class="accordion-panel">Tell viewers what they are looking at, what they can do, what to click, tap, drag, scroll, or select, and what the result means. If users have to guess how it works, it needs better instructions.</div></div>
+            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>ARIA</span><span>+</span></button><div class="accordion-panel">ARIA adds extra information for assistive technologies. It can help describe: Custom controls, Open/closed states, Labels, Instructions, and Interactive regions.</div></div>
+          </div>
+          <div class="subsection-block" id="aria-details">
+            <h4 class="subsection-divide">ARIA: when it helps</h4>
+            <p class="push">ARIA belongs inside accessibility. It is useful for custom interface states, but it should not replace real HTML elements.</p>
+            <div class="card-grid two">
+              <article class="info-card"><h4>Usually no ARIA needed</h4><ul><li>Real buttons</li><li>Real links</li><li>Headings</li><li>Paragraphs</li><li>Lists</li><li>Images with useful alt text</li></ul></article>
+              <article class="info-card"><h4>ARIA may help with</h4><ul><li>Icon-only buttons</li><li>Custom tabs</li><li>Accordions</li><li>Modals/popups</li><li>Carousels</li><li>Hidden or expanded panels</li><li>Interactive regions with instructions</li></ul></article>
+              <article class="info-card"><h4>Common attributes</h4><ul><li><code>aria-label</code>: label for icon-only controls</li><li><code>aria-labelledby</code>: connect region to visible heading</li><li><code>aria-describedby</code>: connect instructions</li><li><code>aria-expanded</code>: open/closed state</li><li><code>aria-hidden=&quot;true&quot;</code>: decorative icons only</li></ul></article>
+              <article class="info-card"><h4>Example</h4><p><code>&lt;button aria-expanded=&quot;false&quot; aria-controls=&quot;migration-details&quot;&gt;Show migration details&lt;/button&gt;</code></p></article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pattern" id="attribution-disclosure">
+        <div class="pattern-header"><div><h3>Attribution & Disclosure</h3><p>Attribution and disclosure explain where material came from and how it was made. If students had to look it up, the source should be traceable.</p></div><span class="tag">Credit + transparency</span></div>
+        <div class="demo-frame">
+          <div class="tabs" role="tablist" aria-label="Attribution and disclosure tabs">
+            <button role="tab" aria-selected="true" aria-controls="attr-items" id="tab-attr-items">What to credit</button>
+            <button role="tab" aria-selected="false" aria-controls="attr-places" id="tab-attr-places">Where it goes</button>
+            <button role="tab" aria-selected="false" aria-controls="attr-patterns" id="tab-attr-patterns">Patterns</button>
+            <button role="tab" aria-selected="false" aria-controls="attr-text" id="tab-attr-text">Use info, don’t copy</button>
+            <button role="tab" aria-selected="false" aria-controls="attr-ai" id="tab-attr-ai">AI disclosure</button>
+          </div>
+          <article class="tab-panel active" id="attr-items" role="tabpanel" aria-labelledby="tab-attr-items"><h4>Items to attribute or disclose</h4><ul><li>Data</li><li>Information</li><li>Images and other media, including audio and video</li><li>Use of AI when it plays a clear role in what the viewer sees, reads, hears, uses, or interprets</li></ul></article>
+          <article class="tab-panel" id="attr-places" role="tabpanel" aria-labelledby="tab-attr-places"><h4>Places to attribute or disclose</h4><ul><li>Inline within the writing</li><li>Built into the title, deck, or subtitle of the graphic</li><li>Adjacent to the figure or media, usually directly below it</li><li>Credits at the end of the story for general background sources or broader process notes</li></ul></article>
+          <article class="tab-panel" id="attr-patterns" role="tabpanel" aria-labelledby="tab-attr-patterns"><h4>Attribution patterns</h4><p><strong>Data:</strong> Source: U.S. Census Bureau American Community Survey</p><p><strong>Information:</strong> Monarch migration information summarized from the U.S. Fish & Wildlife Service, Monarch Joint Venture, and Journey North. Text, design, and interactive structure by the author.</p><p><strong>Media:</strong> Photo: Jane Smith / CC BY 4.0</p></article>
+          <article class="tab-panel" id="attr-text" role="tabpanel" aria-labelledby="tab-attr-text"><h4>Use information. Don’t copy text.</h4><ol><li>Read the source and understand the information.</li><li>Choose the details that serve the story purpose.</li><li>Write the explanation yourself.</li><li>Credit the source so the information is traceable.</li></ol></article>
+          <article class="tab-panel" id="attr-ai" role="tabpanel" aria-labelledby="tab-attr-ai"><h4>Disclosing AI</h4><p>Disclose AI use when it clearly shapes what the viewer sees, reads, hears, uses, or interprets. If AI helped make an image or text, disclose it near the element. If AI helped make the code work, credit it in the credits or end note.</p><p><strong>Code note:</strong> AI tools were used to help develop and troubleshoot the interactive elements in this story. The reporting, data selection, design decisions, testing, editing, and final responsibility for the work are the author’s.</p><p><strong>Image note:</strong> This image was generated with Adobe Firefly and is used as an illustration, not documentary evidence.</p></article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const body = document.body;
+    const menuButton = document.getElementById('mobileMenuToggle');
+    const menuBackdrop = document.getElementById('mobileMenuBackdrop');
+
+    function closeMenu() {
+      body.classList.remove('menu-open');
+      menuButton?.setAttribute('aria-expanded', 'false');
+      if (menuBackdrop) menuBackdrop.hidden = true;
+    }
+
+    menuButton?.addEventListener('click', () => {
+      const isOpen = body.classList.toggle('menu-open');
+      menuButton.setAttribute('aria-expanded', String(isOpen));
+      if (menuBackdrop) menuBackdrop.hidden = !isOpen;
+    });
+    menuBackdrop?.addEventListener('click', closeMenu);
+    document.querySelectorAll('.sidebar a').forEach(link => link.addEventListener('click', closeMenu));
+
+    function setAccordionButton(button, expanded) {
+      button.setAttribute('aria-expanded', String(expanded));
+      const symbol = button.querySelector('span:last-child');
+      if (symbol) symbol.textContent = expanded ? '–' : '+';
+    }
+
+    document.querySelectorAll('.accordion').forEach((accordion, index) => {
+      if (!accordion.id) accordion.id = `accordion-${index + 1}`;
+
+      const controls = document.createElement('div');
+      controls.className = 'accordion-tools';
+      controls.setAttribute('aria-label', 'Accordion controls');
+      controls.innerHTML = `
+        <button type="button" class="secondary accordion-open-all" aria-controls="${accordion.id}">Open all</button>
+        <button type="button" class="secondary accordion-close-all" aria-controls="${accordion.id}">Close all</button>
+      `;
+      accordion.insertAdjacentElement('beforebegin', controls);
+
+      const triggers = Array.from(accordion.querySelectorAll('.accordion-trigger'));
+      triggers.forEach(button => {
+        button.addEventListener('click', () => {
+          const expanded = button.getAttribute('aria-expanded') === 'true';
+          setAccordionButton(button, !expanded);
+        });
+      });
+
+      controls.querySelector('.accordion-open-all').addEventListener('click', () => {
+        triggers.forEach(button => setAccordionButton(button, true));
+      });
+
+      controls.querySelector('.accordion-close-all').addEventListener('click', () => {
+        triggers.forEach(button => setAccordionButton(button, false));
+      });
+    });
+
+    document.querySelectorAll('.tabs').forEach(tabList => {
+      const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const panelId = tab.getAttribute('aria-controls');
+          tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+          tab.setAttribute('aria-selected', 'true');
+          const parent = tabList.parentElement;
+          parent.querySelectorAll('[role="tabpanel"]').forEach(panel => panel.classList.remove('active'));
+          parent.querySelector('#' + CSS.escape(panelId))?.classList.add('active');
+        });
+      });
+    });
+
+    document.querySelectorAll('.form-filter').forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+        document.querySelectorAll('.form-filter').forEach(btn => {
+          btn.classList.remove('active');
+          btn.classList.add('secondary');
+        });
+        button.classList.add('active');
+        button.classList.remove('secondary');
+        document.querySelectorAll('#formGrid [data-kind]').forEach(card => {
+          card.hidden = filter !== 'all' && card.dataset.kind !== filter;
+        });
+      });
+    });
+
+    document.querySelectorAll('.quiz-option').forEach(button => {
+      button.addEventListener('click', () => {
+        const card = button.closest('.quiz-card');
+        const feedback = card.querySelector('.quiz-feedback');
+        feedback.textContent = button.dataset.feedback;
+        feedback.classList.add('show');
+      });
+    });
+  </script>
+</body>
+</html>
