@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Interactive Storytelling Tools</title>
+<style>
+    :root {
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --shadow:0 14px 35px rgba(23,33,27,.12);
+      --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    .layout { display:block; min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow-y:auto; overflow-x:hidden; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+    main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:850px; }
+    .hero p, .section-group p, .tool-card p, .note, td { color:var(--muted); }
+    .hero p { max-width:760px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:840px; }
+    .concept-callout strong { color:var(--ink); }
+    .table-note { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; align-items:center; }
+    .pill { display:inline-flex; align-items:center; gap:7px; padding:6px 10px; border-radius:999px; background:#eef3ef; border:1px solid var(--line); color:var(--accent); font-weight:900; font-size:.78rem; }
+    .table-wrap { width:100%; max-width:100%; overflow-x:auto; border:1px solid var(--line); border-radius:16px; background:#fff; box-shadow:0 8px 20px rgba(23,33,27,.05); }
+    table { border-collapse:separate; border-spacing:0; width:max-content; min-width:100%; font-size:.94rem; }
+    th, td { vertical-align:top; padding:14px 16px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); text-align:left; max-width:340px; }
+    th { position:sticky; top:0; z-index:5; background:#17211b; color:#fffdf7; font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; }
+    th:first-child, td:first-child { position:sticky; left:0; z-index:6; min-width:230px; max-width:260px; box-shadow:8px 0 16px rgba(23,33,27,.08); }
+    th:first-child { z-index:8; background:#17211b; }
+    td:first-child { background:#fffdf7; color:var(--ink); font-weight:900; }
+    tr:last-child td { border-bottom:0; }
+    th:last-child, td:last-child { border-right:0; }
+    .tool-link { display:inline-flex; align-items:center; gap:7px; color:var(--accent); font-weight:900; text-decoration:none; }
+    .tool-link:hover { text-decoration:underline; }
+    .small-meta { display:block; margin-top:5px; color:#7a7165; font-size:.82rem; font-weight:700; }
+    .cat { display:inline-flex; white-space:nowrap; padding:5px 8px; border-radius:999px; background:#edf4ee; color:var(--accent); border:1px solid var(--line); font-weight:900; font-size:.76rem; }
+    .cat.general { background:#fff8ed; color:#8a4b13; }
+    .cat.code { background:#f0f0f0; color:#343434; }
+    .rating { font-weight:900; color:var(--ink); }
+    .grid-three { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .tool-card { background:#fffdf7; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:0 8px 20px rgba(23,33,27,.05); }
+    .tool-card h4 { margin:0 0 6px; font-size:1.1rem; }
+    .tool-card p { margin:0; }
+    .source-list { display:grid; gap:8px; padding-left:18px; color:var(--muted); }
+    .source-list a { color:var(--accent); font-weight:800; }
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+    button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+    button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    @media (max-width: 860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-text { font-weight:900; }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed !important; top:0 !important; left:0; bottom:0; width:min(84vw, 340px); height:100vh !important; padding:76px 22px 28px; overflow-y:auto !important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main { margin-left:0 !important; width:100% !important; max-width:1120px; padding:24px 16px 56px; }
+      .pattern-header, .grid-three { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+      th, td { max-width:300px; }
+    }
+    @media (max-width:520px) {
+      .hero { border-radius:20px; }
+      .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+      .section-group h2 { font-size:clamp(1.45rem,8vw,2rem); }
+      .pattern h3 { font-size:clamp(1.25rem,7vw,1.7rem); }
+      th:first-child, td:first-child { min-width:190px; max-width:210px; }
+      th, td { padding:12px; font-size:.9rem; }
+    }
+  </style>
+</head>
+<body>
+<button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button">
+<span aria-hidden="true" class="mobile-menu-icon"></span>
+<span class="mobile-menu-text">Menu</span>
+</button>
+<div class="mobile-menu-backdrop" hidden="" id="mobileMenuBackdrop"></div>
+<div class="layout">
+<aside aria-label="Tools navigation" class="sidebar" id="siteSidebar">
+<h1>Interactive Storytelling Tools</h1>
+<p>A working guide to builders, embedded tools, hosting choices, and AI-assisted coding.</p>
+<nav>
+<div class="nav-group-title">Start here</div>
+<a href="#intro">Intro</a>
+<div class="nav-group-title">Building</div>
+<a href="#building-project">Building the project</a>
+<a href="#building-table">Builder comparison table</a>
+
+<div class="nav-group-title">Embedded builders</div>
+<a href="#embedded-builders">Embedded builders</a>
+<a href="#embedded-table">Embedded tools table</a>
+<div class="nav-group-title">AI coding</div>
+<a href="#vibe-coding">Vibe coding</a>
+<a href="#ai-table">AI coding table</a>
+<a href="#ai-guidelines">Classroom guidelines</a>
+<div class="nav-group-title">Reference</div>
+<a href="#sources">Pricing/source notes</a>
+</nav>
+</aside>
+<main>
+<section class="hero" id="intro">
+<div class="eyebrow">Interactive storytelling course</div>
+<h2>Tools for Building Interactive Stories</h2>
+<p>This page compares the main ways students can build and publish interactive projects: storytelling builders, general web builders, code-based hosting, embedded visualization tools, and AI-assisted coding workflows.</p>
+<div class="concept-callout"><strong>Core idea:</strong> the tool is not the assignment. Choose the tool that gives enough control for the story while keeping the technical responsibility manageable.</div>
+</section>
+<section class="section-group" id="building-project">
+<h2>Building the project</h2>
+<p>These options determine where the story itself lives. Some tools build the whole page. Others host files you code yourself. The major trade-off is control versus responsibility.</p>
+</section>
+<section class="pattern" id="building-table">
+<div class="pattern-header">
+<div>
+<h3>Builder / solution comparison</h3>
+<p>Pricing, export rules, and feature limits change often, so treat this as a starting point to verify before purchasing.</p>
+</div>
+<span class="tag">Project home</span>
+</div>
+
+<div aria-label="Builder and hosting comparison table" class="table-wrap" role="region" tabindex="0">
+<table>
+<thead>
+<tr>
+<th>Builder / solution</th>
+<th>Category</th>
+<th>Price / free tier</th><th>Archiving / long-term access</th>
+<th>Built-in blocks</th>
+<th>Responsibility</th>
+<th>Control</th>
+<th>Best for</th>
+<th>Students should check before committing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="tool-link" href="https://shorthand.com/" rel="noopener" target="_blank">Shorthand ↗</a><span class="small-meta">Visual longform storytelling platform</span></td>
+<td><span class="cat">Storytelling Specific Builder</span></td>
+<td>Institutional / education access varies. Often best when the school provides accounts.</td><td>No simple static export for GitHub-style hosting. Stories generally need the Shorthand account/platform to remain available, unless the institution has a specific export/archiving arrangement.</td>
+<td>Strong longform story sections, media backgrounds, scroll-based sections, embeds, image/video-led layouts.</td>
+<td><span class="rating">Low–medium.</span> Students mainly manage content, structure, media, and embedding.</td>
+<td><span class="rating">Medium.</span> Strong narrative patterns; less freedom than code.</td>
+<td>Polished multimedia narratives where the page structure should guide the reader.</td>
+<td>Account access, story limits, publishing limits, custom domain/export options, embeds allowed, and whether the class account stays active after the semester.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://tilda.cc/" rel="noopener" target="_blank">Tilda free tier ↗</a><span class="small-meta">Block-based site builder</span></td>
+<td><span class="cat">Storytelling Specific Builder</span></td>
+<td>Free plan. Tilda lists 1 website, 50 pages, and 100 blocks on the free tier.</td><td>Free sites remain tied to Tilda hosting and the free URL. Static code export is not part of the normal free workflow; verify whether the project must stay on Tilda after class.</td>
+<td>Limited block library compared with paid plans. Useful for basic sections and simple story pages.</td>
+<td><span class="rating">Low.</span> Hosting and responsive basics are mostly handled by the platform.</td>
+<td><span class="rating">Low–medium.</span> Useful for layout practice, but free-tier limits matter.</td>
+<td>Testing Tilda workflow before deciding whether paid features are needed.</td>
+<td>Custom domain availability, Tilda branding, HTML/custom code availability, block limits, and whether the free URL is acceptable for the assignment.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://tilda.cc/pricing/" rel="noopener" target="_blank">Tilda paid tier ↗</a><span class="small-meta">Personal / Business plans</span></td>
+<td><span class="cat">Storytelling Specific Builder</span></td>
+<td>Paid Personal / Business plans. Tilda's comparison page lists 600+ blocks on paid plans.</td><td>Paid plans may allow code export depending on plan/settings, but exported projects can lose some platform-managed behavior. Otherwise, the site needs an active Tilda account/site to stay published.</td>
+<td>Large block library, Zero Block, animation tools, custom code options, custom domains, broader site settings.</td>
+<td><span class="rating">Low–medium.</span> More choices mean more design responsibility.</td>
+<td><span class="rating">Medium–high.</span> Stronger visual control than the free plan.</td>
+<td>Visual explainers or narrative pages that need polished blocks plus some custom embeds/code.</td>
+<td>Monthly cost, whether one site or multiple sites are needed, export rules, HTML block access, and whether the project requires features locked behind paid plans.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://www.vev.design/" rel="noopener" target="_blank">Vev ↗</a><span class="small-meta">Visual builder for interactive web pages</span></td>
+<td><span class="cat">Storytelling Specific Builder</span></td>
+<td>Vev advertises a 30-day free trial and paid plans starting around $9.99/month.</td><td>Publishing/export options depend on plan. Treat long-term access as platform-dependent unless students have confirmed whether they can export or keep the project published after any trial ends.</td>
+<td>Interactive sections, animation, responsive visual design, scrolly-style layouts, components, embeds.</td>
+<td><span class="rating">Medium.</span> Students need to understand layout, responsiveness, and publishing settings.</td>
+<td><span class="rating">High.</span> More design freedom than many block-first builders.</td>
+<td>Custom-looking interactive pages without writing the whole project by hand.</td>
+<td>Trial length, publishing after the trial, student discount availability, export/publishing limits, and whether collaboration requires paid seats.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://storymaps.arcgis.com/" rel="noopener" target="_blank">ArcGIS StoryMaps ↗</a><span class="small-meta">Map-centered story builder</span></td>
+<td><span class="cat">Storytelling Specific Builder</span></td>
+<td>Public ArcGIS accounts are free for personal, noncommercial use with limitations; full StoryMaps capabilities may require paid/personal-use or organizational access.</td><td>Stories remain hosted in ArcGIS/StoryMaps and depend on the account, sharing settings, and data/map layers staying active. Not intended as a static HTML export workflow.</td>
+<td>Map-led story sections, sidecars, swipe, guided geographic explanation, media blocks.</td>
+<td><span class="rating">Medium.</span> Students manage map data, layers, sourcing, and account rules.</td>
+<td><span class="rating">Medium.</span> Excellent for maps; less flexible for non-map visual identity.</td>
+<td>Stories where geography is central rather than just decorative.</td>
+<td>Whether the university already has Esri access, data-credit limits, public-account limits, sharing permissions, and whether maps remain available after class.</td>
+</tr>
+
+
+<tr>
+<td><a class="tool-link" href="https://www.squarespace.com/" rel="noopener" target="_blank">Squarespace ↗</a><span class="small-meta">General website builder</span></td>
+<td><span class="cat general">General Web Builder</span></td>
+<td>No permanent free plan; 14-day trial. Common plans range roughly from Basic to Advanced, with annual discounts.</td><td>No normal static-site export for a complete Squarespace project. The site generally requires an active paid subscription to stay publicly available after the trial.</td>
+<td>Page sections, galleries, portfolio/blog/store blocks, forms, embeds, limited custom code depending on plan.</td>
+<td><span class="rating">Low–medium.</span> Hosting and templates are handled; custom interaction may be limited.</td>
+<td><span class="rating">Medium.</span> Good visual polish but less ideal for custom interactive behavior.</td>
+<td>Clean portfolio or project sites with mostly standard pages and embedded interactives.</td>
+<td>Trial expiration, custom code plan requirements, student discount, domain/email costs, and whether embedded tools behave well in Squarespace blocks.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://www.wix.com/" rel="noopener" target="_blank">Wix ↗</a><span class="small-meta">General drag-and-drop site builder</span></td>
+<td><span class="cat general">General Web Builder</span></td>
+<td>Free plan available with branding/subdomain; paid plans needed for custom domain and stronger features.</td><td>No normal static-site export. Published sites remain on Wix and typically require the appropriate plan for custom domains, branding removal, and long-term public use.</td>
+<td>Large template/block library, galleries, forms, blog, CMS features, app marketplace, embeds.</td>
+<td><span class="rating">Low–medium.</span> Easy to start; students still need to manage design consistency.</td>
+<td><span class="rating">Medium.</span> Flexible but can become messy without layout discipline.</td>
+<td>Students who need an all-in-one website quickly and can work within the editor.</td>
+<td>Branding, storage/media limits, custom domain cost, editor complexity, mobile layout cleanup, and whether apps add costs.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://www.wix.com/studio" rel="noopener" target="_blank">Wix Studio ↗</a><span class="small-meta">Advanced Wix builder</span></td>
+<td><span class="cat general">General Web Builder</span></td>
+<td>Paid Studio plans; Wix lists Basic, Standard, and higher tiers for client/professional sites.</td><td>No normal static-site export. Published sites remain on Wix and typically require the appropriate plan for custom domains, branding removal, and long-term public use.</td>
+<td>Responsive editor, custom breakpoints, CMS, design systems, collaboration, advanced layout control.</td>
+<td><span class="rating">Medium–high.</span> More professional features mean more decisions.</td>
+<td><span class="rating">High.</span> More responsive control than standard Wix.</td>
+<td>Students ready for a more advanced builder and responsive design workflow.</td>
+<td>Whether Studio is overkill, plan cost, learning curve, collaboration needs, and handoff/publishing settings.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://wordpress.com/" rel="noopener" target="_blank">WordPress.com ↗</a><span class="small-meta">Hosted WordPress</span></td>
+<td><span class="cat general">General Web Builder</span></td>
+<td>Free plan available; paid plans unlock more design, domain, plugin, and customization options.</td><td>Content can usually be exported in WordPress XML format, but the finished design/theme/plugins may not transfer cleanly. A live public site usually depends on the WordPress.com plan.</td>
+<td>Block editor, themes, patterns, pages/posts, galleries, embeds; plugins depend on plan.</td>
+<td><span class="rating">Medium.</span> More CMS responsibility than most closed builders.</td>
+<td><span class="rating">Medium–high.</span> Stronger if paid plans/plugins/custom CSS are available.</td>
+<td>Content-heavy sites, portfolios, explainers, or projects that benefit from CMS structure.</td>
+<td>Plan needed for plugins/custom code, theme limits, embed support, storage, domain cost, and difference between WordPress.com and self-hosted WordPress.org.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://wordpress.org/" rel="noopener" target="_blank">Purchased hosting ↗</a><span class="small-meta">Self-hosted files or WordPress</span></td>
+<td><span class="cat code">Code</span></td>
+<td>Varies by host. Often a monthly/yearly hosting bill plus domain cost.</td><td>Archiving is strongest if students control files, database exports, backups, and domain/DNS. Ongoing hosting/domain renewal is required unless the project is exported as static files.</td>
+<td>Depends on stack: WordPress themes/plugins, custom HTML/CSS/JS, database-backed sites, server tools.</td>
+<td><span class="rating">Highest.</span> Students handle hosting, files, updates, backups, security, and domains.</td>
+<td><span class="rating">Highest.</span> Most flexible when students know what they are doing.</td>
+<td>Advanced projects, client sites, database-backed work, or projects needing server-side features.</td>
+<td>Renewal cost, domain/DNS, SSL, backups, security, database access, file upload workflow, and whether the student can maintain it after class.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://pages.github.com/" rel="noopener" target="_blank">GitHub hosting ↗</a><span class="small-meta">GitHub Pages for static sites</span></td>
+<td><span class="cat code">Code</span></td>
+<td>Free for static sites. GitHub lists Pages limits including 1 GB published site size and a soft 100 GB/month bandwidth limit.</td><td>Best for archiving static work. Files live in a repository and can be downloaded, forked, or moved. GitHub Pages hosting is free for static sites within limits.</td>
+<td>No built-in visual blocks. Students build with HTML/CSS/JS or static-site tools.</td>
+<td><span class="rating">High.</span> Students manage files, paths, GitHub workflow, assets, and debugging.</td>
+<td><span class="rating">High.</span> Excellent for custom code and hosted embeds.</td>
+<td>Custom HTML prototypes, standalone interactives, class tutorials, and lightweight final projects.</td>
+<td>Static-only limitation, GitHub account setup, file paths, image optimization, repository visibility, custom domain/DNS, and whether students can use Git or web upload.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="section-group" id="embedded-builders">
+<h2>Embedded builders</h2>
+<p>Embedded builders create a specific interactive element that can be placed inside a larger story page. These are useful when the story platform does not have the specific interaction you need.</p>
+</section>
+<section class="pattern" id="embedded-table">
+<div class="pattern-header">
+<div>
+<h3>Embedded builder comparison</h3>
+<p>These tools usually produce an iframe, embed code, or exported asset. They are often the best middle path between native blocks and fully custom code.</p>
+</div>
+<span class="tag">Embed tools</span>
+</div>
+<div aria-label="Embedded builder comparison table" class="table-wrap" role="region" tabindex="0">
+<table>
+<thead>
+<tr>
+<th>Embedded builder</th>
+<th>Category</th>
+<th>Price / free tier</th>
+<th>Best for</th>
+<th>Built-in outputs</th>
+<th>Embed / export</th>
+<th>Responsibility</th>
+<th>Students should check before using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="tool-link" href="https://www.datawrapper.de/" rel="noopener" target="_blank">Datawrapper ↗</a><span class="small-meta">Charts, maps, tables</span></td>
+<td><span class="cat general">Data / visualization</span></td>
+<td>Strong free plan for creating, publishing, embedding, and PNG export; Custom plan is much more expensive for white-label/team needs.</td>
+<td>Clear charts, locator maps, choropleths, symbol maps, tables, election-style or newsroom-style graphics.</td>
+<td>Charts, maps, tables, annotations, source notes, responsive embeds.</td>
+<td>Embed code; PNG export on free; SVG/PDF and white-label options require higher tiers.</td>
+<td><span class="rating">Medium.</span> Tool handles rendering; student must clean data, write labels, and explain the graphic.</td>
+<td>Data source, mobile readability, color choices, annotation clarity, source notes, and whether branding/export limits matter.</td>
+</tr>
+
+<tr>
+<td><a class="tool-link" href="https://genially.com/" rel="noopener" target="_blank">Genially ↗</a><span class="small-meta">Interactive presentations and learning objects</span></td>
+<td><span class="cat general">Interactive media</span></td>
+<td>Free plan available. Genially says students can use free accounts; student/education paid plans add premium features.</td>
+<td>Click-to-reveal explainers, interactive images, simple games/quizzes, diagrams, presentations, posters.</td>
+<td>Templates, hotspots, popups, animations, buttons, presentation-like screens.</td>
+<td>Embed code and share links; download/offline/branding options depend on plan.</td>
+<td><span class="rating">Medium.</span> Easy to overdesign; students still need clear instructions and accessibility checks.</td>
+<td>Watermark/branding, privacy, download limits, whether the interaction is keyboard accessible, and whether the embed fits the story page.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://timeline.knightlab.com/" rel="noopener" target="_blank">Knight Lab TimelineJS ↗</a><span class="small-meta">Spreadsheet-driven timelines</span></td>
+<td><span class="cat general">Timeline</span></td>
+<td>Open-source and free to use.</td>
+<td>Chronological stories with dates, media, captions, and sequence.</td>
+<td>Interactive timeline built from a Google spreadsheet or JSON.</td>
+<td>Embed code; advanced users can customize with JSON/files.</td>
+<td><span class="rating">Medium.</span> Students manage spreadsheet structure, media URLs, dates, captions, and sources.</td>
+<td>Whether the story truly needs a timeline, media hosting, Google Sheet publishing, date accuracy, and mobile usability.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://storymap.knightlab.com/" rel="noopener" target="_blank">Knight Lab StoryMapJS ↗</a><span class="small-meta">Map-based sequence</span></td>
+<td><span class="cat general">Map / sequence</span></td>
+<td>Free Knight Lab storytelling tool.</td>
+<td>Place-based sequences where the reader moves through locations one step at a time.</td>
+<td>Sequential map slides with text, images, video, and location points.</td>
+<td>Embed code; depends on hosted media and map tiles.</td>
+<td><span class="rating">Medium.</span> Students need accurate locations, concise captions, and a reason for sequence.</td>
+<td>Map accuracy, media hosting, whether movement adds understanding, and whether the map is readable on phones.</td>
+</tr>
+
+<tr>
+<td><a class="tool-link" href="https://www.mapbox.com/" rel="noopener" target="_blank">Mapbox ↗</a><span class="small-meta">Custom web maps</span></td>
+<td><span class="cat code">Map / code</span></td>
+<td>Usage-based pricing with free tiers for many products; costs depend on map loads, requests, and APIs used.</td>
+<td>Custom slippy maps, styled maps, geocoding, route/location layers, data-driven maps.</td>
+<td>Map styles, tiles, APIs, SDKs, hosted datasets depending on product.</td>
+<td>Usually embedded through custom code or a mapping library; not a simple no-code embed for most custom work.</td>
+<td><span class="rating">High.</span> Students must handle API keys, billing safeguards, code, tokens, and map/data design.</td>
+<td>Billing account requirements, API key security, usage caps, map load estimates, attribution, and whether Leaflet or Datawrapper would be simpler.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="section-group" id="vibe-coding">
+<h2>Vibe coding</h2>
+<p>Vibe coding means using AI to help generate, revise, explain, or debug code. It can be useful for prototypes, but students still need to understand what the code is doing, test it, and take responsibility for the final result.</p>
+</section>
+<section class="pattern" id="ai-table">
+<div class="pattern-header">
+<div>
+<h3>AI coding tool comparison</h3>
+<p>AI tools change quickly. Pricing, limits, models, and included usage can shift during a semester, so students should verify live details before paying.</p>
+</div>
+<span class="tag">AI assistance</span>
+</div>
+<div aria-label="AI coding tool comparison table" class="table-wrap" role="region" tabindex="0">
+<table>
+<thead>
+<tr>
+<th>AI tool</th>
+<th>Category</th>
+<th>Price / limits</th>
+<th>Coding strengths</th>
+<th>Good classroom uses</th>
+<th>Major limits / risks</th>
+<th>Student responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="tool-link" href="https://chatgpt.com/" rel="noopener" target="_blank">ChatGPT ↗</a><span class="small-meta">General AI assistant with coding support</span></td>
+<td><span class="cat general">General AI / code</span></td>
+<td>Free plan available; Plus is $20/month; Pro tiers add higher usage for heavier research/coding.</td>
+<td>Explaining code, generating HTML/CSS/JS, debugging snippets, revising layouts, accessibility checks, writing instructions.</td>
+<td>Planning an interaction, asking for a starter prototype, debugging console errors, explaining unfamiliar code.</td>
+<td>May generate broken code, invent unsupported features, miss file-path issues, or overcomplicate simple problems.</td>
+<td>Test every interaction, read the code, check responsiveness/accessibility, and disclose AI assistance when it shaped the code.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://claude.ai/" rel="noopener" target="_blank">Claude ↗</a><span class="small-meta">AI assistant with strong long-context coding/writing use</span></td>
+<td><span class="cat general">General AI / code</span></td>
+<td>Free plan; Pro is $20/month; Max plans are $100/month and $200/month for heavier use.</td>
+<td>Working through longer files, explaining trade-offs, revising larger HTML/CSS/JS sections, code review.</td>
+<td>Refactoring a page, asking for a careful review, comparing implementation approaches.</td>
+<td>Usage limits can appear during heavy work; generated code still needs browser testing and validation.</td>
+<td>Do not paste sensitive reporting material without permission; verify output and cite/disclose assistance.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://gemini.google.com/" rel="noopener" target="_blank">Gemini ↗</a><span class="small-meta">Google AI assistant</span></td>
+<td><span class="cat general">General AI / code</span></td>
+<td>Free plan; Google AI Pro / Ultra subscriptions add higher limits and advanced features. Regional prices and student offers can vary.</td>
+<td>Code generation, explanation, Google ecosystem connections, research-to-prototype workflows.</td>
+<td>Explaining code concepts, drafting prototypes, working with Google Drive/Sheets-related project material.</td>
+<td>Plan details and usage limits vary; outputs still need testing and may not match assignment constraints.</td>
+<td>Separate research facts from generated code; test embeds, sheet links, permissions, and public access.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://cursor.com/" rel="noopener" target="_blank">Cursor ↗</a><span class="small-meta">AI code editor</span></td>
+<td><span class="cat code">AI code editor</span></td>
+<td>Free Hobby plan with limited agent requests/completions; Pro is $20/month; higher tiers add more usage.</td>
+<td>Editing across files, project-aware suggestions, agentic code changes, codebase search, autocomplete.</td>
+<td>Students building a multi-file GitHub Pages project in VS Code-like workflow.</td>
+<td>More tool complexity; AI can make broad changes students do not understand; paid usage can be credit/limit based.</td>
+<td>Use version control, review diffs, make small changes, and avoid accepting bulk edits blindly.</td>
+</tr>
+<tr>
+<td><a class="tool-link" href="https://github.com/features/copilot" rel="noopener" target="_blank">GitHub Copilot ↗</a><span class="small-meta">AI coding assistant inside editors/GitHub</span></td>
+<td><span class="cat code">AI coding assistant</span></td>
+<td>Free tier with limited functionality; student access may be available. GitHub has been shifting Copilot toward usage-based billing/AI credits.</td>
+<td>Autocomplete, chat, inline explanations, GitHub/VS Code workflow, code review assistance.</td>
+<td>Small HTML/CSS/JS completions, explaining errors, generating repetitive code, working inside VS Code.</td>
+<td>Can encourage passive acceptance; plan limits and credit systems may confuse beginners.</td>
+<td>Students should understand each accepted suggestion and keep commits small enough to undo.</td>
+</tr>
+
+
+
+</tbody>
+</table>
+</div>
+</section>
+<section class="pattern" id="ai-guidelines">
+<div class="pattern-header">
+<div>
+<h3>Classroom guidelines for vibe coding</h3>
+<p>AI can help students move faster, but it cannot replace design judgment, reporting judgment, testing, or authorship.</p>
+</div>
+<span class="tag">Use responsibly</span>
+</div>
+<div class="grid-three">
+<article class="tool-card"><h4>Use AI for prototypes</h4><p>Ask for a small working version first. Then revise the structure, writing, design, accessibility, and data decisions yourself.</p></article>
+<article class="tool-card"><h4>Keep the scope visible</h4><p>A good prompt should say the host, file structure, interaction, data source, mobile behavior, and accessibility requirements.</p></article>
+<article class="tool-card"><h4>Own the final page</h4><p>Students are responsible for testing, debugging, attribution, AI disclosure, and explaining how the final interactive works.</p></article>
+</div>
+</section>
+<section class="section-group" id="sources">
+<h2>Pricing/source notes</h2>
+<p>Pricing and free-tier limits were checked while this page was drafted. Students should still verify live pricing before paying for any tool.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header">
+<div>
+<h3>Source links to verify</h3>
+<p>Use these links as starting points when updating this table during the semester.</p>
+</div>
+<span class="tag">Update often</span>
+</div>
+<ul class="source-list">
+<li><a href="https://tilda.cc/pricing-compare/" rel="noopener" target="_blank">Tilda pricing comparison</a></li>
+<li><a href="https://vev.co/pricing" rel="noopener" target="_blank">Vev pricing</a></li>
+<li><a href="https://www.wix.com/studio/plans" rel="noopener" target="_blank">Wix Studio plans</a></li>
+<li><a href="https://www.squarespace.com/pricing" rel="noopener" target="_blank">Squarespace pricing</a></li>
+<li><a href="https://wordpress.com/" rel="noopener" target="_blank">WordPress.com plans</a></li>
+<li><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" rel="noopener" target="_blank">GitHub Pages limits</a></li>
+<li><a href="https://www.datawrapper.de/pricing" rel="noopener" target="_blank">Datawrapper pricing</a></li>
+<li><a href="https://flourish.studio/pricing/" rel="noopener" target="_blank">Flourish pricing</a></li>
+<li><a href="https://genially.com/plans/" rel="noopener" target="_blank">Genially plans</a></li>
+<li><a href="https://timeline.knightlab.com/" rel="noopener" target="_blank">Knight Lab TimelineJS</a></li>
+<li><a href="https://chatgpt.com/pricing/" rel="noopener" target="_blank">ChatGPT pricing</a></li>
+<li><a href="https://support.claude.com/en/articles/11049762-choose-a-claude-plan" rel="noopener" target="_blank">Claude plans</a></li>
+<li><a href="https://cursor.com/pricing" rel="noopener" target="_blank">Cursor pricing</a></li>
+<li><a href="https://github.com/features/copilot/plans" rel="noopener" target="_blank">GitHub Copilot plans</a></li>
+</ul>
+</section>
+</main>
+</div>
+<script>
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const backdrop = document.getElementById('mobileMenuBackdrop');
+    const sidebar = document.getElementById('siteSidebar');
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+      if (backdrop) backdrop.hidden = true;
+    }
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        if (backdrop) backdrop.hidden = !isOpen;
+      });
+    }
+    if (backdrop) backdrop.addEventListener('click', closeMenu);
+    if (sidebar) sidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+  </script>
+</body>
+</html>
