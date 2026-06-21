@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GitHub for Interactive Storytelling</title>
+<style>
+    :root {
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --shadow:0 14px 35px rgba(23,33,27,.12);
+      --radius:18px; --code:#162019;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    img, video, iframe, svg { max-width:100%; }
+
+    .layout { display:block; min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow-y:auto; overflow-x:hidden; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+
+    main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+    .hero p, .section-group p, .pattern p, .card p, .note p, li { color:var(--muted); }
+    .hero p { max-width:780px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:860px; }
+    .concept-callout strong { color:var(--ink); }
+
+    .section-group { margin:54px 0 24px; padding-top:10px; border-top:2px solid var(--ink); }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:780px; }
+
+    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+
+    .grid { display:grid; gap:16px; }
+    .grid.two { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .card { border:1px solid var(--line); border-radius:16px; background:#fffdf7; padding:18px; min-width:0; }
+    .card h4 { margin:0 0 8px; font-size:1.08rem; letter-spacing:-.02em; }
+    .card p { margin:0; }
+    .card ul, .step-list, .check-list { margin:10px 0 0; padding-left:1.2rem; }
+    .card li, .step-list li, .check-list li { margin:6px 0; }
+
+    .step-list { counter-reset:steps; list-style:none; padding-left:0; display:grid; gap:12px; margin:0; }
+    .step-list li { position:relative; padding:14px 14px 14px 54px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; color:var(--muted); }
+    .step-list li::before { counter-increment:steps; content:counter(steps); position:absolute; left:14px; top:14px; width:28px; height:28px; display:grid; place-items:center; border-radius:50%; background:var(--accent); color:#fffdf7; font-weight:900; }
+    .step-list strong { color:var(--ink); }
+
+    .note { margin:16px 0 0; padding:14px 16px; border-radius:16px; background:#fff8ed; border:1px solid var(--line); }
+    .note strong { color:var(--ink); }
+    .note p { margin:0; }
+
+    .term-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .term { border:1px solid var(--line); border-radius:16px; padding:14px; background:var(--soft); }
+    .term strong { display:block; margin-bottom:4px; color:var(--accent); font-size:.82rem; text-transform:uppercase; letter-spacing:.06em; }
+    .term span { color:var(--muted); }
+
+    .code-block { margin:16px 0 0; padding:16px; border-radius:16px; background:var(--code); color:#fffdf7; overflow:auto; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size:.9rem; line-height:1.5; }
+    .code-block code { white-space:pre; }
+    .file-tree { margin:16px 0 0; padding:16px; border-radius:16px; background:#f6f1e7; border:1px solid var(--line); font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; color:#3c463f; font-size:.92rem; overflow:auto; white-space:pre; line-height:1.55; }
+    .pill-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+    .pill { display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border-radius:999px; background:#eef3ef; border:1px solid var(--line); color:var(--accent); font-weight:800; font-size:.82rem; }
+
+    .warning { border-left:5px solid var(--accent-2); }
+    .table-wrap { width:100%; overflow-x:auto; border:1px solid var(--line); border-radius:16px; background:#fffdf7; }
+    table { width:100%; border-collapse:separate; border-spacing:0; min-width:760px; }
+    th, td { padding:14px 16px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { background:#eef3ef; color:var(--accent); font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; }
+    tr:last-child td { border-bottom:0; }
+    td:first-child, th:first-child { position:sticky; left:0; background:#fffdf7; z-index:1; box-shadow:8px 0 16px rgba(23,33,27,.05); font-weight:900; color:var(--ink); }
+    th:first-child { background:#eef3ef; z-index:2; }
+
+    .accordion-controls { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; }
+    button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+    button.secondary { background:#eef3ef; color:var(--ink); border:1px solid var(--line); }
+    button:hover { filter:brightness(.96); }
+    button:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    .accordion-item { border-top:1px solid var(--line); }
+    .accordion-item:first-child { border-top:0; }
+    .accordion-trigger { width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 0; background:transparent; color:var(--ink); border-radius:0; text-align:left; }
+    .accordion-trigger span:first-child { font-weight:900; }
+    .accordion-panel { display:none; padding:0 0 18px; color:var(--muted); }
+    .accordion-trigger[aria-expanded="true"] + .accordion-panel { display:block; }
+
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+
+    @media (max-width: 900px) {
+      .grid.two, .grid.three, .term-grid { grid-template-columns:1fr; }
+      .pattern-header { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+    }
+
+    @media (max-width: 860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-text { font-weight:900; }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed !important; top:0 !important; left:0; bottom:0; width:min(84vw, 340px); height:100vh !important; max-height:100vh !important; padding:76px 22px 28px; overflow-y:auto !important; overflow-x:hidden; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main { margin-left:0 !important; width:100% !important; max-width:1120px; padding:24px 16px 56px; }
+    }
+
+    @media (max-width: 520px) {
+      .hero { border-radius:20px; }
+      .hero h2 { font-size:clamp(2rem, 12vw, 3.2rem); line-height:1; }
+      .section-group h2 { font-size:clamp(1.45rem, 8vw, 2rem); }
+      .pattern h3 { font-size:clamp(1.25rem, 7vw, 1.7rem); }
+      .pattern { padding:18px; }
+      .step-list li { padding-left:48px; }
+    }
+    .home-button {
+      border: 1px solid #636363;
+      margin-bottom: 1rem!important;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button">
+<span aria-hidden="true" class="mobile-menu-icon"></span>
+<span class="mobile-menu-text">Menu</span>
+</button>
+<div class="mobile-menu-backdrop" hidden="" id="mobileMenuBackdrop"></div>
+<div class="layout">
+<aside aria-label="GitHub lesson navigation" class="sidebar" id="siteSidebar">
+<a class="home-button" href="../">← Back to Home</a>
+<h1>GitHub for Interactive Storytelling</h1>
+<p>A student workflow for saving, updating, and publishing web projects.</p>
+<nav>
+<div class="nav-group-title">Start here</div>
+<a href="#intro">What GitHub does</a>
+<a href="#responsibility">What you are responsible for</a>
+<div class="nav-group-title">Account</div>
+<a href="#create-account">Create an account</a>
+<a href="#account-checklist">Account checklist</a>
+<div class="nav-group-title">VS Code setup</div>
+<a href="#project-folder">Project folder</a>
+<a href="#connect-vscode">Connect VS Code</a>
+<a href="#first-repository">Create the repository</a>
+<div class="nav-group-title">Everyday workflow</div>
+<a href="#source-control">Source Control panel</a>
+<a href="#commit-push">Add, commit, push</a><a href="#change-computers">Changing computers</a><a href="#clone-pull">Clone and pull</a>
+<a href="#mistakes">Common mistakes</a>
+<div class="nav-group-title">GitHub Pages</div>
+<a href="#pages-setup">Turn on Pages</a>
+<a href="#pages-url">Find and test the URL</a>
+<a href="#update-site">Update the published site</a>
+</nav>
+</aside>
+<main>
+<section class="hero" id="intro">
+<div class="eyebrow">Code hosting and publishing</div>
+<h2>GitHub for Interactive Storytelling</h2>
+<p>GitHub is where students can store project files, track changes, and publish simple HTML/CSS/JavaScript projects to the web using GitHub Pages.</p>
+<div class="concept-callout">
+<strong>Core idea:</strong> GitHub is not the design tool. VS Code is where you edit files. Git tracks changes. GitHub stores the project online. GitHub Pages publishes the project as a website.
+        </div>
+</section>
+<section class="section-group" id="responsibility">
+<h2>What GitHub does, and what students do</h2>
+<p>Students do not need to become software developers to use GitHub for this course. They do need to understand the file workflow well enough to avoid losing work and to publish updates.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header">
+<div>
+<h3>The responsibility split</h3>
+<p>GitHub helps with storage, version history, collaboration, and web publishing. It does not fix broken files, organize assets, or decide what belongs in the project.</p>
+</div>
+<span class="tag">Workflow basics</span>
+</div>
+<div class="grid three">
+<article class="card">
+<h4>VS Code</h4>
+<p>The editor. This is where students open the project folder and change HTML, CSS, JavaScript, images, and other files.</p>
+</article>
+<article class="card">
+<h4>Git</h4>
+<p>The tracking system. Git records snapshots of the project when students commit changes.</p>
+</article>
+<article class="card">
+<h4>GitHub</h4>
+<p>The online home for the repository. GitHub stores the project and can publish it with GitHub Pages.</p>
+</article>
+</div>
+<div class="term-grid" style="margin-top:16px;">
+<div class="term"><strong>Repository</strong><span>The project folder as tracked by Git and stored on GitHub.</span></div>
+<div class="term"><strong>Commit</strong><span>A saved snapshot with a short message explaining what changed.</span></div>
+<div class="term"><strong>Push</strong><span>Sending local commits from VS Code to GitHub.</span></div>
+<div class="term"><strong>Pull</strong><span>Bringing changes from GitHub back down to the local project.</span></div>
+<div class="term"><strong>Branch</strong><span>A version line of the project. For this class, students will usually use <code>main</code>.</span></div>
+<div class="term"><strong>GitHub Pages</strong><span>A publishing feature that turns repository files into a public website.</span></div>
+</div>
+</section>
+<section class="section-group" id="create-account">
+<h2>Creating a GitHub account</h2>
+<p>Students need a personal GitHub account before they can create repositories, push work from VS Code, or publish with GitHub Pages.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header">
+<div>
+<h3>Account setup steps</h3>
+<p>The account should be tied to an email address the student can access and verify.</p>
+</div>
+<span class="tag">One-time setup</span>
+</div>
+<ol class="step-list">
+<li><strong>Go to GitHub and sign up.</strong> Use a username that is appropriate to appear in project URLs, portfolio links, and public repositories.</li>
+<li><strong>Use an email address you can access.</strong> GitHub requires email verification for basic account tasks.</li>
+<li><strong>Save your password and enable security prompts.</strong> Students should not share their GitHub password with AI tools, classmates, or copied code.</li>
+<li><strong>Use the same account in VS Code.</strong> When VS Code asks to sign in to GitHub, use the account that owns the class repositories.</li>
+</ol>
+<div class="note">
+<p><strong>Note:</strong> Account names become part of many GitHub Pages URLs. A professional or neutral username is safer than a joke username.</p>
+</div>
+</section>
+<section class="pattern" id="account-checklist">
+<div class="pattern-header">
+<div>
+<h3>Before class work begins</h3>
+<p>Students should confirm these pieces before trying to publish a project.</p>
+</div>
+<span class="tag">Checklist</span>
+</div>
+<div class="grid two">
+<article class="card">
+<h4>Account checks</h4>
+<ul>
+<li>Can sign in to GitHub.</li>
+<li>Email address is verified.</li>
+<li>Username is acceptable for public project links.</li>
+<li>Knows whether the repository should be public or private.</li>
+</ul>
+</article>
+<article class="card">
+<h4>Computer checks</h4>
+<ul>
+<li>VS Code is installed or available in the lab.</li>
+<li>The project folder is easy to find.</li>
+<li>Files are saved locally before committing.</li>
+<li>Images and other assets are inside the project folder.</li>
+</ul>
+</article>
+</div>
+</section>
+<section class="section-group" id="project-folder">
+<h2>Setting up the project in VS Code</h2>
+<p>A GitHub project works best when students start with a clean folder and keep all required files inside it.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header">
+<div>
+<h3>Recommended project folder</h3>
+<p>For a simple interactive web project, the folder can stay plain: one HTML file, one CSS file, one JavaScript file, and asset folders.</p>
+</div>
+<span class="tag">Local files</span>
+</div>
+<pre aria-label="Example project folder structure" class="file-tree"><code>interactive-storytelling-project/
+├── index.html
+├── css/
+│   └── styles.css
+├── js/
+│   └── script.js
+├── img/
+│   ├── hero.jpg
+│   └── diagram.jpg
+└── data/
+    └── birds.json</code></pre>
+<div class="note warning">
+<p><strong>Important:</strong> GitHub Pages needs an <code>index.html</code> file at the publishing location. For the simplest workflow, put <code>index.html</code> at the top level of the repository.</p>
+</div>
+</section>
+<section class="pattern" id="connect-vscode">
+<div class="pattern-header">
+<div>
+<h3>Open the folder in VS Code</h3>
+<p>Students should open the whole project folder, not just one file. The Source Control panel needs to see the project as a folder.</p>
+</div>
+<span class="tag">VS Code</span>
+</div>
+<ol class="step-list">
+<li><strong>Create or locate the project folder.</strong> Put it somewhere stable, such as the Desktop or Documents folder. Do not work from downloads, email attachments, or temporary folders.</li>
+<li><strong>Open VS Code.</strong> Choose <strong>File → Open Folder</strong>, then select the project folder.</li>
+<li><strong>Create or add project files.</strong> At minimum, a simple page needs <code>index.html</code>. CSS and JavaScript can be separate files or included in the HTML while students are learning.</li>
+<li><strong>Preview locally.</strong> Open <code>index.html</code> in the browser or use a local preview extension if available.</li>
+</ol>
+</section>
+<section class="pattern" id="first-repository">
+<div class="pattern-header">
+<div>
+<h3>Create the repository from VS Code</h3>
+<p>Students can publish the folder to GitHub through VS Code instead of using the command line.</p>
+</div>
+<span class="tag">Initial publish</span>
+</div>
+<ol class="step-list">
+<li><strong>Open the Source Control panel.</strong> In VS Code, use the branch/source-control icon in the left activity bar.</li>
+<li><strong>Initialize repository.</strong> If the folder is not already a Git repository, choose <strong>Initialize Repository</strong>.</li>
+<li><strong>Add a commit message.</strong> Use a clear message such as <code>Initial project setup</code>.</li>
+<li><strong>Commit the files.</strong> VS Code may ask whether to stage all changes. Choose yes for the first commit.</li>
+<li><strong>Publish Branch.</strong> Choose <strong>Publish Branch</strong> and sign in to GitHub if prompted.</li>
+<li><strong>Choose public or private.</strong> For GitHub Pages, public is usually simplest for student websites. Private repositories may require plan or setting considerations.</li>
+</ol>
+<div class="note">
+<p><strong>Safer first repository name:</strong> Use lowercase letters, numbers, and hyphens: <code>interactive-project-1</code>. Avoid spaces and special characters.</p>
+</div>
+</section>
+<section class="section-group" id="source-control">
+<h2>Adding, committing, and pushing with VS Code</h2>
+<p>The everyday workflow is simple: save files, review changes, commit them, and push them to GitHub.</p>
+</section>
+<section class="pattern" id="commit-push">
+<div class="pattern-header">
+<div>
+<h3>The repeatable workflow</h3>
+<p>Students should use this cycle every time they make meaningful progress.</p>
+</div>
+<span class="tag">Save → commit → push</span>
+</div>
+<div class="grid three">
+<article class="card">
+<h4>1. Save</h4>
+<p>Save changed files in VS Code. Unsaved work is not ready to commit.</p>
+<div class="pill-row">
+<span class="pill">HTML</span>
+<span class="pill">CSS</span>
+<span class="pill">JS</span>
+<span class="pill">Images</span>
+</div>
+</article>
+<article class="card">
+<h4>2. Commit</h4>
+<p>Write a short message describing the change, then commit. A commit is a named checkpoint.</p>
+<div class="code-block"><code>Good: Add hotspot annotations
+Weak: stuff
+Weak: final final fixed</code></div>
+</article>
+<article class="card">
+<h4>3. Push</h4>
+<p>Push sends the committed checkpoint to GitHub. If they do not push, GitHub Pages may not update.</p>
+</article>
+</div>
+<div class="table-wrap" style="margin-top:18px;">
+<table>
+<thead>
+<tr>
+<th>VS Code action</th>
+<th>What it means</th>
+<th>Student translation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stage changes</td>
+<td>Select which file changes will be included in the next commit.</td>
+<td>“These are the changes I want to save in this checkpoint.”</td>
+</tr>
+<tr>
+<td>Commit</td>
+<td>Create a local snapshot with a message.</td>
+<td>“Save this version of the project history.”</td>
+</tr>
+<tr>
+<td>Push</td>
+<td>Send local commits to GitHub.</td>
+<td>“Upload my saved work to the online repository.”</td>
+</tr>
+<tr>
+<td>Pull</td>
+<td>Bring online changes back to the local folder.</td>
+<td>“Get the newest version before I keep working.”</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="section-group" id="change-computers">
+<h2>Changing lab computers</h2>
+<p>Students may not use the same lab computer every time. GitHub lets them move between computers, but they need to know the difference between cloning a project for the first time and pulling updates into a project that is already on that computer.</p>
+</section>
+<section class="pattern" id="clone-pull">
+<div class="pattern-header">
+<div>
+<h3>Cloning and pulling through VS Code</h3>
+<p>When students sit down at a different computer, they should start by getting the newest version from GitHub before editing.</p>
+</div>
+<span class="tag">Lab workflow</span>
+</div>
+<div class="grid two">
+<article class="card">
+<h4>Clone</h4>
+<p>Use <strong>Clone</strong> when the project is not already on that computer. Cloning downloads the GitHub repository and creates a local project folder.</p>
+<ul>
+<li>Best for: first time using a new lab computer.</li>
+<li>Result: a fresh local copy connected to GitHub.</li>
+<li>Do this once per computer for each project.</li>
+</ul>
+</article>
+<article class="card">
+<h4>Pull</h4>
+<p>Use <strong>Pull</strong> when the project folder is already on that computer, but GitHub may have newer changes.</p>
+<ul>
+<li>Best for: returning to a computer used before.</li>
+<li>Result: the local folder updates from GitHub.</li>
+<li>Do this before making new edits.</li>
+</ul>
+</article>
+</div>
+<div class="note warning">
+<p><strong>Rule for shared lab computers:</strong> Pull before editing. Commit and push before leaving. If the newest work is not pushed to GitHub, it may only exist on that one computer.</p>
+</div>
+<h4 style="margin:24px 0 12px;">If the project is not on this computer yet: clone it</h4>
+<ol class="step-list">
+<li><strong>Open VS Code.</strong> Make sure you are signed in to the correct GitHub account.</li>
+<li><strong>Open the Command Palette.</strong> Use <strong>View → Command Palette</strong>, then search for <strong>Git: Clone</strong>.</li>
+<li><strong>Choose Clone from GitHub.</strong> Select the correct repository from the list. If VS Code asks for permission, sign in and authorize GitHub access.</li>
+<li><strong>Choose where to save it.</strong> Pick a stable local folder, such as Desktop or Documents. Avoid downloading it into a random temporary folder.</li>
+<li><strong>Open the cloned repository.</strong> VS Code will ask whether to open the project. Choose <strong>Open</strong>.</li>
+<li><strong>Check the files before editing.</strong> Confirm that <code>index.html</code>, CSS, JavaScript, images, and data folders are present.</li>
+</ol>
+<h4 style="margin:24px 0 12px;">If the project is already on this computer: pull first</h4>
+<ol class="step-list">
+<li><strong>Open the project folder in VS Code.</strong> Use <strong>File → Open Folder</strong> and select the existing local repository folder.</li>
+<li><strong>Open Source Control.</strong> Use the Source Control icon in the left activity bar.</li>
+<li><strong>Pull or Sync Changes.</strong> Use the <strong>...</strong> menu and choose <strong>Pull</strong>, or use <strong>Sync Changes</strong> if VS Code shows it.</li>
+<li><strong>Wait for the update to finish.</strong> Then open the files and make sure the current work is there.</li>
+<li><strong>Edit, test, commit, and push.</strong> When finished, push the new commits back to GitHub before leaving the computer.</li>
+</ol>
+<div class="table-wrap" style="margin-top:18px;">
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>What to do in VS Code</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First time using this computer</td>
+<td>Clone the repository from GitHub.</td>
+<td>This creates a connected local copy of the project.</td>
+</tr>
+<tr>
+<td>Project folder already exists here</td>
+<td>Open the folder and pull before editing.</td>
+<td>This gets the newest work from GitHub before making changes.</td>
+</tr>
+<tr>
+<td>Finished working for the day</td>
+<td>Save, commit, and push.</td>
+<td>This sends the newest work back to GitHub so it is available on the next computer.</td>
+</tr>
+<tr>
+<td>VS Code reports conflicts</td>
+<td>Stop and ask for help before choosing a conflict option.</td>
+<td>Conflicts can overwrite or mix versions if handled carelessly.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="concept-callout">
+<strong>Student translation:</strong> Clone means “download my project onto this computer.” Pull means “update this computer with the newest GitHub version.” Push means “send my newest work back to GitHub.”
+  </div>
+</section>
+<section class="pattern" id="mistakes">
+<div class="pattern-header">
+<div>
+<h3>Common mistakes</h3>
+<p>Most beginner problems are file-location or workflow problems, not advanced coding problems.</p>
+</div>
+<span class="tag">Troubleshooting</span>
+</div>
+<div class="accordion-controls">
+<button class="open-all" data-target="mistakesAccordion" type="button">Open all</button>
+<button class="close-all secondary" data-target="mistakesAccordion" type="button">Close all</button>
+</div>
+<div class="accordion" id="mistakesAccordion">
+<div class="accordion-item">
+<button aria-expanded="false" class="accordion-trigger"><span>The page works locally but not on GitHub Pages</span><span>+</span></button>
+<div class="accordion-panel">
+              Check filename case, folder paths, and whether files were pushed. GitHub Pages is case-sensitive. <code>Img/photo.jpg</code> and <code>img/photo.jpg</code> are not the same path.
+            </div>
+</div>
+<div class="accordion-item">
+<button aria-expanded="false" class="accordion-trigger"><span>The repository is empty online</span><span>+</span></button>
+<div class="accordion-panel">
+              The student may have committed locally but not pushed. In VS Code, check whether there is a Sync/Push button or outgoing changes.
+            </div>
+</div>
+<div class="accordion-item">
+<button aria-expanded="false" class="accordion-trigger"><span>Images are missing</span><span>+</span></button>
+<div class="accordion-panel">
+              Images must be inside the project folder and referenced with correct relative paths. Avoid linking to files on the local computer, such as <code>/Users/name/Desktop/photo.jpg</code>.
+            </div>
+</div>
+<div class="accordion-item">
+<button aria-expanded="false" class="accordion-trigger"><span>Git asks about conflicts</span><span>+</span></button>
+<div class="accordion-panel">
+              A conflict usually means the local project and GitHub both changed. Students should stop and ask for help rather than randomly accepting all changes.
+            </div>
+</div>
+<div class="accordion-item">
+<button aria-expanded="false" class="accordion-trigger"><span>There are too many random commits</span><span>+</span></button>
+<div class="accordion-panel">
+              That is not a major problem for class work. The bigger issue is failing to commit meaningful checkpoints before experimenting with AI-generated code.
+            </div>
+</div>
+</div>
+</section>
+<section class="section-group" id="pages-setup">
+<h2>Setting up GitHub Pages</h2>
+<p>GitHub Pages publishes the repository as a website. For class projects, the simplest setup is usually to publish from the <code>main</code> branch and the root folder.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header">
+<div>
+<h3>Turn on GitHub Pages</h3>
+<p>This step happens on GitHub.com after the project has been pushed from VS Code.</p>
+</div>
+<span class="tag">Publishing</span>
+</div>
+<ol class="step-list">
+<li><strong>Open the repository on GitHub.com.</strong> Use the same repository that VS Code pushed to.</li>
+<li><strong>Go to Settings.</strong> The Settings tab is near the top of the repository page.</li>
+<li><strong>Open Pages.</strong> In the left settings menu, choose <strong>Pages</strong>.</li>
+<li><strong>Choose the source.</strong> Under Build and deployment, use <strong>Deploy from a branch</strong>.</li>
+<li><strong>Select the branch and folder.</strong> Choose <code>main</code> and <code>/(root)</code>, then save.</li>
+<li><strong>Wait for the site to build.</strong> The first publish may take a little time. Refresh the Pages settings page to find the published URL.</li>
+</ol>
+<div class="note warning">
+<p><strong>Requirement:</strong> The repository needs an <code>index.html</code> file in the selected publishing folder. If Pages is set to <code>main</code> and <code>/(root)</code>, <code>index.html</code> should be at the top level of the repository.</p>
+</div>
+</section>
+<section class="pattern" id="pages-url">
+<div class="pattern-header">
+<div>
+<h3>Find and test the published URL</h3>
+<p>Once GitHub Pages is active, students need to test the public link, not just the local file.</p>
+</div>
+<span class="tag">Live site</span>
+</div>
+<div class="grid two">
+<article class="card">
+<h4>Common project URL pattern</h4>
+<p>For a regular project repository, the URL usually follows this shape:</p>
+<div class="code-block"><code>https://username.github.io/repository-name/</code></div>
+</article>
+<article class="card">
+<h4>What to test</h4>
+<ul>
+<li>The page loads from the GitHub Pages URL.</li>
+<li>Images and videos appear.</li>
+<li>Buttons, links, and interactions work.</li>
+<li>The page works on a phone-width screen.</li>
+<li>The URL can be opened by someone else.</li>
+</ul>
+</article>
+</div>
+</section>
+<section class="pattern" id="update-site">
+<div class="pattern-header">
+<div>
+<h3>Updating the published site</h3>
+<p>After Pages is turned on, the live site updates when students push new commits to the publishing branch.</p>
+</div>
+<span class="tag">Ongoing workflow</span>
+</div>
+<ol class="step-list">
+<li><strong>Edit files in VS Code.</strong> Make changes to HTML, CSS, JavaScript, images, or data files.</li>
+<li><strong>Preview locally.</strong> Check the page before committing.</li>
+<li><strong>Commit with a useful message.</strong> Example: <code>Fix mobile card layout</code>.</li>
+<li><strong>Push or sync changes.</strong> Send the commit to GitHub.</li>
+<li><strong>Check the live URL.</strong> GitHub Pages may need a moment before the update appears.</li>
+</ol>
+<div class="concept-callout">
+<strong>Class rule:</strong> A project is not “turned in” just because it works on the student’s computer. It should work from the public GitHub Pages link.
+        </div>
+</section>
+</main>
+</div>
+<script>
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const menuBackdrop = document.getElementById('mobileMenuBackdrop');
+
+    function setMenu(open) {
+      document.body.classList.toggle('menu-open', open);
+      if (menuToggle) menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (menuBackdrop) menuBackdrop.hidden = !open;
+    }
+
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        setMenu(!document.body.classList.contains('menu-open'));
+      });
+    }
+
+    if (menuBackdrop) {
+      menuBackdrop.addEventListener('click', () => setMenu(false));
+    }
+
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', () => setMenu(false));
+    });
+
+    document.querySelectorAll('.accordion-trigger').forEach(button => {
+      button.addEventListener('click', () => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+        const icon = button.querySelector('span:last-child');
+        if (icon) icon.textContent = expanded ? '+' : '–';
+      });
+    });
+
+    function setAccordionState(id, open) {
+      const accordion = document.getElementById(id);
+      if (!accordion) return;
+      accordion.querySelectorAll('.accordion-trigger').forEach(button => {
+        button.setAttribute('aria-expanded', open ? 'true' : 'false');
+        const icon = button.querySelector('span:last-child');
+        if (icon) icon.textContent = open ? '–' : '+';
+      });
+    }
+
+    document.querySelectorAll('.open-all').forEach(button => {
+      button.addEventListener('click', () => setAccordionState(button.dataset.target, true));
+    });
+
+    document.querySelectorAll('.close-all').forEach(button => {
+      button.addEventListener('click', () => setAccordionState(button.dataset.target, false));
+    });
+  </script>
+</body>
+</html>

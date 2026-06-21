@@ -41,7 +41,7 @@
     .concept-callout strong { color:var(--ink); }
     .table-note { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; align-items:center; }
     .pill { display:inline-flex; align-items:center; gap:7px; padding:6px 10px; border-radius:999px; background:#eef3ef; border:1px solid var(--line); color:var(--accent); font-weight:900; font-size:.78rem; }
-    .table-wrap { width:100%; max-width:100%; overflow-x:auto; border:1px solid var(--line); border-radius:16px; background:#fff; box-shadow:0 8px 20px rgba(23,33,27,.05); }
+    .table-wrap { width:100%; max-width:100%; max-height:72vh; overflow:auto; border:1px solid var(--line); border-radius:16px; background:#fff; box-shadow:0 8px 20px rgba(23,33,27,.05); }
     table { border-collapse:separate; border-spacing:0; width:max-content; min-width:100%; font-size:.94rem; }
     th, td { vertical-align:top; padding:14px 16px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); text-align:left; max-width:340px; }
     th { position:sticky; top:0; z-index:5; background:#17211b; color:#fffdf7; font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; }
@@ -90,6 +90,11 @@
       th:first-child, td:first-child { min-width:190px; max-width:210px; }
       th, td { padding:12px; font-size:.9rem; }
     }
+    .home-button {
+      border: 1px solid #636363;
+      margin-bottom: 1rem!important;
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -100,6 +105,7 @@
 <div class="mobile-menu-backdrop" hidden="" id="mobileMenuBackdrop"></div>
 <div class="layout">
 <aside aria-label="Tools navigation" class="sidebar" id="siteSidebar">
+<a class="home-button" href="../">← Back to Home</a>
 <h1>Interactive Storytelling Tools</h1>
 <p>A working guide to builders, embedded tools, hosting choices, and AI-assisted coding.</p>
 <nav>
@@ -108,7 +114,6 @@
 <div class="nav-group-title">Building</div>
 <a href="#building-project">Building the project</a>
 <a href="#building-table">Builder comparison table</a>
-
 <div class="nav-group-title">Embedded builders</div>
 <a href="#embedded-builders">Embedded builders</a>
 <a href="#embedded-table">Embedded tools table</a>
@@ -116,8 +121,6 @@
 <a href="#vibe-coding">Vibe coding</a>
 <a href="#ai-table">AI coding table</a>
 <a href="#ai-guidelines">Classroom guidelines</a>
-<div class="nav-group-title">Reference</div>
-<a href="#sources">Pricing/source notes</a>
 </nav>
 </aside>
 <main>
@@ -135,143 +138,31 @@
 <div class="pattern-header">
 <div>
 <h3>Builder / solution comparison</h3>
-<p>Pricing, export rules, and feature limits change often, so treat this as a starting point to verify before purchasing.</p>
+<p>Pricing, export rules, and feature limits change often, so treat this as a starting point to verify before purchasing. Scroll the table horizontally and vertically; the first column and header row stay in view.</p>
 </div>
 <span class="tag">Project home</span>
 </div>
-
 <div aria-label="Builder and hosting comparison table" class="table-wrap" role="region" tabindex="0">
 <table>
 <thead>
-<tr>
-<th>Builder / solution</th>
-<th>Category</th>
-<th>Price / free tier</th><th>Archiving / long-term access</th>
-<th>Built-in blocks</th>
-<th>Responsibility</th>
-<th>Control</th>
-<th>Best for</th>
-<th>Students should check before committing</th>
-</tr>
+<tr><th>Builder / solution</th><th>Category</th><th>Price / free tier</th><th>Archiving / long-term access</th><th>Built-in blocks</th><th>Responsibility</th><th>Control</th><th>Pros</th><th>Cons</th></tr>
 </thead>
 <tbody>
-<tr>
-<td><a class="tool-link" href="https://shorthand.com/" rel="noopener" target="_blank">Shorthand ↗</a><span class="small-meta">Visual longform storytelling platform</span></td>
-<td><span class="cat">Storytelling Specific Builder</span></td>
-<td>Institutional / education access varies. Often best when the school provides accounts.</td><td>No simple static export for GitHub-style hosting. Stories generally need the Shorthand account/platform to remain available, unless the institution has a specific export/archiving arrangement.</td>
-<td>Strong longform story sections, media backgrounds, scroll-based sections, embeds, image/video-led layouts.</td>
-<td><span class="rating">Low–medium.</span> Students mainly manage content, structure, media, and embedding.</td>
-<td><span class="rating">Medium.</span> Strong narrative patterns; less freedom than code.</td>
-<td>Polished multimedia narratives where the page structure should guide the reader.</td>
-<td>Account access, story limits, publishing limits, custom domain/export options, embeds allowed, and whether the class account stays active after the semester.</td>
-</tr>
-<tr>
-<td><a class="tool-link" href="https://tilda.cc/" rel="noopener" target="_blank">Tilda free tier ↗</a><span class="small-meta">Block-based site builder</span></td>
-<td><span class="cat">Storytelling Specific Builder</span></td>
-<td>Free plan. Tilda lists 1 website, 50 pages, and 100 blocks on the free tier.</td><td>Free sites remain tied to Tilda hosting and the free URL. Static code export is not part of the normal free workflow; verify whether the project must stay on Tilda after class.</td>
-<td>Limited block library compared with paid plans. Useful for basic sections and simple story pages.</td>
-<td><span class="rating">Low.</span> Hosting and responsive basics are mostly handled by the platform.</td>
-<td><span class="rating">Low–medium.</span> Useful for layout practice, but free-tier limits matter.</td>
-<td>Testing Tilda workflow before deciding whether paid features are needed.</td>
-<td>Custom domain availability, Tilda branding, HTML/custom code availability, block limits, and whether the free URL is acceptable for the assignment.</td>
-</tr>
-<tr>
-<td><a class="tool-link" href="https://tilda.cc/pricing/" rel="noopener" target="_blank">Tilda paid tier ↗</a><span class="small-meta">Personal / Business plans</span></td>
-<td><span class="cat">Storytelling Specific Builder</span></td>
-<td>Paid Personal / Business plans. Tilda's comparison page lists 600+ blocks on paid plans.</td><td>Paid plans may allow code export depending on plan/settings, but exported projects can lose some platform-managed behavior. Otherwise, the site needs an active Tilda account/site to stay published.</td>
-<td>Large block library, Zero Block, animation tools, custom code options, custom domains, broader site settings.</td>
-<td><span class="rating">Low–medium.</span> More choices mean more design responsibility.</td>
-<td><span class="rating">Medium–high.</span> Stronger visual control than the free plan.</td>
-<td>Visual explainers or narrative pages that need polished blocks plus some custom embeds/code.</td>
-<td>Monthly cost, whether one site or multiple sites are needed, export rules, HTML block access, and whether the project requires features locked behind paid plans.</td>
-</tr>
-<tr>
-<td><a class="tool-link" href="https://www.vev.design/" rel="noopener" target="_blank">Vev ↗</a><span class="small-meta">Visual builder for interactive web pages</span></td>
-<td><span class="cat">Storytelling Specific Builder</span></td>
-<td>Vev advertises a 30-day free trial and paid plans starting around $9.99/month.</td><td>Publishing/export options depend on plan. Treat long-term access as platform-dependent unless students have confirmed whether they can export or keep the project published after any trial ends.</td>
-<td>Interactive sections, animation, responsive visual design, scrolly-style layouts, components, embeds.</td>
-<td><span class="rating">Medium.</span> Students need to understand layout, responsiveness, and publishing settings.</td>
-<td><span class="rating">High.</span> More design freedom than many block-first builders.</td>
-<td>Custom-looking interactive pages without writing the whole project by hand.</td>
-<td>Trial length, publishing after the trial, student discount availability, export/publishing limits, and whether collaboration requires paid seats.</td>
-</tr>
-<tr>
-<td><a class="tool-link" href="https://storymaps.arcgis.com/" rel="noopener" target="_blank">ArcGIS StoryMaps ↗</a><span class="small-meta">Map-centered story builder</span></td>
-<td><span class="cat">Storytelling Specific Builder</span></td>
-<td>Public ArcGIS accounts are free for personal, noncommercial use with limitations; full StoryMaps capabilities may require paid/personal-use or organizational access.</td><td>Stories remain hosted in ArcGIS/StoryMaps and depend on the account, sharing settings, and data/map layers staying active. Not intended as a static HTML export workflow.</td>
-<td>Map-led story sections, sidecars, swipe, guided geographic explanation, media blocks.</td>
-<td><span class="rating">Medium.</span> Students manage map data, layers, sourcing, and account rules.</td>
-<td><span class="rating">Medium.</span> Excellent for maps; less flexible for non-map visual identity.</td>
-<td>Stories where geography is central rather than just decorative.</td>
-<td>Whether the university already has Esri access, data-credit limits, public-account limits, sharing permissions, and whether maps remain available after class.</td>
-</tr>
-
-
-<tr>
-<td><a class="tool-link" href="https://www.squarespace.com/" rel="noopener" target="_blank">Squarespace ↗</a><span class="small-meta">General website builder</span></td>
-<td><span class="cat general">General Web Builder</span></td>
-<td>No permanent free plan; 14-day trial. Common plans range roughly from Basic to Advanced, with annual discounts.</td><td>No normal static-site export for a complete Squarespace project. The site generally requires an active paid subscription to stay publicly available after the trial.</td>
-<td>Page sections, galleries, portfolio/blog/store blocks, forms, embeds, limited custom code depending on plan.</td>
-<td><span class="rating">Low–medium.</span> Hosting and templates are handled; custom interaction may be limited.</td>
-<td><span class="rating">Medium.</span> Good visual polish but less ideal for custom interactive behavior.</td>
-<td>Clean portfolio or project sites with mostly standard pages and embedded interactives.</td>
-<td>Trial expiration, custom code plan requirements, student discount, domain/email costs, and whether embedded tools behave well in Squarespace blocks.</td>
-</tr>
-<tr>
-<td><a class="tool-link" href="https://www.wix.com/" rel="noopener" target="_blank">Wix ↗</a><span class="small-meta">General drag-and-drop site builder</span></td>
-<td><span class="cat general">General Web Builder</span></td>
-<td>Free plan available with branding/subdomain; paid plans needed for custom domain and stronger features.</td><td>No normal static-site export. Published sites remain on Wix and typically require the appropriate plan for custom domains, branding removal, and long-term public use.</td>
-<td>Large template/block library, galleries, forms, blog, CMS features, app marketplace, embeds.</td>
-<td><span class="rating">Low–medium.</span> Easy to start; students still need to manage design consistency.</td>
-<td><span class="rating">Medium.</span> Flexible but can become messy without layout discipline.</td>
-<td>Students who need an all-in-one website quickly and can work within the editor.</td>
-<td>Branding, storage/media limits, custom domain cost, editor complexity, mobile layout cleanup, and whether apps add costs.</td>
-</tr>
-<tr>
-<td><a class="tool-link" href="https://www.wix.com/studio" rel="noopener" target="_blank">Wix Studio ↗</a><span class="small-meta">Advanced Wix builder</span></td>
-<td><span class="cat general">General Web Builder</span></td>
-<td>Paid Studio plans; Wix lists Basic, Standard, and higher tiers for client/professional sites.</td><td>No normal static-site export. Published sites remain on Wix and typically require the appropriate plan for custom domains, branding removal, and long-term public use.</td>
-<td>Responsive editor, custom breakpoints, CMS, design systems, collaboration, advanced layout control.</td>
-<td><span class="rating">Medium–high.</span> More professional features mean more decisions.</td>
-<td><span class="rating">High.</span> More responsive control than standard Wix.</td>
-<td>Students ready for a more advanced builder and responsive design workflow.</td>
-<td>Whether Studio is overkill, plan cost, learning curve, collaboration needs, and handoff/publishing settings.</td>
-</tr>
-<tr>
-<td><a class="tool-link" href="https://wordpress.com/" rel="noopener" target="_blank">WordPress.com ↗</a><span class="small-meta">Hosted WordPress</span></td>
-<td><span class="cat general">General Web Builder</span></td>
-<td>Free plan available; paid plans unlock more design, domain, plugin, and customization options.</td><td>Content can usually be exported in WordPress XML format, but the finished design/theme/plugins may not transfer cleanly. A live public site usually depends on the WordPress.com plan.</td>
-<td>Block editor, themes, patterns, pages/posts, galleries, embeds; plugins depend on plan.</td>
-<td><span class="rating">Medium.</span> More CMS responsibility than most closed builders.</td>
-<td><span class="rating">Medium–high.</span> Stronger if paid plans/plugins/custom CSS are available.</td>
-<td>Content-heavy sites, portfolios, explainers, or projects that benefit from CMS structure.</td>
-<td>Plan needed for plugins/custom code, theme limits, embed support, storage, domain cost, and difference between WordPress.com and self-hosted WordPress.org.</td>
-</tr>
-<tr>
-<td><a class="tool-link" href="https://wordpress.org/" rel="noopener" target="_blank">Purchased hosting ↗</a><span class="small-meta">Self-hosted files or WordPress</span></td>
-<td><span class="cat code">Code</span></td>
-<td>Varies by host. Often a monthly/yearly hosting bill plus domain cost.</td><td>Archiving is strongest if students control files, database exports, backups, and domain/DNS. Ongoing hosting/domain renewal is required unless the project is exported as static files.</td>
-<td>Depends on stack: WordPress themes/plugins, custom HTML/CSS/JS, database-backed sites, server tools.</td>
-<td><span class="rating">Highest.</span> Students handle hosting, files, updates, backups, security, and domains.</td>
-<td><span class="rating">Highest.</span> Most flexible when students know what they are doing.</td>
-<td>Advanced projects, client sites, database-backed work, or projects needing server-side features.</td>
-<td>Renewal cost, domain/DNS, SSL, backups, security, database access, file upload workflow, and whether the student can maintain it after class.</td>
-</tr>
-<tr>
-<td><a class="tool-link" href="https://pages.github.com/" rel="noopener" target="_blank">GitHub hosting ↗</a><span class="small-meta">GitHub Pages for static sites</span></td>
-<td><span class="cat code">Code</span></td>
-<td>Free for static sites. GitHub lists Pages limits including 1 GB published site size and a soft 100 GB/month bandwidth limit.</td><td>Best for archiving static work. Files live in a repository and can be downloaded, forked, or moved. GitHub Pages hosting is free for static sites within limits.</td>
-<td>No built-in visual blocks. Students build with HTML/CSS/JS or static-site tools.</td>
-<td><span class="rating">High.</span> Students manage files, paths, GitHub workflow, assets, and debugging.</td>
-<td><span class="rating">High.</span> Excellent for custom code and hosted embeds.</td>
-<td>Custom HTML prototypes, standalone interactives, class tutorials, and lightweight final projects.</td>
-<td>Static-only limitation, GitHub account setup, file paths, image optimization, repository visibility, custom domain/DNS, and whether students can use Git or web upload.</td>
-</tr>
+<tr><td><a class="tool-link" href="https://shorthand.com/" rel="noopener" target="_blank">Shorthand ↗</a><span class="small-meta">Visual longform storytelling platform</span></td><td><span class="cat">Storytelling Specific Builder</span></td><td>We have free educational accounts I can give you. But otherwise it's an enterprise level builder. See <a href="https://shorthand.com/pricing/">pricing</a>.</td><td>No simple static export for GitHub-style hosting. Stories generally need the Shorthand account/platform to remain available, unless the institution has a specific export/archiving arrangement.</td><td>Strong longform story sections, media backgrounds, scroll-based sections, embeds, image/video-led layouts.</td><td><span class="rating">Low–medium.</span> Students mainly manage content, structure, media, and embedding.</td><td><span class="rating">Medium.</span> Strong narrative patterns; less freedom than code.</td><td>Purpose-built for polished longform storytelling; strong multimedia flow; lower technical setup when the school provides access.</td><td>Platform-dependent; limited static archiving; less flexible for custom interaction than code.</td></tr>
+<tr><td><a class="tool-link" href="https://tilda.cc/" rel="noopener" target="_blank">Tilda free tier ↗</a><span class="small-meta">Block-based site builder</span></td><td><span class="cat">Storytelling Specific Builder</span></td><td>Free plan. Tilda lists 1 website, 50 pages, and 100 blocks on the free tier.</td><td>Free sites remain tied to Tilda hosting and the free URL. Static code export is not part of the normal free workflow; verify whether the project must stay on Tilda after class.</td><td>Limited block library compared with paid plans. Useful for basic sections and simple story pages.</td><td><span class="rating">Low.</span> Hosting and responsive basics are mostly handled by the platform.</td><td><span class="rating">Low–medium.</span> Useful for layout practice, but free-tier limits matter.</td><td>Low-cost way to test a page-building workflow; handles hosting and many responsive basics.</td><td>Free-tier limits, Tilda URL/branding constraints, and less control over advanced blocks or export.</td></tr>
+<tr><td><a class="tool-link" href="https://tilda.cc/pricing/" rel="noopener" target="_blank">Tilda paid tier ↗</a><span class="small-meta">Personal / Business plans</span></td><td><span class="cat">Storytelling Specific Builder</span></td><td>Paid Personal / Business plans. Tilda's comparison page lists 600+ blocks on paid plans.</td><td>Paid plans may allow code export depending on plan/settings, but exported projects can lose some platform-managed behavior. Otherwise, the site needs an active Tilda account/site to stay published.</td><td>Large block library, Zero Block, animation tools, custom code options, custom domains, broader site settings.</td><td><span class="rating">Low–medium.</span> More choices mean more design responsibility.</td><td><span class="rating">Medium–high.</span> Stronger visual control than the free plan.</td><td>Large block library, stronger design control, custom domains, and better support for polished pages and embeds.</td><td>Requires ongoing payment for normal hosted access; export rules and platform-specific behavior need verification.</td></tr>
+<tr><td><a class="tool-link" href="https://www.vev.design/" rel="noopener" target="_blank">Vev ↗</a><span class="small-meta">Visual builder for interactive web pages</span></td><td><span class="cat">Storytelling Specific Builder</span></td><td>Vev advertises a 30-day free trial and paid plans starting around $9.99/month.</td><td>Publishing/export options depend on plan. Treat long-term access as platform-dependent unless students have confirmed whether they can export or keep the project published after any trial ends.</td><td>Interactive sections, animation, responsive visual design, scrolly-style layouts, components, embeds.</td><td><span class="rating">Medium.</span> Students need to understand layout, responsiveness, and publishing settings.</td><td><span class="rating">High.</span> More design freedom than many block-first builders.</td><td>High visual control for interactive pages without building everything by hand; useful for scrolly and animated layouts.</td><td>Trial/payment issues, steeper learning curve, and publishing/export rules students must confirm.</td></tr>
+<tr><td><a class="tool-link" href="https://storymaps.arcgis.com/" rel="noopener" target="_blank">ArcGIS StoryMaps ↗</a><span class="small-meta">Map-centered story builder</span></td><td><span class="cat">Storytelling Specific Builder</span></td><td>Public ArcGIS accounts are free for personal, noncommercial use with limitations; full StoryMaps capabilities may require paid/personal-use or organizational access.</td><td>Stories remain hosted in ArcGIS/StoryMaps and depend on the account, sharing settings, and data/map layers staying active. Not intended as a static HTML export workflow.</td><td>Map-led story sections, sidecars, swipe, guided geographic explanation, media blocks.</td><td><span class="rating">Medium.</span> Students manage map data, layers, sourcing, and account rules.</td><td><span class="rating">Medium.</span> Excellent for maps; less flexible for non-map visual identity.</td><td>Excellent for geography-centered stories; strong built-in map and sidecar patterns.</td><td>Not ideal for non-map stories; depends on ArcGIS accounts, sharing settings, and hosted layers.</td></tr>
+<tr><td><a class="tool-link" href="https://www.squarespace.com/" rel="noopener" target="_blank">Squarespace ↗</a><span class="small-meta">General website builder</span></td><td><span class="cat general">General Web Builder</span></td><td>No permanent free plan; 14-day trial. Common plans range roughly from Basic to Advanced, with annual discounts.</td><td>No normal static-site export for a complete Squarespace project. The site generally requires an active paid subscription to stay publicly available after the trial.</td><td>Page sections, galleries, portfolio/blog/store blocks, forms, embeds, limited custom code depending on plan.</td><td><span class="rating">Low–medium.</span> Hosting and templates are handled; custom interaction may be limited.</td><td><span class="rating">Medium.</span> Good visual polish but less ideal for custom interactive behavior.</td><td>Clean templates and reliable general-site publishing; good for portfolios and mostly standard pages.</td><td>No normal static export; limited custom interaction; paid subscription needed for long-term public use.</td></tr>
+<tr><td><a class="tool-link" href="https://www.wix.com/" rel="noopener" target="_blank">Wix ↗</a><span class="small-meta">General drag-and-drop site builder</span></td><td><span class="cat general">General Web Builder</span></td><td>Free plan available with branding/subdomain; paid plans needed for custom domain and stronger features.</td><td>No normal static-site export. Published sites remain on Wix and typically require the appropriate plan for custom domains, branding removal, and long-term public use.</td><td>Large template/block library, galleries, forms, blog, CMS features, app marketplace, embeds.</td><td><span class="rating">Low–medium.</span> Easy to start; students still need to manage design consistency.</td><td><span class="rating">Medium.</span> Flexible but can become messy without layout discipline.</td><td>Easy all-in-one builder with many templates, apps, and standard site blocks.</td><td>Can become visually messy; export is limited; branding/domain features often require paid plans.</td></tr>
+<tr><td><a class="tool-link" href="https://www.wix.com/studio" rel="noopener" target="_blank">Wix Studio ↗</a><span class="small-meta">Advanced Wix builder</span></td><td><span class="cat general">General Web Builder</span></td><td>Paid Studio plans; Wix lists Basic, Standard, and higher tiers for client/professional sites.</td><td>No normal static-site export. Published sites remain on Wix and typically require the appropriate plan for custom domains, branding removal, and long-term public use.</td><td>Responsive editor, custom breakpoints, CMS, design systems, collaboration, advanced layout control.</td><td><span class="rating">Medium–high.</span> More professional features mean more decisions.</td><td><span class="rating">High.</span> More responsive control than standard Wix.</td><td>Easy all-in-one builder with many templates, apps, and standard site blocks.</td><td>Can become visually messy; export is limited; branding/domain features often require paid plans.</td></tr>
+<tr><td><a class="tool-link" href="https://wordpress.com/" rel="noopener" target="_blank">WordPress.com ↗</a><span class="small-meta">Hosted WordPress</span></td><td><span class="cat general">General Web Builder</span></td><td>Free plan available; paid plans unlock more design, domain, plugin, and customization options.</td><td>Content can usually be exported in WordPress XML format, but the finished design/theme/plugins may not transfer cleanly. A live public site usually depends on the WordPress.com plan.</td><td>Block editor, themes, patterns, pages/posts, galleries, embeds; plugins depend on plan.</td><td><span class="rating">Medium.</span> More CMS responsibility than most closed builders.</td><td><span class="rating">Medium–high.</span> Stronger if paid plans/plugins/custom CSS are available.</td><td>Good for content-heavy projects and CMS structure; export of content is more feasible than many closed builders.</td><td>Plan limits affect plugins/custom code; finished design may not transfer cleanly.</td></tr>
+<tr><td><a class="tool-link" href="https://wordpress.org/" rel="noopener" target="_blank">Purchased hosting ↗</a><span class="small-meta">Self-hosted files or WordPress</span></td><td><span class="cat code">Code</span></td><td>Varies by host. Often a monthly/yearly hosting bill plus domain cost.</td><td>Archiving is strongest if students control files, database exports, backups, and domain/DNS. Ongoing hosting/domain renewal is required unless the project is exported as static files.</td><td>Depends on stack: WordPress themes/plugins, custom HTML/CSS/JS, database-backed sites, server tools.</td><td><span class="rating">Highest.</span> Students handle hosting, files, updates, backups, security, and domains.</td><td><span class="rating">Highest.</span> Most flexible when students know what they are doing.</td><td>Maximum ownership and flexibility; best path for advanced custom sites or self-hosted WordPress.</td><td>Highest maintenance burden: hosting, domains, SSL, backups, security, and renewals.</td></tr>
+<tr><td><a class="tool-link" href="https://pages.github.com/" rel="noopener" target="_blank">GitHub hosting ↗</a><span class="small-meta">GitHub Pages for static sites</span></td><td><span class="cat code">Code</span></td><td>Free for static sites. GitHub lists Pages limits including 1 GB published site size and a soft 100 GB/month bandwidth limit.</td><td>Best for archiving static work. Files live in a repository and can be downloaded, forked, or moved. GitHub Pages hosting is free for static sites within limits.</td><td>No built-in visual blocks. Students build with HTML/CSS/JS or static-site tools.</td><td><span class="rating">High.</span> Students manage files, paths, GitHub workflow, assets, and debugging.</td><td><span class="rating">High.</span> Excellent for custom code and hosted embeds.</td><td>Free static hosting, strong archiving through repositories, and excellent for custom HTML/CSS/JS projects.</td><td>Static-only; students must manage files, paths, Git/GitHub workflow, and debugging.</td></tr>
 </tbody>
 </table>
 </div>
 </section>
-
 <section class="section-group" id="embedded-builders">
 <h2>Embedded builders</h2>
 <p>Embedded builders create a specific interactive element that can be placed inside a larger story page. These are useful when the story platform does not have the specific interaction you need.</p>
@@ -309,7 +200,6 @@
 <td><span class="rating">Medium.</span> Tool handles rendering; student must clean data, write labels, and explain the graphic.</td>
 <td>Data source, mobile readability, color choices, annotation clarity, source notes, and whether branding/export limits matter.</td>
 </tr>
-
 <tr>
 <td><a class="tool-link" href="https://genially.com/" rel="noopener" target="_blank">Genially ↗</a><span class="small-meta">Interactive presentations and learning objects</span></td>
 <td><span class="cat general">Interactive media</span></td>
@@ -340,7 +230,6 @@
 <td><span class="rating">Medium.</span> Students need accurate locations, concise captions, and a reason for sequence.</td>
 <td>Map accuracy, media hosting, whether movement adds understanding, and whether the map is readable on phones.</td>
 </tr>
-
 <tr>
 <td><a class="tool-link" href="https://www.mapbox.com/" rel="noopener" target="_blank">Mapbox ↗</a><span class="small-meta">Custom web maps</span></td>
 <td><span class="cat code">Map / code</span></td>
@@ -426,9 +315,6 @@
 <td>Can encourage passive acceptance; plan limits and credit systems may confuse beginners.</td>
 <td>Students should understand each accepted suggestion and keep commits small enough to undo.</td>
 </tr>
-
-
-
 </tbody>
 </table>
 </div>
@@ -446,35 +332,6 @@
 <article class="tool-card"><h4>Keep the scope visible</h4><p>A good prompt should say the host, file structure, interaction, data source, mobile behavior, and accessibility requirements.</p></article>
 <article class="tool-card"><h4>Own the final page</h4><p>Students are responsible for testing, debugging, attribution, AI disclosure, and explaining how the final interactive works.</p></article>
 </div>
-</section>
-<section class="section-group" id="sources">
-<h2>Pricing/source notes</h2>
-<p>Pricing and free-tier limits were checked while this page was drafted. Students should still verify live pricing before paying for any tool.</p>
-</section>
-<section class="pattern">
-<div class="pattern-header">
-<div>
-<h3>Source links to verify</h3>
-<p>Use these links as starting points when updating this table during the semester.</p>
-</div>
-<span class="tag">Update often</span>
-</div>
-<ul class="source-list">
-<li><a href="https://tilda.cc/pricing-compare/" rel="noopener" target="_blank">Tilda pricing comparison</a></li>
-<li><a href="https://vev.co/pricing" rel="noopener" target="_blank">Vev pricing</a></li>
-<li><a href="https://www.wix.com/studio/plans" rel="noopener" target="_blank">Wix Studio plans</a></li>
-<li><a href="https://www.squarespace.com/pricing" rel="noopener" target="_blank">Squarespace pricing</a></li>
-<li><a href="https://wordpress.com/" rel="noopener" target="_blank">WordPress.com plans</a></li>
-<li><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" rel="noopener" target="_blank">GitHub Pages limits</a></li>
-<li><a href="https://www.datawrapper.de/pricing" rel="noopener" target="_blank">Datawrapper pricing</a></li>
-<li><a href="https://flourish.studio/pricing/" rel="noopener" target="_blank">Flourish pricing</a></li>
-<li><a href="https://genially.com/plans/" rel="noopener" target="_blank">Genially plans</a></li>
-<li><a href="https://timeline.knightlab.com/" rel="noopener" target="_blank">Knight Lab TimelineJS</a></li>
-<li><a href="https://chatgpt.com/pricing/" rel="noopener" target="_blank">ChatGPT pricing</a></li>
-<li><a href="https://support.claude.com/en/articles/11049762-choose-a-claude-plan" rel="noopener" target="_blank">Claude plans</a></li>
-<li><a href="https://cursor.com/pricing" rel="noopener" target="_blank">Cursor pricing</a></li>
-<li><a href="https://github.com/features/copilot/plans" rel="noopener" target="_blank">GitHub Copilot plans</a></li>
-</ul>
 </section>
 </main>
 </div>

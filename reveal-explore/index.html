@@ -1,10 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reveal and Explore Patterns - Stable Scroll Focus</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reveal, Explore, and Compare Patterns</title>
+<style>
 
     :root {
       --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
@@ -987,424 +988,418 @@ main {
   transform:translateY(-50%) translateX(0);
 }
 
+.home-button {
+      border: 1px solid #636363;
+      margin-bottom: 1rem!important;
+      display: block;
+    }
+
   </style>
 </head>
 <body>
-  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false">
-    <span class="mobile-menu-icon" aria-hidden="true"></span>
-    <span class="mobile-menu-text">Menu</span>
-  </button>
-  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
-  <div class="layout">
-    <aside class="sidebar" id="siteSidebar" aria-label="Pattern navigation">
-      <h1>Reveal and Explore Patterns</h1>
-      <p>Encyclopedic and spatial affordance patterns for interactive storytelling.</p>
-      <nav>
-        <div class="nav-group-title">Reveal hidden information</div>
-        <a href="#accordions">Accordions</a>
-        <a href="#modals">Modals/popups</a>
-        <a href="#tooltips">Tooltips</a>
-        <a href="#annotations">Rich annotations</a>
-        <a href="#flip-cards">Flip cards</a>
-        <a href="#hover-cards">Hover cards</a>
-
-        <div class="nav-group-title">Select or compare</div>
-        <a href="#tabs">Tabs</a>
-        <a href="#before-after">Before/after comparisons</a>
-        <a href="#bird-explorer">Master-Detail</a>
-
-        <div class="nav-group-title">Browse a collection</div>
-        <a href="#slideshows">Slideshows</a>
-        <a href="#carousels">Carousels</a>
-        <a href="#galleries">Image galleries</a>
-        <a href="#horizontal-overflow">Horizontal overflow</a>
-        <a href="#vertical-overflow">Vertical overflow</a>
-
-        <div class="nav-group-title">Explore a spatial canvas</div>
-        <a href="#pan-zoom">Pan-and-zoom image</a>
-
-        <div class="nav-group-title">Guide attention through space</div>
-        <a href="#button-guided">Button-guided focus</a>
-        <a href="#scroll-guided">Scroll-driven focus</a>
-      </nav>
-    </aside>
-
-    <main>
-      <section class="hero">
-        <div class="eyebrow">Interactive storytelling demo</div>
-        <h2>Reveal and Explore Patterns</h2>
-        <p>Digital stories do not have to show everything at once. These patterns use interaction to reveal more information, compare versions, browse collections, or move through visual space.</p>
-        <div class="concept-callout"><strong>Core idea:</strong> some patterns reveal hidden explanation. Others reveal another part of a larger encyclopedic or spatial structure.</div>
-      </section>
-
-      <section class="section-group" id="reveal-hidden-information">
-        <h2>Reveal hidden information</h2>
-        <p>Patterns where the reader exposes information that is hidden, collapsed, minimized, or attached to a specific part of the interface.</p>
-      </section>
+<button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button">
+<span aria-hidden="true" class="mobile-menu-icon"></span>
+<span class="mobile-menu-text">Menu</span>
+</button>
+<div class="mobile-menu-backdrop" hidden="" id="mobileMenuBackdrop"></div>
+<div class="layout">
+<aside aria-label="Pattern navigation" class="sidebar" id="siteSidebar">
+<a class="home-button" href="../">← Back to Home</a>
+<h1>Reveal, Explore, and Compare Patterns</h1>
+<p>Interaction patterns for revealing information, comparing versions, browsing collections, and moving through visual space.</p>
+<nav>
+<div class="nav-group-title">Reveal information</div>
+<a href="#accordions">Accordions</a>
+<a href="#modals">Modals/popups</a>
+<a href="#tooltips">Tooltips</a>
+<a href="#annotations">Rich annotations</a>
+<a href="#flip-cards">Flip cards</a>
+<a href="#hover-cards">Hover cards</a>
+<div class="nav-group-title">Select and compare</div>
+<a href="#tabs">Tabs</a>
+<a href="#before-after">Before/after comparisons</a>
+<a href="#bird-explorer">Master-Detail</a>
+<div class="nav-group-title">Explore collections</div>
+<a href="#slideshows">Slideshows</a>
+<a href="#carousels">Carousels</a>
+<a href="#galleries">Image galleries</a>
+<a href="#horizontal-overflow">Horizontal overflow</a>
+<a href="#vertical-overflow">Vertical overflow</a>
+<div class="nav-group-title">Explore space</div>
+<a href="#pan-zoom">Pan-and-zoom image</a>
+<div class="nav-group-title">Guide attention</div>
+<a href="#button-guided">Button-guided focus</a>
+<a href="#scroll-guided">Scroll-driven focus</a>
+</nav>
+</aside>
+<main>
+<section class="hero" id="intro">
+<div class="eyebrow">Interactive storytelling demo</div>
+<h2>Reveal, Explore, and Compare Patterns</h2>
+<p>Digital stories do not have to show everything at once. These patterns use interaction to reveal information, compare versions, browse collections, and move through visual space.</p>
+<div class="concept-callout"><strong>Core idea:</strong> these patterns often use more than one affordance. Reveal and browse patterns rely on layered information. Pan, zoom, and guided focus use spatial structure. Buttons, tabs, sliders, and filters give the reader participatory control. Anything that changes based on input also uses procedural behavior.</div>
+</section>
+<section class="section-group" id="reveal-hidden-information">
+<h2>Reveal information</h2>
+<p>Patterns where the reader exposes information that is hidden, collapsed, minimized, or attached to a specific part of the interface.</p>
+</section>
 <section class="pattern" id="accordions">
-        <div class="pattern-header"><div><h3>Accordions</h3><p>An accordion stacks sections vertically and lets users expand one or more sections to reveal hidden content. It works best for grouped information where readers may only need some parts, such as FAQs, definitions, steps, background context, or categorized details.</p></div><span class="tag">Grouped details</span></div>
-        <div class="demo-frame">
-          <div class="accordion">
-            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>How do you identify a Red-winged Blackbird?</span><span>+</span></button><div class="accordion-panel">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Agelaius_phoeniceus_0110_taxo.jpg/960px-Agelaius_phoeniceus_0110_taxo.jpg" alt="male red-winged blackbird" style="max-width:200px" />
-             <p>Look for a glossy black male with red-and-yellow shoulder patches. Females are brown and heavily streaked.</p></div></div>
-            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>Where should you look for them?</span><span>+</span></button><div class="accordion-panel">They are common in marshes, roadside ditches, wet meadows, and cattail edges.</div></div>
-            <div class="accordion-item"><button class="accordion-trigger" aria-expanded="false"><span>What behavior confirms the ID?</span><span>+</span></button><div class="accordion-panel">During breeding season, males flash their shoulder patches while singing and defending territory.</div></div>
-          </div>
-        </div>
-      </section>
+<div class="pattern-header"><div><h3>Accordions</h3><p>An accordion stacks sections vertically and lets users expand one or more sections to reveal hidden content. It works best for grouped information where readers may only need some parts, such as FAQs, definitions, steps, background context, or categorized details.</p></div><span class="tag">Grouped details</span></div>
+<div class="demo-frame">
+<div class="accordion">
+<div class="accordion-item"><button aria-expanded="false" class="accordion-trigger"><span>How do you identify a Red-winged Blackbird?</span><span>+</span></button><div class="accordion-panel">
+<img alt="male red-winged blackbird" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Agelaius_phoeniceus_0110_taxo.jpg/960px-Agelaius_phoeniceus_0110_taxo.jpg" style="max-width:200px"/>
+<p>Look for a glossy black male with red-and-yellow shoulder patches. Females are brown and heavily streaked.</p></div></div>
+<div class="accordion-item"><button aria-expanded="false" class="accordion-trigger"><span>Where should you look for them?</span><span>+</span></button><div class="accordion-panel">They are common in marshes, roadside ditches, wet meadows, and cattail edges.</div></div>
+<div class="accordion-item"><button aria-expanded="false" class="accordion-trigger"><span>What behavior confirms the ID?</span><span>+</span></button><div class="accordion-panel">During breeding season, males flash their shoulder patches while singing and defending territory.</div></div>
+</div>
+</div>
+</section>
 <section class="pattern" id="modals">
-        <div class="pattern-header"><div><h3>Modals/popups</h3><p>A modal opens content in an overlay above the page, temporarily focusing the reader on one piece of information. It works best for details that need more space or attention but should not require a new page, such as a short profile, explanation, image, video, warning, or source note.</p></div><span class="tag">Focused detail</span></div>
-        <div class="demo-frame">
-          <div class="media-card">
-            <div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/McMillan_Marsh_State_Wildlife_Area.jpg/960px-McMillan_Marsh_State_Wildlife_Area.jpg" alt="Placeholder kingfisher bird image"></div>
-            <div><h4>Marsh observation note</h4><p>Click the button to open a popup about why marsh birds are easier to detect by sound than by sight.</p><br><button id="openModal">Open field note</button></div>
-          </div>
-        </div>
-      </section>
+<div class="pattern-header"><div><h3>Modals/popups</h3><p>A modal opens content in an overlay above the page, temporarily focusing the reader on one piece of information. It works best for details that need more space or attention but should not require a new page, such as a short profile, explanation, image, video, warning, or source note.</p></div><span class="tag">Focused detail</span></div>
+<div class="demo-frame">
+<div class="media-card">
+<div class="image-box"><img alt="Placeholder kingfisher bird image" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/McMillan_Marsh_State_Wildlife_Area.jpg/960px-McMillan_Marsh_State_Wildlife_Area.jpg"/></div>
+<div><h4>Marsh observation note</h4><p>Click the button to open a popup about why marsh birds are easier to detect by sound than by sight.</p><br/><button id="openModal">Open field note</button></div>
+</div>
+</div>
+</section>
 <section class="pattern" id="tooltips">
-        <div class="pattern-header"><div><h3>Tooltips</h3><p>A tooltip is a small label or note attached to a specific word, icon, point, or interface element. It works best for brief supporting information, such as definitions, labels, clarifications, or quick hints that do not need a full paragraph.</p></div><span class="tag">Tiny point label</span></div>
-        <div class="demo-frame">
-          <div class="point-stage">
-            <img class="placeholder-img" src="img/spring.jpg" alt="Placeholder bird field mark image">
-            <button class="hotpoint" style="left:62%;top:55%;" aria-label="Show tooltip for wing bar"></button>
-            <div class="tooltip-bubble" style="left:58%;top:50%;">Wing bar: a bright stripe across folded wing feathers.</div>
-          </div>
-        </div>
-      </section>
+<div class="pattern-header"><div><h3>Tooltips</h3><p>A tooltip is a small label or note attached to a specific word, icon, point, or interface element. It works best for brief supporting information, such as definitions, labels, clarifications, or quick hints that do not need a full paragraph.</p></div><span class="tag">Tiny point label</span></div>
+<div class="demo-frame">
+<div class="point-stage">
+<img alt="Placeholder bird field mark image" class="placeholder-img" src="img/spring.jpg"/>
+<button aria-label="Show tooltip for wing bar" class="hotpoint" style="left:62%;top:55%;"></button>
+<div class="tooltip-bubble" style="left:58%;top:50%;">Wing bar: a bright stripe across folded wing feathers.</div>
+</div>
+</div>
+</section>
 <section class="pattern" id="annotations">
-        <div class="pattern-header"><div><h3>Rich annotations</h3><p>A rich annotation attaches deeper explanatory content to a specific part of an image, graphic, map, document, or scene. It works best when a reader needs to inspect a particular point and see more than a label, such as a photo, caption, audio clip, video, quote, source, or extended explanation.</p></div><span class="tag">Rich point detail</span></div>
-        <div class="demo-frame">
-          <div class="point-stage">
-            <img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder nest site image">
-            <button class="hotpoint annotation-trigger" style="left:69%;top:32%;" aria-expanded="false" aria-controls="nestAnnotation" aria-label="Open rich annotation"></button>
-            <article class="annotation-card" id="nestAnnotation">
-              <button class="annotation-close close-annotation" type="button" aria-label="Close annotation">&times;</button>
-              <div class="annotation-video"><iframe height="180px" src="https://www.youtube.com/embed/5dnouQtSIL0?si=7bFM-rGdTFBW3hhE&amp;start=60" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-              <div><h4>Divers</h4><p>This annotation combines text with a video. It could also hold audio from the site, a short video clip, or a captioned archival photo.</p></div>
-            </article>
-          </div>
-        </div>
-      </section>
+<div class="pattern-header"><div><h3>Rich annotations</h3><p>A rich annotation attaches deeper explanatory content to a specific part of an image, graphic, map, document, or scene. It works best when a reader needs to inspect a particular point and see more than a label, such as a photo, caption, audio clip, video, quote, source, or extended explanation.</p></div><span class="tag">Rich point detail</span></div>
+<div class="demo-frame">
+<div class="point-stage">
+<img alt="Placeholder nest site image" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4"/>
+<button aria-controls="nestAnnotation" aria-expanded="false" aria-label="Open rich annotation" class="hotpoint annotation-trigger" style="left:69%;top:32%;"></button>
+<article class="annotation-card" id="nestAnnotation">
+<button aria-label="Close annotation" class="annotation-close close-annotation" type="button">×</button>
+<div class="annotation-video"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="180px" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/5dnouQtSIL0?si=7bFM-rGdTFBW3hhE&amp;start=60" title="YouTube video player"></iframe></div>
+<div><h4>Divers</h4><p>This annotation combines text with a video. It could also hold audio from the site, a short video clip, or a captioned archival photo.</p></div>
+</article>
+</div>
+</div>
+</section>
 <section class="pattern" id="flip-cards">
-        <div class="pattern-header"><div><h3>Flip cards</h3><p>A flip card hides related information on the back of a card and reveals it when the user clicks. It works best for simple front/back relationships, such as question/answer, term/definition, image/explanation, prediction/result, or “guess then reveal” interactions.</p></div><span class="tag">Front/back reveal</span></div>
-        <div class="demo-frame">
-          <div class="flip-grid">
-            <button class="flip-card" type="button" aria-pressed="false">
-              <span class="flip-inner">
-                <span class="flip-face flip-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg/960px-Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg" alt="Placeholder bird photo">
-                  <span class="flip-title">Least Sandpiper <small>Click to identify</small></span>
-                </span>
-                <span class="flip-face flip-back">
-                  <span><h4>Least Sandpiper</h4><p>The smallest peep, usually browner above with a slightly drooped fine bill and yellowish-green legs.</p><p class="hint">Click again to flip back</p></span>
-                </span>
-              </span>
-            </button>
-            <button class="flip-card" type="button" aria-pressed="false">
-              <span class="flip-inner">
-                <span class="flip-face flip-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Semipalmated_sandpiper_%2832560%29.jpg/960px-Semipalmated_sandpiper_%2832560%29.jpg" alt="Placeholder bird photo">
-                  <span class="flip-title">Semipalmated Sandpiper <small>Click to identify</small></span>
-                </span>
-                <span class="flip-face flip-back">
-                  <span><h4>Semipalmated Sandpiper</h4><p>A compact gray-brown peep with black legs, a short straight bill, and a plainer, less rusty look than Western.</p><p class="hint">Click again to flip back</p></span>
-                </span>
-              </span>
-            </button>
-            <button class="flip-card" type="button" aria-pressed="false">
-              <span class="flip-inner">
-                <span class="flip-face flip-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg/960px-Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg" alt="Placeholder bird photo">
-                  <span class="flip-title">Western Sandpiper <small>Click to identify</small></span>
-                </span>
-                <span class="flip-face flip-back">
-                  <span><h4>Western Sandpiper</h4><p>Slightly longer-billed and more front-heavy than Semipalmated, often showing rufous tones in the scapulars or crown and a subtly drooping bill tip.</p><p class="hint">Click again to flip back</p></span>
-                </span>
-              </span>
-            </button>
-          </div>
-        </div>
-      </section>
+<div class="pattern-header"><div><h3>Flip cards</h3><p>A flip card hides related information on the back of a card and reveals it when the user clicks. It works best for simple front/back relationships, such as question/answer, term/definition, image/explanation, prediction/result, or “guess then reveal” interactions.</p></div><span class="tag">Front/back reveal</span></div>
+<div class="demo-frame">
+<div class="flip-grid">
+<button aria-pressed="false" class="flip-card" type="button">
+<span class="flip-inner">
+<span class="flip-face flip-front">
+<img alt="Placeholder bird photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg/960px-Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg"/>
+<span class="flip-title">Least Sandpiper <small>Click to identify</small></span>
+</span>
+<span class="flip-face flip-back">
+<span><h4>Least Sandpiper</h4><p>The smallest peep, usually browner above with a slightly drooped fine bill and yellowish-green legs.</p><p class="hint">Click again to flip back</p></span>
+</span>
+</span>
+</button>
+<button aria-pressed="false" class="flip-card" type="button">
+<span class="flip-inner">
+<span class="flip-face flip-front">
+<img alt="Placeholder bird photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Semipalmated_sandpiper_%2832560%29.jpg/960px-Semipalmated_sandpiper_%2832560%29.jpg"/>
+<span class="flip-title">Semipalmated Sandpiper <small>Click to identify</small></span>
+</span>
+<span class="flip-face flip-back">
+<span><h4>Semipalmated Sandpiper</h4><p>A compact gray-brown peep with black legs, a short straight bill, and a plainer, less rusty look than Western.</p><p class="hint">Click again to flip back</p></span>
+</span>
+</span>
+</button>
+<button aria-pressed="false" class="flip-card" type="button">
+<span class="flip-inner">
+<span class="flip-face flip-front">
+<img alt="Placeholder bird photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg/960px-Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg"/>
+<span class="flip-title">Western Sandpiper <small>Click to identify</small></span>
+</span>
+<span class="flip-face flip-back">
+<span><h4>Western Sandpiper</h4><p>Slightly longer-billed and more front-heavy than Semipalmated, often showing rufous tones in the scapulars or crown and a subtly drooping bill tip.</p><p class="hint">Click again to flip back</p></span>
+</span>
+</span>
+</button>
+</div>
+</div>
+</section>
 <section class="pattern" id="hover-cards">
-        <div class="pattern-header"><div><h3>Hover cards</h3><p>A hover card reveals supporting information when the reader hovers over or focuses on a card. It works best for quick previews, captions, labels, short descriptions, or lightweight explanations that should appear without opening a new panel.</p></div><span class="tag">Hover reveal</span></div>
-        <div class="demo-frame">
-          <div class="hover-grid">
-            <button class="hover-card" type="button">
-              <span class="hover-inner">
-                <span class="hover-face hover-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg/960px-Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg" alt="Placeholder bird photo">
-                  <span class="flip-title">Least Sandpiper <small>Hover to identify</small></span>
-                </span>
-                <span class="hover-overlay">
-                  <span><h4>Least Sandpiper</h4><p>The smallest peep, usually browner above with a slightly drooped fine bill and yellowish-green legs.</p><p class="hint">Hover or focus to reveal</p></span>
-                </span>
-              </span>
-            </button>
-            <button class="hover-card" type="button">
-              <span class="hover-inner">
-                <span class="hover-face hover-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Semipalmated_sandpiper_%2832560%29.jpg/960px-Semipalmated_sandpiper_%2832560%29.jpg" alt="Placeholder bird photo">
-                  <span class="flip-title">Semipalmated Sandpiper <small>Hover to identify</small></span>
-                </span>
-                <span class="hover-overlay">
-                  <span><h4>Semipalmated Sandpiper</h4><p>A compact gray-brown peep with black legs, a short straight bill, and a plainer, less rusty look than Western.</p><p class="hint">Hover or focus to reveal</p></span>
-                </span>
-              </span>
-            </button>
-            <button class="hover-card" type="button">
-              <span class="hover-inner">
-                <span class="hover-face hover-front">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg/960px-Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg" alt="Placeholder bird photo">
-                  <span class="flip-title">Western Sandpiper <small>Hover to identify</small></span>
-                </span>
-                <span class="hover-overlay">
-                  <span><h4>Western Sandpiper</h4><p>Slightly longer-billed and more front-heavy than Semipalmated, often showing rufous tones in the scapulars or crown and a subtly drooping bill tip.</p><p class="hint">Hover or focus to reveal</p></span>
-                </span>
-              </span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-group" id="select-or-compare">
-        <h2>Select or compare</h2>
-        <p>Patterns where the reader chooses between categories, records, or versions to inspect.</p>
-      </section>
+<div class="pattern-header"><div><h3>Hover cards</h3><p>A hover card reveals supporting information when the reader hovers over or focuses on a card. It works best for quick previews, captions, labels, short descriptions, or lightweight explanations that should appear without opening a new panel.</p></div><span class="tag">Hover reveal</span></div>
+<div class="demo-frame">
+<div class="hover-grid">
+<button class="hover-card" type="button">
+<span class="hover-inner">
+<span class="hover-face hover-front">
+<img alt="Placeholder bird photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg/960px-Least_Sandpiper_%28Calidris_minutilla%29_-_Breeding_plumage_-_Malibu_Beach_WMA_-_Ocean_City_-_New_Jersey_-_USA.jpg"/>
+<span class="flip-title">Least Sandpiper <small>Hover to identify</small></span>
+</span>
+<span class="hover-overlay">
+<span><h4>Least Sandpiper</h4><p>The smallest peep, usually browner above with a slightly drooped fine bill and yellowish-green legs.</p><p class="hint">Hover or focus to reveal</p></span>
+</span>
+</span>
+</button>
+<button class="hover-card" type="button">
+<span class="hover-inner">
+<span class="hover-face hover-front">
+<img alt="Placeholder bird photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Semipalmated_sandpiper_%2832560%29.jpg/960px-Semipalmated_sandpiper_%2832560%29.jpg"/>
+<span class="flip-title">Semipalmated Sandpiper <small>Hover to identify</small></span>
+</span>
+<span class="hover-overlay">
+<span><h4>Semipalmated Sandpiper</h4><p>A compact gray-brown peep with black legs, a short straight bill, and a plainer, less rusty look than Western.</p><p class="hint">Hover or focus to reveal</p></span>
+</span>
+</span>
+</button>
+<button class="hover-card" type="button">
+<span class="hover-inner">
+<span class="hover-face hover-front">
+<img alt="Placeholder bird photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg/960px-Western_sandpiper_-_Sitka_Sedge_-_Oregon_-_2026-4.jpg"/>
+<span class="flip-title">Western Sandpiper <small>Hover to identify</small></span>
+</span>
+<span class="hover-overlay">
+<span><h4>Western Sandpiper</h4><p>Slightly longer-billed and more front-heavy than Semipalmated, often showing rufous tones in the scapulars or crown and a subtly drooping bill tip.</p><p class="hint">Hover or focus to reveal</p></span>
+</span>
+</span>
+</button>
+</div>
+</div>
+</section>
+<section class="section-group" id="select-or-compare">
+<h2>Select and compare</h2>
+<p>Patterns where the reader chooses between categories, records, or versions to inspect and compare.</p>
+</section>
 <section class="pattern" id="tabs">
-        <div class="pattern-header"><div><h3>Tabs</h3><p>Tabs let users switch between related content panels within the same space. They work best when the sections are parallel categories, such as overview/details, causes/effects, local/national, beginner/advanced, or several dimensions of the same topic.</p></div><span class="tag">Different content panels</span></div>
-        <div class="demo-frame">
-          <div class="tabs" role="tablist" aria-label="Cardinal information tabs">
-            <button role="tab" aria-selected="true" data-tab="tab-field">Field marks</button>
-            <button role="tab" aria-selected="false" data-tab="tab-diet">Diet</button>
-            <button role="tab" aria-selected="false" data-tab="tab-habitat">Habitat</button>
-          </div>
-          <div class="tab-panel active" id="tab-field" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/4/47/Northern_Cardinal_from_The_Crossley_ID_Guide_Eastern_Birds.jpg" alt="Placeholder cardinal image"></div><div><h4>Field marks</h4><p>Male Northern Cardinals are bright red with a crest and heavy orange bill. Females are warm brown with red highlights.</p></div></div>
-          <div class="tab-panel" id="tab-diet" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/3/33/Guazi_%28sunflower_seeds%29.jpg" alt="Placeholder diet image"></div><div><h4>Diet</h4><p>Cardinals eat seeds, fruit, and insects. A strong bill helps them crack sunflower seeds and other hard foods.</p></div></div>
-          <div class="tab-panel" id="tab-habitat" role="tabpanel"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/6/64/Shrubland_of_the_Pruno-Crataegetum_%28close-up%29.jpg" alt="Placeholder habitat image"></div><div><h4>Habitat</h4><p>They favor shrubby edges, backyards, woodlots, and thickets where cover and food are close together.</p></div></div>
-        </div>
-      </section>
+<div class="pattern-header"><div><h3>Tabs</h3><p>Tabs let users switch between related content panels within the same space. They work best when the sections are parallel categories, such as overview/details, causes/effects, local/national, beginner/advanced, or several dimensions of the same topic.</p></div><span class="tag">Different content panels</span></div>
+<div class="demo-frame">
+<div aria-label="Cardinal information tabs" class="tabs" role="tablist">
+<button aria-selected="true" data-tab="tab-field" role="tab">Field marks</button>
+<button aria-selected="false" data-tab="tab-diet" role="tab">Diet</button>
+<button aria-selected="false" data-tab="tab-habitat" role="tab">Habitat</button>
+</div>
+<div class="tab-panel active" id="tab-field" role="tabpanel"><div class="image-box"><img alt="Placeholder cardinal image" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/4/47/Northern_Cardinal_from_The_Crossley_ID_Guide_Eastern_Birds.jpg"/></div><div><h4>Field marks</h4><p>Male Northern Cardinals are bright red with a crest and heavy orange bill. Females are warm brown with red highlights.</p></div></div>
+<div class="tab-panel" id="tab-diet" role="tabpanel"><div class="image-box"><img alt="Placeholder diet image" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/3/33/Guazi_%28sunflower_seeds%29.jpg"/></div><div><h4>Diet</h4><p>Cardinals eat seeds, fruit, and insects. A strong bill helps them crack sunflower seeds and other hard foods.</p></div></div>
+<div class="tab-panel" id="tab-habitat" role="tabpanel"><div class="image-box"><img alt="Placeholder habitat image" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/6/64/Shrubland_of_the_Pruno-Crataegetum_%28close-up%29.jpg"/></div><div><h4>Habitat</h4><p>They favor shrubby edges, backyards, woodlots, and thickets where cover and food are close together.</p></div></div>
+</div>
+</section>
 <section class="pattern" id="before-after">
-        <div class="pattern-header"><div><h3>Before/after comparisons</h3><p>A before/after comparison lets users compare two versions of the same subject, often with a draggable divider or toggle. It works best for showing change over time, visual differences, restoration, damage, edits, growth, contrast, or transformation.</p></div><span class="tag">Drag to compare</span></div>
-        <div class="demo-frame">
-          <div class="ba-stage" id="baStage">
-            <div class="ba-layer"><img class="placeholder-img" src="img/spring.jpg" alt="Placeholder spring plumage"></div>
-            <div class="ba-layer ba-after"><img class="placeholder-img" src="img/fall.jpg" alt="Placeholder fall plumage"></div>
-            <span class="ba-label before">Spring plumage</span><span class="ba-label after">Fall plumage</span>
-            <button class="ba-handle" id="baHandle" aria-label="Drag to compare images"></button>
-          </div>
-        </div>
-      </section>
+<div class="pattern-header"><div><h3>Before/after comparisons</h3><p>A before/after comparison lets users compare two versions of the same subject, often with a draggable divider or toggle. It works best for showing change over time, visual differences, restoration, damage, edits, growth, contrast, or transformation.</p></div><span class="tag">Drag to compare</span></div>
+<div class="demo-frame">
+<div class="ba-stage" id="baStage">
+<div class="ba-layer"><img alt="Placeholder spring plumage" class="placeholder-img" src="img/spring.jpg"/></div>
+<div class="ba-layer ba-after"><img alt="Placeholder fall plumage" class="placeholder-img" src="img/fall.jpg"/></div>
+<span class="ba-label before">Spring plumage</span><span class="ba-label after">Fall plumage</span>
+<button aria-label="Drag to compare images" class="ba-handle" id="baHandle"></button>
+</div>
+</div>
+</section>
 <section class="pattern" id="bird-explorer">
-        <div class="pattern-header"><div><h3>Master-Detail</h3><p>A master-detail pattern lets users select one item from a list, menu, map, table, or dropdown and view detailed information about that selected item. It works best for encyclopedia-style collections, directories, databases, profiles, product/species/place guides, or spreadsheet-backed interactives.</p></div><span class="tag">Select-to-view</span></div>
-        <div class="demo-frame">
-          <!-- <div class="explorer-note"><strong>Teaching distinction:</strong> tabs switch between fixed categories; this pattern pulls one selected item from a collection and displays its photo and facts. The editable object in the script is the “mini spreadsheet.”</div> -->
-          <div class="bird-select-row">
-            <label for="birdSelect">Bird explorer</label>
-            <select id="birdSelect" aria-label="Choose a bird to explore"></select>
-          </div>
-          <article class="bird-explorer-panel" id="birdExplorerPanel" aria-live="polite">
-            <div class="image-box"><img class="placeholder-img" id="birdExplorerImage" src="" alt=""></div>
-            <div class="bird-explorer-content">
-              <h4 id="birdExplorerName"></h4>
-              <p class="bird-explorer-subtitle" id="birdExplorerSubtitle"></p>
-              <div class="bird-facts">
-                <div class="bird-fact"><strong>Habitat</strong><span id="birdExplorerHabitat"></span></div>
-                <div class="bird-fact"><strong>Food</strong><span id="birdExplorerFood"></span></div>
-                <div class="bird-fact"><strong>Range</strong><span id="birdExplorerRange"></span></div>
-                <div class="bird-fact"><strong>Story angle</strong><span id="birdExplorerAngle"></span></div>
-              </div>
-              <p id="birdExplorerDescription"></p>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="section-group" id="browse-a-collection">
-        <h2>Browse a collection</h2>
-        <p>Patterns where the reader moves through a set of items, examples, moments, images, or timeline entries.</p>
-      </section>
+<div class="pattern-header"><div><h3>Master-Detail</h3><p>A master-detail pattern lets users select one item from a list, menu, map, table, or dropdown and view detailed information about that selected item. It works best for encyclopedia-style collections, directories, databases, profiles, product/species/place guides, or spreadsheet-backed interactives.</p></div><span class="tag">Select-to-view</span></div>
+<div class="demo-frame">
+<!-- <div class="explorer-note"><strong>Teaching distinction:</strong> tabs switch between fixed categories; this pattern pulls one selected item from a collection and displays its photo and facts. The editable object in the script is the “mini spreadsheet.”</div> -->
+<div class="bird-select-row">
+<label for="birdSelect">Bird explorer</label>
+<select aria-label="Choose a bird to explore" id="birdSelect"></select>
+</div>
+<article aria-live="polite" class="bird-explorer-panel" id="birdExplorerPanel">
+<div class="image-box"><img alt="" class="placeholder-img" id="birdExplorerImage" src=""/></div>
+<div class="bird-explorer-content">
+<h4 id="birdExplorerName"></h4>
+<p class="bird-explorer-subtitle" id="birdExplorerSubtitle"></p>
+<div class="bird-facts">
+<div class="bird-fact"><strong>Habitat</strong><span id="birdExplorerHabitat"></span></div>
+<div class="bird-fact"><strong>Food</strong><span id="birdExplorerFood"></span></div>
+<div class="bird-fact"><strong>Range</strong><span id="birdExplorerRange"></span></div>
+<div class="bird-fact"><strong>Story angle</strong><span id="birdExplorerAngle"></span></div>
+</div>
+<p id="birdExplorerDescription"></p>
+</div>
+</article>
+</div>
+</section>
+<section class="section-group" id="browse-a-collection">
+<h2>Explore collections</h2>
+<p>Patterns where the reader moves through a set of items, examples, moments, images, or timeline entries.</p>
+</section>
 <section class="pattern" id="slideshows">
-        <div class="pattern-header"><div><h3>Slideshows</h3><p>A slideshow presents one item at a time and lets users move forward or backward through a set. It works best for ordered sequences, process steps, guided examples, photo essays, timelines, or stories where each item should receive focused attention.</p></div><span class="tag">Ordered sequence</span></div>
-        <div class="demo-frame">
-          <div class="slideshow-visual" id="slideVisual"></div>
-          <h4 id="slideTitle"></h4><p id="slideText"></p><br>
-          <div class="slideshow-controls"><button class="secondary" id="prevSlide">Previous</button><strong id="slideCount"></strong><button id="nextSlide">Next</button></div>
-        </div>
-      </section>
+<div class="pattern-header"><div><h3>Slideshows</h3><p>A slideshow presents one item at a time and lets users move forward or backward through a set. It works best for ordered sequences, process steps, guided examples, photo essays, timelines, or stories where each item should receive focused attention.</p></div><span class="tag">Ordered sequence</span></div>
+<div class="demo-frame">
+<div class="slideshow-visual" id="slideVisual"></div>
+<h4 id="slideTitle"></h4><p id="slideText"></p><br/>
+<div class="slideshow-controls"><button class="secondary" id="prevSlide">Previous</button><strong id="slideCount"></strong><button id="nextSlide">Next</button></div>
+</div>
+</section>
 <section class="pattern" id="carousels">
-        <div class="pattern-header"><div><h3>Carousels</h3><p>A carousel presents multiple related items in a horizontal or rotating strip, usually with next/previous controls. It works best for compact browsing of featured items, examples, cards, profiles, recommendations, or highlights when page space is limited.</p></div><span class="tag">Browse sideways</span></div>
-        <div class="demo-frame">
-          <div class="carousel-window"><div class="carousel-track" id="carouselTrack">
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Kentucky_Warbler_%28Geothlypis_formosa%29_in_the_United_States.jpg/960px-Kentucky_Warbler_%28Geothlypis_formosa%29_in_the_United_States.jpg" alt="Placeholder heron"></div><div><h4>Kentucky Warbler</h4><p>The Kentucky Warbler’s loud, rolling song rings out from dense forest understories.</p></div></article>
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Hooded_Warbler.jpg/960px-Hooded_Warbler.jpg" alt="Placeholder cardinal"></div><div><h4>Hooded Warbler</h4><p>The Hooded Warbler flits through shrubby understories in eastern forests, flicking its tail to show off its white tail feathers.</p></div></article>
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Canada_warbler_magee_marsh_boardwalk_5.17.23_DSC_1872-topaz-denoiseraw-sharpen.jpg/960px-Canada_warbler_magee_marsh_boardwalk_5.17.23_DSC_1872-topaz-denoiseraw-sharpen.jpg" alt="Placeholder eagle"></div><div><h4>Canada Warbler</h4><p>A colorful, energetic warbler of northern forests, the Canada Warbler spends little time on its breeding grounds.</p></div></article>
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Magnolia_Warbler_-_May_17%2C_2025.jpg/960px-Magnolia_Warbler_-_May_17%2C_2025.jpg" alt="Placeholder goldfinch"></div><div><h4>Magnolia Warbler</h4><p>Many male warblers are black and yellow, but Magnolia Warblers take it up a notch, sporting a bold black necklace complete with long tassels, a black mask, and a standout white wing patch.</p></div></article>
-            <article class="carousel-card"><div class="image-box"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Yellow-throated_warbler_patuxent_research_refuge_north_tract_4.6.25_DSC_6733-topaz-rawdenoise.jpg/960px-Yellow-throated_warbler_patuxent_research_refuge_north_tract_4.6.25_DSC_6733-topaz-rawdenoise.jpg" alt="Placeholder goldfinch"></div><div><h4>Yellow-throated Warbler</h4><p>The well-named Yellow-throated Warbler shows off its bright yellow throat in the canopy of forests in the southeastern United States.</p></div></article>
-          </div></div><br>
-          <div class="carousel-controls"><button class="secondary" id="carouselPrev">Previous</button><button id="carouselNext">Next</button></div>
-        </div>
-      </section>
+<div class="pattern-header"><div><h3>Carousels</h3><p>A carousel presents multiple related items in a horizontal or rotating strip, usually with next/previous controls. It works best for compact browsing of featured items, examples, cards, profiles, recommendations, or highlights when page space is limited.</p></div><span class="tag">Browse sideways</span></div>
+<div class="demo-frame">
+<div class="carousel-window"><div class="carousel-track" id="carouselTrack">
+<article class="carousel-card"><div class="image-box"><img alt="Placeholder heron" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Kentucky_Warbler_%28Geothlypis_formosa%29_in_the_United_States.jpg/960px-Kentucky_Warbler_%28Geothlypis_formosa%29_in_the_United_States.jpg"/></div><div><h4>Kentucky Warbler</h4><p>The Kentucky Warbler’s loud, rolling song rings out from dense forest understories.</p></div></article>
+<article class="carousel-card"><div class="image-box"><img alt="Placeholder cardinal" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Hooded_Warbler.jpg/960px-Hooded_Warbler.jpg"/></div><div><h4>Hooded Warbler</h4><p>The Hooded Warbler flits through shrubby understories in eastern forests, flicking its tail to show off its white tail feathers.</p></div></article>
+<article class="carousel-card"><div class="image-box"><img alt="Placeholder eagle" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Canada_warbler_magee_marsh_boardwalk_5.17.23_DSC_1872-topaz-denoiseraw-sharpen.jpg/960px-Canada_warbler_magee_marsh_boardwalk_5.17.23_DSC_1872-topaz-denoiseraw-sharpen.jpg"/></div><div><h4>Canada Warbler</h4><p>A colorful, energetic warbler of northern forests, the Canada Warbler spends little time on its breeding grounds.</p></div></article>
+<article class="carousel-card"><div class="image-box"><img alt="Placeholder goldfinch" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Magnolia_Warbler_-_May_17%2C_2025.jpg/960px-Magnolia_Warbler_-_May_17%2C_2025.jpg"/></div><div><h4>Magnolia Warbler</h4><p>Many male warblers are black and yellow, but Magnolia Warblers take it up a notch, sporting a bold black necklace complete with long tassels, a black mask, and a standout white wing patch.</p></div></article>
+<article class="carousel-card"><div class="image-box"><img alt="Placeholder goldfinch" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Yellow-throated_warbler_patuxent_research_refuge_north_tract_4.6.25_DSC_6733-topaz-rawdenoise.jpg/960px-Yellow-throated_warbler_patuxent_research_refuge_north_tract_4.6.25_DSC_6733-topaz-rawdenoise.jpg"/></div><div><h4>Yellow-throated Warbler</h4><p>The well-named Yellow-throated Warbler shows off its bright yellow throat in the canopy of forests in the southeastern United States.</p></div></article>
+</div></div><br/>
+<div class="carousel-controls"><button class="secondary" id="carouselPrev">Previous</button><button id="carouselNext">Next</button></div>
+</div>
+</section>
 <section class="pattern" id="galleries">
-        <div class="pattern-header"><div><h3>Image galleries</h3><p>An image gallery presents a collection of images, often using thumbnails that open or update a larger view. It works best for browseable visual collections, portfolios, archives, event photos, comparisons across examples, or media sets where the reader chooses what to inspect.</p></div><span class="tag">Browse a collection</span></div>
-        <div class="demo-frame">
-          <div class="gallery">
-            <article class="gallery-main">
-              <div class="gallery-visual" id="galleryVisual"></div>
-              <div class="gallery-caption"><h4 id="galleryTitle"></h4><p id="galleryText"></p></div>
-            </article>
-            <div class="gallery-thumbnails" id="galleryThumbnails" aria-label="Choose an image to view"></div>
-          </div>
-        </div>
-      </section>
+<div class="pattern-header"><div><h3>Image galleries</h3><p>An image gallery presents a collection of images, often using thumbnails that open or update a larger view. It works best for browseable visual collections, portfolios, archives, event photos, comparisons across examples, or media sets where the reader chooses what to inspect.</p></div><span class="tag">Browse a collection</span></div>
+<div class="demo-frame">
+<div class="gallery">
+<article class="gallery-main">
+<div class="gallery-visual" id="galleryVisual"></div>
+<div class="gallery-caption"><h4 id="galleryTitle"></h4><p id="galleryText"></p></div>
+</article>
+<div aria-label="Choose an image to view" class="gallery-thumbnails" id="galleryThumbnails"></div>
+</div>
+</div>
+</section>
 <section class="pattern" id="horizontal-overflow">
-        <div class="pattern-header">
-          <div>
-            <h3>Horizontal overflow</h3>
-            <p>Horizontal overflow creates a sideways canvas that the reader scrolls across. It works best for timelines, journeys, process flows, wide comparisons, or any visual structure that naturally extends from left to right.</p>
-          </div>
-          <span class="tag">X-axis scroll</span>
-        </div>
-        <div class="demo-frame">
-          <div class="timeline-shell horizontal-scroll" aria-label="Horizontal bird migration timeline">
-            <div class="horizontal-timeline">
-              <article class="h-event"><span class="timeline-date">February</span><h4>Winter range</h4><p>Birds concentrate where food and open water are easier to find.</p></article>
-              <article class="h-event"><span class="timeline-date">March</span><h4>Early movement</h4><p>Longer days and weather shifts begin to pull migrants north.</p></article>
-              <article class="h-event"><span class="timeline-date">April</span><h4>Stopover sites</h4><p>Wetlands, rivers, and woodlots become refueling points.</p></article>
-              <article class="h-event"><span class="timeline-date">May</span><h4>Breeding grounds</h4><p>Birds arrive, claim territory, and begin nesting behavior.</p></article>
-              <article class="h-event"><span class="timeline-date">June</span><h4>Young birds</h4><p>Nestlings and fledglings increase activity around breeding habitat.</p></article>
-              <article class="h-event"><span class="timeline-date">August</span><h4>Return migration</h4><p>Adults and young birds begin moving south in waves.</p></article>
-            </div>
-          </div>
-        </div>
-      </section>
+<div class="pattern-header">
+<div>
+<h3>Horizontal overflow</h3>
+<p>Horizontal overflow creates a sideways canvas that the reader scrolls across. It works best for timelines, journeys, process flows, wide comparisons, or any visual structure that naturally extends from left to right.</p>
+</div>
+<span class="tag">X-axis scroll</span>
+</div>
+<div class="demo-frame">
+<div aria-label="Horizontal bird migration timeline" class="timeline-shell horizontal-scroll">
+<div class="horizontal-timeline">
+<article class="h-event"><span class="timeline-date">February</span><h4>Winter range</h4><p>Birds concentrate where food and open water are easier to find.</p></article>
+<article class="h-event"><span class="timeline-date">March</span><h4>Early movement</h4><p>Longer days and weather shifts begin to pull migrants north.</p></article>
+<article class="h-event"><span class="timeline-date">April</span><h4>Stopover sites</h4><p>Wetlands, rivers, and woodlots become refueling points.</p></article>
+<article class="h-event"><span class="timeline-date">May</span><h4>Breeding grounds</h4><p>Birds arrive, claim territory, and begin nesting behavior.</p></article>
+<article class="h-event"><span class="timeline-date">June</span><h4>Young birds</h4><p>Nestlings and fledglings increase activity around breeding habitat.</p></article>
+<article class="h-event"><span class="timeline-date">August</span><h4>Return migration</h4><p>Adults and young birds begin moving south in waves.</p></article>
+</div>
+</div>
+</div>
+</section>
 <section class="pattern" id="vertical-overflow">
-        <div class="pattern-header">
-          <div>
-            <h3>Vertical overflow</h3>
-            <p>Vertical overflow creates a tall canvas inside a fixed frame. It works best for vertical timelines, stacked process explanations, long infographics, annotated posters, or step-by-step sequences where the reader moves downward.</p>
-          </div>
-          <span class="tag">Y-axis scroll</span>
-        </div>
-        <div class="demo-frame">
-          <div class="timeline-shell vertical-scroll" aria-label="Vertical bird nesting timeline">
-            <div class="vertical-timeline">
-              <article class="v-event"><span class="timeline-date">Territory</span><h4>Claim a space</h4><p>A pair chooses or defends an area with enough food, cover, and nesting material.</p></article>
-              <article class="v-event"><span class="timeline-date">Nest site</span><h4>Choose a location</h4><p>The nest may be placed in reeds, shrubs, cavities, ledges, or open branches depending on the species.</p></article>
-              <article class="v-event"><span class="timeline-date">Build</span><h4>Construct the nest</h4><p>Material is gathered, shaped, and reinforced before eggs are laid.</p></article>
-              <article class="v-event"><span class="timeline-date">Incubate</span><h4>Warm the eggs</h4><p>Parents keep the eggs protected and at a stable temperature.</p></article>
-              <article class="v-event"><span class="timeline-date">Feed</span><h4>Raise nestlings</h4><p>Adults make repeated trips for insects, fish, seeds, or other food.</p></article>
-              <article class="v-event"><span class="timeline-date">Fledge</span><h4>Leave the nest</h4><p>Young birds leave before they are fully independent and continue learning nearby.</p></article>
-              <article class="v-event"><span class="timeline-date">Disperse</span><h4>Move outward</h4><p>Juveniles begin using nearby habitat and eventually join larger seasonal movements.</p></article>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-group" id="explore-a-spatial-canvas">
-        <h2>Explore a spatial canvas</h2>
-        <p>Patterns where the reader directly controls movement around a larger image or graphic.</p>
-      </section>
+<div class="pattern-header">
+<div>
+<h3>Vertical overflow</h3>
+<p>Vertical overflow creates a tall canvas inside a fixed frame. It works best for vertical timelines, stacked process explanations, long infographics, annotated posters, or step-by-step sequences where the reader moves downward.</p>
+</div>
+<span class="tag">Y-axis scroll</span>
+</div>
+<div class="demo-frame">
+<div aria-label="Vertical bird nesting timeline" class="timeline-shell vertical-scroll">
+<div class="vertical-timeline">
+<article class="v-event"><span class="timeline-date">Territory</span><h4>Claim a space</h4><p>A pair chooses or defends an area with enough food, cover, and nesting material.</p></article>
+<article class="v-event"><span class="timeline-date">Nest site</span><h4>Choose a location</h4><p>The nest may be placed in reeds, shrubs, cavities, ledges, or open branches depending on the species.</p></article>
+<article class="v-event"><span class="timeline-date">Build</span><h4>Construct the nest</h4><p>Material is gathered, shaped, and reinforced before eggs are laid.</p></article>
+<article class="v-event"><span class="timeline-date">Incubate</span><h4>Warm the eggs</h4><p>Parents keep the eggs protected and at a stable temperature.</p></article>
+<article class="v-event"><span class="timeline-date">Feed</span><h4>Raise nestlings</h4><p>Adults make repeated trips for insects, fish, seeds, or other food.</p></article>
+<article class="v-event"><span class="timeline-date">Fledge</span><h4>Leave the nest</h4><p>Young birds leave before they are fully independent and continue learning nearby.</p></article>
+<article class="v-event"><span class="timeline-date">Disperse</span><h4>Move outward</h4><p>Juveniles begin using nearby habitat and eventually join larger seasonal movements.</p></article>
+</div>
+</div>
+</div>
+</section>
+<section class="section-group" id="explore-a-spatial-canvas">
+<h2>Explore space</h2>
+<p>Patterns where the reader can move around, inspect, or orient themselves within a larger visual or spatial field.</p>
+</section>
 <section class="pattern" id="pan-zoom">
-        <div class="pattern-header">
-          <div>
-            <h3>Pan-and-zoom (Slippy Canvas)</h3>
-            <p>A pan-and-zoom canvas lets the reader drag around a larger visual field and zoom in or out. It works best for large images, diagrams, documents, family trees, floor plans, or detailed graphics where readers need freedom to inspect the space.</p>
-          </div>
-          <span class="tag">Explorable canvas</span>
-        </div>
-        <div class="demo-frame">
-          <div class="zoom-controls" aria-label="Pan and zoom controls">
-            <button class="secondary" id="zoomOut">Zoom out</button>
-            <button id="zoomIn">Zoom in</button>
-            <button class="secondary" id="resetPanZoom">Reset</button>
-          </div>
-          <div class="spatial-canvas" id="panzoomCanvas">
-            <div class="panzoom-stage" id="panzoomStage">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird image for pan and zoom demo">
-              <span class="spatial-marker" style="left:38%;top:44%;" data-label="Head"></span>
-              <span class="spatial-marker" style="left:55%;top:60%;" data-label="Fish"></span>
-              <span class="spatial-marker" style="left:72%;top:50%;" data-label="Wing"></span>
-            </div>
-            <div class="canvas-help">Drag the image to pan. Use the buttons to zoom. This same pattern could hold a diagram, archival image, or large graphic.</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-group" id="guide-attention-through-space">
-        <h2>Guide attention through space</h2>
-        <p>Patterns where the author controls the path through a visual space using buttons, steps, or scrolling.</p>
-      </section>
+<div class="pattern-header">
+<div>
+<h3>Pan-and-zoom (Slippy Canvas)</h3>
+<p>A pan-and-zoom canvas lets the reader drag around a larger visual field and zoom in or out. It works best for large images, diagrams, documents, family trees, floor plans, or detailed graphics where readers need freedom to inspect the space.</p>
+</div>
+<span class="tag">Explorable canvas</span>
+</div>
+<div class="demo-frame">
+<div aria-label="Pan and zoom controls" class="zoom-controls">
+<button class="secondary" id="zoomOut">Zoom out</button>
+<button id="zoomIn">Zoom in</button>
+<button class="secondary" id="resetPanZoom">Reset</button>
+</div>
+<div class="spatial-canvas" id="panzoomCanvas">
+<div class="panzoom-stage" id="panzoomStage">
+<img alt="Placeholder bird image for pan and zoom demo" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4"/>
+<span class="spatial-marker" data-label="Head" style="left:38%;top:44%;"></span>
+<span class="spatial-marker" data-label="Fish" style="left:55%;top:60%;"></span>
+<span class="spatial-marker" data-label="Wing" style="left:72%;top:50%;"></span>
+</div>
+<div class="canvas-help">Drag the image to pan. Use the buttons to zoom. This same pattern could hold a diagram, archival image, or large graphic.</div>
+</div>
+</div>
+</section>
+<section class="section-group" id="guide-attention-through-space">
+<h2>Guide attention</h2>
+<p>Patterns where the designer leads the reader through selected details, locations, or moments in a larger visual structure.</p>
+</section>
 <section class="pattern" id="button-guided">
-        <div class="pattern-header">
-          <div>
-            <h3>Button-guided focus</h3>
-            <p>Button-guided focus moves the view to specific parts of a larger image or graphic. It works best when the author wants to guide attention through selected features while still using spatial movement as part of the explanation.</p>
-          </div>
-          <span class="tag">Spatial stepper</span>
-        </div>
-        <div class="demo-frame">
-          <div class="guided-layout">
-            <div class="focus-controls" aria-label="Choose a feature to focus on">
-              <button class="active" data-focus="overview">Overview</button>
-              <button data-focus="back">Back</button>
-              <button data-focus="wing">Wing</button>
-              <button data-focus="bill">Bill</button>
-            </div>
-            <div class="spatial-canvas">
-              <div class="guided-stage" id="guidedStage">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird image for guided focus demo">
-                <span class="spatial-marker" style="left:38%;top:44%;" data-label="Back"></span>
-                <span class="spatial-marker" style="left:55%;top:60%;" data-label="Wing"></span>
-                <span class="spatial-marker" style="left:72%;top:50%;" data-label="Bill"></span>
-              </div>
-            </div>
-            <div class="focus-caption" id="focusCaption">
-              <h4>Overview</h4>
-              <p>The full frame gives the reader orientation before focusing on individual details.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+<div class="pattern-header">
+<div>
+<h3>Button-guided focus</h3>
+<p>Button-guided focus moves the view to specific parts of a larger image or graphic. It works best when the author wants to guide attention through selected features while still using spatial movement as part of the explanation.</p>
+</div>
+<span class="tag">Spatial stepper</span>
+</div>
+<div class="demo-frame">
+<div class="guided-layout">
+<div aria-label="Choose a feature to focus on" class="focus-controls">
+<button class="active" data-focus="overview">Overview</button>
+<button data-focus="back">Back</button>
+<button data-focus="wing">Wing</button>
+<button data-focus="bill">Bill</button>
+</div>
+<div class="spatial-canvas">
+<div class="guided-stage" id="guidedStage">
+<img alt="Placeholder bird image for guided focus demo" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4"/>
+<span class="spatial-marker" data-label="Back" style="left:38%;top:44%;"></span>
+<span class="spatial-marker" data-label="Wing" style="left:55%;top:60%;"></span>
+<span class="spatial-marker" data-label="Bill" style="left:72%;top:50%;"></span>
+</div>
+</div>
+<div class="focus-caption" id="focusCaption">
+<h4>Overview</h4>
+<p>The full frame gives the reader orientation before focusing on individual details.</p>
+</div>
+</div>
+</div>
+</section>
 <section class="pattern" id="scroll-guided">
-        <div class="pattern-header">
-          <div>
-            <h3>Scroll-driven focus</h3>
-            <p>The image area scrolls through a guided sequence. It starts with the full overview, then moves to each marked point.</p>
-          </div>
-          <span class="tag">Scroll focus</span>
-        </div>
-        <div class="demo-frame">
-          <div class="image-scroll-focus" id="imageScrollFocus" aria-label="Scroll through image focus points">
-            <div class="image-scroll-stage" id="imageScrollStage">
-              <div class="scrolly-stage" id="scrollyStage">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4" alt="Placeholder bird image for scroll-driven focus demo">
-                <span class="spatial-marker scroll-focus-marker" data-focus="back" style="left:38%;top:44%;" data-label="Back"></span>
-                <span class="spatial-marker scroll-focus-marker" data-focus="wing" style="left:55%;top:60%;" data-label="Wing"></span>
-                <span class="spatial-marker scroll-focus-marker" data-focus="bill" style="left:72%;top:50%;" data-label="Bill"></span>
-              </div>
-            </div>
-
-            <div class="image-scroll-spacer" aria-hidden="true">
-              <span>Overview</span>
-              <span>Point 1</span>
-              <span>Point 2</span>
-              <span>Point 3</span>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-dialog">
-      <header><h4 id="modalTitle">Why sound matters in a marsh</h4><button class="secondary" id="closeModal">Close</button></header>
-      <div class="media-card" style="display:flex;flex-direction:column;"><div class="image-box" style="max-height:180px;"><img class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/4/47/MarshWrenTuleLake.jpg" alt="Placeholder kingfisher bird image"></div><iframe src="https://commons.wikimedia.org/wiki/File:Cistothorus_palustris_-_Marsh_Wren_-_XC105804.ogg?embedplayer=yes" width="320" height="40" frameborder="0" loading="lazy" allow="autoplay; picture-in-picture" allowfullscreen></iframe><p>Dense reeds can hide birds from view. Calls, songs, and movement sounds often tell a birder where to look before the bird becomes visible.</p></div>
-    </div>
-  </div>
-
-  <script>
+<div class="pattern-header">
+<div>
+<h3>Scroll-driven focus</h3>
+<p>The image area scrolls through a guided sequence. It starts with the full overview, then moves to each marked point.</p>
+</div>
+<span class="tag">Scroll focus</span>
+</div>
+<div class="demo-frame">
+<div aria-label="Scroll through image focus points" class="image-scroll-focus" id="imageScrollFocus">
+<div class="image-scroll-stage" id="imageScrollStage">
+<div class="scrolly-stage" id="scrollyStage">
+<img alt="Placeholder bird image for scroll-driven focus demo" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4"/>
+<span class="spatial-marker scroll-focus-marker" data-focus="back" data-label="Back" style="left:38%;top:44%;"></span>
+<span class="spatial-marker scroll-focus-marker" data-focus="wing" data-label="Wing" style="left:55%;top:60%;"></span>
+<span class="spatial-marker scroll-focus-marker" data-focus="bill" data-label="Bill" style="left:72%;top:50%;"></span>
+</div>
+</div>
+<div aria-hidden="true" class="image-scroll-spacer">
+<span>Overview</span>
+<span>Point 1</span>
+<span>Point 2</span>
+<span>Point 3</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<div aria-labelledby="modalTitle" aria-modal="true" class="modal-backdrop" id="modalBackdrop" role="dialog">
+<div class="modal-dialog">
+<header><h4 id="modalTitle">Why sound matters in a marsh</h4><button class="secondary" id="closeModal">Close</button></header>
+<div class="media-card" style="display:flex;flex-direction:column;"><div class="image-box" style="max-height:180px;"><img alt="Placeholder kingfisher bird image" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/4/47/MarshWrenTuleLake.jpg"/></div><iframe allow="autoplay; picture-in-picture" allowfullscreen="" frameborder="0" height="40" loading="lazy" src="https://commons.wikimedia.org/wiki/File:Cistothorus_palustris_-_Marsh_Wren_-_XC105804.ogg?embedplayer=yes" width="320"></iframe><p>Dense reeds can hide birds from view. Calls, songs, and movement sounds often tell a birder where to look before the bird becomes visible.</p></div>
+</div>
+</div>
+<script>
 document.querySelectorAll('.accordion-trigger').forEach((button) => {
       button.addEventListener('click', () => {
         const open = button.getAttribute('aria-expanded') === 'true';
