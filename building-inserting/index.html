@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Getting Interactives Into Projects</title>
+<style>
+:root{--bg:#f7f4ec;--panel:#fffdf7;--ink:#17211b;--muted:#5c675f;--line:#d9d2c2;--accent:#37634e;--accent-2:#d8893a;--soft:#edf4ee;--shadow:0 14px 35px rgba(23,33,27,.12);--radius:18px;--code:#162019}
+*{box-sizing:border-box}html{scroll-behavior:smooth;width:100%;max-width:100%;overflow-x:hidden}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;width:100%;max-width:100%;overflow-x:hidden}
+a{color:inherit}img,video,iframe,svg{max-width:100%}.layout{display:block;min-height:100vh}
+.sidebar{position:fixed;top:0;left:0;width:280px;height:100vh;overflow-y:auto;overflow-x:hidden;padding:28px 22px;background:#17211b;color:#fffdf7;z-index:20}
+.sidebar h1{margin:0 0 8px;font-size:1.35rem;line-height:1.15;letter-spacing:-.02em}.sidebar p{margin:0 0 24px;color:rgba(255,255,255,.72);font-size:.92rem}
+.nav-group-title{margin:24px 0 8px;color:#83e4b6;text-transform:uppercase;font-size:.72rem;letter-spacing:.08em;font-weight:800}
+.sidebar a{display:block;padding:8px 10px;margin:2px 0;border-radius:10px;text-decoration:none;color:rgba(255,255,255,.88);font-size:.94rem}
+.sidebar a:hover,.sidebar a:focus{background:rgba(255,255,255,.1);outline:none}.home-button{border:1px solid #636363;margin-bottom:1rem!important;display:block}
+main{margin-left:280px;width:calc(100% - 280px);max-width:none;padding:44px 36px 80px}main>*{max-width:1120px;margin-left:auto;margin-right:auto}
+.hero{background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%);border:1px solid var(--line);border-radius:28px;padding:clamp(28px,5vw,56px);box-shadow:var(--shadow);margin-bottom:34px}
+.eyebrow{display:inline-flex;margin:0 0 12px;color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem}
+.hero h2{margin:0 0 14px;font-size:clamp(2rem,5vw,4.4rem);line-height:.98;letter-spacing:-.02em;max-width:900px}
+.hero p,.section-group p,.pattern p,.card p,.note p,li,td{color:var(--muted)}.hero p{max-width:780px;margin:0;font-size:clamp(1.05rem,2vw,1.25rem)}
+.concept-callout{margin:22px 0 0;padding:16px 18px;border-radius:18px;border:1px solid var(--line);background:#fff8ed;color:var(--muted);max-width:900px}.concept-callout strong{color:var(--ink)}
+.section-group{margin:54px 0 24px;padding-top:10px;border-top:2px solid var(--ink)}.section-group h2{margin:0 0 8px;font-size:clamp(1.55rem,3vw,2.2rem);letter-spacing:-.03em;color:var(--accent)}.section-group p{margin:0;max-width:820px}
+.pattern{scroll-margin-top:24px;margin:26px auto 42px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(20px,3vw,30px);box-shadow:0 8px 20px rgba(23,33,27,.06)}
+.pattern-header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start;margin-bottom:18px}.pattern h3{margin:0 0 6px;font-size:clamp(1.35rem,2.4vw,1.85rem);letter-spacing:-.03em}.pattern p{margin:0}
+.tag{display:inline-block;white-space:nowrap;padding:6px 10px;border-radius:999px;background:var(--soft);color:var(--accent);font-weight:800;font-size:.78rem}
+.grid{display:grid;gap:16px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{border:1px solid var(--line);border-radius:16px;background:#fffdf7;padding:18px;min-width:0}.card h4{margin:0 0 8px;font-size:1.08rem;letter-spacing:-.02em}.card p{margin:0}.card ul,.step-list,.check-list{margin:10px 0 0;padding-left:1.2rem}.card li,.step-list li,.check-list li{margin:6px 0}
+.step-list{counter-reset:steps;list-style:none;padding-left:0;display:grid;gap:12px;margin:0}.step-list li{position:relative;padding:14px 14px 14px 54px;border:1px solid var(--line);border-radius:16px;background:#fffdf7;color:var(--muted)}.step-list li::before{counter-increment:steps;content:counter(steps);position:absolute;left:14px;top:14px;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:#fffdf7;font-weight:900}.step-list strong{color:var(--ink)}
+.note{margin:16px 0 0;padding:14px 16px;border-radius:16px;background:#fff8ed;border:1px solid var(--line)}.note strong{color:var(--ink)}.note p{margin:0}.warning{border-left:5px solid var(--accent-2)}
+.term-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:16px}.term{border:1px solid var(--line);border-radius:16px;padding:14px;background:var(--soft)}.term strong{display:block;margin-bottom:4px;color:var(--accent);font-size:.82rem;text-transform:uppercase;letter-spacing:.06em}.term span{color:var(--muted)}
+.code-block{margin:16px 0 0;padding:16px;border-radius:16px;background:var(--code);color:#fffdf7;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:.9rem;line-height:1.5}.code-block code{white-space:pre}
+.bad-good{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}.bad-good article{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fffdf7}.bad-good article:first-child{border-left:5px solid #9b3a2f}.bad-good article:last-child{border-left:5px solid var(--accent)}.bad-good h4{margin:0 0 8px;font-size:1rem}
+.table-wrap{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:#fffdf7;margin-top:16px}table{width:100%;border-collapse:separate;border-spacing:0;min-width:820px}th,td{padding:14px 16px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);text-align:left;vertical-align:top}th{background:#eef3ef;color:var(--accent);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}tr:last-child td{border-bottom:0}th:last-child,td:last-child{border-right:0}td:first-child,th:first-child{position:sticky;left:0;background:#fffdf7;z-index:1;box-shadow:8px 0 16px rgba(23,33,27,.05);font-weight:900;color:var(--ink)}th:first-child{background:#eef3ef;z-index:2}
+.mobile-menu-toggle,.mobile-menu-backdrop{display:none}button{border:0;background:var(--accent);color:white;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer;font:inherit}button:focus-visible,a:focus-visible{outline:3px solid rgba(216,137,58,.5);outline-offset:3px}
+@media(max-width:900px){.grid.two,.grid.three,.term-grid,.bad-good{grid-template-columns:1fr}.pattern-header{grid-template-columns:1fr}.tag{justify-self:start;white-space:normal}}
+@media(max-width:860px){body{padding-top:64px}body.menu-open{overflow:hidden}.mobile-menu-toggle{position:fixed;top:12px;left:12px;z-index:1001;display:inline-flex;align-items:center;gap:9px;padding:10px 13px;border-radius:999px;background:#17211b;color:#fffdf7;box-shadow:0 8px 22px rgba(23,33,27,.24)}.mobile-menu-icon{position:relative;display:block;width:18px;height:12px;border-top:2px solid currentColor;border-bottom:2px solid currentColor}.mobile-menu-icon::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid currentColor;transform:translateY(-50%)}.mobile-menu-text{font-weight:900}.mobile-menu-backdrop{position:fixed;inset:0;z-index:999;display:block;background:rgba(23,33,27,.45)}.mobile-menu-backdrop[hidden]{display:none}.sidebar{position:fixed!important;top:0!important;left:0;bottom:0;width:min(84vw,340px);height:100vh!important;max-height:100vh!important;padding:76px 22px 28px;overflow-y:auto!important;overflow-x:hidden;z-index:1000;transform:translateX(-105%);transition:transform .24s ease;box-shadow:18px 0 36px rgba(0,0,0,.22)}body.menu-open .sidebar{transform:translateX(0)}main{margin-left:0!important;width:100%!important;max-width:1120px;padding:24px 16px 56px}}
+@media(max-width:520px){.hero{border-radius:20px}.hero h2{font-size:clamp(2rem,12vw,3.2rem);line-height:1}.section-group h2{font-size:clamp(1.45rem,8vw,2rem)}.pattern h3{font-size:clamp(1.25rem,7vw,1.7rem)}.pattern{padding:18px}.step-list li{padding-left:48px}th,td{padding:12px;font-size:.9rem}}
+</style>
+</head>
+<body>
+<button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
+<div class="layout">
+<aside class="sidebar" id="siteSidebar" aria-label="Getting interactives into projects navigation">
+<a href="../" class="home-button">&larr; Back to Home</a>
+<h1>Getting Interactives Into Projects</h1>
+<p>How to place a working interactive element inside your final story page.</p>
+<nav>
+<div class="nav-group-title">Start here</div>
+<a href="#intro">Intro</a>
+<a href="#decision">Choose the right path</a>
+<div class="nav-group-title">Builder paths</div>
+<a href="#native-blocks">Native blocks</a>
+<a href="#embedded-builders">Embedded builders</a>
+<a href="#custom-html-blocks">Custom HTML blocks</a>
+<a href="#github-hosted-code">GitHub-hosted code</a>
+<div class="nav-group-title">Checks</div>
+<a href="#testing">Testing before publishing</a>
+<a href="#troubleshooting">Common problems</a>
+</nav>
+</aside>
+<main>
+<section class="hero" id="intro">
+<div class="eyebrow">Production workflow</div>
+<h2>Building and Inserting Interactives Into Projects</h2>
+<p>Interactive elements can enter a story in different ways. The right approach depends on where your story is built, what kind of interactive you are adding, and how much control the element needs.</p>
+<div class="concept-callout"><strong>Core idea:</strong> Start with the simplest method that does the job while allowing the control you need.</div>
+</section>
+
+<section class="section-group" id="decision">
+<h2>Choose the right path</h2>
+<p>Before adding an interactive, identify what kind of thing you have: a builder feature, an embed code, a snippet, or a full standalone web page.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>The four main ways to place an interactive</h3><p>These methods can look similar inside your final story, but each path gives you different responsibilities.</p></div><span class="tag">Placement methods</span></div>
+<div class="term-grid">
+<div class="term"><strong>Native block</strong><span>Your story builder already has the interactive pattern built in.</span></div>
+<div class="term"><strong>Embed code</strong><span>An outside tool gives you an iframe or script that displays the interactive inside your story.</span></div>
+<div class="term"><strong>Custom HTML block</strong><span>Your builder allows pasted HTML/CSS/JS snippets inside the page.</span></div>
+<div class="term"><strong>Hosted code</strong><span>Your interactive is its own web page, then you embed it into the story with an iframe.</span></div>
+</div>
+<div class="table-wrap" aria-label="Interactive placement methods comparison" role="region" tabindex="0">
+<table><thead><tr><th>Method</th><th>Use when</th><th>What you paste</th><th>What you manage</th></tr></thead>
+<tbody>
+<tr><td>Native block</td><td>The builder already has a timeline, accordion, hotspot, carousel, map, or similar block that does the job.</td><td>Usually nothing. You use the builder interface.</td><td>Content, labels, media, source notes, visual consistency, and mobile settings.</td></tr>
+<tr><td>Embedded builder</td><td>The interactive was made in Datawrapper, Flourish, Genially, Knight Lab, or another external tool.</td><td>An embed code, usually an <code>&lt;iframe&gt;</code>.</td><td>Tool settings, public sharing, embed size, captions, sources, and whether it works in the story platform.</td></tr>
+<tr><td>Custom HTML block</td><td>The story platform allows custom code inside a block or embed area.</td><td>Only the needed snippet, not the full page wrapper.</td><td>HTML structure, CSS conflicts, JavaScript behavior, accessibility, and responsiveness.</td></tr>
+<tr><td>GitHub-hosted code</td><td>The interactive is a full custom HTML/CSS/JS page that should live separately from the story builder.</td><td>An iframe pointing to the GitHub Pages URL.</td><td>The hosted page, file paths, GitHub Pages, iframe height, mobile behavior, and updates.</td></tr>
+</tbody></table>
+</div>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Simple decision rule</h3><p>Start with the lowest-responsibility option that still serves your story purpose.</p></div><span class="tag">Start simple</span></div>
+<ol class="step-list">
+<li><strong>If the builder has a good native block, use it.</strong> This is usually the easiest and most stable path.</li>
+<li><strong>If a specialized tool does the job better, embed it.</strong> Use Datawrapper, Flourish, Genially, Knight Lab, or similar tools when they match the pattern.</li>
+<li><strong>If the builder allows a small custom element, use a custom HTML snippet.</strong> Paste only the needed code, not a full HTML document.</li>
+<li><strong>If the interactive needs full custom code, host it separately.</strong> Publish it with GitHub Pages and embed it with an iframe.</li>
+</ol>
+</section>
+</section>
+
+<section class="section-group" id="native-blocks">
+<h2>Native blocks</h2>
+<p>Native blocks are interactive elements already provided by the builder. This is usually the lowest-responsibility option when the built-in pattern is good enough for your story purpose.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Use the builder’s own feature first when it fits</h3><p>If Shorthand, Tilda, Wix, WordPress, Squarespace, or another builder already has the pattern, test that before jumping to custom code.</p></div><span class="tag">Lowest friction</span></div>
+<div class="grid three">
+<article class="card"><h4>What you add</h4><p>Add content inside the builder interface: text, photos, captions, labels, links, map points, timeline entries, or blocks.</p></article>
+<article class="card"><h4>What the builder handles</h4><p>Most layout, hosting, responsive behavior, basic styling, and publishing.</p></article>
+<article class="card"><h4>What you still check</h4><p>Check mobile layout, readable text, source notes, image quality, accessibility options, and whether the block actually serves your story purpose.</p></article>
+</div>
+<div class="note warning"><p><strong>Limit:</strong> native blocks are convenient, but they can become tool-limited thinking. If the block cannot support the story purpose, move to an embedded builder or custom code path.</p></div>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Native block workflow</h3><p>This path should feel like building a page section, not coding a separate interactive.</p></div><span class="tag">Builder-first</span></div>
+<ol class="step-list">
+<li><strong>Choose the block that matches the job.</strong> Do not choose a block just because it looks interesting.</li>
+<li><strong>Add the story content.</strong> Write the headline, instructions, labels, captions, and source notes.</li>
+<li><strong>Adjust the visual settings.</strong> Match the page’s typography, spacing, color, and hierarchy as much as the builder allows.</li>
+<li><strong>Test the mobile version.</strong> Builders often create mobile layouts automatically, but they still need checking.</li>
+<li><strong>Ask whether the block is enough.</strong> If it cannot reveal, compare, locate, explain, or guide the way the story needs, use another path.</li>
+</ol>
+</section>
+
+
+<section class="section-group" id="embedded-builders">
+<h2>Embedded builders</h2>
+<p>Embedded builders are outside tools that create an interactive element and provide embed code. The embed code is usually an iframe, which places the external interactive inside the story page.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>What embed code usually is</h3><p>Tools like Datawrapper, Flourish, Genially, Knight Lab TimelineJS, and StoryMapJS often give you a block of code to copy. Most commonly, it contains an <code>&lt;iframe&gt;</code>.</p></div><span class="tag">Copy embed code</span></div>
+<div class="code-block"><code>&lt;iframe
+  title="Where monarch butterflies migrate"
+  src="https://www.example-embed-tool.com/my-interactive"
+  width="100%"
+  height="600"
+  frameborder="0"
+  scrolling="no"&gt;
+&lt;/iframe&gt;</code></div>
+<div class="concept-callout"><strong>In plain terms:</strong> the iframe is a window. The interactive lives somewhere else, and the story page displays it through that window.</div>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Embedded builder workflow</h3><p>Your main task is copying the correct embed code and placing it in a block that accepts embeds, custom HTML, or iframe code.</p></div><span class="tag">Iframe embed</span></div>
+<ol class="step-list">
+<li><strong>Build and publish the interactive in the external tool.</strong> The embed usually will not work if the chart, map, timeline, or graphic is still private or unpublished.</li>
+<li><strong>Find the share or embed option.</strong> Look for buttons labeled Share, Embed, Publish, Add to website, or iframe.</li>
+<li><strong>Copy the embed code.</strong> Copy the full code, not just the public URL, unless the builder specifically asks for a URL.</li>
+<li><strong>Paste it into the story builder’s embed/custom code block.</strong> Use the block meant for embeds, not a normal text paragraph.</li>
+<li><strong>Test the published story page.</strong> Make sure it loads, scales, and remains readable on mobile.</li>
+</ol>
+<div class="bad-good">
+<article><h4>Common mistake</h4><p>Pasting iframe code into a normal text block. The page may show the code as text instead of rendering the interactive.</p></article>
+<article><h4>Better approach</h4><p>Use a block specifically labeled embed, HTML, custom code, iframe, or external content.</p></article>
+</div>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Embed checks</h3><p>An embedded builder can make the technical build easier, but you still own how it works inside your story.</p></div><span class="tag">Before publishing</span></div>
+<div class="grid two">
+<article class="card"><h4>Check the tool</h4><ul><li>Is the interactive published or public?</li><li>Does the embed require a paid plan?</li><li>Does it show branding or a watermark?</li><li>Does it provide a responsive embed?</li><li>Does it include source notes and attribution?</li></ul></article>
+<article class="card"><h4>Check the story page</h4><ul><li>Does it fit the page width?</li><li>Is the height tall enough?</li><li>Does it work on phone size?</li><li>Does it load in the published page?</li><li>Is there enough attendant text around it?</li></ul></article>
+</div>
+</section>
+
+<section class="section-group" id="custom-html-blocks">
+<h2>Custom HTML blocks</h2>
+<p>Some builders allow you to paste custom code into a page. This is different from creating a full standalone HTML file. In a custom HTML block, you usually need only the code for the element itself.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Use only the snippet, not the whole HTML document</h3><p>A full HTML file has a wrapper around the page. A custom HTML block already lives inside another page, so do not usually paste the full wrapper.</p></div><span class="tag">Snippet only</span></div>
+<div class="bad-good">
+<article><h4>Do not paste a full document into a block</h4><div class="code-block"><code>&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;My interactive&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="interactive"&gt;...&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></div></article>
+<article><h4>Paste only the element code</h4><div class="code-block"><code>&lt;div class="interactive"&gt;
+  &lt;button type="button"&gt;Show answer&lt;/button&gt;
+  &lt;p hidden&gt;This is the revealed explanation.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+  .interactive { padding:1rem; }
+&lt;/style&gt;
+
+&lt;script&gt;
+  // Small interaction script here
+&lt;/script&gt;</code></div></article>
+</div>
+<div class="note warning"><p><strong>Important:</strong> Some builders strip out <code>&lt;script&gt;</code> tags or require JavaScript to be placed in a separate settings area. You should test before assuming a custom block supports all code.</p></div>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>What to ask AI for</h3><p>When you use AI to make custom code for a builder block, specify that they need a snippet, not a full page.</p></div><span class="tag">Prompt pattern</span></div>
+<div class="code-block"><code>Make this as a copy/paste snippet for a custom HTML block.
+
+Do not include:
+- &lt;!doctype html&gt;
+- &lt;html&gt;
+- &lt;head&gt;
+- &lt;body&gt;
+
+Include:
+- the HTML for the element
+- the CSS inside a &lt;style&gt; tag
+- the JavaScript inside a &lt;script&gt; tag
+- comments showing where I can add more items
+- class names unlikely to conflict with the rest of the page</code></div>
+<div class="concept-callout"><strong>Class rule:</strong> if you are pasting into a custom HTML block inside a builder, the AI should produce a block-safe snippet unless the builder specifically asks for a full HTML document.</div>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Custom HTML block checks</h3><p>Custom snippets can be powerful, but they can also break because they live inside a larger platform page.</p></div><span class="tag">Responsibility rises</span></div>
+<div class="grid three">
+<article class="card"><h4>CSS conflicts</h4><p>The builder page may already have styles. Use specific class names so the snippet does not accidentally restyle the whole page.</p></article>
+<article class="card"><h4>JavaScript limits</h4><p>Some platforms block scripts, delay scripts, or require JavaScript in a separate footer/settings area.</p></article>
+<article class="card"><h4>Responsive behavior</h4><p>A snippet that looks good inside a desktop block may overflow or become too small on mobile.</p></article>
+</div>
+</section>
+
+<section class="section-group" id="github-hosted-code">
+<h2>GitHub-hosted code</h2>
+<p>When your interactive is a full custom web page, you can host it on GitHub Pages and place it inside a story builder with an iframe.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>When to host separately</h3><p>GitHub-hosted code is useful when your interactive is too complex for a custom HTML block or when it needs its own files, folders, data, images, libraries, or JavaScript structure.</p></div><span class="tag">Standalone page</span></div>
+<div class="grid two">
+<article class="card"><h4>Good fit</h4><ul><li>Multi-file HTML/CSS/JS projects.</li><li>Interactive maps or visualizations with data files.</li><li>Projects that need their own layout and scripts.</li><li>Reusable tutorials or prototypes.</li></ul></article>
+<article class="card"><h4>Less good fit</h4><ul><li>Very small reveal elements that could be native blocks.</li><li>Interactives that need server-side databases.</li><li>Projects with giant unoptimized media files.</li><li>Anything that has not been tested at iframe size.</li></ul></article>
+</div>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>GitHub iframe workflow</h3><p>Your final story page does not contain all the code. It contains an iframe that points to the separately published GitHub Pages URL.</p></div><span class="tag">Hosted embed</span></div>
+<ol class="step-list">
+<li><strong>Build the interactive as its own web page.</strong> The project should have an <code>index.html</code> file and any needed CSS, JavaScript, image, or data folders.</li>
+<li><strong>Publish the project with GitHub Pages.</strong> Confirm that the public GitHub Pages URL loads correctly by itself.</li>
+<li><strong>Copy the live GitHub Pages URL.</strong> Do not use the repository URL. Use the published page URL.</li>
+<li><strong>Put that URL inside an iframe.</strong> Paste the iframe into the story builder’s embed/custom code block.</li>
+<li><strong>Adjust the iframe height.</strong> The iframe often needs a fixed height so the full interactive is visible.</li>
+<li><strong>Test the final story page.</strong> Check desktop, phone width, links, scrolling, and loading.</li>
+</ol>
+<div class="code-block"><code>&lt;iframe
+  title="Interactive bird migration explorer"
+  src="https://username.github.io/project-name/"
+  width="100%"
+  height="700"
+  style="border:0;"
+  loading="lazy"&gt;
+&lt;/iframe&gt;</code></div>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Repository URL vs. published URL</h3><p>It is easy to copy the wrong URL. The GitHub repository is where the code lives. GitHub Pages is where the finished page lives.</p></div><span class="tag">Common confusion</span></div>
+<div class="bad-good">
+<article><h4>Wrong for iframe</h4><div class="code-block"><code>https://github.com/username/project-name</code></div><p>This is the code repository. It is not the published interactive page.</p></article>
+<article><h4>Correct for iframe</h4><div class="code-block"><code>https://username.github.io/project-name/</code></div><p>This is the public GitHub Pages URL that can be embedded.</p></article>
+</div>
+</section>
+
+<section class="section-group" id="testing">
+<h2>Testing before publishing</h2>
+<p>Getting the interactive into the page is not finished until you test it inside your final story environment.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Final placement checklist</h3><p>These checks apply to native blocks, embedded tools, custom snippets, and GitHub-hosted iframes.</p></div><span class="tag">Quality control</span></div>
+<div class="grid two">
+<article class="card"><h4>Interaction checks</h4><ul><li>Can users tell what to click, tap, drag, scroll, or select?</li><li>Does the interaction work after the full story page is published?</li><li>Does it work with touch, not just mouse hover?</li><li>Are buttons and links actually clickable?</li><li>Does the reader get a clear result from interacting?</li></ul></article>
+<article class="card"><h4>Production checks</h4><ul><li>Does it fit the page width?</li><li>Is the height tall enough?</li><li>Does it work on mobile?</li><li>Are media files optimized?</li><li>Are sources, credits, and AI disclosures included where needed?</li></ul></article>
+</div>
+</section>
+
+<section class="section-group" id="troubleshooting">
+<h2>Common problems</h2>
+<p>Most embedding problems come from the wrong block type, the wrong URL, missing publication settings, file paths, or iframe sizing.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Troubleshooting table</h3><p>Use this table to diagnose the first few things to check before rebuilding the interactive.</p></div><span class="tag">Fix first</span></div>
+<div class="table-wrap" aria-label="Common embedding problems and fixes" role="region" tabindex="0">
+<table><thead><tr><th>Problem</th><th>Likely cause</th><th>First fix to try</th></tr></thead>
+<tbody>
+<tr><td>Code appears as text</td><td>The code was pasted into a normal text block.</td><td>Use an embed, iframe, HTML, or custom code block.</td></tr>
+<tr><td>Embed is blank</td><td>The external tool or GitHub Pages project is not public/published.</td><td>Open the embed URL by itself. If it does not load, publish or change sharing settings.</td></tr>
+<tr><td>Iframe is too short</td><td>The iframe height is smaller than the interactive.</td><td>Increase the iframe <code>height</code> value or redesign the interactive to fit a smaller frame.</td></tr>
+<tr><td>Images missing in GitHub iframe</td><td>Incorrect file paths or files were not pushed to GitHub.</td><td>Check file names, capitalization, folder paths, and whether images are inside the repository.</td></tr>
+<tr><td>Works locally but not in the builder</td><td>The builder blocks scripts, rewrites code, or places the snippet inside a constrained container.</td><td>Test with a simpler snippet. Move complex work to GitHub Pages and iframe it.</td></tr>
+<tr><td>Bad mobile layout</td><td>The interactive was designed only for desktop width.</td><td>Test at phone width and add responsive CSS or use a builder/tool that handles mobile better.</td></tr>
+</tbody></table>
+</div>
+</section>
+
+
+</main>
+</div>
+<script>
+const menuToggle=document.getElementById('mobileMenuToggle');
+const menuBackdrop=document.getElementById('mobileMenuBackdrop');
+function setMenu(open){document.body.classList.toggle('menu-open',open);if(menuToggle)menuToggle.setAttribute('aria-expanded',open?'true':'false');if(menuBackdrop)menuBackdrop.hidden=!open}
+if(menuToggle){menuToggle.addEventListener('click',()=>{setMenu(!document.body.classList.contains('menu-open'))})}
+if(menuBackdrop){menuBackdrop.addEventListener('click',()=>setMenu(false))}
+document.querySelectorAll('.sidebar a').forEach(link=>{link.addEventListener('click',()=>setMenu(false))});
+document.addEventListener('keydown',event=>{if(event.key==='Escape')setMenu(false)});
+</script>
+</body>
+</html>
