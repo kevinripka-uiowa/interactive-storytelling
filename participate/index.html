@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Participate and Personalization Patterns</title>
+<style>
+:root {
+  --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+  --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --shadow:0 14px 35px rgba(23,33,27,.12);
+  --radius:18px;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; width:100%; max-width:100%; overflow-x:hidden; }
+a { color:inherit; }
+button, input, select, textarea { font:inherit; }
+button, .button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+button.secondary { background:#eef3ef; color:var(--ink); border:1px solid var(--line); }
+button.ghost { background:#fffdf7; color:var(--accent); border:1px solid var(--line); }
+button:hover { filter:brightness(.96); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+img, svg, canvas { max-width:100%; }
+.layout { display:block; min-height:100vh; }
+.sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow-y:auto; overflow-x:hidden; z-index:20; padding:28px 22px; background:#17211b; color:#fffdf7; }
+.sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+.sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+.nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+.sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+.sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+.home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
+main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+.hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+.eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+.hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+.hero p, .section-group p, .pattern p { color:var(--muted); }
+.hero p { max-width:790px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+.concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:850px; }
+.concept-callout strong { color:var(--ink); }
+.section-group { margin:54px 0 24px; padding-top:10px; border-top:2px solid var(--ink); }
+.section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+.section-group p { margin:0; max-width:780px; }
+.pattern { scroll-margin-top:24px; margin:26px 0 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+.pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+.pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+.pattern p { margin:0; }
+.tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+.pattern-analysis { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:16px 0 20px; }
+.pattern-analysis-card, .interaction-card { padding:13px 14px; border:1px solid var(--line); border-radius:14px; background:#f6f1e7; }
+.pattern-analysis-card h4, .interaction-card h4 { margin:0 0 5px; color:var(--accent); font-size:.82rem; letter-spacing:.07em; text-transform:uppercase; }
+.pattern-analysis-card p, .interaction-card p { margin:0; color:var(--ink); font-size:.94rem; line-height:1.35; }
+.interaction-card { margin:0 0 20px; background:#fff8ed; }
+.interaction-card ul { margin:6px 0 0; padding-left:20px; color:var(--ink); }
+.interaction-card li { margin:4px 0; }
+.demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
+.demo-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.demo-panel { border:1px solid var(--line); border-radius:16px; background:#fffdf7; padding:16px; }
+.demo-panel h4 { margin:0 0 8px; }
+.control-row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:0 0 14px; }
+.control-row label { font-weight:900; color:var(--ink); }
+select, input[type="number"], input[type="text"], textarea { border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:#fffdf7; color:var(--ink); min-width:160px; }
+input[type="range"] { width:min(100%, 340px); accent-color:var(--accent); }
+.output-card { margin-top:14px; padding:16px; border-radius:16px; border:1px solid var(--line); background:var(--soft); }
+.output-card h4 { margin:0 0 6px; }
+.output-card p { margin:0; color:var(--ink); }
+.result-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:12px; }
+.result-card { padding:14px; border:1px solid var(--line); border-radius:14px; background:#fffdf7; }
+.result-card strong { display:block; margin-bottom:4px; color:var(--accent); }
+.quiz-options, .choice-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:14px; }
+.quiz-options button, .choice-grid button { border-radius:14px; padding:13px; text-align:left; justify-content:flex-start; background:#eef3ef; color:var(--ink); border:1px solid var(--line); }
+.quiz-options button.correct { background:#dff1e6; border-color:#7db28d; }
+.quiz-options button.wrong { background:#f7e4d3; border-color:#d8893a; }
+.score-pill { display:inline-flex; padding:6px 10px; border-radius:999px; background:#17211b; color:#fffdf7; font-weight:900; font-size:.86rem; }
+.fake-map { position:relative; height:320px; border-radius:16px; border:1px solid var(--line); overflow:hidden; background:linear-gradient(135deg,#dceadc,#f5f1e8 58%,#d8e5f1); }
+.fake-map::before { content:""; position:absolute; inset:30px 50px; border:2px dashed rgba(55,99,78,.35); border-radius:45% 55% 50% 46%; transform:rotate(-10deg); }
+.path-line { position:absolute; left:12%; top:20%; width:76%; height:58%; pointer-events:none; }
+.draw-canvas { position:absolute; inset:0; width:100%; height:100%; cursor:crosshair; touch-action:none; }
+.reveal-route { position:absolute; inset:0; opacity:0; transition:opacity .2s ease; pointer-events:none; }
+.reveal-route.show { opacity:1; }
+.caption-box { position:absolute; left:14px; bottom:14px; max-width:320px; padding:10px 12px; border-radius:14px; background:rgba(255,253,247,.94); color:var(--muted); border:1px solid var(--line); font-size:.9rem; }
+.branch-screen { min-height:280px; display:grid; align-content:center; gap:14px; padding:22px; border-radius:16px; background:linear-gradient(135deg,#edf4ee,#fff8ed); border:1px solid var(--line); }
+.branch-screen h4 { margin:0; font-size:1.35rem; }
+.branch-screen p { margin:0; color:var(--muted); }
+.tree-path { display:grid; gap:12px; }
+.tree-node { padding:14px; border:1px solid var(--line); border-radius:14px; background:#fffdf7; }
+.tree-node.active { border-color:var(--accent-2); box-shadow:0 0 0 3px rgba(216,137,58,.18); }
+.estimate-meter { position:relative; height:18px; border-radius:999px; background:#e7dfd0; overflow:hidden; margin-top:10px; }
+.estimate-fill { height:100%; width:50%; background:var(--accent); border-radius:999px; transition:width .25s ease; }
+.checklist { display:grid; gap:8px; margin-top:10px; }
+.checklist label { display:flex; gap:10px; align-items:flex-start; padding:10px; border:1px solid var(--line); border-radius:12px; background:#fffdf7; }
+.mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+@media (max-width: 860px) {
+  body { padding-top:64px; }
+  body.menu-open { overflow:hidden; }
+  .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+  .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+  .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+  .mobile-menu-text { font-weight:900; }
+  .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+  .mobile-menu-backdrop[hidden] { display:none; }
+  .sidebar { position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important; padding:76px 22px 28px; overflow-y:auto!important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+  body.menu-open .sidebar { transform:translateX(0); }
+  main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
+}
+@media (max-width:760px) {
+  .pattern-header, .pattern-analysis, .demo-grid, .result-grid, .quiz-options, .choice-grid { grid-template-columns:1fr; }
+  .tag { justify-self:start; white-space:normal; }
+}
+</style>
+</head>
+<body>
+<button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span class="mobile-menu-text">Menu</span></button>
+<div class="mobile-menu-backdrop" hidden id="mobileMenuBackdrop"></div>
+<div class="layout">
+<aside aria-label="Pattern navigation" class="sidebar" id="siteSidebar">
+<a class="home-button" href="../">← Back to Home</a>
+<h1>Participate and Personalization Patterns</h1>
+<p>Interaction patterns that ask viewers to choose, enter, guess, reflect, or move through a personalized path.</p>
+<nav>
+<div class="nav-group-title">Participatory interactives</div>
+<a href="#input-generator">Viewer input generator</a>
+<a href="#goofy-comparison">Goofy comparison</a>
+<a href="#quiz">Quiz</a>
+<a href="#calculator">Calculator</a>
+<a href="#matcher">Matcher</a>
+<a href="#draw-guess">Draw to guess</a>
+<div class="nav-group-title">Paths</div>
+<a href="#branching-path">Branching path</a>
+<a href="#decision-tree">Decision tree</a>
+<div class="nav-group-title">Reflect, guess, estimate</div>
+<a href="#guess-reveal">Guess-then-reveal</a>
+<a href="#prediction">Prediction</a>
+<a href="#self-assessment">Self-assessment</a>
+</nav>
+</aside>
+<main>
+<section class="hero" id="intro">
+<div class="eyebrow">Interactive storytelling demo</div>
+<h2>Participate and Personalization</h2>
+<p>Participatory interactives ask viewers to put something into the story: a choice, a guess, an estimate, a drawing, a set of preferences, or a path through decisions. The result can be playful, explanatory, reflective, or personalized.</p>
+<div class="concept-callout"><strong>Core idea:</strong> participation should have a story purpose. A good participatory interactive does not only collect input; it uses that input to help viewers understand themselves, test an assumption, compare choices, or experience how a system responds.</div>
+</section>
+
+<section class="section-group" id="participatory-interactives">
+<h2>Participatory interactives</h2>
+<p>Use these when the viewer’s input changes the result. The interaction may be simple and playful, but it should still explain something.</p>
+</section>
+
+<section class="pattern" id="input-generator">
+<div class="pattern-header"><div><h3>Viewer input generator</h3><p>A generator asks viewers for a few inputs and returns a custom result. It works well for playful explainers, personalized recommendations, simple prototypes, and “what applies to me?” story moments.</p></div><span class="tag">Generated result</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Best:</strong> Participate. <strong>Also useful for:</strong> Explain when the generated result teaches why the inputs matter.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory through viewer input; procedural because the result is generated; encyclopedic if the result pulls from a larger set of records or rules.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Limited personalization. The viewer chooses from designed inputs and receives a tailored result.</p></div></div>
+<div class="interaction-card"><h4>Possible interactions</h4><ul><li>Dropdowns, buttons, sliders, or short text inputs.</li><li>Generated result card with explanation, not just a label.</li><li>Reset or “try another combination” control.</li></ul></div>
+<div class="demo-frame">
+<div class="demo-grid">
+<div class="demo-panel">
+<h4>Build a backyard bird setup</h4>
+<div class="control-row"><label for="yardType">Yard type</label><select id="yardType"><option value="trees">Mature trees</option><option value="shrubs">Shrubby edge</option><option value="open">Open grass</option></select></div>
+<div class="control-row"><label for="foodType">Food</label><select id="foodType"><option value="sunflower">Sunflower seed</option><option value="suet">Suet</option><option value="nectar">Nectar</option></select></div>
+<div class="control-row"><label for="seasonType">Season</label><select id="seasonType"><option value="winter">Winter</option><option value="spring">Spring migration</option><option value="summer">Summer</option></select></div>
+<button id="generateBirds" type="button">Generate likely visitors</button>
+</div>
+<div class="output-card" id="generatorOutput"><h4>Your result</h4><p>Choose a setup to generate a bird-focused explanation.</p></div>
+</div>
+</div>
+</section>
+
+<section class="pattern" id="goofy-comparison">
+<div class="pattern-header"><div><h3>Goofy comparison</h3><p>A goofy comparison translates abstract scale into something more familiar, funny, or surprising. It is useful when numbers are too large, too small, or too abstract to feel meaningful.</p></div><span class="tag">Playful scale</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Best:</strong> Participate and Explain. The viewer enters a familiar value and gets a comparison that makes scale easier to feel.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory through input; procedural through calculated comparison; experiential when the result changes how the scale feels.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Low-stakes play. The viewer personalizes the comparison without changing the underlying claim.</p></div></div>
+<div class="interaction-card"><h4>Possible interactions</h4><ul><li>Range slider for a familiar personal value.</li><li>Instant comparison text that updates on input.</li><li>Optional “show the math” reveal for transparency.</li></ul></div>
+<div class="demo-frame">
+<h4>Compare your walk to a warbler migration</h4>
+<p>Move the slider to compare a daily walk to a simplified 2,000-mile migration.</p><br />
+<div class="control-row"><label for="walkMiles">Your daily walk: <span id="walkMilesLabel">3</span> miles</label><input id="walkMiles" type="range" min="1" max="12" value="3" /></div>
+<div class="output-card"><h4 id="comparisonTitle">That is 667 days of walking.</h4><p id="comparisonText">At 3 miles per day, it would take you about 667 days to cover a 2,000-mile migration route.</p></div>
+</div>
+</section>
+
+<section class="pattern" id="quiz">
+<div class="pattern-header"><div><h3>Quiz</h3><p>A quiz asks viewers to commit to an answer before receiving feedback. It works best when the goal is to test recognition, surface misconceptions, or make viewers notice evidence before explanation.</p></div><span class="tag">Answer and feedback</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Best:</strong> Participate. <strong>Also useful for:</strong> Reveal and Explain because feedback can teach the reason behind the answer.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory through choice; procedural through scoring and feedback; encyclopedic if feedback links to more context.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided challenge. The viewer chooses an answer from a controlled set.</p></div></div>
+<div class="interaction-card"><h4>Possible interactions</h4><ul><li>Multiple-choice buttons with immediate feedback.</li><li>Score tracking across questions.</li><li>Explanation after each answer, not only right/wrong.</li></ul></div>
+<div class="demo-frame">
+<div class="control-row"><span class="score-pill" id="quizScore">Score: 0/0</span><button class="secondary" id="resetQuiz" type="button">Reset quiz</button></div>
+<h4 id="quizQuestion">Which feature is most useful for identifying a male Red-winged Blackbird?</h4>
+<div class="quiz-options" id="quizOptions"></div>
+<div class="output-card" id="quizFeedback"><h4>Feedback</h4><p>Choose an answer to see the explanation.</p></div>
+</div>
+</section>
+
+<section class="pattern" id="calculator">
+<div class="pattern-header"><div><h3>Calculator</h3><p>A calculator uses viewer input to produce a number, estimate, score, or category. It is strongest when the calculation helps the viewer understand a relationship or consequence.</p></div><span class="tag">Input to estimate</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Best:</strong> Participate and Explain. The viewer sees how changing one value affects an outcome.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural because rules convert input into output; participatory through entered values; encyclopedic if it uses a dataset or lookup table.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Personalized exploration. The viewer can test “what if?” scenarios inside defined rules.</p></div></div>
+<div class="interaction-card"><h4>Possible interactions</h4><ul><li>Numeric inputs or sliders.</li><li>Live result with interpretation.</li><li>Scenario presets for quick comparison.</li></ul></div>
+<div class="demo-frame">
+<h4>Window-collision risk reduction calculator</h4>
+<p>This is a teaching demo with simplified numbers, not a scientific estimate.</p><br />
+<div class="demo-grid">
+<div class="demo-panel">
+<div class="control-row"><label for="windowsCount">Windows treated</label><input id="windowsCount" type="number" min="0" max="200" value="25" /></div>
+<div class="control-row"><label for="treatmentQuality">Treatment quality</label><select id="treatmentQuality"><option value="0.35">Light decals</option><option value="0.65">Dense pattern</option><option value="0.85">Exterior screen/film</option></select></div>
+<button id="runCalculator" type="button">Calculate</button>
+</div>
+<div class="output-card" id="calculatorOutput"><h4>Estimated reduction</h4><p>Enter values to estimate the result.</p></div>
+</div>
+</div>
+</section>
+
+<section class="pattern" id="matcher">
+<div class="pattern-header"><div><h3>Matcher</h3><p>A matcher pairs viewer preferences or observations with the closest item in a set. It works well for recommendations, field guides, “which one fits?” explainers, and simple classification prototypes.</p></div><span class="tag">Closest fit</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Best:</strong> Participate. <strong>Also useful for:</strong> Explore because the result points the viewer into a collection.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Encyclopedic because options come from a defined set; procedural because rules choose a match; participatory because the viewer supplies criteria.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Limited personalization. The viewer describes needs or observations and receives a match.</p></div></div>
+<div class="interaction-card"><h4>Possible interactions</h4><ul><li>Multi-step choices or compact filters.</li><li>Match result with explanation of why it matched.</li><li>Alternative matches or “close but not exact” feedback.</li></ul></div>
+<div class="demo-frame">
+<h4>Match a habitat to a likely bird group</h4>
+<div class="choice-grid" id="matcherChoices">
+<button data-match="marsh">Cattails and standing water</button>
+<button data-match="grassland">Tall grasses and open fields</button>
+<button data-match="forest">Closed canopy and leaf litter</button>
+<button data-match="shore">Mudflats or shallow water edge</button>
+</div>
+<div class="output-card" id="matcherOutput"><h4>Your match</h4><p>Choose a habitat to see the likely bird group.</p></div>
+</div>
+</section>
+
+<section class="pattern" id="draw-guess">
+<div class="pattern-header"><div><h3>Draw to guess</h3><p>A draw-to-guess interaction asks viewers to sketch, trace, or mark their prediction before showing the answer. It works best when spatial intuition is part of the learning.</p></div><span class="tag">Sketch before reveal</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Best:</strong> Participate and Reveal. The viewer makes an estimate, then compares it to the answer.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory through drawing; spatial because the answer is location-based; procedural because the page records marks and reveals a reference layer.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Direct input. The viewer creates a visible guess rather than choosing from a fixed list.</p></div></div>
+<div class="interaction-card"><h4>Possible interactions</h4><ul><li>Canvas drawing or tap-to-place points.</li><li>Reveal reference route, boundary, or answer layer.</li><li>Clear/reset control for another attempt.</li></ul></div>
+<div class="demo-frame">
+<div class="control-row"><button id="clearDrawing" class="secondary" type="button">Clear drawing</button><button id="revealRoute" type="button">Reveal migration route</button></div>
+<div class="fake-map" id="drawMap">
+<canvas class="draw-canvas" id="drawCanvas" aria-label="Draw your guessed migration route"></canvas>
+<svg class="reveal-route" id="routeOverlay" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M 16 75 C 28 45, 42 30, 55 24 S 78 20, 88 12" fill="none" stroke="#d8893a" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="6 5"/><circle cx="16" cy="75" r="3" fill="#37634e"/><circle cx="88" cy="12" r="3" fill="#37634e"/></svg>
+<div class="caption-box">Draw where you think a simplified spring migration route might go, then reveal the reference route.</div>
+</div>
+</div>
+</section>
+
+<section class="section-group" id="paths">
+<h2>Paths</h2>
+<p>Use path patterns when the viewer’s choices change the sequence. These can feel like Twine, decision trees, or guided branching explainers.</p>
+</section>
+
+<section class="pattern" id="branching-path">
+<div class="pattern-header"><div><h3>Branching path</h3><p>A branching path lets viewers move through a small choice structure. Each choice changes what they see next, creating a light story path or scenario simulation.</p></div><span class="tag">Choice structure</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Best:</strong> Participate and Experience. <strong>Also useful for:</strong> Explain when choices demonstrate consequences.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural through branching logic; participatory through choices; experiential because the path changes how the viewer moves through the material.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Branching agency. The viewer controls the path, but the author controls possible branches and endings.</p></div></div>
+<div class="interaction-card"><h4>Possible interactions</h4><ul><li>Choice buttons that move to different nodes.</li><li>Back, restart, or path summary controls.</li><li>Consequence text that explains why a choice matters.</li></ul></div>
+<div class="demo-frame">
+<div class="branch-screen" id="branchScreen"></div>
+</div>
+</section>
+
+<section class="pattern" id="decision-tree">
+<div class="pattern-header"><div><h3>Decision tree</h3><p>A decision tree walks viewers through a sequence of questions and uses their answers to produce an outcome. It is useful when the point is classification, triage, recommendation, or process guidance.</p></div><span class="tag">Structured choice</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Best:</strong> Participate and Explain. It makes a process visible by letting viewers follow the logic.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural because rules determine the next question; participatory because answers steer the route; encyclopedic if outcomes link to more detail.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided path. The viewer answers questions, but the logic tree controls the structure.</p></div></div>
+<div class="interaction-card"><h4>Possible interactions</h4><ul><li>Yes/no or either/or questions.</li><li>Visible progress through the tree.</li><li>Outcome card with reasoning and next step.</li></ul></div>
+<div class="demo-frame">
+<div class="tree-path" id="decisionTree"></div>
+</div>
+</section>
+
+<section class="section-group" id="reflect-guess-estimate">
+<h2>Reflect, Guess, Estimate</h2>
+<p>Use these when the viewer should pause, commit to an idea, or compare their perception with an answer, benchmark, or recommendation.</p>
+</section>
+
+<section class="pattern" id="guess-reveal">
+<div class="pattern-header"><div><h3>Guess-then-reveal</h3><p>A guess-then-reveal interaction asks viewers to make a prediction before showing the answer. It works because the act of guessing makes the reveal more meaningful.</p></div><span class="tag">Commit then reveal</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Best:</strong> Participate and Reveal. <strong>Also useful for:</strong> Explain when the reveal corrects a misconception.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory through guessing; procedural through feedback; encyclopedic if the reveal opens more evidence.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Reflective micro-choice. The viewer commits to an answer, then compares it with the story’s evidence.</p></div></div>
+<div class="interaction-card"><h4>Possible interactions</h4><ul><li>Numeric entry, button choice, or slider guess.</li><li>Reveal button that compares guess to answer.</li><li>Short explanation of why the answer matters.</li></ul></div>
+<div class="demo-frame">
+<h4>Guess the peak migration month</h4>
+<p>For many small songbirds moving through the Midwest in spring, which month would you expect to be busiest?</p><br />
+<div class="control-row"><select id="migrationGuess"><option>March</option><option>April</option><option>May</option><option>June</option></select><button id="revealMigrationGuess" type="button">Reveal answer</button></div>
+<div class="output-card" id="guessOutput"><h4>Your reveal</h4><p>Make a guess to reveal the answer.</p></div>
+</div>
+</section>
+
+<section class="pattern" id="prediction">
+<div class="pattern-header"><div><h3>Prediction</h3><p>A prediction interaction asks viewers what they expect to happen before showing an outcome. It is useful for patterns, change over time, risk, and cause-effect explanations.</p></div><span class="tag">Predict outcome</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Best:</strong> Participate and Explain. The viewer sees whether their expectation matches the pattern.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory through prediction; procedural through result display; temporal when the prediction concerns change over time.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Reflective choice. The viewer selects a likely outcome and receives explanation.</p></div></div>
+<div class="interaction-card"><h4>Possible interactions</h4><ul><li>Prediction buttons or draggable forecast line.</li><li>Comparison of predicted result and actual result.</li><li>Follow-up explanation with context.</li></ul></div>
+<div class="demo-frame">
+<h4>Which bird group is most likely to show habitat-related decline?</h4>
+<div class="quiz-options" id="predictionOptions"><button data-predict="waterbirds">Waterbirds</button><button data-predict="grassland">Grassland birds</button><button data-predict="yardbirds">Common backyard birds</button><button data-predict="raptors">Large raptors</button></div>
+<div class="output-card" id="predictionOutput"><h4>Prediction feedback</h4><p>Choose a group to compare your expectation with the explanation.</p></div>
+</div>
+</section>
+
+<section class="pattern" id="self-assessment">
+<div class="pattern-header"><div><h3>Self-assessment</h3><p>A self-assessment asks viewers to reflect on their situation, habits, knowledge, or readiness and then returns a score or interpretation.</p></div><span class="tag">Reflective input</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Best:</strong> Participate. <strong>Also useful for:</strong> Explain when the score teaches what factors matter.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory through checklist input; procedural through scoring; encyclopedic when each item links to advice or more context.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Personal reflection. The viewer evaluates their own situation and receives a tailored interpretation.</p></div></div>
+<div class="interaction-card"><h4>Possible interactions</h4><ul><li>Checklist, scale, or short-answer reflection.</li><li>Score with interpretation.</li><li>Recommended next steps based on responses.</li></ul></div>
+<div class="demo-frame">
+<h4>Bird-friendly yard self-assessment</h4>
+<div class="checklist" id="yardChecklist">
+<label><input type="checkbox" value="1" /> Native plants or shrubs provide cover.</label>
+<label><input type="checkbox" value="1" /> Windows have visible collision-reduction treatment.</label>
+<label><input type="checkbox" value="1" /> Outdoor cats are kept away from birds.</label>
+<label><input type="checkbox" value="1" /> Water or natural food sources are available.</label>
+<label><input type="checkbox" value="1" /> Leaves, seed heads, or brush are left for insects and shelter.</label>
+</div>
+<div class="output-card" id="assessmentOutput"><h4>Assessment result</h4><p>Select items to see the result.</p><div class="estimate-meter"><div class="estimate-fill" id="assessmentFill" style="width:0%"></div></div></div>
+</div>
+</section>
+</main>
+</div>
+<script>
+const menuButton = document.getElementById('mobileMenuToggle');
+const backdrop = document.getElementById('mobileMenuBackdrop');
+function closeMenu(){ document.body.classList.remove('menu-open'); menuButton?.setAttribute('aria-expanded','false'); if(backdrop) backdrop.hidden = true; }
+function openMenu(){ document.body.classList.add('menu-open'); menuButton?.setAttribute('aria-expanded','true'); if(backdrop) backdrop.hidden = false; }
+menuButton?.addEventListener('click', () => document.body.classList.contains('menu-open') ? closeMenu() : openMenu());
+backdrop?.addEventListener('click', closeMenu);
+document.querySelectorAll('.sidebar a').forEach(a => a.addEventListener('click', closeMenu));
+
+// Viewer input generator
+const generatorRules = {
+  trees: { sunflower:['Northern Cardinal','Tufted Titmouse','Black-capped Chickadee'], suet:['Downy Woodpecker','White-breasted Nuthatch','Red-bellied Woodpecker'], nectar:['Baltimore Oriole','Ruby-throated Hummingbird','Gray Catbird'] },
+  shrubs: { sunflower:['Song Sparrow','Northern Cardinal','White-throated Sparrow'], suet:['Carolina Wren','Downy Woodpecker','Blue Jay'], nectar:['Ruby-throated Hummingbird','Orchard Oriole','House Finch'] },
+  open: { sunflower:['American Goldfinch','Mourning Dove','House Finch'], suet:['European Starling','Blue Jay','Downy Woodpecker'], nectar:['Ruby-throated Hummingbird','House Finch','Baltimore Oriole'] }
+};
+document.getElementById('generateBirds')?.addEventListener('click', () => {
+  const yard = document.getElementById('yardType').value;
+  const food = document.getElementById('foodType').value;
+  const season = document.getElementById('seasonType').value;
+  const birds = generatorRules[yard][food];
+  document.getElementById('generatorOutput').innerHTML = `<h4>Likely visitors</h4><p>For a <strong>${document.getElementById('yardType').selectedOptions[0].text.toLowerCase()}</strong> setup with <strong>${document.getElementById('foodType').selectedOptions[0].text.toLowerCase()}</strong> in <strong>${document.getElementById('seasonType').selectedOptions[0].text.toLowerCase()}</strong>, the demo result points to these birds.</p><div class="result-grid">${birds.map(b => `<div class="result-card"><strong>${b}</strong><span>The generated result should explain why this bird fits the selected conditions.</span></div>`).join('')}</div>`;
+});
+
+// Goofy comparison
+const walkMiles = document.getElementById('walkMiles');
+function updateWalk(){
+  const miles = Number(walkMiles.value);
+  const days = Math.ceil(2000 / miles);
+  document.getElementById('walkMilesLabel').textContent = miles;
+  document.getElementById('comparisonTitle').textContent = `That is ${days.toLocaleString()} days of walking.`;
+  document.getElementById('comparisonText').textContent = `At ${miles} miles per day, it would take you about ${days.toLocaleString()} days to cover a 2,000-mile migration route.`;
+}
+walkMiles?.addEventListener('input', updateWalk);
+
+// Quiz
+const quizQuestions = [
+  {q:'Which feature is most useful for identifying a male Red-winged Blackbird?', a:'Red shoulder patches', options:['Blue wing bars','Red shoulder patches','Forked tail','White eye ring'], why:'The male’s red-and-yellow shoulder patches are the key field mark.'},
+  {q:'Which clue best points to a woodpecker?', a:'Chisel-like bill', options:['Chisel-like bill','Webbed feet','Long shorebird legs','Hooked raptor bill'], why:'Woodpeckers use a chisel-like bill to probe bark and excavate cavities.'},
+  {q:'Which setting is most likely for shorebirds during migration?', a:'Mudflats', options:['Dense pine forest','Mudflats','Backyard feeder','Cornfield in winter'], why:'Many migrating shorebirds feed along exposed mudflats and shallow water edges.'}
+];
+let quizIndex = 0, quizRight = 0, quizAnswered = 0;
+function renderQuiz(){
+  const item = quizQuestions[quizIndex];
+  document.getElementById('quizQuestion').textContent = item.q;
+  document.getElementById('quizOptions').innerHTML = item.options.map(opt => `<button type="button" data-answer="${opt}">${opt}</button>`).join('');
+  document.getElementById('quizFeedback').innerHTML = '<h4>Feedback</h4><p>Choose an answer to see the explanation.</p>';
+  document.getElementById('quizScore').textContent = `Score: ${quizRight}/${quizAnswered}`;
+  document.querySelectorAll('#quizOptions button').forEach(btn => btn.addEventListener('click', () => {
+    if(document.querySelector('#quizOptions button.correct, #quizOptions button.wrong')) return;
+    const correct = btn.dataset.answer === item.a;
+    btn.classList.add(correct ? 'correct' : 'wrong');
+    document.querySelectorAll('#quizOptions button').forEach(b => { if(b.dataset.answer === item.a) b.classList.add('correct'); });
+    quizAnswered++; if(correct) quizRight++;
+    document.getElementById('quizScore').textContent = `Score: ${quizRight}/${quizAnswered}`;
+    document.getElementById('quizFeedback').innerHTML = `<h4>${correct ? 'Correct' : 'Not quite'}</h4><p>${item.why}</p><br><button type="button" id="nextQuiz">Next question</button>`;
+    document.getElementById('nextQuiz').addEventListener('click', () => { quizIndex = (quizIndex + 1) % quizQuestions.length; renderQuiz(); });
+  }));
+}
+document.getElementById('resetQuiz')?.addEventListener('click', () => { quizIndex = 0; quizRight = 0; quizAnswered = 0; renderQuiz(); });
+renderQuiz();
+
+// Calculator
+function calculateRisk(){
+  const windows = Number(document.getElementById('windowsCount').value || 0);
+  const quality = Number(document.getElementById('treatmentQuality').value);
+  const reduction = Math.round(windows * quality * 0.8);
+  const percent = Math.round(quality * 100);
+  document.getElementById('calculatorOutput').innerHTML = `<h4>Estimated reduction: ${reduction} risk units</h4><p>With ${windows} treated windows and a ${percent}% treatment-strength assumption, this simplified demo estimates a reduction of ${reduction} collision-risk units. The useful part is the relationship: more treated surface and better exterior visibility produce a stronger result.</p>`;
+}
+document.getElementById('runCalculator')?.addEventListener('click', calculateRisk);
+
+// Matcher
+const matches = {
+  marsh:['Rails, bitterns, marsh wrens','Dense wetland vegetation favors birds that can hide, call, and move through cattails.'],
+  grassland:['Meadowlarks, bobolinks, grassland sparrows','Open grass structure favors ground nesters and seed/insect foragers.'],
+  forest:['Woodpeckers, vireos, warblers','Layered canopy and dead wood create foraging and nesting opportunities.'],
+  shore:['Sandpipers, plovers, yellowlegs','Shallow edges expose invertebrates that migrating shorebirds probe for food.']
+};
+document.querySelectorAll('#matcherChoices button').forEach(btn => btn.addEventListener('click', () => {
+  const [title, text] = matches[btn.dataset.match];
+  document.getElementById('matcherOutput').innerHTML = `<h4>${title}</h4><p>${text}</p>`;
+}));
+
+// Draw to guess
+const canvas = document.getElementById('drawCanvas');
+const ctx = canvas?.getContext('2d');
+let drawing = false;
+function resizeCanvas(){ if(!canvas) return; const rect = canvas.getBoundingClientRect(); canvas.width = rect.width * devicePixelRatio; canvas.height = rect.height * devicePixelRatio; ctx.scale(devicePixelRatio, devicePixelRatio); ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.strokeStyle = '#37634e'; }
+window.addEventListener('resize', resizeCanvas); setTimeout(resizeCanvas, 100);
+function pointerPos(e){ const rect = canvas.getBoundingClientRect(); const p = e.touches ? e.touches[0] : e; return {x:p.clientX-rect.left, y:p.clientY-rect.top}; }
+canvas?.addEventListener('pointerdown', e => { drawing = true; const p = pointerPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); });
+canvas?.addEventListener('pointermove', e => { if(!drawing) return; const p = pointerPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+window.addEventListener('pointerup', () => drawing = false);
+document.getElementById('clearDrawing')?.addEventListener('click', () => { ctx.clearRect(0,0,canvas.width,canvas.height); document.getElementById('routeOverlay').classList.remove('show'); });
+document.getElementById('revealRoute')?.addEventListener('click', () => document.getElementById('routeOverlay').classList.add('show'));
+
+// Branching path
+const branchNodes = {
+  start:{title:'You are planning a migration stopover story.', text:'What should the viewer decide first?', choices:[['Choose a habitat','habitat'],['Choose a threat','threat']]},
+  habitat:{title:'Habitat path', text:'The viewer chooses where the bird lands. This path can explain how habitat structure affects food and cover.', choices:[['Wetland stopover','wetland'],['Urban park stopover','urban']]},
+  threat:{title:'Threat path', text:'The viewer chooses the obstacle first. This path can explain risk and consequence.', choices:[['Glass buildings','glass'],['Outdoor cats','cats']]},
+  wetland:{title:'Ending: Wetland refuge', text:'The story can show food availability, cover, and why stopover sites matter.', choices:[['Restart','start']]},
+  urban:{title:'Ending: Urban park', text:'The story can show how small green spaces help, but also introduce collision and light risks.', choices:[['Restart','start']]},
+  glass:{title:'Ending: Collision risk', text:'The story can explain why transparent or reflective glass creates a hazard.', choices:[['Restart','start']]},
+  cats:{title:'Ending: Predator risk', text:'The story can explain how a personal choice changes bird safety near homes.', choices:[['Restart','start']]}
+};
+function renderBranch(id='start'){
+  const node = branchNodes[id];
+  document.getElementById('branchScreen').innerHTML = `<h4>${node.title}</h4><p>${node.text}</p><div class="choice-grid">${node.choices.map(c => `<button type="button" data-next="${c[1]}">${c[0]}</button>`).join('')}</div>`;
+  document.querySelectorAll('#branchScreen button').forEach(btn => btn.addEventListener('click', () => renderBranch(btn.dataset.next)));
+}
+renderBranch();
+
+// Decision tree
+let treeStep = 'start';
+const tree = {
+  start:{q:'What is the viewer trying to personalize?', choices:[['A recommendation','rec'],['A learning path','learn']]},
+  rec:{q:'Is the recommendation based on preferences or conditions?', choices:[['Preferences','pref'],['Conditions','conditions']]},
+  learn:{q:'Should the viewer choose a route or answer a sequence of questions?', choices:[['Route','route'],['Questions','questions']]},
+  pref:{out:'Use a matcher or generator. Example: choose preferred birdwatching conditions and return a likely habitat or species group.'},
+  conditions:{out:'Use a calculator or triage-style decision tree. Example: enter yard conditions and return bird-friendly next steps.'},
+  route:{out:'Use a branching path. Example: move through a migration story by choosing stopover decisions.'},
+  questions:{out:'Use a quiz or self-assessment. Example: test bird ID knowledge or evaluate bird-friendly practices.'}
+};
+function renderTree(step='start'){
+  const n = tree[step];
+  treeStep = step;
+  if(n.out){
+    document.getElementById('decisionTree').innerHTML = `<div class="tree-node active"><h4>Recommended pattern</h4><p>${n.out}</p><br><button type="button" id="treeRestart">Restart</button></div>`;
+    document.getElementById('treeRestart').addEventListener('click', () => renderTree('start'));
+    return;
+  }
+  document.getElementById('decisionTree').innerHTML = `<div class="tree-node active"><h4>${n.q}</h4><div class="choice-grid">${n.choices.map(c => `<button type="button" data-step="${c[1]}">${c[0]}</button>`).join('')}</div></div>`;
+  document.querySelectorAll('#decisionTree button').forEach(btn => btn.addEventListener('click', () => renderTree(btn.dataset.step)));
+}
+renderTree();
+
+// Guess reveal
+document.getElementById('revealMigrationGuess')?.addEventListener('click', () => {
+  const guess = document.getElementById('migrationGuess').value;
+  const correct = guess === 'May';
+  document.getElementById('guessOutput').innerHTML = `<h4>${correct ? 'Good estimate' : 'The answer for this demo is May'}</h4><p>You guessed <strong>${guess}</strong>. In this simplified Midwest spring-migration example, May is the strongest answer because many small songbirds move through during that period. The teaching value is the commitment before the reveal.</p>`;
+});
+
+// Prediction
+document.querySelectorAll('#predictionOptions button').forEach(btn => btn.addEventListener('click', () => {
+  const isGrass = btn.dataset.predict === 'grassland';
+  document.getElementById('predictionOutput').innerHTML = `<h4>${isGrass ? 'That is the intended pattern' : 'Useful prediction, but not the intended pattern'}</h4><p>This demo points to <strong>grassland birds</strong> because they are often used to explain how habitat loss and land-use change connect to population decline. A prediction interaction works best when the reveal includes the reason behind the pattern.</p>`;
+}));
+
+// Self assessment
+function updateAssessment(){
+  const checks = [...document.querySelectorAll('#yardChecklist input')];
+  const score = checks.filter(c => c.checked).length;
+  const pct = score / checks.length * 100;
+  let label = 'Starting point';
+  if(score >= 4) label = 'Strong bird-friendly setup';
+  else if(score >= 2) label = 'Moderate bird-friendly setup';
+  document.getElementById('assessmentFill').style.width = pct + '%';
+  document.getElementById('assessmentOutput').querySelector('p').innerHTML = `<strong>${label}:</strong> ${score} of ${checks.length} practices selected. The score is less important than showing which factors shape the result.`;
+}
+document.querySelectorAll('#yardChecklist input').forEach(c => c.addEventListener('change', updateAssessment));
+</script>
+</body>
+</html>

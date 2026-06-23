@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Spatial and Immersive Media Patterns</title>
+<style>
+:root {
+  --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+  --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --shadow:0 14px 35px rgba(23,33,27,.12);
+  --radius:18px;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; }
+a { color:inherit; }
+.layout { display:block; min-height:100vh; }
+.sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow-y:auto; overflow-x:hidden; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+.sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+.sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+.nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+.sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+.sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+.home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
+main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+.hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+.eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+.hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:850px; }
+.hero p, .section-group p, .pattern p { color:var(--muted); }
+.hero p { max-width:790px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+.concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:850px; }
+.concept-callout strong { color:var(--ink); }
+.section-group { margin:54px 0 24px; padding-top:10px; border-top:2px solid var(--ink); }
+.section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+.section-group p { margin:0; max-width:800px; }
+.pattern { scroll-margin-top:24px; margin:26px 0 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+.pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+.pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+.pattern p { margin:0; }
+.tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+.pattern-analysis { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:16px 0 20px; }
+.pattern-analysis-card { padding:13px 14px; border:1px solid var(--line); border-radius:14px; background:#f6f1e7; }
+.pattern-analysis-card h4 { margin:0 0 5px; color:var(--accent); font-size:.82rem; letter-spacing:.07em; text-transform:uppercase; }
+.pattern-analysis-card p { margin:0; color:var(--ink); font-size:.94rem; line-height:1.35; }
+.demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
+button, .button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+button.secondary { background:#eef3ef; color:var(--ink); border:1px solid var(--line); }
+button:hover { filter:brightness(.96); }
+button:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+.interaction-list { display:grid; gap:8px; margin:16px 0 20px; padding:14px 16px; border-radius:16px; background:#fff8ed; border:1px solid var(--line); color:var(--muted); }
+.interaction-list h4 { margin:0; color:var(--accent); font-size:.82rem; letter-spacing:.07em; text-transform:uppercase; }
+.interaction-list ul { margin:0; padding-left:1.1rem; }
+.interaction-list li { margin:3px 0; }
+.demo-title { margin:0 0 12px; font-size:1rem; color:var(--ink); }
+.demo-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start; }
+.note-card { padding:14px 16px; border:1px solid var(--line); border-radius:16px; background:#f6f1e7; color:var(--muted); }
+.note-card h4 { margin:0 0 6px; color:var(--ink); }
+.note-card p { margin:0; }
+.control-row { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; align-items:center; }
+.control-row label { font-weight:900; color:var(--ink); }
+.control-row input[type="range"] { accent-color:var(--accent); }
+
+/* 360 demos */
+.pano-viewport { position:relative; height:360px; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:#101813; cursor:grab; user-select:none; }
+.pano-viewport.dragging { cursor:grabbing; }
+.pano-track { position:absolute; top:0; left:0; height:100%; width:1600px; will-change:transform; background:
+  radial-gradient(circle at 14% 30%, rgba(255,253,247,.58) 0 2%, transparent 2.4%),
+  radial-gradient(circle at 38% 22%, rgba(255,253,247,.42) 0 1.3%, transparent 1.7%),
+  radial-gradient(circle at 72% 31%, rgba(255,253,247,.35) 0 1.5%, transparent 1.9%),
+  linear-gradient(to bottom, #8fb0c7 0 38%, #c7d7c1 39% 48%, #5f7d58 49% 63%, #2e4735 64% 100%);
+}
+.pano-track::before { content:""; position:absolute; left:0; right:0; bottom:0; height:42%; background:
+  radial-gradient(ellipse at 9% 100%, #233828 0 11%, transparent 12%),
+  radial-gradient(ellipse at 27% 100%, #263f2c 0 13%, transparent 14%),
+  radial-gradient(ellipse at 52% 100%, #1f3528 0 10%, transparent 11%),
+  radial-gradient(ellipse at 78% 100%, #2d4934 0 15%, transparent 16%),
+  linear-gradient(to top, #25392c, transparent 80%); opacity:.95; }
+.pano-track::after { content:"Wetland overlook · Drag to pan"; position:absolute; left:40px; bottom:30px; color:#fffdf7; font-weight:900; font-size:1.3rem; text-shadow:0 2px 12px rgba(0,0,0,.45); }
+.pano-hotspot { position:absolute; width:28px; height:28px; border-radius:50%; transform:translate(-50%,-50%); border:3px solid #fff; background:var(--accent-2); box-shadow:0 8px 18px rgba(0,0,0,.3); display:grid; place-items:center; padding:0; color:#1b160f; }
+.pano-hotspot::after { content:attr(data-label); position:absolute; left:34px; top:50%; transform:translateY(-50%); white-space:nowrap; padding:5px 9px; border-radius:999px; background:rgba(255,253,247,.94); color:var(--ink); border:1px solid var(--line); font-size:.82rem; font-weight:900; }
+.annotation-card { margin-top:14px; padding:14px 16px; border:1px solid var(--line); border-radius:16px; background:#fff8ed; min-height:82px; }
+.annotation-card h4 { margin:0 0 6px; }
+.scene-buttons button.active { background:var(--accent-2); color:#1b160f; }
+.tour-shell { display:grid; grid-template-columns:1.1fr .9fr; gap:18px; align-items:stretch; }
+.tour-panel { padding:18px; border:1px solid var(--line); border-radius:16px; background:#f6f1e7; }
+.tour-panel h4 { margin:0 0 8px; }
+.tour-panel p { margin:0 0 14px; }
+.tour-progress { display:flex; gap:6px; margin:14px 0; }
+.tour-dot { width:12px; height:12px; border-radius:50%; background:#d9d2c2; }
+.tour-dot.active { background:var(--accent-2); }
+
+/* 3D demos */
+.object-stage { position:relative; height:380px; border:1px solid var(--line); border-radius:16px; background:radial-gradient(circle at 50% 35%, #f8f4e9, #dfe9df); overflow:hidden; perspective:850px; }
+.object-holder { position:absolute; left:50%; top:50%; width:180px; height:130px; transform-style:preserve-3d; transform:translate(-50%,-50%) rotateX(-12deg) rotateY(24deg) scale(1); transition:transform .05s linear; }
+.bird-object { position:absolute; inset:0; transform-style:preserve-3d; }
+.bird-body { position:absolute; left:25px; top:42px; width:120px; height:58px; border-radius:58% 45% 50% 55%; background:#37634e; box-shadow:inset -18px 0 0 rgba(0,0,0,.18); transform:translateZ(20px); }
+.bird-wing { position:absolute; left:55px; top:55px; width:70px; height:40px; border-radius:60% 40% 55% 45%; background:#263f34; transform:translateZ(34px) rotate(-12deg); }
+.bird-head { position:absolute; left:130px; top:34px; width:42px; height:42px; border-radius:50%; background:#37634e; transform:translateZ(24px); }
+.bird-beak { position:absolute; left:165px; top:48px; width:0; height:0; border-top:8px solid transparent; border-bottom:8px solid transparent; border-left:30px solid #d8893a; transform:translateZ(24px); }
+.bird-tail { position:absolute; left:-10px; top:54px; width:48px; height:24px; background:#263f34; clip-path:polygon(0 0,100% 30%,100% 70%,0 100%); transform:translateZ(8px); }
+.object-shadow { position:absolute; left:50%; top:73%; width:220px; height:38px; transform:translateX(-50%); border-radius:50%; background:rgba(23,33,27,.18); filter:blur(5px); }
+.object-hotspot { position:absolute; width:26px; height:26px; border-radius:50%; background:var(--accent-2); color:#1b160f; border:3px solid white; transform:translate(-50%,-50%); box-shadow:0 8px 18px rgba(0,0,0,.25); z-index:3; padding:0; }
+.object-hotspot[data-point="wing"] { left:52%; top:49%; }
+.object-hotspot[data-point="beak"] { left:64%; top:40%; }
+.object-hotspot[data-point="tail"] { left:39%; top:49%; }
+.ar-stage { position:relative; height:420px; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:
+  linear-gradient(to bottom, rgba(255,253,247,.8), rgba(255,253,247,.2)),
+  repeating-linear-gradient(90deg, rgba(23,33,27,.08) 0 1px, transparent 1px 52px),
+  repeating-linear-gradient(0deg, rgba(23,33,27,.08) 0 1px, transparent 1px 52px),
+  linear-gradient(145deg,#e9ddce,#f8f4e9 48%,#d1c2ae 49%,#b5a58f 100%); }
+.phone-frame { position:absolute; inset:22px; border:10px solid #17211b; border-radius:30px; box-shadow:var(--shadow); overflow:hidden; background:rgba(255,253,247,.32); }
+.ar-floor { position:absolute; left:0; right:0; bottom:0; height:52%; background:linear-gradient(to top, rgba(55,99,78,.18), rgba(255,253,247,.05)); }
+.ar-bird { position:absolute; left:50%; bottom:78px; width:170px; height:110px; transform:translateX(-50%) scale(1); transform-origin:bottom center; transition:transform .25s ease; }
+.ar-bird .bird-body { left:20px; top:40px; }
+.ar-bird .bird-wing { left:48px; top:52px; }
+.ar-bird .bird-head { left:125px; top:32px; }
+.ar-bird .bird-beak { left:159px; top:46px; }
+.ar-bird .bird-tail { left:-14px; top:54px; }
+.scale-label { position:absolute; left:50%; bottom:30px; transform:translateX(-50%); padding:7px 11px; border-radius:999px; background:rgba(255,253,247,.92); border:1px solid var(--line); color:var(--ink); font-weight:900; }
+.ar-buttons button.active { background:var(--accent-2); color:#1b160f; }
+
+.mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+@media (max-width:860px) {
+  body { padding-top:64px; }
+  body.menu-open { overflow:hidden; }
+  .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+  .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+  .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+  .mobile-menu-text { font-weight:900; }
+  .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+  .mobile-menu-backdrop[hidden] { display:none; }
+  .sidebar { position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important; padding:76px 22px 28px; overflow-y:auto!important; overflow-x:hidden; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+  body.menu-open .sidebar { transform:translateX(0); }
+  main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
+  .pattern-header, .pattern-analysis, .demo-grid, .tour-shell { grid-template-columns:1fr; }
+  .tag { justify-self:start; white-space:normal; }
+}
+@media (max-width:520px) {
+  .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+  .pano-viewport, .object-stage, .ar-stage { height:320px; }
+  .object-holder { width:145px; height:105px; }
+  .pano-hotspot::after { max-width:130px; white-space:normal; line-height:1.15; }
+}
+</style>
+</head>
+<body>
+<button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span class="mobile-menu-text">Menu</span></button>
+<div class="mobile-menu-backdrop" hidden id="mobileMenuBackdrop"></div>
+<div class="layout">
+<aside aria-label="Pattern navigation" class="sidebar" id="siteSidebar">
+<a class="home-button" href="../">← Back to Home</a>
+<h1>Spatial and Immersive Media</h1>
+<p>Interaction patterns for 360 scenes and 3D objects.</p>
+<nav>
+<div class="nav-group-title">360 Photos</div>
+<a href="#pano-simple">Simple exploration</a>
+<a href="#pano-hotspots">Hotspots and annotations</a>
+<a href="#pano-tours">Linked views and tours</a>
+<div class="nav-group-title">3D Objects</div>
+<a href="#object-simple">Simple 3D exploration</a>
+<a href="#object-hotspots">3D hotspots and annotations</a>
+<a href="#ar-scale">Real-world scale / AR</a>
+</nav>
+</aside>
+<main>
+<section class="hero" id="intro">
+<div class="eyebrow">Interactive storytelling demo</div>
+<h2>Spatial and Immersive Media</h2>
+<p>Spatial and immersive media help viewers feel positioned inside a scene or near an object. The story job is usually Experience, but these tools can also Reveal, Explain, Locate, or Compare when the interaction helps viewers inspect details.</p>
+<div class="concept-callout"><strong>Core idea:</strong> immersion is not enough by itself. A 360 photo or 3D model needs a reason to be interactive: moving through a place, inspecting evidence, opening annotations, comparing views, or understanding scale.</div>
+</section>
+
+<section class="section-group" id="photos-360">
+<h2>360 photos</h2>
+<p>Use 360 photos when the viewer needs to understand a place from inside the scene. They are strongest when spatial context, atmosphere, or point of view matters.</p>
+</section>
+
+<section class="pattern" id="pano-simple">
+<div class="pattern-header"><div><h3>Simple exploration</h3><p>A basic 360 viewer lets the viewer pan around a scene. This is the most direct immersive interaction: the viewer controls where to look.</p></div><span class="tag">Pan to explore</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Experience.</strong> Also supports Locate when the surrounding place matters.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Open visual inspection. The viewer chooses where to look, but stays inside one scene.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial and participatory. The viewer navigates a visual environment rather than reading a fixed frame.</p></div></div>
+<div class="interaction-list"><h4>Possible interactions</h4><ul><li>Click/touch and drag to pan horizontally or vertically.</li><li>Use compass, reset, or home-view controls to reorient the viewer.</li><li>Limit pan range when a full 360 scene is not needed.</li></ul></div>
+<div class="demo-frame"><h4 class="demo-title">Demo: drag the wetland scene</h4><div class="pano-viewport" id="panoBasic"><div class="pano-track"></div></div></div>
+</section>
+
+<section class="pattern" id="pano-hotspots">
+<div class="pattern-header"><div><h3>Hotspots and annotations</h3><p>Hotspots attach explanatory content to locations inside the 360 scene. They turn a scene from simple atmosphere into an inspectable spatial explainer.</p></div><span class="tag">Point-based detail</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Experience and Reveal.</strong> Also supports Explain when annotations teach what to notice.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided inspection. The viewer can look around freely, then choose which points to open.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial, encyclopedic, participatory, and procedural. Details are attached to places and appear when selected.</p></div></div>
+<div class="interaction-list"><h4>Possible interactions</h4><ul><li>Click/tap hotspots to open text, photos, audio, video, or source notes.</li><li>Use tooltip labels on hover/focus to preview what a hotspot contains.</li><li>Use rich annotations for longer explanation, not just labels.</li><li>Use reveal-page patterns inside the scene: tooltips, modals, hotspots, and annotation cards.</li></ul></div>
+<div class="demo-frame"><h4 class="demo-title">Demo: select a hotspot</h4><div class="demo-grid"><div><div class="pano-viewport" id="panoAnnotated"><div class="pano-track"><button class="pano-hotspot" data-title="Cattail edge" data-text="Dense cattails create cover for marsh wrens, red-winged blackbirds, and rails." data-label="Cattails" style="left:32%;top:62%;"></button><button class="pano-hotspot" data-title="Open water" data-text="Open water changes what birds are visible. Ducks and herons use this space differently than reed-edge species." data-label="Open water" style="left:58%;top:48%;"></button><button class="pano-hotspot" data-title="Observation point" data-text="The viewer is placed at the edge, which matters because sound and visibility change with distance." data-label="Viewpoint" style="left:76%;top:72%;"></button></div></div></div><div class="annotation-card" id="panoAnnotation"><h4>No hotspot selected</h4><p>Select a point in the scene to open an attached note.</p></div></div></div>
+</section>
+
+<section class="pattern" id="pano-tours">
+<div class="pattern-header"><div><h3>Linked views and tours</h3><p>Linked views connect multiple 360 scenes. A tour can be open, where viewers choose their path, or guided, where the author moves them through a planned sequence.</p></div><span class="tag">Move between scenes</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Experience.</strong> Also supports Locate and Explain when the path clarifies how places connect.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Open exploration for self-directed tours; guided agency for step-through tours.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial, participatory, and procedural. The viewer moves through a structured set of scenes.</p></div></div>
+<div class="interaction-list"><h4>Possible interactions</h4><ul><li>Link hotspots from one 360 photo to another.</li><li>Offer open scene choices such as “marsh,” “woodland,” or “shoreline.”</li><li>Use guided next/previous controls for a tour with a planned order.</li><li>Use map thumbnails or scene labels so viewers understand where they are in the tour.</li></ul></div>
+<div class="demo-frame"><h4 class="demo-title">Demo: open exploration or guided tour</h4><div class="tour-shell"><div><div class="control-row scene-buttons"><button class="active" data-scene="marsh">Marsh</button><button data-scene="woodland">Woodland</button><button data-scene="shoreline">Shoreline</button></div><div class="pano-viewport" id="tourPano"><div class="pano-track"></div></div></div><div class="tour-panel"><h4 id="tourTitle">Marsh stop</h4><p id="tourText">Start in the marsh to understand the wetland edge and the birds that use cattails, open water, and mudflat transitions.</p><div class="tour-progress"><span class="tour-dot active"></span><span class="tour-dot"></span><span class="tour-dot"></span></div><div class="control-row"><button class="secondary" id="prevScene">Previous</button><button id="nextScene">Next guided stop</button></div><p><strong>Teaching use:</strong> the same linked scene system can be open exploration or a guided route.</p></div></div></div>
+</section>
+
+<section class="section-group" id="objects-3d">
+<h2>3D objects</h2>
+<p>Use 3D objects when shape, volume, orientation, mechanism, or scale matters. A 3D model is strongest when the viewer needs to inspect an object from more than one angle.</p>
+</section>
+
+<section class="pattern" id="object-simple">
+<div class="pattern-header"><div><h3>Simple 3D exploration</h3><p>A basic 3D viewer lets the viewer rotate, zoom, and sometimes move an object. This is useful when a single flat image cannot show the object clearly.</p></div><span class="tag">Pan, zoom, move</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Experience and Explain.</strong> The object can be felt as a form and inspected as evidence.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Direct manipulation. The viewer controls angle, distance, and sometimes position.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial, participatory, and procedural. The model responds to viewer input.</p></div></div>
+<div class="interaction-list"><h4>Possible interactions</h4><ul><li>Drag to rotate around the object.</li><li>Zoom in/out to inspect form and surface details.</li><li>Move or reset the model when the viewer gets disoriented.</li><li>Constrain rotation if only certain angles matter.</li></ul></div>
+<div class="demo-frame"><h4 class="demo-title">Demo: rotate, zoom, and move the object</h4><div class="control-row"><label for="objectZoom">Zoom</label><input id="objectZoom" type="range" min="70" max="150" value="100"/><button class="secondary" id="moveLeft">Move left</button><button class="secondary" id="moveRight">Move right</button><button id="resetObject">Reset</button></div><div class="object-stage" id="objectStage"><div class="object-shadow"></div><div class="object-holder" id="objectHolder"><div class="bird-object"><div class="bird-tail"></div><div class="bird-body"></div><div class="bird-wing"></div><div class="bird-head"></div><div class="bird-beak"></div></div></div></div></div>
+</section>
+
+<section class="pattern" id="object-hotspots">
+<div class="pattern-header"><div><h3>Hotspots and annotations</h3><p>3D hotspots attach labels or explanations to features of a model. They work best when the viewer needs to inspect parts, mechanisms, materials, or evidence.</p></div><span class="tag">Model annotations</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Explain and Reveal.</strong> Also supports Experience because the viewer inspects the model spatially.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided inspection. The viewer controls the model and chooses which labeled part to inspect.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial and encyclopedic. The interaction attaches explanatory layers to parts of the object.</p></div></div>
+<div class="interaction-list"><h4>Possible interactions</h4><ul><li>Click/tap labels attached to model parts.</li><li>Use hover/focus labels for short names and modals for longer explanations.</li><li>Highlight a part when its annotation opens.</li><li>Pair hotspots with camera moves that rotate the model toward the selected feature.</li></ul></div>
+<div class="demo-frame"><h4 class="demo-title">Demo: inspect model parts</h4><div class="demo-grid"><div class="object-stage"><div class="object-shadow"></div><div class="object-holder" style="transform:translate(-50%,-50%) rotateX(-12deg) rotateY(24deg) scale(1.05);"><div class="bird-object"><div class="bird-tail"></div><div class="bird-body"></div><div class="bird-wing"></div><div class="bird-head"></div><div class="bird-beak"></div></div></div><button class="object-hotspot" data-point="wing" data-title="Wing shape" data-text="Wing shape affects flight style. A longer, narrower wing can support efficient travel; a rounder wing can help maneuverability."></button><button class="object-hotspot" data-point="beak" data-title="Beak form" data-text="Beak shape is evidence of feeding strategy. A fine beak, heavy seed-cracking bill, or hooked bill suggests different food sources."></button><button class="object-hotspot" data-point="tail" data-title="Tail position" data-text="Tail length and shape help with balance, steering, and species identification."></button></div><div class="annotation-card" id="objectAnnotation"><h4>No model part selected</h4><p>Select a hotspot on the model to open an annotation.</p></div></div></div>
+</section>
+
+<section class="pattern" id="ar-scale">
+<div class="pattern-header"><div><h3>Real-world scale via AR projection</h3><p>AR projection places a 3D object into a camera view or real-world space. It is useful when the viewer needs to understand size, presence, or how an object fits into an environment.</p></div><span class="tag">Scale in place</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Experience and Compare.</strong> It helps viewers understand size in relation to a familiar space.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Embodied exploration. The viewer places or moves the object in their own surroundings.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial, participatory, and experiential. The object is understood through scale and placement.</p></div></div>
+<div class="interaction-list"><h4>Possible interactions</h4><ul><li>Place a model in a room or outdoor scene using AR.</li><li>Move, rotate, or resize the model to compare scale.</li><li>Switch between objects to compare size: sparrow, hawk, heron, eagle.</li><li>Use a fallback non-AR scale graphic for devices that do not support AR.</li></ul></div>
+<div class="demo-frame"><h4 class="demo-title">Demo: simulated real-world scale</h4><div class="control-row ar-buttons"><button class="active" data-scale="0.65" data-label="House sparrow · about 6 in.">Sparrow</button><button data-scale="1" data-label="American robin · about 10 in.">Robin</button><button data-scale="1.65" data-label="Red-tailed hawk · about 19 in.">Hawk</button><button data-scale="2.35" data-label="Great blue heron · about 46 in.">Heron</button></div><div class="ar-stage"><div class="phone-frame"><div class="ar-floor"></div><div class="ar-bird" id="arBird"><div class="bird-tail"></div><div class="bird-body"></div><div class="bird-wing"></div><div class="bird-head"></div><div class="bird-beak"></div></div><div class="scale-label" id="scaleLabel">American robin · about 10 in.</div></div></div><div class="note-card" style="margin-top:14px;"><h4>Production note</h4><p>This demo simulates the concept. In production, AR usually requires a model format and viewer that supports real-world placement, with a fallback for devices that cannot open AR.</p></div></div>
+</section>
+</main>
+</div>
+<script>
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+// Mobile menu
+const menuToggle = $('#mobileMenuToggle');
+const menuBackdrop = $('#mobileMenuBackdrop');
+function setMenu(open){ document.body.classList.toggle('menu-open', open); menuToggle?.setAttribute('aria-expanded', open ? 'true' : 'false'); if(menuBackdrop) menuBackdrop.hidden = !open; }
+menuToggle?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+menuBackdrop?.addEventListener('click', () => setMenu(false));
+$$('.sidebar a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+
+// Panorama drag helper
+function initPano(viewport, start=0){
+  const track = $('.pano-track', viewport);
+  let x = start, drag = false, last = 0;
+  const max = () => Math.max(0, track.offsetWidth - viewport.offsetWidth);
+  const apply = () => { x = Math.max(-max(), Math.min(0, x)); track.style.transform = `translateX(${x}px)`; };
+  const startDrag = e => { drag = true; viewport.classList.add('dragging'); last = e.clientX ?? e.touches?.[0]?.clientX ?? 0; };
+  const moveDrag = e => { if(!drag) return; const cx = e.clientX ?? e.touches?.[0]?.clientX ?? 0; x += cx - last; last = cx; apply(); };
+  const endDrag = () => { drag = false; viewport.classList.remove('dragging'); };
+  viewport.addEventListener('pointerdown', e => { viewport.setPointerCapture(e.pointerId); startDrag(e); });
+  viewport.addEventListener('pointermove', moveDrag);
+  viewport.addEventListener('pointerup', endDrag);
+  viewport.addEventListener('pointercancel', endDrag);
+  apply();
+  return { set(pos){ x = pos; apply(); }, get(){ return x; } };
+}
+initPano($('#panoBasic'));
+initPano($('#panoAnnotated'));
+const tourPano = initPano($('#tourPano'));
+
+// 360 hotspot annotations
+$$('.pano-hotspot').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const card = $('#panoAnnotation');
+    card.innerHTML = `<h4>${btn.dataset.title}</h4><p>${btn.dataset.text}</p>`;
+  });
+});
+
+// Linked tour
+const scenes = [
+  {key:'marsh', title:'Marsh stop', text:'Start in the marsh to understand the wetland edge and the birds that use cattails, open water, and mudflat transitions.', offset:0},
+  {key:'woodland', title:'Woodland stop', text:'Move into the wooded edge to compare cover, sound, and visibility with the open wetland.', offset:-360},
+  {key:'shoreline', title:'Shoreline stop', text:'End at the shoreline, where water level and exposed mud change which birds are likely to appear.', offset:-720}
+];
+let sceneIndex = 0;
+function setScene(i){
+  sceneIndex = (i + scenes.length) % scenes.length;
+  const scene = scenes[sceneIndex];
+  $$('.scene-buttons button').forEach(b => b.classList.toggle('active', b.dataset.scene === scene.key));
+  $$('.tour-dot').forEach((d, idx) => d.classList.toggle('active', idx === sceneIndex));
+  $('#tourTitle').textContent = scene.title;
+  $('#tourText').textContent = scene.text;
+  tourPano.set(scene.offset);
+}
+$$('.scene-buttons button').forEach(btn => btn.addEventListener('click', () => setScene(scenes.findIndex(s => s.key === btn.dataset.scene))));
+$('#nextScene').addEventListener('click', () => setScene(sceneIndex + 1));
+$('#prevScene').addEventListener('click', () => setScene(sceneIndex - 1));
+
+// 3D object controls
+const holder = $('#objectHolder');
+const stage = $('#objectStage');
+let rotX = -12, rotY = 24, zoom = 1, moveX = 0, isDrag = false, lx = 0, ly = 0;
+function applyObject(){ holder.style.transform = `translate(calc(-50% + ${moveX}px), -50%) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(${zoom})`; }
+stage.addEventListener('pointerdown', e => { isDrag = true; stage.setPointerCapture(e.pointerId); lx = e.clientX; ly = e.clientY; });
+stage.addEventListener('pointermove', e => { if(!isDrag) return; rotY += (e.clientX - lx) * .5; rotX -= (e.clientY - ly) * .35; rotX = Math.max(-55, Math.min(55, rotX)); lx = e.clientX; ly = e.clientY; applyObject(); });
+stage.addEventListener('pointerup', () => isDrag = false);
+stage.addEventListener('pointercancel', () => isDrag = false);
+$('#objectZoom').addEventListener('input', e => { zoom = Number(e.target.value)/100; applyObject(); });
+$('#moveLeft').addEventListener('click', () => { moveX -= 28; applyObject(); });
+$('#moveRight').addEventListener('click', () => { moveX += 28; applyObject(); });
+$('#resetObject').addEventListener('click', () => { rotX = -12; rotY = 24; zoom = 1; moveX = 0; $('#objectZoom').value = 100; applyObject(); });
+applyObject();
+
+// 3D annotations
+$$('.object-hotspot').forEach(btn => {
+  btn.addEventListener('click', () => {
+    $('#objectAnnotation').innerHTML = `<h4>${btn.dataset.title}</h4><p>${btn.dataset.text}</p>`;
+  });
+});
+
+// AR scale mock
+$$('.ar-buttons button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    $$('.ar-buttons button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    $('#arBird').style.transform = `translateX(-50%) scale(${btn.dataset.scale})`;
+    $('#scaleLabel').textContent = btn.dataset.label;
+  });
+});
+</script>
+</body>
+</html>
