@@ -994,7 +994,43 @@ main {
       display: block;
     }
 
-  </style>
+  
+
+/* --- Teaching metadata cards: story jobs, affordances, agency --- */
+.pattern-analysis {
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:12px;
+  margin:16px 0 20px;
+}
+.pattern-analysis-card {
+  padding:13px 14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#f6f1e7;
+}
+.pattern-analysis-card h4 {
+  margin:0 0 5px;
+  color:var(--accent);
+  font-size:.82rem;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.pattern-analysis-card p {
+  margin:0;
+  color:var(--ink);
+  font-size:.94rem;
+  line-height:1.35;
+}
+.pattern-analysis-card strong {
+  color:var(--ink);
+}
+@media (max-width:760px) {
+  .pattern-analysis {
+    grid-template-columns:1fr;
+  }
+}
+</style>
 </head>
 <body>
 <button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button">
@@ -1044,7 +1080,7 @@ main {
 <p>Use reveal patterns when the story has more detail than the first view can responsibly hold.</p>
 </section>
 <section class="pattern" id="accordions">
-<div class="pattern-header"><div><h3>Accordions</h3><p>An accordion stacks sections vertically and lets users expand one or more sections to reveal hidden content. It works best for grouped information where readers may only need some parts, such as FAQs, definitions, steps, background context, or categorized details.</p></div><span class="tag">Grouped details</span></div>
+<div class="pattern-header"><div><h3>Accordions</h3><p>An accordion stacks sections vertically and lets users expand one or more sections to reveal hidden content. It works best for grouped information where readers may only need some parts, such as FAQs, definitions, steps, background context, or categorized details.</p></div><span class="tag">Grouped details</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Reveal. <strong>Also useful for:</strong> Explain and Explore when details are grouped into sections.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Encyclopedic for storing layered information; participatory because the reader chooses what to open; procedural because the page changes state.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided, low-stakes choice. Readers choose which section to expand, but the available path is tightly structured.</p></div></div>
 <div class="demo-frame">
 <div class="accordion">
 <div class="accordion-item"><button aria-expanded="false" class="accordion-trigger"><span>How do you identify a Red-winged Blackbird?</span><span>+</span></button><div class="accordion-panel">
@@ -1056,7 +1092,7 @@ main {
 </div>
 </section>
 <section class="pattern" id="modals">
-<div class="pattern-header"><div><h3>Modals/popups</h3><p>A modal opens content in an overlay above the page, temporarily focusing the reader on one piece of information. It works best for details that need more space or attention but should not require a new page, such as a short profile, explanation, image, video, warning, or source note.</p></div><span class="tag">Focused detail</span></div>
+<div class="pattern-header"><div><h3>Modals/popups</h3><p>A modal opens content in an overlay above the page, temporarily focusing the reader on one piece of information. It works best for details that need more space or attention but should not require a new page, such as a short profile, explanation, image, video, warning, or source note.</p></div><span class="tag">Focused detail</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Reveal. <strong>Also useful for:</strong> Explain when a detail needs temporary focus without leaving the page.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Encyclopedic for holding extra context; participatory because the reader opens and closes it; procedural because the overlay changes the page state.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided choice. The reader decides when to open the detail, then the interface narrows attention to one focused layer.</p></div></div>
 <div class="demo-frame">
 <div class="media-card">
 <div class="image-box"><img alt="Placeholder kingfisher bird image" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/McMillan_Marsh_State_Wildlife_Area.jpg/960px-McMillan_Marsh_State_Wildlife_Area.jpg"/></div>
@@ -1065,7 +1101,7 @@ main {
 </div>
 </section>
 <section class="pattern" id="tooltips">
-<div class="pattern-header"><div><h3>Tooltips</h3><p>A tooltip is a small label or note attached to a specific word, icon, point, or interface element. It works best for brief supporting information, such as definitions, labels, clarifications, or quick hints that do not need a full paragraph.</p></div><span class="tag">Tiny point label</span></div>
+<div class="pattern-header"><div><h3>Tooltips</h3><p>A tooltip is a small label or note attached to a specific word, icon, point, or interface element. It works best for brief supporting information, such as definitions, labels, clarifications, or quick hints that do not need a full paragraph.</p></div><span class="tag">Tiny point label</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Reveal. <strong>Also useful for:</strong> Explain when the needed context is short.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory through hover, focus, or tap; encyclopedic at a very small scale; spatial when attached to a point in an image or interface.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Micro-choice. The reader briefly inspects a label or clarification without changing the overall path.</p></div></div>
 <div class="demo-frame">
 <div class="point-stage">
 <img alt="Placeholder bird field mark image" class="placeholder-img" src="img/spring.jpg"/>
@@ -1075,7 +1111,7 @@ main {
 </div>
 </section>
 <section class="pattern" id="annotations">
-<div class="pattern-header"><div><h3>Rich annotations</h3><p>A rich annotation attaches deeper explanatory content to a specific part of an image, graphic, map, document, or scene. It works best when a reader needs to inspect a particular point and see more than a label, such as a photo, caption, audio clip, video, quote, source, or extended explanation.</p></div><span class="tag">Rich point detail</span></div>
+<div class="pattern-header"><div><h3>Rich annotations</h3><p>A rich annotation attaches deeper explanatory content to a specific part of an image, graphic, map, document, or scene. It works best when a reader needs to inspect a particular point and see more than a label, such as a photo, caption, audio clip, video, quote, source, or extended explanation.</p></div><span class="tag">Rich point detail</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Reveal and Explain. <strong>Also useful for:</strong> Locate when the note is tied to a specific point in space.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial because the information is anchored to a location; encyclopedic because the point can hold rich media; participatory and procedural through click-to-open behavior.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided inspection. The reader chooses which point to inspect, but the author controls the available points and framing.</p></div></div>
 <div class="demo-frame">
 <div class="point-stage">
 <img alt="Placeholder nest site image" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/1/11/003_Ringed_kingfisher_flying_with_a_fish_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg?v=4"/>
@@ -1089,7 +1125,7 @@ main {
 </div>
 </section>
 <section class="pattern" id="flip-cards">
-<div class="pattern-header"><div><h3>Flip cards</h3><p>A flip card hides related information on the back of a card and reveals it when the user clicks. It works best for simple front/back relationships, such as question/answer, term/definition, image/explanation, prediction/result, or “guess then reveal” interactions.</p></div><span class="tag">Front/back reveal</span></div>
+<div class="pattern-header"><div><h3>Flip cards</h3><p>A flip card hides related information on the back of a card and reveals it when the user clicks. It works best for simple front/back relationships, such as question/answer, term/definition, image/explanation, prediction/result, or “guess then reveal” interactions.</p></div><span class="tag">Front/back reveal</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Reveal. <strong>Also useful for:</strong> Participate when the front invites a guess, and Compare when cards are viewed as a set.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory because the reader triggers the reveal; procedural because the card changes state; encyclopedic because the back stores a second layer.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Limited choice. The reader decides when to reveal the answer or explanation, usually within a controlled front/back structure.</p></div></div>
 <div class="demo-frame">
 <div class="flip-grid">
 <button aria-pressed="false" class="flip-card" type="button">
@@ -1129,7 +1165,7 @@ main {
 </div>
 </section>
 <section class="pattern" id="hover-cards">
-<div class="pattern-header"><div><h3>Hover cards</h3><p>A hover card reveals supporting information when the reader hovers over or focuses on a card. It works best for quick previews, captions, labels, short descriptions, or lightweight explanations that should appear without opening a new panel.</p></div><span class="tag">Hover reveal</span></div>
+<div class="pattern-header"><div><h3>Hover cards</h3><p>A hover card reveals supporting information when the reader hovers over or focuses on a card. It works best for quick previews, captions, labels, short descriptions, or lightweight explanations that should appear without opening a new panel.</p></div><span class="tag">Hover reveal</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Reveal. <strong>Also useful for:</strong> Explore when the cards form a browsable set.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory through hover or focus; procedural through state change; encyclopedic because each card can hold a compact second layer.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Micro-exploration. The reader samples brief information across a set without opening a larger panel.</p></div></div>
 <div class="demo-frame">
 <div class="hover-grid">
 <button class="hover-card" type="button">
@@ -1173,7 +1209,7 @@ main {
 <p>Use these when meaning comes from switching, choosing, or placing versions in relation.</p>
 </section>
 <section class="pattern" id="tabs">
-<div class="pattern-header"><div><h3>Tabs</h3><p>Tabs let users switch between related content panels within the same space. They work best when the sections are parallel categories, such as overview/details, causes/effects, local/national, beginner/advanced, or several dimensions of the same topic.</p></div><span class="tag">Different content panels</span></div>
+<div class="pattern-header"><div><h3>Tabs</h3><p>Tabs let users switch between related content panels within the same space. They work best when the sections are parallel categories, such as overview/details, causes/effects, local/national, beginner/advanced, or several dimensions of the same topic.</p></div><span class="tag">Different content panels</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Compare. <strong>Also useful for:</strong> Reveal and Explain when categories are parallel and mutually exclusive.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory because the reader chooses a category; procedural because one panel replaces another; encyclopedic because several content layers share one space.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Limited choice. The reader switches among author-defined categories rather than freely exploring an open set.</p></div></div>
 <div class="demo-frame">
 <div aria-label="Cardinal information tabs" class="tabs" role="tablist">
 <button aria-selected="true" data-tab="tab-field" role="tab">Field marks</button>
@@ -1186,7 +1222,7 @@ main {
 </div>
 </section>
 <section class="pattern" id="before-after">
-<div class="pattern-header"><div><h3>Before/after comparisons</h3><p>A before/after comparison lets users compare two versions of the same subject, often with a draggable divider or toggle. It works best for showing change over time, visual differences, restoration, damage, edits, growth, contrast, or transformation.</p></div><span class="tag">Drag to compare</span></div>
+<div class="pattern-header"><div><h3>Before/after comparisons</h3><p>A before/after comparison lets users compare two versions of the same subject, often with a draggable divider or toggle. It works best for showing change over time, visual differences, restoration, damage, edits, growth, contrast, or transformation.</p></div><span class="tag">Drag to compare</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Compare. <strong>Also useful for:</strong> Explain when the comparison shows change, damage, restoration, or transformation.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory through dragging or toggling; procedural because the visible split changes continuously; spatial because both images occupy the same visual field.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Direct manipulation. The reader controls the comparison point and can inspect small differences at their own pace.</p></div></div>
 <div class="demo-frame">
 <div class="ba-stage" id="baStage">
 <div class="ba-layer"><img alt="Placeholder spring plumage" class="placeholder-img" src="img/spring.jpg"/></div>
@@ -1197,7 +1233,7 @@ main {
 </div>
 </section>
 <section class="pattern" id="bird-explorer">
-<div class="pattern-header"><div><h3>Master-Detail</h3><p>A master-detail pattern lets users select one item from a list, menu, map, table, or dropdown and view detailed information about that selected item. It works best for encyclopedia-style collections, directories, databases, profiles, product/species/place guides, or spreadsheet-backed interactives.</p></div><span class="tag">Select-to-view</span></div>
+<div class="pattern-header"><div><h3>Master-Detail</h3><p>A master-detail pattern lets users select one item from a list, menu, map, table, or dropdown and view detailed information about that selected item. It works best for encyclopedia-style collections, directories, databases, profiles, product/species/place guides, or spreadsheet-backed interactives.</p></div><span class="tag">Select-to-view</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Explore. <strong>Also useful for:</strong> Compare and Reveal when each selected item exposes a profile or record.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Encyclopedic because it organizes many records; participatory because the reader selects an item; procedural because the display updates from the selection.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Limited exploratory agency. The reader chooses among a defined set of records, but the structure and fields are author controlled.</p></div></div>
 <div class="demo-frame">
 <!-- <div class="explorer-note"><strong>Teaching distinction:</strong> tabs switch between fixed categories; this pattern pulls one selected item from a collection and displays its photo and facts. The editable object in the script is the “mini spreadsheet.”</div> -->
 <div class="bird-select-row">
@@ -1225,7 +1261,7 @@ main {
 <p>Use collection patterns when the reader needs a way through many items, not one giant page dump.</p>
 </section>
 <section class="pattern" id="slideshows">
-<div class="pattern-header"><div><h3>Slideshows</h3><p>A slideshow presents one item at a time and lets users move forward or backward through a set. It works best for ordered sequences, process steps, guided examples, photo essays, timelines, or stories where each item should receive focused attention.</p></div><span class="tag">Ordered sequence</span></div>
+<div class="pattern-header"><div><h3>Slideshows</h3><p>A slideshow presents one item at a time and lets users move forward or backward through a set. It works best for ordered sequences, process steps, guided examples, photo essays, timelines, or stories where each item should receive focused attention.</p></div><span class="tag">Ordered sequence</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Explore or Explain. <strong>Also useful for:</strong> Experience when pacing and sequence shape how the material feels.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural because the sequence advances; participatory because the reader controls next and previous; encyclopedic because multiple items are packaged into one frame.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided sequence. The reader controls pace, but the author controls order.</p></div></div>
 <div class="demo-frame">
 <div class="slideshow-visual" id="slideVisual"></div>
 <h4 id="slideTitle"></h4><p id="slideText"></p><br/>
@@ -1233,7 +1269,7 @@ main {
 </div>
 </section>
 <section class="pattern" id="carousels">
-<div class="pattern-header"><div><h3>Carousels</h3><p>A carousel presents multiple related items in a horizontal or rotating strip, usually with next/previous controls. It works best for compact browsing of featured items, examples, cards, profiles, recommendations, or highlights when page space is limited.</p></div><span class="tag">Browse sideways</span></div>
+<div class="pattern-header"><div><h3>Carousels</h3><p>A carousel presents multiple related items in a horizontal or rotating strip, usually with next/previous controls. It works best for compact browsing of featured items, examples, cards, profiles, recommendations, or highlights when page space is limited.</p></div><span class="tag">Browse sideways</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Explore. <strong>Also useful for:</strong> Reveal and Compare when several examples sit side by side.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial because the set moves across a horizontal strip; participatory through navigation; encyclopedic because many items can fit into limited space.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Browse-level agency. The reader moves through a compact set, usually without changing the larger story path.</p></div></div>
 <div class="demo-frame">
 <div class="carousel-window"><div class="carousel-track" id="carouselTrack">
 <article class="carousel-card"><div class="image-box"><img alt="Placeholder heron" class="placeholder-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Kentucky_Warbler_%28Geothlypis_formosa%29_in_the_United_States.jpg/960px-Kentucky_Warbler_%28Geothlypis_formosa%29_in_the_United_States.jpg"/></div><div><h4>Kentucky Warbler</h4><p>The Kentucky Warbler’s loud, rolling song rings out from dense forest understories.</p></div></article>
@@ -1246,7 +1282,7 @@ main {
 </div>
 </section>
 <section class="pattern" id="galleries">
-<div class="pattern-header"><div><h3>Image galleries</h3><p>An image gallery presents a collection of images, often using thumbnails that open or update a larger view. It works best for browseable visual collections, portfolios, archives, event photos, comparisons across examples, or media sets where the reader chooses what to inspect.</p></div><span class="tag">Browse a collection</span></div>
+<div class="pattern-header"><div><h3>Image galleries</h3><p>An image gallery presents a collection of images, often using thumbnails that open or update a larger view. It works best for browseable visual collections, portfolios, archives, event photos, comparisons across examples, or media sets where the reader chooses what to inspect.</p></div><span class="tag">Browse a collection</span></div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Explore. <strong>Also useful for:</strong> Compare and Experience when the images build mood, evidence, or visual variety.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Encyclopedic because the gallery stores a visual collection; spatial because thumbnails and the main image create an inspection layout; participatory because the reader chooses what to view.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Exploratory selection. The reader decides which image to inspect and in what order.</p></div></div>
 <div class="demo-frame">
 <div class="gallery">
 <article class="gallery-main">
@@ -1264,7 +1300,7 @@ main {
 <p>Horizontal overflow creates a sideways canvas that the reader scrolls across. It works best for timelines, journeys, process flows, wide comparisons, or any visual structure that naturally extends from left to right.</p>
 </div>
 <span class="tag">X-axis scroll</span>
-</div>
+</div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Explore. <strong>Also useful for:</strong> Explain, Locate, or Compare when the horizontal axis carries meaning.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial because the canvas extends sideways; participatory because the reader scrolls; encyclopedic because the frame can hold more material than the screen.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Reader-paced navigation. The reader controls movement through a wide structure while the author defines the axis and sequence.</p></div></div>
 <div class="demo-frame">
 <div aria-label="Horizontal bird migration timeline" class="timeline-shell horizontal-scroll">
 <div class="horizontal-timeline">
@@ -1285,7 +1321,7 @@ main {
 <p>Vertical overflow creates a tall canvas inside a fixed frame. It works best for vertical timelines, stacked process explanations, long infographics, annotated posters, or step-by-step sequences where the reader moves downward.</p>
 </div>
 <span class="tag">Y-axis scroll</span>
-</div>
+</div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Explore or Explain. <strong>Also useful for:</strong> Experience when vertical movement creates pacing or immersion.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial because the content extends vertically; participatory because the reader scrolls; encyclopedic because a long structure is contained in one frame.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Reader-paced navigation. The reader moves through a tall structure, but the order usually remains author-directed.</p></div></div>
 <div class="demo-frame">
 <div aria-label="Vertical bird nesting timeline" class="timeline-shell vertical-scroll">
 <div class="vertical-timeline">
@@ -1311,7 +1347,7 @@ main {
 <p>A pan-and-zoom canvas lets the reader drag around a larger visual field and zoom in or out. It works best for large images, diagrams, documents, family trees, floor plans, or detailed graphics where readers need freedom to inspect the space.</p>
 </div>
 <span class="tag">Explorable canvas</span>
-</div>
+</div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Explore and Locate. <strong>Also useful for:</strong> Experience when movement through the visual field creates perspective.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial is primary; participatory because the reader pans and zooms; procedural because the view changes in response to input.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Exploratory agency. The reader controls where to look, how close to get, and how to move through the visual space.</p></div></div>
 <div class="demo-frame">
 <div aria-label="Pan and zoom controls" class="zoom-controls">
 <button class="secondary" id="zoomOut">Zoom out</button>
@@ -1340,7 +1376,7 @@ main {
 <p>Button-guided focus moves the view to specific parts of a larger image or graphic. It works best when the author wants to guide attention through selected features while still using spatial movement as part of the explanation.</p>
 </div>
 <span class="tag">Spatial stepper</span>
-</div>
+</div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Explain. <strong>Also useful for:</strong> Reveal and Locate when each button directs attention to a meaningful point.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial because the view moves to marked areas; procedural because buttons trigger view changes; participatory because the reader chooses a focus point.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided choice. The reader chooses among author-defined stops while the story controls what matters at each stop.</p></div></div>
 <div class="demo-frame">
 <div class="guided-layout">
 <div aria-label="Choose a feature to focus on" class="focus-controls">
@@ -1371,7 +1407,7 @@ main {
 <p>The image area scrolls through a guided sequence. It starts with the full overview, then moves to each marked point.</p>
 </div>
 <span class="tag">Scroll focus</span>
-</div>
+</div><div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story jobs</h4><p><strong>Best:</strong> Explain and Experience. <strong>Also useful for:</strong> Locate when movement through the scene teaches spatial relationships.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial and experiential through motion and focus; procedural because scroll position changes the view; participatory because the reader controls pace.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Reader-paced guided sequence. The reader controls speed, but the author controls order, focus, and reveal timing.</p></div></div>
 <div class="demo-frame">
 <div aria-label="Scroll through image focus points" class="image-scroll-focus" id="imageScrollFocus">
 <div class="image-scroll-stage" id="imageScrollStage">
