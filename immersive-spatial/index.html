@@ -120,6 +120,21 @@ button:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px
 .scale-label { position:absolute; left:50%; bottom:30px; transform:translateX(-50%); padding:7px 11px; border-radius:999px; background:rgba(255,253,247,.92); border:1px solid var(--line); color:var(--ink); font-weight:900; }
 .ar-buttons button.active { background:var(--accent-2); color:#1b160f; }
 
+
+/* VR concept demo */
+.vr-stage { position:relative; min-height:420px; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:radial-gradient(circle at 50% 22%, #d7e6f3 0 15%, #8fb0c7 16% 42%, #496855 43% 62%, #20372a 63% 100%); }
+.vr-stage::before { content:""; position:absolute; left:50%; top:50%; width:220px; height:110px; transform:translate(-50%,-50%); border:12px solid #17211b; border-radius:55px; background:rgba(255,253,247,.22); box-shadow:0 16px 35px rgba(0,0,0,.25), inset 0 0 0 2px rgba(255,255,255,.25); }
+.vr-lens { position:absolute; top:50%; width:84px; height:84px; transform:translateY(-50%); border-radius:50%; background:radial-gradient(circle at 45% 35%, rgba(255,253,247,.9), rgba(141,176,199,.65) 36%, rgba(23,33,27,.18) 68%); border:2px solid rgba(23,33,27,.5); overflow:hidden; }
+.vr-lens.left { left:calc(50% - 96px); }
+.vr-lens.right { left:calc(50% + 12px); }
+.vr-lens::after { content:""; position:absolute; inset:0; background:linear-gradient(115deg, transparent 0 48%, rgba(255,255,255,.35) 49% 51%, transparent 52%); }
+.vr-object { position:absolute; left:50%; top:70%; width:70px; height:44px; transform:translate(-50%,-50%); border-radius:50% 45% 45% 52%; background:#37634e; box-shadow:inset -10px 0 0 rgba(0,0,0,.2); }
+.vr-object::before { content:""; position:absolute; right:-18px; top:-9px; width:26px; height:26px; border-radius:50%; background:#37634e; }
+.vr-object::after { content:""; position:absolute; left:-24px; top:14px; width:32px; height:16px; background:#263f34; clip-path:polygon(0 0,100% 30%,100% 70%,0 100%); }
+.vr-path { position:absolute; left:50%; bottom:0; width:42%; height:52%; transform:translateX(-50%); background:linear-gradient(to top, rgba(255,253,247,.32), transparent); clip-path:polygon(42% 0,58% 0,100% 100%,0 100%); opacity:.85; }
+.vr-label { position:absolute; left:50%; bottom:24px; transform:translateX(-50%); padding:8px 12px; border-radius:999px; background:rgba(255,253,247,.92); border:1px solid var(--line); color:var(--ink); font-weight:900; text-align:center; }
+.vr-mode-buttons button.active { background:var(--accent-2); color:#1b160f; }
+
 .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
 @media (max-width:860px) {
   body { padding-top:64px; }
@@ -138,7 +153,7 @@ button:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px
 }
 @media (max-width:520px) {
   .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
-  .pano-viewport, .object-stage, .ar-stage { height:320px; }
+  .pano-viewport, .object-stage, .ar-stage, .vr-stage { height:320px; min-height:320px; }
   .object-holder { width:145px; height:105px; }
   .pano-hotspot::after { max-width:130px; white-space:normal; line-height:1.15; }
 }
@@ -161,6 +176,8 @@ button:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px
 <a href="#object-simple">Simple 3D exploration</a>
 <a href="#object-hotspots">3D hotspots and annotations</a>
 <a href="#ar-scale">Real-world scale / AR</a>
+<div class="nav-group-title">Full VR</div>
+<a href="#vr-immersion">Full immersion via VR</a>
 </nav>
 </aside>
 <main>
@@ -168,7 +185,7 @@ button:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px
 <div class="eyebrow">Interactive storytelling demo</div>
 <h2>Spatial and Immersive Media</h2>
 <p>Spatial and immersive media help viewers feel positioned inside a scene or near an object. The story job is usually Experience, but these tools can also Reveal, Explain, Locate, or Compare when the interaction helps viewers inspect details.</p>
-<div class="concept-callout"><strong>Core idea:</strong> immersion is not enough by itself. A 360 photo or 3D model needs a reason to be interactive: moving through a place, inspecting evidence, opening annotations, comparing views, or understanding scale.</div>
+<div class="concept-callout"><strong>Core idea:</strong> immersion is not enough by itself. A 360 photo or 3D model needs a reason to be interactive: moving through a place, inspecting evidence, opening annotations, comparing views, understanding scale, or entering a fully immersive VR environment.</div>
 </section>
 
 <section class="section-group" id="photos-360">
@@ -199,20 +216,20 @@ button:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px
 
 <section class="section-group" id="objects-3d">
 <h2>3D objects</h2>
-<p>Use 3D objects when shape, volume, orientation, mechanism, or scale matters. A 3D model is strongest when the viewer needs to inspect an object from more than one angle.</p>
+<p>Use 3D models when shape, volume, orientation, mechanism, space, or scale matters. A model can represent a single object, but it can also represent a room, building, landscape, exhibit, or other location that viewers need to inspect from more than one angle.</p>
 </section>
 
 <section class="pattern" id="object-simple">
-<div class="pattern-header"><div><h3>Simple 3D exploration</h3><p>A basic 3D viewer lets the viewer rotate, zoom, and sometimes move an object. This is useful when a single flat image cannot show the object clearly.</p></div><span class="tag">Pan, zoom, move</span></div>
-<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Experience and Explain.</strong> The object can be felt as a form and inspected as evidence.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Direct manipulation. The viewer controls angle, distance, and sometimes position.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial, participatory, and procedural. The model responds to viewer input.</p></div></div>
-<div class="interaction-list"><h4>Possible interactions</h4><ul><li>Drag to rotate around the object.</li><li>Zoom in/out to inspect form and surface details.</li><li>Move or reset the model when the viewer gets disoriented.</li><li>Constrain rotation if only certain angles matter.</li></ul></div>
+<div class="pattern-header"><div><h3>Simple 3D exploration</h3><p>A basic 3D viewer lets the viewer rotate, zoom, and sometimes move around an object or modeled space. This is useful when a single flat image cannot show the form, layout, or spatial relationship clearly.</p></div><span class="tag">Pan, zoom, move</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Experience and Explain.</strong> The model can be felt as a form or space and inspected as evidence.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Direct manipulation. The viewer controls angle, distance, and sometimes position.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial, participatory, and procedural. The model responds to viewer input.</p></div></div>
+<div class="interaction-list"><h4>Possible interactions</h4><ul><li>Drag to rotate around an object or pan through a modeled space.</li><li>Zoom in/out to inspect form, surface details, or spatial layout.</li><li>Move, orbit, or reset the model when the viewer gets disoriented.</li><li>Constrain rotation or movement if only certain angles or pathways matter.</li></ul></div>
 <div class="demo-frame"><h4 class="demo-title">Demo: rotate, zoom, and move the object</h4><div class="control-row"><label for="objectZoom">Zoom</label><input id="objectZoom" type="range" min="70" max="150" value="100"/><button class="secondary" id="moveLeft">Move left</button><button class="secondary" id="moveRight">Move right</button><button id="resetObject">Reset</button></div><div class="object-stage" id="objectStage"><div class="object-shadow"></div><div class="object-holder" id="objectHolder"><div class="bird-object"><div class="bird-tail"></div><div class="bird-body"></div><div class="bird-wing"></div><div class="bird-head"></div><div class="bird-beak"></div></div></div></div></div>
 </section>
 
 <section class="pattern" id="object-hotspots">
-<div class="pattern-header"><div><h3>Hotspots and annotations</h3><p>3D hotspots attach labels or explanations to features of a model. They work best when the viewer needs to inspect parts, mechanisms, materials, or evidence.</p></div><span class="tag">Model annotations</span></div>
-<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Explain and Reveal.</strong> Also supports Experience because the viewer inspects the model spatially.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided inspection. The viewer controls the model and chooses which labeled part to inspect.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial and encyclopedic. The interaction attaches explanatory layers to parts of the object.</p></div></div>
-<div class="interaction-list"><h4>Possible interactions</h4><ul><li>Click/tap labels attached to model parts.</li><li>Use hover/focus labels for short names and modals for longer explanations.</li><li>Highlight a part when its annotation opens.</li><li>Pair hotspots with camera moves that rotate the model toward the selected feature.</li></ul></div>
+<div class="pattern-header"><div><h3>Hotspots and annotations</h3><p>3D hotspots attach labels or explanations to features of a model. They work best when the viewer needs to inspect parts, mechanisms, materials, evidence, rooms, landmarks, or locations within a modeled space.</p></div><span class="tag">Model annotations</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Explain and Reveal.</strong> Also supports Experience because the viewer inspects the model spatially.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided inspection. The viewer controls the model and chooses which labeled part to inspect.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial and encyclopedic. The interaction attaches explanatory layers to parts of the object or locations inside the modeled space.</p></div></div>
+<div class="interaction-list"><h4>Possible interactions</h4><ul><li>Click/tap labels attached to model parts, rooms, landmarks, or evidence points.</li><li>Use hover/focus labels for short names and modals for longer explanations.</li><li>Highlight a part or location when its annotation opens.</li><li>Pair hotspots with camera moves that rotate or move the model toward the selected feature.</li></ul></div>
 <div class="demo-frame"><h4 class="demo-title">Demo: inspect model parts</h4><div class="demo-grid"><div class="object-stage"><div class="object-shadow"></div><div class="object-holder" style="transform:translate(-50%,-50%) rotateX(-12deg) rotateY(24deg) scale(1.05);"><div class="bird-object"><div class="bird-tail"></div><div class="bird-body"></div><div class="bird-wing"></div><div class="bird-head"></div><div class="bird-beak"></div></div></div><button class="object-hotspot" data-point="wing" data-title="Wing shape" data-text="Wing shape affects flight style. A longer, narrower wing can support efficient travel; a rounder wing can help maneuverability."></button><button class="object-hotspot" data-point="beak" data-title="Beak form" data-text="Beak shape is evidence of feeding strategy. A fine beak, heavy seed-cracking bill, or hooked bill suggests different food sources."></button><button class="object-hotspot" data-point="tail" data-title="Tail position" data-text="Tail length and shape help with balance, steering, and species identification."></button></div><div class="annotation-card" id="objectAnnotation"><h4>No model part selected</h4><p>Select a hotspot on the model to open an annotation.</p></div></div></div>
 </section>
 
@@ -222,6 +239,19 @@ button:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px
 <div class="interaction-list"><h4>Possible interactions</h4><ul><li>Place a model in a room or outdoor scene using AR.</li><li>Move, rotate, or resize the model to compare scale.</li><li>Switch between objects to compare size: sparrow, hawk, heron, eagle.</li><li>Use a fallback non-AR scale graphic for devices that do not support AR.</li></ul></div>
 <div class="demo-frame"><h4 class="demo-title">Demo: simulated real-world scale</h4><div class="control-row ar-buttons"><button class="active" data-scale="0.65" data-label="House sparrow · about 6 in.">Sparrow</button><button data-scale="1" data-label="American robin · about 10 in.">Robin</button><button data-scale="1.65" data-label="Red-tailed hawk · about 19 in.">Hawk</button><button data-scale="2.35" data-label="Great blue heron · about 46 in.">Heron</button></div><div class="ar-stage"><div class="phone-frame"><div class="ar-floor"></div><div class="ar-bird" id="arBird"><div class="bird-tail"></div><div class="bird-body"></div><div class="bird-wing"></div><div class="bird-head"></div><div class="bird-beak"></div></div><div class="scale-label" id="scaleLabel">American robin · about 10 in.</div></div></div><div class="note-card" style="margin-top:14px;"><h4>Production note</h4><p>This demo simulates the concept. In production, AR usually requires a model format and viewer that supports real-world placement, with a fallback for devices that cannot open AR.</p></div></div>
 </section>
+
+<section class="section-group" id="vr-section">
+<h2>Full immersion via VR</h2>
+<p>Use VR when the viewer should feel placed inside a scene or modeled environment rather than looking at it from the outside. This can extend either 360 photos or 3D models.</p>
+</section>
+
+<section class="pattern" id="vr-immersion">
+<div class="pattern-header"><div><h3>Full immersion via VR</h3><p>Full VR turns spatial media into an embodied experience. A 360 photo can become a headset-based scene, while a 3D model can become a walkable or inspectable space, location, exhibit, or environment.</p></div><span class="tag">Enter the scene</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Experience.</strong> Also supports Locate and Explain when the viewer needs to understand where things are in relation.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Embodied exploration. The viewer looks around naturally and may move through a guided or open environment.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial, participatory, and experiential. The viewer navigates from inside the scene instead of inspecting a framed image.</p></div></div>
+<div class="interaction-list"><h4>Possible interactions</h4><ul><li>Look around with headset movement rather than mouse or touch drag.</li><li>Move between 360 scenes as a VR tour, either open exploration or a guided route.</li><li>Walk, teleport, or move through a modeled 3D space such as a room, historic site, habitat, exhibit, or landscape.</li><li>Use gaze, controller, or pointer-based hotspots to open annotations inside the environment.</li><li>Use guided stops, narration, captions, or highlighted areas so the experience still has a story path.</li></ul></div>
+<div class="demo-frame"><h4 class="demo-title">Demo: VR concept modes</h4><div class="control-row vr-mode-buttons"><button class="active" data-vr="360 scene" data-note="A 360 photo places the viewer inside a captured location. The main interaction is looking around, with optional linked scenes and annotations.">360 scene</button><button data-vr="modeled space" data-note="A 3D model can become a navigable space or location, such as a reconstructed habitat, room, trail, gallery, or historical site.">Modeled space</button><button data-vr="guided route" data-note="A guided VR route uses author-controlled stops, narration, or highlighted locations to prevent the experience from becoming aimless.">Guided route</button></div><div class="demo-grid"><div class="vr-stage"><div class="vr-path"></div><div class="vr-lens left"></div><div class="vr-lens right"></div><div class="vr-object"></div><div class="vr-label" id="vrLabel">360 scene</div></div><div class="note-card"><h4 id="vrNoteTitle">360 scene</h4><p id="vrNoteText">A 360 photo places the viewer inside a captured location. The main interaction is looking around, with optional linked scenes and annotations.</p><br><p><strong>Production note:</strong> this is usually a different level of production than an embedded 360 viewer. Students would need to plan headset compatibility, navigation, accessibility alternatives, and whether the work is a captured 360 scene or a modeled 3D environment.</p></div></div></div>
+</section>
+
 </main>
 </div>
 <script>
@@ -315,6 +345,18 @@ $$('.ar-buttons button').forEach(btn => {
     $('#scaleLabel').textContent = btn.dataset.label;
   });
 });
+
+// VR concept modes
+$$('.vr-mode-buttons button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    $$('.vr-mode-buttons button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    $('#vrLabel').textContent = btn.dataset.vr;
+    $('#vrNoteTitle').textContent = btn.dataset.vr;
+    $('#vrNoteText').textContent = btn.dataset.note;
+  });
+});
+
 </script>
 </body>
 </html>

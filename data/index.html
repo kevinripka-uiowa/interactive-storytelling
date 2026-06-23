@@ -274,6 +274,99 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 }
 
 
+
+/* Data visualization type accordion */
+.data-viz-accordion {
+  display:grid;
+  gap:10px;
+}
+.data-viz-accordion details {
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fffdf7;
+  overflow:hidden;
+  box-shadow:0 8px 20px rgba(23,33,27,.05);
+}
+.data-viz-accordion summary {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:16px 18px;
+  cursor:pointer;
+  color:var(--ink);
+  font-weight:900;
+  list-style:none;
+}
+.data-viz-accordion summary::-webkit-details-marker { display:none; }
+.data-viz-accordion summary::after {
+  content:"+";
+  display:grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  flex:0 0 auto;
+  border-radius:50%;
+  background:var(--soft);
+  color:var(--accent);
+  font-weight:900;
+}
+.data-viz-accordion details[open] summary {
+  background:#f6f1e7;
+  border-bottom:1px solid var(--line);
+}
+.data-viz-accordion details[open] summary::after { content:"–"; }
+.data-viz-body {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  padding:16px 18px 18px;
+}
+.data-viz-panel {
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#f6f1e7;
+  padding:13px 14px;
+}
+.data-viz-panel h4 {
+  margin:0 0 7px;
+  color:var(--accent);
+  font-size:.82rem;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.data-viz-panel p,
+.data-viz-panel ul {
+  margin:0;
+  color:var(--ink);
+  font-size:.94rem;
+  line-height:1.42;
+}
+.data-viz-panel ul { padding-left:1.1rem; }
+.chart-type-links {
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+.chart-type-links a {
+  display:inline-flex;
+  padding:5px 9px;
+  border-radius:999px;
+  background:#fffdf7;
+  border:1px solid var(--line);
+  color:var(--accent);
+  font-weight:900;
+  font-size:.86rem;
+  text-decoration:none;
+}
+.chart-type-links a:hover,
+.chart-type-links a:focus {
+  border-color:var(--accent);
+}
+@media (max-width:760px) {
+  .data-viz-body { grid-template-columns:1fr; }
+}
+
 /* Mobile menu */
 .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
 @media (max-width:860px) {
@@ -318,6 +411,8 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 <div class="nav-group-title">Guided views</div>
 <a href="#revisualization-switcher">Revisualization switcher</a>
 <a href="#step-data-story">Step-through data story</a>
+<div class="nav-group-title">Data visualization types</div>
+<a href="#data-viz-types-section">Data viz types by job</a>
 <div class="nav-group-title">Beyond charts</div>
 <a href="#labeled-diagram-types">Labeled diagrams</a>
 <a href="#visual-list-types">Visual lists</a>
@@ -331,7 +426,6 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 <h2>Explain a Pattern, Process, or Change</h2>
 <p>Data visualizations and information graphics help viewers understand what is happening, how it varies, how it changes over time, and how parts connect.</p>
 <div class="concept-callout"><strong>Core idea:</strong> this module is not just about making charts. It is about choosing the right visual explanation: a focused data pattern, an exploratory data view, a guided story sequence, a timeline, or a diagram.</div>
-<div class="resource-callout"><strong>Chart reference:</strong> For chart-type ideas, see the <a href="https://datavizcatalogue.com/" rel="noopener" target="_blank">Data Viz Catalogue</a>. Use it to study visual forms, then decide what job the graphic needs to do in the story.</div>
 </section>
 <section class="section-group" id="focused-data-section">
 <h2>Explanatory Data Visualization</h2>
@@ -430,6 +524,89 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 <div class="tool-fit">Good tool fit: Flourish stories, Datawrapper locator-style annotations, scrollytelling, or custom HTML/JS.</div>
 </div>
 </section>
+
+<section class="section-group" id="data-viz-types-section">
+<h2>Data visualization types by job</h2>
+<p>Use this accordion to connect a data job to possible chart forms and interactions. For more chart-type references, visit the <a href="https://datavizcatalogue.com/" rel="noopener" target="_blank">Data Viz Catalogue</a>; the chart type links below point to likely method pages that can be corrected if needed.</p>
+</section>
+<section class="pattern" id="data-viz-types">
+<div class="pattern-header"><div><h3>Chart forms by data job</h3><p>The visual form should match what the data needs to do: compare, show change, show composition, reveal distribution, show relationships, or explain flow.</p></div><span class="tag">Choose the form</span></div>
+<div class="data-viz-accordion">
+<details>
+<summary>Compare values</summary>
+<div class="data-viz-body">
+<div class="data-viz-panel"><h4>Data job</h4><p>Show which items are larger, smaller, higher, lower, more common, or less common.</p></div>
+<div class="data-viz-panel"><h4>Chart types</h4><div class="chart-type-links"><a href="https://datavizcatalogue.com/methods/bar_chart.html" rel="noopener" target="_blank">Bar chart</a><a href="https://datavizcatalogue.com/methods/column_chart.html" rel="noopener" target="_blank">Column chart</a><a href="https://datavizcatalogue.com/methods/dot_plot.html" rel="noopener" target="_blank">Dot plot</a><a href="https://datavizcatalogue.com/methods/lollipop_chart.html" rel="noopener" target="_blank">Lollipop chart</a><a href="https://datavizcatalogue.com/methods/table.html" rel="noopener" target="_blank">Ranked table</a></div></div>
+<div class="data-viz-panel"><h4>Possible interactions</h4><ul><li>Tooltip labels for exact values.</li><li>Hover or focus to highlight one item.</li><li>Sort by value or category.</li><li>Toggle between raw number, rate, or percent.</li></ul></div>
+</div>
+</details>
+<details>
+<summary>Show change over time</summary>
+<div class="data-viz-body">
+<div class="data-viz-panel"><h4>Data job</h4><p>Show trend, increase, decrease, cycle, seasonality, or historical change.</p></div>
+<div class="data-viz-panel"><h4>Chart types</h4><div class="chart-type-links"><a href="https://datavizcatalogue.com/methods/line_graph.html" rel="noopener" target="_blank">Line graph</a><a href="https://datavizcatalogue.com/methods/area_chart.html" rel="noopener" target="_blank">Area chart</a><a href="https://datavizcatalogue.com/methods/slope_chart.html" rel="noopener" target="_blank">Slope chart</a><a href="https://datavizcatalogue.com/methods/small_multiples.html" rel="noopener" target="_blank">Small multiples</a><a href="https://datavizcatalogue.com/methods/bump_chart.html" rel="noopener" target="_blank">Bump chart</a></div></div>
+<div class="data-viz-panel"><h4>Possible interactions</h4><ul><li>Hover or focus on a point in time.</li><li>Select or isolate one series.</li><li>Scrub, step, or animate across time.</li><li>Highlight periods, events, or turning points.</li></ul></div>
+</div>
+</details>
+<details>
+<summary>Show part-to-whole</summary>
+<div class="data-viz-body">
+<div class="data-viz-panel"><h4>Data job</h4><p>Show how a whole breaks into parts or how composition differs across groups.</p></div>
+<div class="data-viz-panel"><h4>Chart types</h4><div class="chart-type-links"><a href="https://datavizcatalogue.com/methods/stacked_bar_graph.html" rel="noopener" target="_blank">Stacked bar graph</a><a href="https://datavizcatalogue.com/methods/treemap.html" rel="noopener" target="_blank">Treemap</a><a href="https://datavizcatalogue.com/methods/waffle_chart.html" rel="noopener" target="_blank">Waffle chart</a><a href="https://datavizcatalogue.com/methods/pie_chart.html" rel="noopener" target="_blank">Pie chart</a><a href="https://datavizcatalogue.com/methods/donut_chart.html" rel="noopener" target="_blank">Donut chart</a></div></div>
+<div class="data-viz-panel"><h4>Possible interactions</h4><ul><li>Tooltip labels for exact share or count.</li><li>Toggle between count and percent.</li><li>Highlight one part across multiple wholes.</li><li>Filter the whole by category or time.</li></ul></div>
+</div>
+</details>
+<details>
+<summary>Show distribution</summary>
+<div class="data-viz-body">
+<div class="data-viz-panel"><h4>Data job</h4><p>Show spread, range, clustering, outliers, or variation.</p></div>
+<div class="data-viz-panel"><h4>Chart types</h4><div class="chart-type-links"><a href="https://datavizcatalogue.com/methods/histogram.html" rel="noopener" target="_blank">Histogram</a><a href="https://datavizcatalogue.com/methods/strip_plot.html" rel="noopener" target="_blank">Strip plot</a><a href="https://datavizcatalogue.com/methods/box_plot.html" rel="noopener" target="_blank">Box plot</a><a href="https://datavizcatalogue.com/methods/violin_plot.html" rel="noopener" target="_blank">Violin plot</a><a href="https://datavizcatalogue.com/methods/beeswarm_plot.html" rel="noopener" target="_blank">Beeswarm plot</a></div></div>
+<div class="data-viz-panel"><h4>Possible interactions</h4><ul><li>Hover or focus on outliers or individual points.</li><li>Filter by group or condition.</li><li>Highlight median, range, or threshold.</li><li>Switch between individual points and summary view.</li></ul></div>
+</div>
+</details>
+<details>
+<summary>Show relationship or correlation</summary>
+<div class="data-viz-body">
+<div class="data-viz-panel"><h4>Data job</h4><p>Show whether variables move together, cluster, diverge, or create meaningful patterns.</p></div>
+<div class="data-viz-panel"><h4>Chart types</h4><div class="chart-type-links"><a href="https://datavizcatalogue.com/methods/scatterplot.html" rel="noopener" target="_blank">Scatterplot</a><a href="https://datavizcatalogue.com/methods/bubble_chart.html" rel="noopener" target="_blank">Bubble chart</a><a href="https://datavizcatalogue.com/methods/connected_scatterplot.html" rel="noopener" target="_blank">Connected scatterplot</a><a href="https://datavizcatalogue.com/methods/heat_map.html" rel="noopener" target="_blank">Heat map</a><a href="https://datavizcatalogue.com/methods/correlation_matrix.html" rel="noopener" target="_blank">Correlation matrix</a></div></div>
+<div class="data-viz-panel"><h4>Possible interactions</h4><ul><li>Tooltip labels for individual records.</li><li>Highlight selected groups or categories.</li><li>Filter by category.</li><li>Add or remove trend, reference, or threshold lines.</li></ul></div>
+</div>
+</details>
+<details>
+<summary>Show ranking or rank change</summary>
+<div class="data-viz-body">
+<div class="data-viz-panel"><h4>Data job</h4><p>Show order, position, top/bottom, or how rank changes between moments.</p></div>
+<div class="data-viz-panel"><h4>Chart types</h4><div class="chart-type-links"><a href="https://datavizcatalogue.com/methods/bar_chart.html" rel="noopener" target="_blank">Ranked bar chart</a><a href="https://datavizcatalogue.com/methods/dot_plot.html" rel="noopener" target="_blank">Ordered dot plot</a><a href="https://datavizcatalogue.com/methods/bump_chart.html" rel="noopener" target="_blank">Bump chart</a><a href="https://datavizcatalogue.com/methods/slope_chart.html" rel="noopener" target="_blank">Slope chart</a><a href="https://datavizcatalogue.com/methods/table.html" rel="noopener" target="_blank">Sortable table</a></div></div>
+<div class="data-viz-panel"><h4>Possible interactions</h4><ul><li>Sort by metric.</li><li>Change ranking year, period, or category.</li><li>Highlight one item across rank changes.</li><li>Filter to top, bottom, or selected group.</li></ul></div>
+</div>
+</details>
+<details>
+<summary>Show flow or movement</summary>
+<div class="data-viz-body">
+<div class="data-viz-panel"><h4>Data job</h4><p>Show movement, transfer, connection, quantity moving between stages, or directional flow.</p></div>
+<div class="data-viz-panel"><h4>Chart types</h4><div class="chart-type-links"><a href="https://datavizcatalogue.com/methods/sankey_diagram.html" rel="noopener" target="_blank">Sankey diagram</a><a href="https://datavizcatalogue.com/methods/alluvial_diagram.html" rel="noopener" target="_blank">Alluvial diagram</a><a href="https://datavizcatalogue.com/methods/flow_map.html" rel="noopener" target="_blank">Flow map</a><a href="https://datavizcatalogue.com/methods/chord_diagram.html" rel="noopener" target="_blank">Chord diagram</a><a href="https://datavizcatalogue.com/methods/network_diagram.html" rel="noopener" target="_blank">Network diagram</a></div></div>
+<div class="data-viz-panel"><h4>Possible interactions</h4><ul><li>Hover or focus to highlight one flow.</li><li>Filter by source, destination, or category.</li><li>Show exact values through tooltips.</li><li>Step through stages or isolate one pathway.</li></ul></div>
+</div>
+</details>
+<details>
+<summary>Show hierarchy</summary>
+<div class="data-viz-body">
+<div class="data-viz-panel"><h4>Data job</h4><p>Show parent-child structure, levels, nested categories, or branching organization.</p></div>
+<div class="data-viz-panel"><h4>Chart types</h4><div class="chart-type-links"><a href="https://datavizcatalogue.com/methods/tree_diagram.html" rel="noopener" target="_blank">Tree diagram</a><a href="https://datavizcatalogue.com/methods/dendrogram.html" rel="noopener" target="_blank">Dendrogram</a><a href="https://datavizcatalogue.com/methods/sunburst_diagram.html" rel="noopener" target="_blank">Sunburst diagram</a><a href="https://datavizcatalogue.com/methods/icicle_chart.html" rel="noopener" target="_blank">Icicle chart</a><a href="https://datavizcatalogue.com/methods/treemap.html" rel="noopener" target="_blank">Treemap</a></div></div>
+<div class="data-viz-panel"><h4>Possible interactions</h4><ul><li>Expand or collapse branches.</li><li>Zoom into one branch or level.</li><li>Use breadcrumbs for navigation.</li><li>Search or filter within the hierarchy.</li></ul></div>
+</div>
+</details>
+<details>
+<summary>Show network relationships</summary>
+<div class="data-viz-body">
+<div class="data-viz-panel"><h4>Data job</h4><p>Show connections, associations, dependencies, overlaps, or influence without a strict top-down structure.</p></div>
+<div class="data-viz-panel"><h4>Chart types</h4><div class="chart-type-links"><a href="https://datavizcatalogue.com/methods/network_diagram.html" rel="noopener" target="_blank">Network diagram</a><a href="https://datavizcatalogue.com/methods/node_link_diagram.html" rel="noopener" target="_blank">Node-link diagram</a><a href="https://datavizcatalogue.com/methods/matrix_diagram.html" rel="noopener" target="_blank">Matrix diagram</a><a href="https://datavizcatalogue.com/methods/chord_diagram.html" rel="noopener" target="_blank">Chord diagram</a><a href="https://datavizcatalogue.com/methods/arc_diagram.html" rel="noopener" target="_blank">Arc diagram</a></div></div>
+<div class="data-viz-panel"><h4>Possible interactions</h4><ul><li>Click a node to highlight direct connections.</li><li>Filter by relationship type.</li><li>Search for a node or group.</li><li>Toggle between network, matrix, and list views.</li></ul></div>
+</div>
+</details>
+</div>
+</section>
+
 <section class="section-group" id="beyond-charts-section">
 <h2>Explain beyond charts</h2>
 <p>Information graphics are visual explanations that may use data, labels, sequence, scale, parts, or systems. This section separates the <strong>visualization type</strong> from the <strong>interaction pattern</strong>. A type gives the material its structure; interaction controls how viewers inspect, switch, compare, filter, or move through that structure.</p>
