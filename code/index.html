@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coding for Interactive Storytelling</title>
+  <title>Code Literacy for Interactive Storytelling</title>
   <style>
     :root {
       --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
@@ -123,13 +123,14 @@
   <div class="layout">
     <aside class="sidebar" id="siteSidebar" aria-label="Coding page navigation">
       <a href="../" class="home-button">&larr; Back to Home</a>
-      <h1>Coding for Interactive Storytelling</h1>
-      <p>A practical guide to reading, editing, and directing AI-generated HTML, CSS, and JavaScript.</p>
+      <h1>Code Literacy for Interactive Storytelling</h1>
+      <p>A practical guide to reading, editing, and troubleshooting small pieces of HTML, CSS, JavaScript, embed code, and AI-assisted code.</p>
       <nav>
         <div class="nav-group-title">Start here</div>
         <a href="#intro">Intro</a>
         <a href="#responsibilities">What you control</a>
-        <a href="#vibe-coding-mindset">Vibe coding mindset</a>
+        <a href="#where-code-appears">Where code appears</a>
+        <a href="#code-editing-mindset">Code editing mindset</a>
 
         <div class="nav-group-title">HTML</div>
         <a href="#html">HTML</a>
@@ -140,6 +141,7 @@
         <div class="nav-group-title">CSS</div>
         <a href="#css">CSS</a>
         <a href="#css-syntax">CSS syntax</a>
+        <a href="#style-attribute">The style attribute</a>
         <a href="#css-fixes">Simple CSS fixes</a>
         <a href="#css-responsive">Responsive CSS</a>
 
@@ -147,28 +149,28 @@
         <a href="#javascript">JavaScript</a>
         <a href="#js-concepts">Core concepts</a>
         <a href="#js-objects">JavaScript objects</a>
-        <a href="#ai-prompts">AI prompting patterns</a>
+        <a href="#ai-prompts">Using AI carefully</a>
       </nav>
     </aside>
 
     <main>
       <section class="hero" id="intro">
         <div class="eyebrow">Interactive storytelling reference</div>
-        <h2>Coding basics for students using AI</h2>
-        <p>You do not need to become a full-time programmer to make useful interactive elements. But you do need enough code literacy to understand what the AI produced, change simple details, avoid breaking the page, and explain what your interactive is doing.</p>
-        <div class="concept-callout"><strong>Core idea:</strong> AI can generate code, but you remain responsible for the content, structure, usability, accessibility, attribution, and final testing.</div>
+        <h2>Coding basics for interactive storytelling</h2>
+        <p>You do not need to become a full-time programmer to make useful interactive elements. But you do need enough code literacy to edit embed codes, adjust builder snippets, make small style fixes, understand AI-assisted code, avoid breaking the page, and explain what your interactive is doing.</p>
+        <div class="concept-callout"><strong>Core idea:</strong> code may come from a hosted tool, a builder, a library, a tutorial, an embed code, or AI. Wherever it comes from, you remain responsible for the content, structure, usability, accessibility, attribution, and final testing.</div>
       </section>
 
       <section class="section-group" id="responsibilities">
         <h2>What are you responsible for on a web page?</h2>
-        <p>When you use AI-generated code, the main responsibility shifts from writing every line yourself to directing, editing, testing, and understanding the result.</p>
+        <p>Most student code work is not writing a full application from scratch. It is reading, editing, testing, and adapting code that came from a tool, an embed, a template, documentation, or AI.</p>
       </section>
 
       <section class="pattern">
         <div class="pattern-header">
           <div>
             <h3>Your responsibilities</h3>
-            <p>These are the parts students should be able to evaluate even when the first draft of the code came from AI.</p>
+            <p>These are the parts students should be able to evaluate whether the code came from a hosted tool, a builder, a tutorial, a class demo, or AI.</p>
           </div>
           <span class="tag">Code literacy</span>
         </div>
@@ -182,20 +184,41 @@
         </div>
       </section>
 
-      <section class="pattern" id="vibe-coding-mindset">
+
+      <section class="pattern" id="where-code-appears">
         <div class="pattern-header">
           <div>
-            <h3>What you need to know for vibe coding</h3>
-            <p>Vibe coding works best when you can describe the intended behavior, identify which part of the file controls what, and ask for targeted changes.</p>
+            <h3>Where students are likely to edit code</h3>
+            <p>In this course, code literacy usually means making small, targeted changes to code that already exists. The source of the code changes what is safe to edit.</p>
           </div>
-          <span class="tag">AI workflow</span>
+          <span class="tag">Common contexts</span>
+        </div>
+        <div class="grid two">
+          <article class="card"><h4>Embed codes</h4><p>Hosted tools often give you an <code>&lt;iframe&gt;</code> or script embed. Students may need to edit width, height, border, loading behavior, or surrounding spacing.</p></article>
+          <article class="card"><h4>Builder custom HTML blocks</h4><p>Tools like Tilda, Shorthand, WordPress, or other builders may provide a block where students paste HTML, CSS, or JavaScript snippets.</p></article>
+          <article class="card"><h4>Hosted files</h4><p>A GitHub Pages, Netlify, or class-hosted file may include full HTML, CSS, and JavaScript. Students may edit content, styles, data arrays, or repeated sections.</p></article>
+          <article class="card"><h4>Tool-generated code</h4><p>Flourish, Datawrapper, maps, galleries, timelines, and other tools may expose settings, embed code, custom CSS, or small configuration snippets.</p></article>
+          <article class="card"><h4>Library-based examples</h4><p>Examples using D3, Leaflet, Pannellum, Mapbox, or similar libraries often require editing configuration, data paths, labels, and container sizes.</p></article>
+          <article class="card"><h4>AI-assisted prototypes</h4><p>AI can generate a starting point or help debug. Students still need to understand what layer they are changing and verify that the result works.</p></article>
+        </div>
+        <div class="code-note"><strong>Working rule:</strong> do not paste every kind of code into every kind of place. A full HTML page, a custom HTML snippet, an iframe embed, and a library configuration are different things.</div>
+      </section>
+
+      <section class="pattern" id="code-editing-mindset">
+        <div class="pattern-header">
+          <div>
+            <h3>Code editing mindset</h3>
+            <p>Small code edits work best when you can describe the intended behavior, identify which layer you are editing, make one change at a time, and test the result.</p>
+          </div>
+          <span class="tag">Workflow</span>
         </div>
         <div class="demo-frame">
           <ul class="mini-list">
-            <li><strong>Do not ask only for “make it better.”</strong> Ask for a specific change: “Make the cards 3 columns on desktop and 1 column on mobile.”</li>
-            <li><strong>Keep the file organized.</strong> Ask AI to label major sections with comments so you can find them later.</li>
+            <li><strong>Do not change everything at once.</strong> Make a specific edit: “Set this iframe to 100% width,” or “Make the cards one column on mobile.”</li>
+            <li><strong>Keep the file organized.</strong> Label major sections with comments or ask AI to add comments so you can find them later.</li>
             <li><strong>Test after each change.</strong> Make one meaningful change, refresh the browser, and check desktop and mobile widths.</li>
             <li><strong>Know what layer you are editing.</strong> HTML changes structure/content. CSS changes appearance/layout. JavaScript changes behavior/data-driven interactions.</li>
+            <li><strong>Use AI as a helper, not a replacement for checking.</strong> Ask it to explain code, isolate the smallest fix, or debug an error, then test the result yourself.</li>
           </ul>
         </div>
       </section>
@@ -236,7 +259,7 @@
         <div class="pattern-header">
           <div>
             <h3>HTML terms to recognize</h3>
-            <p>These are the terms you should be able to spot when AI gives you code.</p>
+            <p>These are the terms you should be able to spot when you edit embed code, custom HTML, or AI-assisted code.</p>
           </div>
           <span class="tag">Vocabulary</span>
         </div>
@@ -253,8 +276,8 @@
       <section class="pattern" id="html-snippets">
         <div class="pattern-header">
           <div>
-            <h3>Ask AI for a commented snippet you can duplicate</h3>
-            <p>When your interactive has repeated elements, ask the AI to clearly mark the smallest chunk you can copy, paste, and edit.</p>
+            <h3>Use commented snippets you can duplicate</h3>
+            <p>When your interactive has repeated elements, the safest workflow is to clearly mark the smallest chunk you can copy, paste, and edit. You can write these comments yourself or ask AI to add them.</p>
           </div>
           <span class="tag">Reusable chunks</span>
         </div>
@@ -267,7 +290,7 @@
   &lt;p&gt;Look for the chestnut throat and buff sides in spring plumage.&lt;/p&gt;
 &lt;/article&gt;
 &lt;!-- END: Duplicate this whole article to add another bird card --&gt;</code></pre>
-          <div class="code-note"><strong>Prompt to use:</strong> “Add comments that show exactly which HTML block I should duplicate when I want to add another item. Also tell me which text, image path, alt text, and labels I should edit.”</div>
+          <div class="code-note"><strong>Prompt or request to use:</strong> “Add comments that show exactly which HTML block I should duplicate when I want to add another item. Also tell me which text, image path, alt text, and labels I should edit.”</div>
         </div>
       </section>
 
@@ -305,11 +328,70 @@
         </div>
       </section>
 
+
+
+      <section class="pattern" id="style-attribute">
+        <div class="pattern-header">
+          <div>
+            <h3>The style attribute: CSS inside an HTML tag</h3>
+            <p>The <code>style</code> attribute lets you put CSS directly on one HTML element. Students may see this often when editing iframe embeds or small snippets from builders, because the code may not have a full stylesheet available.</p>
+          </div>
+          <span class="tag">Inline CSS</span>
+        </div>
+        <div class="demo-frame">
+          <div class="syntax-grid">
+            <div>
+              <h4>Basic pattern</h4>
+              <pre><code>&lt;iframe
+  src="https://example.com/interactive"
+  title="Interactive graphic"
+  style="width:100%; height:650px; border:0;"
+&gt;&lt;/iframe&gt;</code></pre>
+              <div class="code-note"><strong>How to read it:</strong> everything inside <code>style="..."</code> is CSS. Each declaration uses a property, a colon, a value, and a semicolon.</div>
+            </div>
+            <div>
+              <h4>What it is good for</h4>
+              <ul class="mini-list">
+                <li><strong>Quick iframe sizing:</strong> set <code>width</code>, <code>height</code>, <code>max-width</code>, or <code>aspect-ratio</code>.</li>
+                <li><strong>Small one-off fixes:</strong> remove a border, add margin, or center an element.</li>
+                <li><strong>Embed cleanup:</strong> make a pasted iframe fit the story column instead of using a fixed width.</li>
+                <li><strong>Testing:</strong> try a small visual change before moving it into the main CSS.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="demo-frame" style="margin-top:16px;">
+          <h4>Common iframe edits</h4>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Goal</th><th>Inline style example</th><th>Why it helps</th></tr></thead>
+              <tbody>
+                <tr><td>Make an iframe fill the available width</td><td><code>style="width:100%; border:0;"</code></td><td>Prevents a fixed-width embed from overflowing the story column.</td></tr>
+                <tr><td>Set a taller embed</td><td><code>style="width:100%; height:700px; border:0;"</code></td><td>Useful for maps, timelines, or interactives that need vertical room.</td></tr>
+                <tr><td>Use a responsive video shape</td><td><code>style="width:100%; aspect-ratio:16/9; height:auto; border:0;"</code></td><td>Keeps video-style embeds proportional across screen sizes.</td></tr>
+                <tr><td>Add space around an embed</td><td><code>style="margin:24px 0;"</code></td><td>Creates breathing room before and after the embed.</td></tr>
+                <tr><td>Center a smaller item</td><td><code>style="display:block; margin:0 auto;"</code></td><td>Makes an iframe, image, or block-level element sit in the center.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="demo-frame" style="margin-top:16px;">
+          <h4>When not to use it</h4>
+          <ul class="mini-list">
+            <li><strong>Do not use inline styles for repeated design systems.</strong> If many cards need the same style, use a class in the main CSS instead.</li>
+            <li><strong>Do not put media queries inside a style attribute.</strong> Responsive rules like <code>@media</code> belong in the stylesheet, not inside <code>style=""</code>.</li>
+            <li><strong>Do not paste a full CSS block into the style attribute.</strong> The style attribute only accepts declarations like <code>width:100%;</code>, not selectors like <code>.card { ... }</code>.</li>
+            <li><strong>Be careful with fixed heights.</strong> A height that works on desktop may be too tall or too short on a phone. Test the iframe at mobile widths.</li>
+          </ul>
+          <div class="code-note"><strong>Student strategy:</strong> use the style attribute for small, specific embed fixes. Use the main CSS when the change should apply to many elements or needs responsive rules.</div>
+        </div>
+      </section>
+
       <section class="pattern" id="css-fixes">
         <div class="pattern-header">
           <div>
             <h3>Simple CSS fixes students should be able to make</h3>
-            <p>These are common changes you can usually make without asking AI to rewrite the whole file.</p>
+            <p>These are common changes you can usually make directly without rewriting the whole file.</p>
           </div>
           <span class="tag">Practical edits</span>
         </div>
@@ -360,7 +442,7 @@
         <div class="pattern-header">
           <div>
             <h3>JavaScript concepts to recognize</h3>
-            <p>You do not need to memorize all of JavaScript, but you should recognize the pieces AI is likely to use in an interactive element.</p>
+            <p>You do not need to memorize all of JavaScript, but you should recognize the pieces that often appear in interactive elements, hosted embed customizations, and AI-assisted code.</p>
           </div>
           <span class="tag">Behavior</span>
         </div>
@@ -370,7 +452,7 @@
           <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Functions</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>Functions are named blocks of behavior. Example: <code>showSlide(2)</code> might show the third slide. If something happens after a click, a function is probably involved.</p></div></div>
           <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Events</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>Events are things the user or browser does: click, tap, scroll, resize, type, or load. Code often listens for events with <code>addEventListener</code>.</p></div></div>
           <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Conditionals</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>Conditionals make decisions. Example: if this panel is open, close it; otherwise, open it. Look for <code>if</code>, <code>else</code>, and comparison symbols like <code>===</code>.</p></div></div>
-          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Loops</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>Loops repeat an action for many items. If AI creates cards, markers, timeline entries, or list items from data, it may use <code>forEach</code> or a <code>for</code> loop.</p></div></div>
+          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Loops</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>Loops repeat an action for many items. If a script creates cards, markers, timeline entries, or list items from data, it may use <code>forEach</code> or a <code>for</code> loop.</p></div></div>
           <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>The DOM</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>The DOM is the browser’s live version of the page. JavaScript can find HTML elements and change them. Look for <code>document.querySelector</code>, <code>classList</code>, <code>textContent</code>, and <code>innerHTML</code>.</p></div></div>
         </div>
       </section>
@@ -379,7 +461,7 @@
         <div class="pattern-header">
           <div>
             <h3>JavaScript objects: editable data for visualizations</h3>
-            <p>AI may create a JavaScript object or array of objects so you can add, remove, or edit items without touching the interaction logic.</p>
+            <p>Many interactives use a JavaScript object or array of objects so you can add, remove, or edit content without touching the interaction logic.</p>
           </div>
           <span class="tag">Data you can edit</span>
         </div>
@@ -412,7 +494,7 @@
             </ul>
           </div>
         </div>
-        <div class="code-note"><strong>Student strategy:</strong> Ask AI to separate “data I can edit” from “code that makes the interaction work.” Then add new objects by copying one whole object, including its commas and braces.</div>
+        <div class="code-note"><strong>Student strategy:</strong> separate “data I can edit” from “code that makes the interaction work.” If using AI, ask it to label those sections clearly. Then add new objects by copying one whole object, including its commas and braces.</div>
       </section>
 
       <section class="pattern" id="object-editing">
@@ -436,18 +518,18 @@
       <section class="pattern" id="ai-prompts">
         <div class="pattern-header">
           <div>
-            <h3>Useful AI prompts for coding work</h3>
-            <p>These prompts help keep AI-generated code usable for students who need to edit and maintain it.</p>
+            <h3>Using AI carefully for code help</h3>
+            <p>AI is useful for explaining unfamiliar code, finding small fixes, adding comments, and debugging. It should not replace testing, accessibility checks, or your own understanding of what the interaction does.</p>
           </div>
-          <span class="tag">Prompting</span>
+          <span class="tag">AI support</span>
         </div>
         <div class="demo-frame accordion-group" data-accordion-group>
           <div class="accordion-tools"><button type="button" class="secondary" data-open-all>Open all</button><button type="button" class="secondary" data-close-all>Close all</button></div>
-          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Ask for editable sections</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Put all the content I am likely to edit in one clearly labeled section near the top. Comment each field so I know what to change.”</p></div></div>
-          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Ask for comments around repeatable HTML</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Add START and END comments around the exact HTML block I should duplicate to add another item.”</p></div></div>
-          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Ask for CSS targets</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Add comments in the CSS showing where to change colors, type sizes, spacing, and mobile layout.”</p></div></div>
-          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Ask for a safe change</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Do not rewrite the full file. Only tell me the smallest CSS change needed to make the cards two columns instead of three.”</p></div></div>
-          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Ask for debugging help</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“This worked before I added a new item. Check the JavaScript object punctuation and tell me exactly where the missing comma, quote, bracket, or brace is.”</p></div></div>
+          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Explain unfamiliar code</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Explain what this embed code does in plain language. Identify which parts control size, content, styling, and behavior.”</p></div></div>
+          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Mark editable sections</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Add START and END comments around the exact HTML block I should duplicate to add another item. Do not change the design.”</p></div></div>
+          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Find CSS targets</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Tell me which CSS selector controls this card spacing / iframe height / mobile layout. Give me the smallest change only.”</p></div></div>
+          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Make a safe change</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Do not rewrite the full file. Only tell me the smallest HTML or CSS change needed to make this embed fit the story column.”</p></div></div>
+          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Debug without guessing</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“This worked before I changed the iframe/style/data item. Check for the smallest likely error: missing comma, quote, bracket, brace, wrong file path, or fixed width.”</p></div></div>
         </div>
       </section>
     </main>
