@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tilda: Blocks, Custom HTML, and Zero Block</title>
+<style>
+:root {
+  --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+  --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --shadow:0 14px 35px rgba(23,33,27,.12);
+  --radius:18px;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+html, body { width:100%; max-width:100%; overflow-x:hidden; }
+body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; }
+a { color:inherit; }
+button, .button {
+  border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer;
+  font:inherit; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+}
+button.secondary, .button.secondary { background:#eef3ef; color:var(--ink); border:1px solid var(--line); }
+button:hover, .button:hover { filter:brightness(.96); }
+button:focus-visible, .button:focus-visible, a:focus-visible, input:focus-visible {
+  outline:3px solid rgba(216,137,58,.5); outline-offset:3px;
+}
+
+.layout { display:block; min-height:100vh; }
+.sidebar {
+  position:fixed; top:0; left:0; width:280px; height:100vh; overflow-y:auto; overflow-x:hidden; z-index:20;
+  padding:28px 22px; background:#17211b; color:#fffdf7;
+}
+.sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+.sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+.nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+.sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+.sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+.home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+
+main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
+main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+.hero {
+  background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px;
+  padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px;
+}
+.eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+.hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+.hero p, .section-group p, .pattern p { color:var(--muted); }
+.hero p { max-width:820px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+.concept-callout, .resource-callout {
+  margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:880px;
+}
+.concept-callout strong, .resource-callout strong { color:var(--ink); }
+.resource-callout a { color:var(--accent); font-weight:900; text-decoration-thickness:2px; text-underline-offset:3px; }
+
+.section-group { margin:54px 0 24px; padding-top:10px; border-top:2px solid var(--ink); }
+.section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+.section-group p { margin:0; max-width:820px; }
+
+.pattern {
+  scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06);
+}
+.pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+.pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+.pattern p { margin:0; }
+.tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+
+.info-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:16px 0 20px; }
+.info-card { padding:13px 14px; border:1px solid var(--line); border-radius:14px; background:#f6f1e7; }
+.info-card h4 { margin:0 0 5px; color:var(--accent); font-size:.82rem; letter-spacing:.07em; text-transform:uppercase; }
+.info-card p, .info-card ul { margin:0; color:var(--ink); font-size:.94rem; line-height:1.35; }
+.info-card ul { padding-left:1.15rem; }
+.info-card li + li { margin-top:4px; }
+
+.demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; max-width:100%; }
+.demo-note { margin:0 0 16px; padding:12px 14px; border-left:4px solid var(--accent-2); background:#fff8ed; color:var(--muted); }
+.tool-fit {
+  margin-top:16px; padding:10px 12px; border-radius:12px; background:#f6f1e7; color:#6b6256;
+  font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.86rem;
+}
+
+.table-controls { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:0 0 16px; }
+.table-controls label { font-weight:900; }
+.table-controls input {
+  width:min(420px,100%); padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:#fffdf7; color:var(--ink); font:inherit;
+}
+.table-wrap { overflow:auto; border:1px solid var(--line); border-radius:16px; background:#fffdf7; }
+.native-table { width:100%; border-collapse:collapse; min-width:760px; }
+.native-table th, .native-table td { padding:12px 14px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+.native-table th {
+  position:sticky; top:0; z-index:1; background:#edf4ee; color:var(--accent); font-size:.78rem; letter-spacing:.07em; text-transform:uppercase;
+}
+.native-table tr:last-child td { border-bottom:0; }
+.native-table code {
+  display:inline-block; padding:3px 6px; border-radius:7px; background:#f6f1e7; border:1px solid var(--line); color:var(--ink); font-weight:900;
+}
+.pattern-pill {
+  display:inline-flex; align-items:center; padding:4px 8px; border-radius:999px; background:#fff8ed; border:1px solid var(--line);
+  color:#7a4b1f; font-size:.82rem; font-weight:900; white-space:nowrap;
+}
+
+.steps { counter-reset:step; display:grid; gap:12px; margin-top:16px; }
+.step {
+  position:relative; padding:14px 14px 14px 52px; border:1px solid var(--line); border-radius:16px; background:#fffdf7;
+}
+.step::before {
+  counter-increment:step; content:counter(step); position:absolute; left:14px; top:14px; width:26px; height:26px; border-radius:50%;
+  display:grid; place-items:center; background:var(--accent-2); color:#1b160f; font-weight:900;
+}
+.step h4 { margin:0 0 4px; color:var(--ink); }
+.step p { margin:0; }
+
+.compare-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.use-card { border:1px solid var(--line); border-radius:16px; background:#fffdf7; padding:16px; }
+.use-card h4 { margin:0 0 8px; color:var(--accent); }
+.use-card ul { margin:0; padding-left:1.15rem; color:var(--muted); }
+.use-card li + li { margin-top:6px; }
+
+.mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+@media (max-width:860px) {
+  body { padding-top:64px; }
+  body.menu-open { overflow:hidden; }
+  .mobile-menu-toggle {
+    position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px;
+    padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24);
+  }
+  .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+  .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+  .mobile-menu-text { font-weight:900; }
+  .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+  .mobile-menu-backdrop[hidden] { display:none; }
+  .sidebar {
+    position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important;
+    padding:76px 22px 28px; overflow-y:auto!important; overflow-x:hidden; z-index:1000; transform:translateX(-105%);
+    transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22);
+  }
+  body.menu-open .sidebar { transform:translateX(0); }
+  main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
+  .pattern-header, .info-grid, .compare-grid { grid-template-columns:1fr; }
+  .tag { white-space:normal; justify-self:start; }
+}
+@media (max-width:520px) {
+  .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+  .demo-frame { padding:14px; }
+}
+</style>
+</head>
+<body>
+<button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span class="mobile-menu-text">Menu</span></button>
+<div class="mobile-menu-backdrop" hidden id="mobileMenuBackdrop"></div>
+<div class="layout">
+<aside aria-label="Page navigation" class="sidebar" id="siteSidebar">
+<a class="home-button" href="../">← Back to Home</a>
+<h1>Tilda Blocks and Custom Options</h1>
+<p>How to choose between native blocks, custom HTML, and Zero Block when building interactive story projects.</p>
+<nav>
+  <div class="nav-group-title">Native blocks</div>
+  <a href="#native-blocks">Native block table</a>
+  <div class="nav-group-title">Custom code</div>
+  <a href="#custom-html">Custom HTML block</a>
+  <div class="nav-group-title">Custom layout</div>
+  <a href="#zero-block">Zero Block</a>
+</nav>
+</aside>
+<main>
+<section class="hero" id="intro">
+  <div class="eyebrow">Tool guide</div>
+  <h2>Tilda: Blocks, Custom HTML, and Zero Block</h2>
+  <p>Tilda gives you three useful levels of control: native blocks for fast production, Custom HTML for embeds and code snippets, and Zero Block for custom-designed layouts.</p>
+  <div class="concept-callout"><strong>Core idea:</strong> start with the lowest-control option that can do the job well. Use native blocks when they fit the pattern, use Custom HTML when the interactive already exists as an embed or code snippet, and use Zero Block when the layout itself needs custom design control.</div>
+</section>
+
+<section class="section-group" id="native-blocks-section">
+  <h2>Native blocks</h2>
+  <p>Native blocks are prebuilt Tilda blocks that students can configure through the regular Content and Settings panels. They are usually the easiest option when the block already matches the interactive pattern.</p>
+</section>
+
+<section class="pattern" id="native-blocks">
+  <div class="pattern-header"><div><h3>Native block table</h3><p>Use this table to connect Tilda block numbers to the interaction pattern they can support in your course language.</p></div><span class="tag">Fastest production path</span></div>
+  <div class="info-grid">
+    <div class="info-card"><h4>Best for</h4><p>Common patterns where Tilda already provides the structure: accordions, tabs, galleries, carousels, quizzes, before/after sliders, and map blocks.</p></div>
+    <div class="info-card"><h4>Control level</h4><p>Low to moderate. Students control content, settings, spacing, images, and some behavior, but not the full code structure.</p></div>
+    <div class="info-card"><h4>Use first when</h4><p>The native block does the story job without needing custom annotations, special data logic, or unusual responsive behavior.</p></div>
+  </div>
+  <div class="demo-frame">
+    <div class="table-controls">
+      <label for="blockSearch">Filter blocks</label>
+      <input id="blockSearch" type="search" placeholder="Search by block number, name, group, or pattern"/>
+    </div>
+    <div class="table-wrap">
+      <table class="native-table" id="nativeBlockTable">
+        <thead>
+          <tr><th>Block #</th><th>Name</th><th>Group</th><th>Pattern</th></tr>
+        </thead>
+        <tbody>
+          
+<tr>
+  <td><code>TX16N</code></td>
+  <td>Text in Dropdown Items</td>
+  <td>Text Block</td>
+  <td><span class="pattern-pill">Accordion</span></td>
+</tr>
+<tr>
+  <td><code>TX16N2</code></td>
+  <td>Text in Dropdown Items on the background</td>
+  <td>Text Block</td>
+  <td><span class="pattern-pill">Accordion</span></td>
+</tr>
+<tr>
+  <td><code>GL01</code></td>
+  <td>Gallery</td>
+  <td>Gallery</td>
+  <td><span class="pattern-pill">Slideshow</span></td>
+</tr>
+<tr>
+  <td><code>GL09</code></td>
+  <td>Before/After Image Slider</td>
+  <td>Gallery</td>
+  <td><span class="pattern-pill">Before/After Slider</span></td>
+</tr>
+<tr>
+  <td><code>GL10N</code></td>
+  <td>Image Slider</td>
+  <td>Gallery</td>
+  <td><span class="pattern-pill">Carousel</span></td>
+</tr>
+<tr>
+  <td><code>GL19</code></td>
+  <td>Full Screen Gallery</td>
+  <td>Gallery</td>
+  <td><span class="pattern-pill">Slideshow</span></td>
+</tr>
+<tr>
+  <td><code>GL20</code></td>
+  <td>Gallery with Slide Previews</td>
+  <td>Gallery</td>
+  <td><span class="pattern-pill">Slideshow</span></td>
+</tr>
+<tr>
+  <td><code>GL21</code></td>
+  <td>Gallery with Text Information</td>
+  <td>Gallery</td>
+  <td><span class="pattern-pill">Slideshow</span></td>
+</tr>
+<tr>
+  <td><code>GL26</code></td>
+  <td>Gallery with Thumbnails</td>
+  <td>Gallery</td>
+  <td><span class="pattern-pill">Slideshow/Image Gallery</span></td>
+</tr>
+<tr>
+  <td><code>GL27</code></td>
+  <td>Stories Style Gallery</td>
+  <td>Gallery</td>
+  <td><span class="pattern-pill">Carousel</span></td>
+</tr>
+<tr>
+  <td><code>BF918</code></td>
+  <td>Quiz</td>
+  <td>Form</td>
+  <td><span class="pattern-pill">Quiz</span></td>
+</tr>
+<tr>
+  <td><code>CL47</code></td>
+  <td>Tabs with Content</td>
+  <td>Columns</td>
+  <td><span class="pattern-pill">Tabs</span></td>
+</tr>
+<tr>
+  <td><code>CL48</code></td>
+  <td>Tabs with Content (Centered Tabs)</td>
+  <td>Columns</td>
+  <td><span class="pattern-pill">Tabs</span></td>
+</tr>
+<tr>
+  <td><code>T143</code></td>
+  <td>Google Maps</td>
+  <td>Other</td>
+  <td><span class="pattern-pill">Slippy Map with Markers + Popups</span></td>
+</tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tool-fit">Production note: use the block number to search in Tilda’s block library, then test the block on desktop and mobile before committing to it.</div>
+  </div>
+</section>
+
+<section class="section-group" id="custom-html-section">
+  <h2>Custom HTML block</h2>
+  <p>Use the Custom HTML block when the thing you want to add is already built elsewhere or needs a code snippet: an iframe embed, a third-party widget, custom CSS, custom JavaScript, or a small standalone interactive.</p>
+</section>
+
+<section class="pattern" id="custom-html">
+  <div class="pattern-header"><div><h3>Custom HTML block</h3><p>Tilda’s embed-code block is the bridge between a visual builder page and outside code. In Tilda’s help documentation, the block is listed as <strong>T123 “Embed HTML Code”</strong> in the <strong>Other</strong> category.</p></div><span class="tag">Embed or code snippet</span></div>
+  <div class="info-grid">
+    <div class="info-card"><h4>What it does</h4><p>Adds HTML code directly to the page body. It can hold iframe embeds, script snippets, style blocks, or code for a custom interactive.</p></div>
+    <div class="info-card"><h4>Best for</h4><ul><li>Datawrapper or Flourish embeds</li><li>GitHub-hosted interactives in iframes</li><li>Small HTML/CSS/JS demos</li><li>Custom styles for a specific block</li></ul></div>
+    <div class="info-card"><h4>Watch-outs</h4><p>Custom code is the student’s responsibility. Tilda’s support documentation notes that support does not advise on code added by the user.</p></div>
+  </div>
+  <div class="demo-frame">
+    <div class="demo-note"><strong>Use this when:</strong> the interactive exists as embed code or a compact snippet, and you do not need to design the whole section visually in Zero Block.</div>
+    <div class="steps">
+      <div class="step"><h4>Add the block</h4><p>Open the Block Library, go to <strong>Other</strong>, and add <strong>T123: Embed HTML Code</strong>.</p></div>
+      <div class="step"><h4>Paste the correct code</h4><p>For Datawrapper, Flourish, YouTube, Vimeo, GitHub Pages, or another hosted page, paste the iframe/embed code. For a small custom element, paste only the needed HTML, CSS, and JavaScript.</p></div>
+      <div class="step"><h4>Publish and test</h4><p>Test after publishing. Some scripts, embeds, and iframes do not behave the same inside the editor as they do on the live page.</p></div>
+      <div class="step"><h4>Check responsiveness</h4><p>Confirm iframe height, mobile width, scrolling, and tap behavior. Custom HTML can easily create overflow or unusable mobile layouts.</p></div>
+    </div>
+    <div class="resource-callout"><strong>Reference:</strong> <a href="https://help.tilda.cc/html" rel="noopener" target="_blank">Tilda Help: How to Embed HTML Code</a></div>
+  </div>
+</section>
+
+<section class="section-group" id="zero-block-section">
+  <h2>Zero Block</h2>
+  <p>Use Zero Block when the visual arrangement is the hard part: custom hero sections, designed explanatory graphics, layered layouts, or sections where the native blocks are too rigid.</p>
+</section>
+
+<section class="pattern" id="zero-block">
+  <div class="pattern-header"><div><h3>Zero Block</h3><p>Zero Block is Tilda’s built-in visual design editor for creating custom-designed blocks. It gives students more layout control than regular blocks, while still working inside Tilda.</p></div><span class="tag">Custom design control</span></div>
+  <div class="info-grid">
+    <div class="info-card"><h4>What it does</h4><p>Lets students design custom block layouts with positioned text, images, shapes, buttons, forms, animation, and responsive settings.</p></div>
+    <div class="info-card"><h4>Best for</h4><ul><li>Designed intros and hero sections</li><li>Custom visual explainers</li><li>Layered image/text layouts</li><li>Precise responsive compositions</li><li>Small custom interactions inside a designed section</li></ul></div>
+    <div class="info-card"><h4>Watch-outs</h4><p>More control also means more responsibility. Students need to check multiple screen sizes, alignment, overlap, tap targets, and readable type.</p></div>
+  </div>
+  <div class="demo-frame">
+    <div class="demo-note"><strong>Use this when:</strong> a native block gets close but cannot produce the specific layout, layering, or visual explanation the story needs.</div>
+    <div class="compare-grid">
+      <div class="use-card">
+        <h4>Good Zero Block uses</h4>
+        <ul>
+          <li>A custom visual header with text placed over an image.</li>
+          <li>A designed diagram where labels need exact placement.</li>
+          <li>A section that needs different arrangements on desktop and mobile.</li>
+          <li>A custom callout or explanatory panel that native blocks cannot match.</li>
+        </ul>
+      </div>
+      <div class="use-card">
+        <h4>Poor Zero Block uses</h4>
+        <ul>
+          <li>Rebuilding a normal text section that a standard block already handles.</li>
+          <li>Using absolute positioning without checking mobile layouts.</li>
+          <li>Creating interactions that should really be handled by an embed or custom code.</li>
+          <li>Designing everything as fixed artwork instead of responsive web content.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><h4>Start from the story job</h4><p>Decide whether the section needs to reveal, explain, compare, locate, participate, or create an experience.</p></div>
+      <div class="step"><h4>Place the main elements</h4><p>Add the text, images, shapes, buttons, or media elements that need custom positioning.</p></div>
+      <div class="step"><h4>Check responsive views</h4><p>Use Zero Block’s screen-size controls to adjust the composition separately for desktop, tablet, and mobile.</p></div>
+      <div class="step"><h4>Add interaction only if it helps</h4><p>Use links, buttons, animation, or embedded HTML only when the interaction improves the explanation or navigation.</p></div>
+    </div>
+    <div class="resource-callout"><strong>Reference:</strong> <a href="https://help.tilda.cc/zero" rel="noopener" target="_blank">Tilda Help: Zero Block</a></div>
+  </div>
+</section>
+</main>
+</div>
+<script>
+const menuButton = document.getElementById('mobileMenuToggle');
+const backdrop = document.getElementById('mobileMenuBackdrop');
+const body = document.body;
+function setMenu(open) {
+  body.classList.toggle('menu-open', open);
+  menuButton?.setAttribute('aria-expanded', String(open));
+  if (backdrop) backdrop.hidden = !open;
+}
+menuButton?.addEventListener('click', () => setMenu(!body.classList.contains('menu-open')));
+backdrop?.addEventListener('click', () => setMenu(false));
+document.querySelectorAll('.sidebar a').forEach(link => link.addEventListener('click', () => setMenu(false)));
+
+const search = document.getElementById('blockSearch');
+const rows = Array.from(document.querySelectorAll('#nativeBlockTable tbody tr'));
+search?.addEventListener('input', () => {
+  const q = search.value.trim().toLowerCase();
+  rows.forEach(row => {
+    row.hidden = q && !row.textContent.toLowerCase().includes(q);
+  });
+});
+</script>
+</body>
+</html>
