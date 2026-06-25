@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prompting AI for Custom Interactives</title>
+<style>
+    :root {
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --shadow:0 14px 35px rgba(23,33,27,.12);
+      --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    .layout { display:block; min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow-y:auto; overflow-x:hidden; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+    main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+    .hero p, .section-group p, .step p, .note, li { color:var(--muted); }
+    .hero p { max-width:780px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+    .step { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .step-header { display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .step-number { display:grid; place-items:center; width:42px; height:42px; border-radius:999px; background:var(--accent); color:#fffdf7; font-weight:900; }
+    .step h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .step p { margin:0; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:880px; }
+    .concept-callout strong { color:var(--ink); }
+    .prompt-wrap { margin-top:16px; }
+    .prompt-toolbar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; }
+    .prompt-toolbar h4 { margin:0; font-size:1rem; color:var(--accent); }
+    .copy-button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+    pre { margin:0; width:100%; overflow:auto; white-space:pre-wrap; word-break:normal; background:#17211b; color:#fffdf7; border-radius:18px; padding:20px; border:1px solid rgba(255,255,255,.15); box-shadow:0 8px 20px rgba(23,33,27,.08); }
+    code { font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size:.9rem; line-height:1.55; }
+    .mini-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:16px; }
+    .card { background:#fffdf7; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:0 8px 20px rgba(23,33,27,.05); }
+    .card h4 { margin:0 0 6px; font-size:1.08rem; color:var(--accent); }
+    .card p { margin:0; }
+    .card ul { margin:10px 0 0; padding-left:20px; }
+    .card li + li { margin-top:6px; }
+    .inline-code { background:#f0eee6; border:1px solid var(--line); border-radius:8px; padding:.1rem .35rem; font-size:.92em; color:var(--ink); }
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+    button:focus-visible, a:focus-visible, .copy-button:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+    @media (max-width: 860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); border:0; font:inherit; font-weight:900; }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed !important; top:0 !important; left:0; bottom:0; width:min(84vw, 340px); height:100vh !important; padding:76px 22px 28px; overflow-y:auto !important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main { margin-left:0 !important; width:100% !important; max-width:1120px; padding:24px 16px 56px; }
+      .step-header, .mini-grid { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+      .prompt-toolbar { align-items:flex-start; flex-direction:column; }
+      pre { padding:16px; }
+    }
+    @media (max-width:520px) {
+      .hero { border-radius:20px; }
+      .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+      .section-group h2 { font-size:clamp(1.45rem,8vw,2rem); }
+      .step h3 { font-size:clamp(1.25rem,7vw,1.7rem); }
+      .step-number { width:36px; height:36px; }
+    }
+  </style>
+</head>
+<body>
+<button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button">
+<span aria-hidden="true" class="mobile-menu-icon"></span>
+<span class="mobile-menu-text">Menu</span>
+</button>
+<div class="mobile-menu-backdrop" hidden="" id="mobileMenuBackdrop"></div>
+<div class="layout">
+<aside aria-label="AI prompting navigation" class="sidebar" id="siteSidebar">
+<a class="home-button" href="../">← Back to Home</a>
+<h1>Prompting AI for Custom Interactives</h1>
+<p>A step-by-step prompt for full-page interactives hosted on GitHub and embedded by iframe.</p>
+<nav><div class="nav-group-title">Walkthrough</div>
+<a href="#intro">Intro</a>
+<a href="#step-1">1. Pattern</a>
+<a href="#step-2">2. Production context</a>
+<a href="#step-3">3. Iframe behavior</a>
+<a href="#step-4">4. Content</a>
+<a href="#step-5">5. Editable units</a>
+<a href="#step-6">6. Appearance</a>
+<a href="#step-7">7. Asset optimization</a>
+<a href="#step-8">8. All Devices</a>
+<a href="#step-9">9. Accessibility</a>
+<a href="#step-10">10. Attribution</a>
+<a href="#step-11">11. Output</a>
+<div class="nav-group-title">Follow-up prompts</div>
+<a href="#debugging">Debugging prompt</a>
+<a href="#revision">Revision prompt</a>
+</nav>
+</aside>
+<main>
+<section class="hero" id="intro">
+<div class="eyebrow">Interactive storytelling course</div>
+<h2>Prompting AI for Custom Interactives</h2>
+<p>Use this walkthrough when asking AI to write a full custom interactive that will live as its own web page, be hosted on GitHub Pages, and be placed inside a story page with an iframe.</p>
+<div class="concept-callout"><strong>Working rule:</strong> this is not a custom HTML-block snippet. Ask for a complete <span class="inline-code">index.html</span> file with the full HTML wrapper, viewport setup, scoped code, replaceable assets, and an iframe-friendly layout that fills the available space.</div>
+</section>
+<section class="section-group">
+<h2>Step-by-step prompt walkthrough</h2>
+<p>Each section below gives students one part of the prompt to fill in. By the end, they should have a complete production prompt for a GitHub-hosted interactive.</p>
+</section>
+<section class="step" id="step-1">
+<div class="step-header"><div class="step-number">1</div><div><h3>Pattern</h3><p>Name the type of interactive and describe what the reader does.</p></div><span class="tag">Pattern</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" data-copy="step1" type="button">Copy</button></div>
+<pre><code id="step1">Create a [filterable explorer / scrolly explainer / interactive map / timeline / quiz / guided comparison / data visualization / image annotation / step-by-step process] that works like this:
+[Describe what the reader clicks, taps, selects, scrolls, drags, or enters.]
+[Describe what changes on screen.]</code></pre></div>
+</section>
+<section class="step" id="step-2">
+<div class="step-header"><div class="step-number">2</div><div><h3>Production context</h3><p>This tells AI that the project is a complete web page for GitHub Pages, not a snippet for a builder block.</p></div><span class="tag">Production context</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" data-copy="step2" type="button">Copy</button></div>
+<pre><code id="step2">This interactive will be hosted as a standalone page on GitHub Pages and embedded in a larger story page using an iframe.
+
+Give me a complete index.html file with the full HTML wrapper, including &lt;!DOCTYPE html&gt;, &lt;html&gt;, &lt;head&gt;, &lt;meta name="viewport"&gt;, &lt;body&gt;, CSS, and JavaScript.
+
+Use only front-end code that can run on GitHub Pages: HTML, CSS, and JavaScript. Do not use server-side code. Do not require a build process unless I specifically ask for one. Do not use external libraries unless there is a strong reason.</code></pre></div>
+</section>
+<section class="step" id="step-3">
+<div class="step-header"><div class="step-number">3</div><div><h3>Iframe behavior</h3><p>The embedded page should fill the iframe. The parent page controls the iframe size, so the interactive should not assume a fixed width or height.</p></div><span class="tag">Iframe fit</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" data-copy="step3" type="button">Copy</button></div>
+<pre><code id="step3">Design the page so it works well inside an iframe.
+
+The visualization should take up the full available iframe width and height. Set html and body to width: 100%, height: 100%, and margin: 0. Use a main interactive container that can fill the viewport, such as min-height: 100vh or height: 100vh when appropriate.
+
+Do not set a fixed pixel width for the full interactive. Let the parent iframe control the displayed size. Avoid unnecessary outer page margins. If the interactive needs scrolling, make the scrolling intentional and testable inside the iframe.</code></pre></div>
+</section>
+<section class="step" id="step-4">
+<div class="step-header"><div class="step-number">4</div><div><h3>Content</h3><p>The AI needs the actual labels, descriptions, image filenames, data, and credits that the interactive will use.</p></div><span class="tag">Content</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" data-copy="step4" type="button">Copy</button></div>
+<pre><code id="step4">Use this sample content:
+[Paste titles, labels, body text, image filenames, data, categories, captions, source notes, credits, etc.]
+
+Use relative paths for assets I will upload with the GitHub project, such as assets/image-name.jpg or data/example.csv.</code></pre></div>
+</section>
+<section class="step" id="step-5">
+<div class="step-header"><div class="step-number">5</div><div><h3>Editable content units</h3><p>Students should decide whether they want repeated HTML blocks they can copy and paste, or a JavaScript object/array they can edit in one place.</p></div><span class="tag">Editable units</span></div>
+<div class="mini-grid">
+<article class="card"><h4>Option 1: Repeatable HTML pattern</h4><p>Best for simple structures such as cards, timeline entries, panels, slides, or annotation sections.</p></article>
+<article class="card"><h4>Option 2: JavaScript object or array</h4><p>Best for filtering, generated cards, quizzes, maps, charts, steppers, or larger datasets.</p></article>
+</div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Option 1 prompt: Repeatable HTML pattern</h4><button class="copy-button" data-copy="step5html" type="button">Copy</button></div>
+<pre><code id="step5html">Make the content easy for a beginner to edit later using a repeatable HTML pattern.
+
+Use clearly commented HTML units that I can copy, paste, delete, or reorder. Each repeated item should have comments showing where one item starts and ends.
+
+Example comment style:
+&lt;!-- ITEM 1 START: copy this whole block to add another item --&gt;
+&lt;!-- ITEM 1 END --&gt;
+
+Use only this repeatable HTML pattern approach. Do not also create a JavaScript object or array for the content.</code></pre></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Option 2 prompt: JavaScript object or array</h4><button class="copy-button" data-copy="step5js" type="button">Copy</button></div>
+<pre><code id="step5js">Make the content easy for a beginner to edit later using a JavaScript object or array.
+
+Put the editable content in a clearly labeled JavaScript object or array near the top of the script. Use this approach because the interactive has repeated content, filtering, generated cards, a map, a chart, step-by-step screens, quiz results, or content that should be easier to update in one place.
+
+Comment the data structure so I know what each field controls. Keep the field names readable, such as title, description, image, alt, category, latitude, longitude, value, source, or credit.
+
+Use only this JavaScript object or array approach. Do not also create repeatable HTML content units.</code></pre></div>
+</section>
+<section class="step" id="step-6">
+<div class="step-header"><div class="step-number">6</div><div><h3>Appearance</h3><p>This is where students describe the visual style, hierarchy, and instructions for the reader.</p></div><span class="tag">Appearance</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" data-copy="step6" type="button">Copy</button></div>
+<pre><code id="step6">[Describe visual style, hierarchy, colors, spacing, tone, and whether it should match the larger story page.]
+
+Include a clear title for the interactive and a short intro or instructional text that tells the reader how to use it. Keep the interface clean enough to work inside an iframe without feeling cramped.</code></pre></div>
+</section>
+<section class="step" id="step-7">
+<div class="step-header"><div class="step-number">7</div><div><h3>Asset optimization</h3><p>GitHub Pages can host static assets, but students still need clean file paths and lightweight media.</p></div><span class="tag">Asset optimization</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" data-copy="step7" type="button">Copy</button></div>
+<pre><code id="step7">Use replaceable image/file names with relative paths, such as assets/photo-1.jpg or data/items.csv. Do not use base64 assets. Do not use random external image URLs.
+
+Keep the code lightweight. Include placeholders where I should add compressed images, captions, transcripts, or data files. If you include sample data inside the JavaScript, make it easy to replace later.</code></pre></div>
+</section>
+<section class="step" id="step-8">
+<div class="step-header"><div class="step-number">8</div><div><h3>All Devices</h3><p>The interactive needs to work both as a standalone GitHub page and inside an iframe at different sizes.</p></div><span class="tag">All Devices</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" data-copy="step8" type="button">Copy</button></div>
+<pre><code id="step8">Make it responsive for desktop and mobile. Avoid hover-only interactions. Make buttons and controls easy to tap.
+
+The layout should adapt to different iframe widths and heights. On small screens or short iframe heights, stack or simplify the layout. Do not let important controls disappear outside the visible iframe area.</code></pre></div>
+</section>
+<section class="step" id="step-9">
+<div class="step-header"><div class="step-number">9</div><div><h3>Accessibility</h3><p>Students should require semantic HTML, keyboard access, visible focus states, alt text, and careful motion.</p></div><span class="tag">Accessibility</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" data-copy="step9" type="button">Copy</button></div>
+<pre><code id="step9">Use semantic HTML. Use real buttons for actions. Make it keyboard accessible. Add visible focus states. Include useful alt text placeholders.
+
+Use ARIA only when needed for state or labeling, such as expanded panels, selected tabs, or modal labels. Do not rely only on color to communicate meaning. Respect reduced-motion preferences.</code></pre></div>
+</section>
+<section class="step" id="step-10">
+<div class="step-header"><div class="step-number">10</div><div><h3>Attribution</h3><p>Credits and source notes should remain visible in the standalone interactive.</p></div><span class="tag">Attribution</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" data-copy="step10" type="button">Copy</button></div>
+<pre><code id="step10">Include a small readable credit/source line inside the interactive. Use placeholder text such as Source: [source name]. Images: [credit]. Code assistance: AI used for drafting/debugging.</code></pre></div>
+</section>
+<section class="step" id="step-11">
+<div class="step-header"><div class="step-number">11</div><div><h3>Output</h3><p>Tell the AI to return the complete file only.</p></div><span class="tag">Output</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" data-copy="step11" type="button">Copy</button></div>
+<pre><code id="step11">Provide the complete code for index.html.</code></pre></div>
+</section>
+<section class="section-group" id="debugging">
+<h2>Debugging prompt</h2>
+<p>Use this when the GitHub-hosted page or iframe embed is not working correctly.</p>
+</section>
+<section class="step">
+<div class="step-header"><div class="step-number">D</div><div><h3>Ask AI to fix a specific problem</h3><p>Students should describe whether the problem happens on GitHub Pages, inside the iframe, or both.</p></div><span class="tag">Debug</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Copy-ready prompt</h4><button class="copy-button" data-copy="debugPrompt" type="button">Copy</button></div>
+<pre><code id="debugPrompt">This custom interactive is not working correctly as a GitHub-hosted page and/or iframe embed.
+
+Problem:
+[Describe what is wrong: blank iframe, file paths broken, buttons do not click, layout does not fill iframe, page has unwanted margins, mobile layout breaks, scrolling is awkward, images do not load, etc.]
+
+Context:
+The interactive is a standalone index.html file hosted on GitHub Pages and embedded in a larger story page using an iframe.
+
+Please:
+1. identify the likely problem,
+2. fix the code,
+3. keep it as a complete index.html file,
+4. preserve the full HTML wrapper,
+5. keep the layout iframe-friendly with full-width and full-height behavior,
+6. use relative asset paths suitable for GitHub Pages,
+7. preserve the 5 As: Appearance, Asset optimization, All Devices, Accessibility, and Attribution.
+
+Here is the code:
+[paste code]</code></pre></div>
+</section>
+<section class="section-group" id="revision">
+<h2>Revision prompt</h2>
+<p>Use this when the interactive works but needs better design, editing structure, mobile behavior, or iframe fit.</p>
+</section>
+<section class="step">
+<div class="step-header"><div class="step-number">R</div><div><h3>Ask AI to improve a working version</h3><p>This prompt is for improving quality without changing the basic concept.</p></div><span class="tag">Revise</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Copy-ready prompt</h4><button class="copy-button" data-copy="revisionPrompt" type="button">Copy</button></div>
+<pre><code id="revisionPrompt">Revise this GitHub-hosted custom interactive.
+
+Keep the same basic function, but improve it for:
+- clearer visual hierarchy,
+- better iframe fit,
+- better full-width and full-height behavior,
+- better mobile layout,
+- stronger accessibility,
+- more obvious clickable/tappable controls,
+- cleaner beginner-friendly comments,
+- easier content editing.
+
+Keep it as a complete index.html file with the full HTML wrapper. Do not add external libraries unless there is a strong reason. Keep it suitable for GitHub Pages and iframe embedding.
+
+Here is the current code:
+[paste code]</code></pre></div>
+</section>
+</main>
+</div>
+<script>
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const backdrop = document.getElementById('mobileMenuBackdrop');
+    const sidebar = document.getElementById('siteSidebar');
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+      if (backdrop) backdrop.hidden = true;
+    }
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        if (backdrop) backdrop.hidden = !isOpen;
+      });
+    }
+    if (backdrop) backdrop.addEventListener('click', closeMenu);
+    if (sidebar) sidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+
+    document.querySelectorAll('[data-copy]').forEach(button => {
+      button.addEventListener('click', async () => {
+        const targetId = button.getAttribute('data-copy');
+        const target = document.getElementById(targetId);
+        if (!target) return;
+        const original = button.textContent;
+        try {
+          await navigator.clipboard.writeText(target.innerText);
+          button.textContent = 'Copied';
+        } catch (error) {
+          const range = document.createRange();
+          range.selectNodeContents(target);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          button.textContent = 'Selected';
+        }
+        window.setTimeout(() => { button.textContent = original; }, 1600);
+      });
+    });
+  </script>
+</body>
+</html>
