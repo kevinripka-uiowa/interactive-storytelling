@@ -149,7 +149,10 @@
         <a href="#javascript">JavaScript</a>
         <a href="#js-concepts">Core concepts</a>
         <a href="#js-objects">JavaScript objects</a>
-        <a href="#ai-prompts">Using AI carefully</a>
+        <a href="#js-libraries">JavaScript libraries</a>
+        <a href="#library-choice">Choosing a library</a>
+        <a href="#library-loading">Adding a library</a>
+        <a href="#library-table">Common libraries</a>
       </nav>
     </aside>
 
@@ -327,7 +330,6 @@
           </div>
         </div>
       </section>
-
 
 
       <section class="pattern" id="style-attribute">
@@ -515,23 +517,178 @@
         </div>
       </section>
 
-      <section class="pattern" id="ai-prompts">
+
+      <section class="section-group" id="js-libraries">
+        <h2>JavaScript libraries: code you build with</h2>
+        <p>A JavaScript library is reusable code written by other developers to solve a category of problems. Instead of writing every map, chart, animation system, CSV parser, or user-interface behavior from scratch, you load the library and use its documented functions, objects, methods, and options.</p>
+      </section>
+
+      <section class="pattern">
         <div class="pattern-header">
           <div>
-            <h3>Using AI carefully for code help</h3>
-            <p>AI is useful for explaining unfamiliar code, finding small fixes, adding comments, and debugging. It should not replace testing, accessibility checks, or your own understanding of what the interaction does.</p>
+            <h3>What a library does and does not do</h3>
+            <p>A library gives you capabilities. You still decide what the interactive should communicate, provide the content or data, write the page structure, configure the behavior, and test the result.</p>
           </div>
-          <span class="tag">AI support</span>
+          <span class="tag">Reusable code</span>
         </div>
-        <div class="demo-frame accordion-group" data-accordion-group>
-          <div class="accordion-tools"><button type="button" class="secondary" data-open-all>Open all</button><button type="button" class="secondary" data-close-all>Close all</button></div>
-          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Explain unfamiliar code</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Explain what this embed code does in plain language. Identify which parts control size, content, styling, and behavior.”</p></div></div>
-          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Mark editable sections</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Add START and END comments around the exact HTML block I should duplicate to add another item. Do not change the design.”</p></div></div>
-          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Find CSS targets</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Tell me which CSS selector controls this card spacing / iframe height / mobile layout. Give me the smallest change only.”</p></div></div>
-          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Make a safe change</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“Do not rewrite the full file. Only tell me the smallest HTML or CSS change needed to make this embed fit the story column.”</p></div></div>
-          <div class="accordion-item"><button class="accordion-trigger" type="button" aria-expanded="false"><span>Debug without guessing</span><span class="accordion-icon">+</span></button><div class="accordion-panel"><p>“This worked before I changed the iframe/style/data item. Check for the smallest likely error: missing comma, quote, bracket, brace, wrong file path, or fixed width.”</p></div></div>
+        <div class="grid two">
+          <article class="card"><h4>The library provides</h4><p>Prewritten tools for jobs such as drawing map layers, binding data to SVG shapes, animating elements, parsing CSV files, creating 3D scenes, or adding interface widgets.</p></article>
+          <article class="card"><h4>Your code provides</h4><p>The container, data, labels, story logic, settings, event handlers, styling, accessibility work, and decisions about what the user should be able to do.</p></article>
         </div>
+        <div class="code-note"><strong>Useful mental model:</strong> a library is not a finished interactive. It is a vocabulary of capabilities your own JavaScript can call.</div>
       </section>
+
+      <section class="pattern" id="library-choice">
+        <div class="pattern-header">
+          <div>
+            <h3>How to figure out which library to use</h3>
+            <p>Start with the interaction or production problem, not with a library name. Then verify that the library actually supports the job and fits the way your project is built.</p>
+          </div>
+          <span class="tag">Selection</span>
+        </div>
+        <div class="demo-frame">
+          <ul class="mini-list">
+            <li><strong>1. Name the job.</strong> “I need a slippy map with markers and GeoJSON,” “I need scroll-triggered animation,” or “I need to turn a CSV file into JavaScript objects.”</li>
+            <li><strong>2. Look for official examples.</strong> Find a demo close to the behavior you need. A working example is often more useful than a broad feature list.</li>
+            <li><strong>3. Read the getting-started or installation page.</strong> Check whether it works with a plain HTML page, requires CSS, expects modules, needs an access token, or assumes a build system such as npm.</li>
+            <li><strong>4. Check the API documentation.</strong> The API is the list of functions, methods, objects, events, and options the library gives you.</li>
+            <li><strong>5. Check project fit.</strong> Ask whether the library is too large or complex for the job, whether it works on mobile, and whether you can realistically maintain the code.</li>
+            <li><strong>6. Prototype the smallest version first.</strong> Load the library and make one marker, one chart, one animation, or one parsed file work before building the full interactive.</li>
+          </ul>
+        </div>
+        <div class="code-note"><strong>Search strategy:</strong> search for the job plus the word <code>JavaScript</code>, then prefer the library’s official site and documentation. Example: <code>interactive map GeoJSON JavaScript library</code> or <code>scroll animation JavaScript library</code>.</div>
+      </section>
+
+      <section class="pattern" id="library-loading">
+        <div class="pattern-header">
+          <div>
+            <h3>How to add a library to a page</h3>
+            <p>The two most approachable methods for a plain HTML project are loading the library from a CDN or storing the library file inside your own project folder.</p>
+          </div>
+          <span class="tag">Installation</span>
+        </div>
+
+        <div class="grid two">
+          <article class="card">
+            <h4>Option 1: Load from a CDN</h4>
+            <p>A content delivery network hosts the library file for you. Your page points to that external file with a <code>&lt;script&gt;</code> tag. Some libraries also require a CSS file loaded with <code>&lt;link&gt;</code>.</p>
+          </article>
+          <article class="card">
+            <h4>Option 2: Keep the file in your project</h4>
+            <p>Download the library file, place it in a folder such as <code>js/</code> or <code>vendor/</code>, and reference that local path. You host the dependency along with the rest of the project.</p>
+          </article>
+        </div>
+
+        <div class="demo-frame" style="margin-top:16px;">
+          <h4>CDN example</h4>
+          <pre><code>&lt;!-- Load the library first --&gt;
+&lt;script src="https://cdn.example.com/library.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Then load your code that uses it --&gt;
+&lt;script src="js/interactive.js"&gt;&lt;/script&gt;</code></pre>
+          <div class="code-note"><strong>Order matters:</strong> your own script cannot use the library until the browser has loaded the library.</div>
+        </div>
+
+        <div class="demo-frame" style="margin-top:16px;">
+          <h4>Local project-folder example</h4>
+          <pre><code>my-interactive/
+├── index.html
+├── js/
+│   ├── library.min.js
+│   └── interactive.js
+└── css/
+    └── styles.css</code></pre>
+          <pre><code>&lt;script src="js/library.min.js"&gt;&lt;/script&gt;
+&lt;script src="js/interactive.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+
+        <div class="demo-frame" style="margin-top:16px;">
+          <h4>When a library also needs CSS</h4>
+          <pre><code>&lt;head&gt;
+  &lt;link rel="stylesheet" href="path/to/library.css"&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;div id="interactive"&gt;&lt;/div&gt;
+
+  &lt;script src="path/to/library.js"&gt;&lt;/script&gt;
+  &lt;script src="js/interactive.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</code></pre>
+          <p style="margin-top:12px;">Mapping and interface libraries often use both JavaScript and CSS. Leaving out the CSS can make controls, markers, widgets, or layout appear broken.</p>
+        </div>
+
+        <div class="grid two" style="margin-top:16px;">
+          <article class="card"><h4>CDN is useful when</h4><p>You want the fastest setup, are making a small prototype, or the official documentation gives you a ready-to-copy CDN snippet.</p></article>
+          <article class="card"><h4>Local files are useful when</h4><p>You want tighter control over the exact files, need the project to avoid a third-party runtime dependency, or are preserving a self-contained project.</p></article>
+        </div>
+
+        <div class="code-note"><strong>Do not invent the URL or filename.</strong> Copy installation code from the library’s official documentation. Libraries differ in filenames, module formats, required CSS, plugins, and initialization steps.</div>
+      </section>
+
+      <section class="pattern" id="library-table">
+        <div class="pattern-header">
+          <div>
+            <h3>Common JavaScript libraries for interactives</h3>
+            <p>These libraries solve different production problems. Some overlap. The best choice depends on the story job, the level of customization you need, and the complexity you can maintain.</p>
+          </div>
+          <span class="tag">Reference table</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Library</th><th>Best for</th><th>Typical interactive uses</th><th>What to know</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>D3</td><td>Highly custom data visualization and data-driven graphics</td><td>Custom charts, animated diagrams, force layouts, maps, treemaps, bespoke SVG or Canvas graphics</td><td>Extremely flexible, but it is not a chart-template library. You assemble scales, axes, shapes, selections, transitions, and other pieces.</td></tr>
+              <tr><td>Leaflet</td><td>Interactive web maps</td><td>Slippy maps, markers, popups, GeoJSON layers, choropleths, locator maps</td><td>Open-source and approachable for standard 2D mapping. Usually needs both Leaflet CSS and JavaScript plus a tile provider.</td></tr>
+              <tr><td>Mapbox GL JS</td><td>Highly styled, dynamic, and 3D-capable web maps</td><td>Vector maps, custom layers, data-driven styling, camera moves, terrain, 3D map experiences</td><td>Powerful but more complex than Leaflet. Mapbox-hosted services commonly involve an access token and account-based usage.</td></tr>
+              <tr><td>jQuery UI</td><td>Traditional interface widgets and interactions</td><td>Draggable elements, sliders, sortable lists, accordions, tabs, dialogs, autocomplete</td><td>Built on top of jQuery, so dependency order matters. Useful when you specifically need its mature widgets or interactions.</td></tr>
+              <tr><td>GSAP</td><td>Precise animation and motion sequencing</td><td>Timelines, transitions, scroll-linked sequences, object motion, staged reveals</td><td>Strong for complex animation choreography. Core animation and additional plugins are documented separately.</td></tr>
+              <tr><td>Chart.js</td><td>Common chart types with less custom code</td><td>Bar, line, scatter, doughnut, and other responsive charts</td><td>Faster to start than D3 for conventional charts, but less open-ended for bespoke visual forms.</td></tr>
+              <tr><td>Papa Parse</td><td>Reading and writing CSV data in the browser</td><td>Load spreadsheet exports, parse uploaded CSV files, convert CSV rows into JavaScript objects</td><td>It handles data ingestion rather than visualization. Often paired with D3, maps, or custom JavaScript.</td></tr>
+              <tr><td>Three.js</td><td>3D graphics in the browser</td><td>3D scenes, models, cameras, lighting, interactive spatial experiences</td><td>Powerful but conceptually heavier. Modern setup commonly uses JavaScript modules and benefits from a local development server.</td></tr>
+              <tr><td>&lt;model-viewer&gt;</td><td>Displaying interactive 3D models with less custom code</td><td>Rotate and zoom product models, artifacts, scientific objects, reconstructions, or other GLB/GLTF assets</td><td>A web component rather than a general-purpose 3D engine. Much simpler than Three.js when the main job is letting users inspect a 3D model.</td></tr>
+              <tr><td>Scrollama</td><td>Scroll-driven storytelling</td><td>Scrollytelling steps that update charts, maps, images, annotations, or other page states as the reader scrolls</td><td>Focused on detecting scroll progress and step changes. You still write the code that determines what each step changes.</td></tr>
+              <tr><td>Pannellum</td><td>360-degree panoramic images</td><td>Interactive panoramas, virtual tours, hotspots, annotated immersive scenes</td><td>Focused on panorama viewing rather than general 3D. Useful when the asset is an equirectangular 360 image.</td></tr>
+              <tr><td>Turf.js</td><td>Geospatial analysis in JavaScript</td><td>Buffers, distances, intersections, point-in-polygon tests, manipulating GeoJSON</td><td>Often paired with Leaflet or Mapbox. It performs geographic calculations rather than drawing the map itself.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-note"><strong>Important distinction:</strong> libraries can work together. For example, Papa Parse can read a CSV, D3 can transform the data, and Leaflet can display the results on a map.</div>
+      </section>
+
+      <section class="pattern" id="library-reading-code">
+        <div class="pattern-header">
+          <div>
+            <h3>How to recognize library-based code</h3>
+            <p>Library code often has a distinctive object name, function name, or initialization pattern. You do not need to understand every internal detail. First identify which parts come from the library and which parts are your project settings and data.</p>
+          </div>
+          <span class="tag">Code reading</span>
+        </div>
+        <div class="syntax-grid">
+          <div class="demo-frame">
+            <pre><code>const map = L.map("map").setView(
+  [41.66, -91.53],
+  11
+);
+
+L.marker([41.66, -91.53])
+  .addTo(map)
+  .bindPopup("Iowa City");</code></pre>
+          </div>
+          <div class="demo-frame">
+            <ul class="mini-list">
+              <li><strong><code>L</code></strong> is the global object Leaflet exposes in its classic browser build.</li>
+              <li><strong><code>L.map()</code></strong> and <strong><code>L.marker()</code></strong> are library functions.</li>
+              <li><strong><code>"map"</code></strong> is your HTML container ID.</li>
+              <li><strong>The coordinates, zoom, and popup text</strong> are project-specific values you can edit.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="code-note"><strong>AI prompt to use:</strong> “Identify which lines are library API calls and which values are specific to my project. Do not rewrite the code.”</div>
+      </section>
+
+
     </main>
   </div>
 
