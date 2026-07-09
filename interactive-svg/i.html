@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive SVG for Storytelling</title>
+  <style>
+    :root {
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --shadow:0 14px 35px rgba(23,33,27,.12);
+      --radius:18px; --code:#162019;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    img, video, iframe, svg { max-width:100%; }
+
+    .layout { display:block; min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow-y:auto; overflow-x:hidden; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+
+    main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+    .hero p, .section-group p, .card p, .pattern p { color:var(--muted); }
+    .hero p { max-width:820px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:860px; }
+    .concept-callout strong { color:var(--ink); }
+
+    .section-group { margin:54px 0 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color: var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+    .pattern { scroll-margin-top:24px; margin:26px 0 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; min-width:0; }
+
+    .grid { display:grid; gap:16px; }
+    .grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .grid.two { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .card { background:#fffdf7; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:0 8px 20px rgba(23,33,27,.05); min-width:0; }
+    .card h4 { margin:0 0 6px; font-size:1.08rem; }
+    .card p { margin:0; }
+    .number-label { display:inline-grid; place-items:center; width:34px; height:34px; border-radius:50%; background:var(--accent); color:white; font-weight:900; margin-bottom:10px; }
+    .mini-list { display:grid; gap:10px; margin:0; padding:0; list-style:none; }
+    .mini-list li { padding:11px 13px; border:1px solid var(--line); border-radius:14px; background:#fffdf7; color:var(--muted); }
+    .mini-list strong { color:var(--ink); }
+
+    .accordion-tools { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; }
+    button, .button-link { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; }
+    button.secondary { background:#eef3ef; color:var(--ink); border:1px solid var(--line); }
+    button:hover, .button-link:hover { filter:brightness(.96); }
+    button:focus-visible, .button-link:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    .accordion-item { border-top:1px solid var(--line); }
+    .accordion-item:first-child { border-top:0; }
+    .accordion-trigger { width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 0; background:transparent; color:var(--ink); border-radius:0; text-align:left; }
+    .accordion-trigger span:first-child { font-weight:900; }
+    .accordion-icon { color:var(--accent); font-size:1.2rem; font-weight:900; }
+    .accordion-panel { display:none; padding:0 0 18px; color:var(--muted); }
+    .accordion-panel > *:first-child { margin-top:0; }
+    .accordion-trigger[aria-expanded="true"] + .accordion-panel { display:block; }
+
+    pre { margin:14px 0 0; max-width:100%; overflow:auto; border-radius:16px; background:var(--code); color:#f7f4ec; padding:16px; border:1px solid rgba(255,255,255,.08); }
+    code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.9rem; }
+    :not(pre) > code { background:#f0eadf; color:#1f271f; border:1px solid var(--line); border-radius:7px; padding:.08rem .32rem; }
+    .code-note { margin-top:12px; padding:12px 14px; border-radius:14px; background:#fff8ed; border-left:4px solid var(--accent-2); color:var(--muted); }
+    .code-note strong { color:var(--ink); }
+
+    .responsibility-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .responsibility-list .card { background:linear-gradient(180deg,#fffdf7,#f8f3e9); }
+    .syntax-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+    .object-demo { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:16px; background:#fffdf7; }
+    table { border-collapse:separate; border-spacing:0; min-width:850px; width:100%; }
+    th, td { padding:13px 14px; border-bottom:1px solid var(--line); border-right:1px solid var(--line); vertical-align:top; text-align:left; }
+    th { background:#edf4ee; color:var(--accent); font-size:.82rem; text-transform:uppercase; letter-spacing:.06em; }
+    tr:last-child td { border-bottom:0; }
+    th:last-child, td:last-child { border-right:0; }
+    td:first-child, th:first-child { position:sticky; left:0; background:#fffdf7; z-index:1; font-weight:900; min-width:170px; }
+    th:first-child { background:#e2eee5; z-index:2; }
+
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+    @media (max-width: 860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-text { font-weight:900; }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed !important; top:0 !important; left:0; bottom:0; width:min(84vw, 340px); height:100vh !important; max-height:100vh !important; padding:76px 22px 28px; overflow-y:auto !important; overflow-x:hidden; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main { margin-left:0 !important; width:100% !important; max-width:1120px; padding:24px 16px 56px; }
+      .pattern-header, .syntax-grid, .object-demo { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+      .grid.three, .grid.two, .responsibility-list { grid-template-columns:1fr; }
+      .hero { border-radius:20px; }
+    }
+    .home-button {
+      border: 1px solid #636363;
+      margin-bottom: 1rem!important;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false">
+    <span class="mobile-menu-icon" aria-hidden="true"></span>
+    <span class="mobile-menu-text">Menu</span>
+  </button>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="siteSidebar" aria-label="Interactive SVG page navigation">
+      <a href="../" class="home-button">&larr; Back to Home</a>
+      <h1>Interactive SVG for Storytelling</h1>
+      <p>A practical guide to turning vector graphics into responsive, clickable, scroll-driven, and explanatory interactives.</p>
+
+      <nav>
+        <div class="nav-group-title">Start here</div>
+        <a href="#intro">Intro</a>
+        <a href="#why-use-svg">Why use SVG?</a>
+        <a href="#how-svg-works">How SVG works</a>
+
+        <div class="nav-group-title">Production</div>
+        <a href="#illustrator-workflow">Illustrator workflow</a>
+        <a href="#inline-vs-image">Inline vs. image</a>
+        <a href="#responsive-svg">Responsive SVG</a>
+        <a href="#accessibility">Accessibility</a>
+
+        <div class="nav-group-title">Interaction patterns</div>
+        <a href="#clickable-parts">Clickable parts</a>
+        <a href="#custom-maps">Custom maps</a>
+        <a href="#state-changes">State changes</a>
+        <a href="#process-diagrams">Process diagrams</a>
+        <a href="#scroll-driven">Scroll-driven SVG</a>
+      </nav>
+    </aside>
+
+    <main>
+      <section class="hero" id="intro">
+        <div class="eyebrow">Interactive storytelling reference</div>
+        <h2>Turn a vector graphic into an interactive explainer</h2>
+        <p>An SVG can be more than a scalable illustration. Because its shapes and groups can exist as elements in the page, you can make individual parts clickable, reveal information, change states, respond to scrolling, or connect a designed graphic to story text.</p>
+        <div class="concept-callout"><strong>Core idea:</strong> use SVG when the graphic itself is part of the explanation. Instead of treating an illustration as a flat image, make meaningful parts of it respond to the user.</div>
+      </section>
+
+      <section class="section-group" id="why-use-svg">
+        <h2>Why interactive SVG is useful</h2>
+        <p>Interactive SVG sits between simple HTML/CSS interactions and heavier libraries such as D3, Leaflet, or Three.js. Use it when the graphic itself is part of the explanation, especially for diagrams, custom maps, process graphics, and designed illustrations.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>A productive middle ground</h3>
+            <p>You can create a custom visual experience without building every shape in JavaScript or adopting a large visualization framework.</p>
+          </div>
+          <span class="tag">Why it matters</span>
+        </div>
+
+        <div class="grid three">
+          <article class="card"><span class="number-label">1</span><h4>Design first</h4><p>Create the visual structure in Illustrator or another vector tool, then add interaction to meaningful parts.</p></article>
+          <article class="card"><span class="number-label">2</span><h4>Target parts directly</h4><p>JavaScript can select one path, shape, label, or group and change only that part of the graphic.</p></article>
+          <article class="card"><span class="number-label">3</span><h4>Explain through states</h4><p>Use clicks, buttons, filters, or scrolling to highlight different stages, systems, regions, or components.</p></article>
+        </div>
+
+        <div class="code-note"><strong>Good fit:</strong> anatomy diagrams, process graphics, floor plans, campus maps, historical maps, systems diagrams, technical explainers, and scroll-driven illustrations.</div>
+      </section>
+
+      <section class="section-group" id="how-svg-works">
+        <h2>How SVG works</h2>
+        <p>SVG stands for Scalable Vector Graphics. Instead of storing a grid of pixels, SVG markup describes graphic elements such as circles, rectangles, text, paths, and groups.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>SVG is made of elements</h3>
+            <p>A browser can treat graphic parts as individual elements, much like headings, buttons, and sections in HTML.</p>
+          </div>
+          <span class="tag">Structure</span>
+        </div>
+
+        <div class="syntax-grid">
+          <div class="demo-frame">
+            <pre><code>&lt;svg viewBox="0 0 800 500"&gt;
+  &lt;circle
+    cx="200"
+    cy="200"
+    r="50"
+  &gt;&lt;/circle&gt;
+
+  &lt;rect
+    x="350"
+    y="150"
+    width="120"
+    height="100"
+  &gt;&lt;/rect&gt;
+
+  &lt;path d="..."&gt;&lt;/path&gt;
+&lt;/svg&gt;</code></pre>
+          </div>
+
+          <div class="demo-frame">
+            <ul class="mini-list">
+              <li><strong>&lt;circle&gt;</strong> draws a circle.</li>
+              <li><strong>&lt;rect&gt;</strong> draws a rectangle.</li>
+              <li><strong>&lt;path&gt;</strong> can describe complex vector shapes.</li>
+              <li><strong>&lt;g&gt;</strong> groups multiple graphic elements together.</li>
+              <li><strong>id and class</strong> let CSS and JavaScript target important parts.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>A PNG is pixels. An inline SVG is structure.</h3>
+            <p>This is the distinction that makes interactive SVG possible.</p>
+          </div>
+          <span class="tag">Mental model</span>
+        </div>
+
+        <div class="grid two">
+          <article class="card">
+            <h4>Raster image</h4>
+            <p>A PNG or JPEG is essentially a field of pixels. The browser does not know that one cluster of pixels is a wing and another is a bill.</p>
+          </article>
+          <article class="card">
+            <h4>Inline SVG</h4>
+            <p>The browser can know that one element has <code>id="bill"</code>, another has <code>id="wing"</code>, and a group has <code>id="migration-route"</code>.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-group" id="illustrator-workflow">
+        <h2>Production workflow: Illustrator to interactive SVG</h2>
+        <p>A practical SVG workflow lets you begin with a familiar visual design process and then add interactivity.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>A practical workflow</h3>
+            <p>Design the graphic first, but organize it so meaningful parts can be targeted later.</p>
+          </div>
+          <span class="tag">Production</span>
+        </div>
+
+        <div class="responsibility-list">
+          <article class="card"><span class="number-label">1</span><h4>Design</h4><p>Create the illustration, diagram, or map in Illustrator.</p></article>
+          <article class="card"><span class="number-label">2</span><h4>Organize</h4><p>Put meaningful parts on separate layers or groups.</p></article>
+          <article class="card"><span class="number-label">3</span><h4>Name</h4><p>Give important layers clear names such as river, factories, bill, wing, or step-1.</p></article>
+          <article class="card"><span class="number-label">4</span><h4>Export</h4><p>Export the artwork as SVG.</p></article>
+          <article class="card"><span class="number-label">5</span><h4>Inline</h4><p>Place the SVG markup inside the HTML page.</p></article>
+          <article class="card"><span class="number-label">6</span><h4>Connect</h4><p>Use CSS and JavaScript to change meaningful groups and states.</p></article>
+        </div>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Groups make complex graphics manageable</h3>
+            <p>A single logical part of the illustration may contain many paths. Group them so your code can target the whole concept at once.</p>
+          </div>
+          <span class="tag">SVG groups</span>
+        </div>
+
+        <div class="demo-frame">
+          <pre><code>&lt;g id="river"&gt;
+  ...
+&lt;/g&gt;
+
+&lt;g id="factories"&gt;
+  ...
+&lt;/g&gt;
+
+&lt;g id="railroads"&gt;
+  ...
+&lt;/g&gt;
+
+&lt;g id="neighborhoods"&gt;
+  ...
+&lt;/g&gt;</code></pre>
+        </div>
+
+        <div class="code-note"><strong>Working rule:</strong> name layers by meaning, not appearance. <code>factories</code> is more useful than <code>blue-shapes</code>.</div>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Expect some cleanup after export</h3>
+            <p>Illustrator may produce long paths, generated class names, and layer names that are difficult to read.</p>
+          </div>
+          <span class="tag">Reality check</span>
+        </div>
+
+        <div class="demo-frame">
+          <pre><code>&lt;g id="Layer_2_0000012631504809"&gt;
+  &lt;path
+    class="st17"
+    d="M382.72,173.91c..."
+  /&gt;
+&lt;/g&gt;</code></pre>
+        </div>
+
+        <div class="code-note"><strong>Student strategy:</strong> preserve the important groups and IDs, but do not expect exported SVG code to look as clean as hand-written HTML.</div>
+      </section>
+
+      <section class="section-group" id="inline-vs-image">
+        <h2>Inline SVG vs. an SVG image file</h2>
+        <p>This is the most important implementation distinction. Displaying an SVG file is not the same as putting its internal elements into the page DOM.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Use an image when you only need to display it</h3>
+            <p>This is simple and appropriate for a non-interactive vector image.</p>
+          </div>
+          <span class="tag">Display only</span>
+        </div>
+
+        <div class="demo-frame">
+          <pre><code>&lt;img
+  src="bird.svg"
+  alt="Diagram of a bird"
+&gt;</code></pre>
+        </div>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Use inline SVG when you need to target internal parts</h3>
+            <p>The SVG markup becomes part of the page, so CSS and JavaScript can directly select its elements.</p>
+          </div>
+          <span class="tag">Interactive</span>
+        </div>
+
+        <div class="demo-frame">
+          <pre><code>&lt;svg viewBox="0 0 800 500"&gt;
+  &lt;path
+    id="bill"
+    d="..."
+  &gt;&lt;/path&gt;
+&lt;/svg&gt;</code></pre>
+        </div>
+
+        <div class="code-note"><strong>Core distinction:</strong> <code>&lt;img src="bird.svg"&gt;</code> displays the SVG as an image. Inline <code>&lt;svg&gt;...&lt;/svg&gt;</code> lets page JavaScript directly target internal elements such as <code>#bill</code>.</div>
+      </section>
+
+      <section class="section-group" id="responsive-svg">
+        <h2>Responsive SVG</h2>
+        <p>SVG scales well, but students need one core concept: the <code>viewBox</code>.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>The viewBox defines the internal coordinate space</h3>
+            <p>The browser can scale that coordinate space to fit the available width.</p>
+          </div>
+          <span class="tag">All devices</span>
+        </div>
+
+        <div class="syntax-grid">
+          <div class="demo-frame">
+            <pre><code>&lt;svg
+  viewBox="0 0 800 500"
+  width="100%"
+&gt;
+  ...
+&lt;/svg&gt;</code></pre>
+          </div>
+
+          <div class="demo-frame">
+            <ul class="mini-list">
+              <li><strong>0 0</strong> is the starting coordinate.</li>
+              <li><strong>800 500</strong> describes the internal width and height.</li>
+              <li><strong>width="100%"</strong> lets the SVG fit the available container.</li>
+              <li>The artwork can scale while preserving its internal geometry.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="code-note"><strong>Working rule:</strong> test labels, hotspots, and touch targets at phone sizes. A graphic can technically scale while still becoming too dense to use.</div>
+      </section>
+
+      <section class="section-group" id="accessibility">
+        <h2>Accessibility</h2>
+        <p>A clickable SVG shape is not automatically an accessible control. Mouse interaction alone is not enough.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Prefer robust controls for important interaction</h3>
+            <p>One reliable pattern is to let real HTML buttons control the SVG state.</p>
+          </div>
+          <span class="tag">Accessibility</span>
+        </div>
+
+        <div class="syntax-grid">
+          <div class="demo-frame">
+            <pre><code>&lt;button
+  type="button"
+  data-part="bill"
+&gt;
+  Bill
+&lt;/button&gt;</code></pre>
+          </div>
+
+          <div class="demo-frame">
+            <pre><code>&lt;path
+  id="bill"
+  d="..."
+&gt;&lt;/path&gt;</code></pre>
+          </div>
+        </div>
+
+        <div class="grid three" style="margin-top:16px;">
+          <article class="card"><h4>Keyboard access</h4><p>Users should be able to reach and activate important controls without a mouse.</p></article>
+          <article class="card"><h4>Visible focus</h4><p>Keyboard users need to see which control is currently active.</p></article>
+          <article class="card"><h4>Equivalent information</h4><p>The explanation should not depend only on color, hover, or precise pointer movement.</p></article>
+        </div>
+
+        <div class="code-note"><strong>Hybrid approach:</strong> the SVG can still respond to direct clicks, but visible buttons can provide a clearer and more accessible control system.</div>
+      </section>
+
+      <section class="section-group" id="interaction-patterns">
+        <h2>Interaction patterns</h2>
+        <p>Once your SVG is organized and inline in the page, you can connect it to several common storytelling patterns. Start with the simplest interaction that fits the explanation.</p>
+      </section>
+
+      <section class="section-group" id="clickable-parts">
+        <h2>Pattern 1: clickable parts of an illustration</h2>
+        <p>One of the strongest uses is a diagram where the user selects a meaningful part and the page reveals an explanation.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Example: explore the anatomy of a bird</h3>
+            <p>Different SVG shapes can act as targets for information about feeding, flight, habitat, or identification.</p>
+          </div>
+          <span class="tag">Reveal + Explain</span>
+        </div>
+
+        <div class="syntax-grid">
+          <div class="demo-frame">
+            <pre><code>&lt;svg viewBox="0 0 800 500"&gt;
+  &lt;path
+    id="wing"
+    d="..."
+  &gt;&lt;/path&gt;
+
+  &lt;path
+    id="bill"
+    d="..."
+  &gt;&lt;/path&gt;
+&lt;/svg&gt;</code></pre>
+          </div>
+
+          <div class="demo-frame">
+            <pre><code>const bill =
+  document.querySelector("#bill");
+
+bill.addEventListener("click", () =&gt; {
+  document.querySelector(
+    "#info-panel"
+  ).innerHTML = `
+    &lt;h2&gt;Bill&lt;/h2&gt;
+    &lt;p&gt;
+      This shape is adapted
+      for probing flowers.
+    &lt;/p&gt;
+  `;
+});</code></pre>
+          </div>
+        </div>
+
+        <div class="demo-frame" style="margin-top:16px;">
+          <h4>Simple example</h4>
+          <svg viewBox="0 0 420 180" style="width:100%; max-width:560px; display:block; margin:auto;" aria-label="Simple bird diagram with clickable bill and wing">
+            <ellipse cx="205" cy="95" rx="95" ry="50" fill="#d9e7dd"></ellipse>
+            <circle cx="120" cy="75" r="34" fill="#edf4ee"></circle>
+            <polygon id="demo-bill" points="87,72 38,89 88,92" fill="#d8893a" style="cursor:pointer;"></polygon>
+            <path id="demo-wing" d="M180 78 C230 42, 285 68, 275 116 C245 138, 198 130, 172 104 Z" fill="#37634e" style="cursor:pointer;"></path>
+            <circle cx="110" cy="67" r="4" fill="#17211b"></circle>
+          </svg>
+          <p id="demo-part-info" style="margin-top:14px;">Click the orange bill or green wing.</p>
+        </div>
+        <div class="code-note"><strong>Story use:</strong> anatomy, machinery, architecture, ecological systems, camera controls, scientific diagrams, and any illustration with meaningful components.</div>
+      </section>
+
+
+      <section class="section-group" id="custom-maps">
+        <h2>Pattern 2: custom maps that do not need a mapping library</h2>
+        <p>Some projects look geographic but do not need map tiles, panning, zooming, or live coordinates. A designed SVG can be simpler and more appropriate.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Use SVG when the map is really an explanatory graphic</h3>
+            <p>A campus plan, floor plan, festival layout, historical map, or illustrated region may work better as a designed vector graphic.</p>
+          </div>
+          <span class="tag">Locate + Compare</span>
+        </div>
+
+        <div class="grid two">
+          <article class="card"><h4>Good SVG map uses</h4><p>Campus buildings, neighborhoods, historical districts, migration flyways, event grounds, room layouts, watersheds, and schematic routes.</p></article>
+          <article class="card"><h4>Use Leaflet or Mapbox when</h4><p>The user needs geographic navigation, map tiles, accurate coordinate placement, dynamic spatial layers, or pan-and-zoom exploration.</p></article>
+        </div>
+
+        <div class="demo-frame" style="margin-top:16px;">
+          <pre><code>&lt;path
+  id="downtown"
+  class="district"
+  d="..."
+&gt;&lt;/path&gt;
+
+&lt;path
+  id="west-side"
+  class="district"
+  d="..."
+&gt;&lt;/path&gt;
+
+&lt;path
+  id="riverfront"
+  class="district"
+  d="..."
+&gt;&lt;/path&gt;</code></pre>
+        </div>
+        <div class="demo-frame" style="margin-top:16px;">
+          <h4>Simple example</h4>
+          <svg viewBox="0 0 420 210" style="width:100%; max-width:560px; display:block; margin:auto;" aria-label="Three clickable example districts">
+            <path class="demo-district" data-name="Downtown" d="M35 35 H190 V120 H35 Z" fill="#d9e7dd" stroke="#17211b" style="cursor:pointer;"></path>
+            <path class="demo-district" data-name="West Side" d="M205 35 H385 V100 H205 Z" fill="#edf4ee" stroke="#17211b" style="cursor:pointer;"></path>
+            <path class="demo-district" data-name="Riverfront" d="M140 130 H360 V185 H140 Z" fill="#f4d7b8" stroke="#17211b" style="cursor:pointer;"></path>
+          </svg>
+          <p id="demo-map-info" style="margin-top:14px;">Click a district to identify it.</p>
+        </div>
+      </section>
+
+
+      <section class="section-group" id="state-changes">
+        <h2>Pattern 3: show change through visual states</h2>
+        <p>An SVG can stay in one place while JavaScript changes classes that reveal, hide, fade, or highlight parts of the graphic.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Example: show a landscape over time</h3>
+            <p>Buttons or a stepper can move between historical states without rebuilding the graphic.</p>
+          </div>
+          <span class="tag">Compare + Change</span>
+        </div>
+
+        <div class="syntax-grid">
+          <div class="demo-frame">
+            <pre><code>graphic.classList.add(
+  "year-1950"
+);</code></pre>
+          </div>
+
+          <div class="demo-frame">
+            <pre><code>.year-1950 .railroad {
+  opacity: 1;
+}
+
+.year-1950 .wetland {
+  opacity: 0.3;
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="demo-frame" style="margin-top:16px;">
+          <h4>Simple example</h4>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+            <button type="button" class="secondary demo-year" data-year="1900">1900</button>
+            <button type="button" class="secondary demo-year" data-year="1950">1950</button>
+            <button type="button" class="secondary demo-year" data-year="2000">2000</button>
+          </div>
+          <svg id="demo-state-svg" viewBox="0 0 420 190" style="width:100%; max-width:560px; display:block; margin:auto;">
+            <rect x="20" y="20" width="380" height="145" rx="14" fill="#edf4ee"></rect>
+            <path d="M30 120 C110 80, 180 150, 390 95" fill="none" stroke="#4b86b4" stroke-width="18" opacity=".7"></path>
+            <g id="demo-railroad" opacity=".15">
+              <line x1="50" y1="55" x2="360" y2="145" stroke="#17211b" stroke-width="5"></line>
+              <line x1="55" y1="70" x2="365" y2="160" stroke="#17211b" stroke-width="2" stroke-dasharray="8 8"></line>
+            </g>
+            <g id="demo-buildings" opacity=".15">
+              <rect x="95" y="45" width="38" height="55" fill="#d8893a"></rect>
+              <rect x="155" y="55" width="42" height="50" fill="#d8893a"></rect>
+              <rect x="270" y="45" width="48" height="70" fill="#d8893a"></rect>
+            </g>
+          </svg>
+          <p id="demo-state-info" style="margin-top:14px;">Choose a year.</p>
+        </div>
+        <div class="code-note"><strong>Useful for:</strong> land-use change, infrastructure growth, ecological change, architecture, political boundaries, historical development, and process stages.</div>
+      </section>
+
+
+      <section class="section-group" id="process-diagrams">
+        <h2>Pattern 4: interactive process diagrams</h2>
+        <p>SVG is effective when a story needs to explain how something moves through a system or how several components relate.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Let the user move through a system</h3>
+            <p>Each step can highlight a section of the diagram, reveal detail, animate a flow, or update explanatory text.</p>
+          </div>
+          <span class="tag">Explain a process</span>
+        </div>
+
+        <div class="demo-frame">
+          <ul class="mini-list">
+            <li><strong>Source</strong> → where something begins.</li>
+            <li><strong>Processing</strong> → how it changes.</li>
+            <li><strong>Distribution</strong> → how it moves.</li>
+            <li><strong>Consumer</strong> → where it ends or who experiences the result.</li>
+          </ul>
+        </div>
+
+        <div class="grid three" style="margin-top:16px;">
+          <article class="card"><h4>Click</h4><p>Users select a step and control the pace of explanation.</p></article>
+          <article class="card"><h4>Stepper</h4><p>Next and previous buttons create a guided sequence.</p></article>
+          <article class="card"><h4>Scroll</h4><p>The graphic changes as the reader moves through explanatory text.</p></article>
+        </div>
+        <div class="demo-frame" style="margin-top:16px;">
+          <h4>Simple example</h4>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+            <button type="button" class="secondary demo-process" data-step="1">Source</button>
+            <button type="button" class="secondary demo-process" data-step="2">Processing</button>
+            <button type="button" class="secondary demo-process" data-step="3">Distribution</button>
+            <button type="button" class="secondary demo-process" data-step="4">Consumer</button>
+          </div>
+          <svg viewBox="0 0 620 170" style="width:100%; display:block; margin:auto;">
+            <g class="demo-process-node" data-step="1"><circle cx="75" cy="85" r="42" fill="#d9e7dd"></circle><text x="75" y="90" text-anchor="middle" font-size="16">Source</text></g>
+            <line x1="117" y1="85" x2="205" y2="85" stroke="#5c675f" stroke-width="4"></line>
+            <g class="demo-process-node" data-step="2"><circle cx="250" cy="85" r="42" fill="#d9e7dd"></circle><text x="250" y="90" text-anchor="middle" font-size="15">Process</text></g>
+            <line x1="292" y1="85" x2="380" y2="85" stroke="#5c675f" stroke-width="4"></line>
+            <g class="demo-process-node" data-step="3"><circle cx="425" cy="85" r="42" fill="#d9e7dd"></circle><text x="425" y="90" text-anchor="middle" font-size="14">Distribute</text></g>
+            <line x1="467" y1="85" x2="525" y2="85" stroke="#5c675f" stroke-width="4"></line>
+            <g class="demo-process-node" data-step="4"><circle cx="565" cy="85" r="42" fill="#d9e7dd"></circle><text x="565" y="90" text-anchor="middle" font-size="14">Consumer</text></g>
+          </svg>
+          <p id="demo-process-info" style="margin-top:14px;">Choose a step to highlight it.</p>
+        </div>
+      </section>
+
+
+      <section class="section-group" id="scroll-driven">
+        <h2>Pattern 5: scroll-driven SVG</h2>
+        <p>A persistent SVG can change as the user scrolls through a sequence of explanatory text. This is one of the strongest combinations for interactive journalism.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>One graphic, multiple explanatory states</h3>
+            <p>The page can highlight a different part of the same SVG at each scroll step.</p>
+          </div>
+          <span class="tag">Guided interaction</span>
+        </div>
+
+        <div class="grid two">
+          <article class="card"><h4>Step 1</h4><p>Show the overview and establish the full system.</p></article>
+          <article class="card"><h4>Step 2</h4><p>Highlight the river and explain its role.</p></article>
+          <article class="card"><h4>Step 3</h4><p>Reveal factories and explain industrial growth.</p></article>
+          <article class="card"><h4>Step 4</h4><p>Show transportation and population movement.</p></article>
+        </div>
+
+        <div class="demo-frame" style="margin-top:16px;">
+          <pre><code>graphic.classList.remove(
+  "step-1",
+  "step-2",
+  "step-3"
+);
+
+graphic.classList.add("step-2");</code></pre>
+        </div>
+
+        <div class="demo-frame" style="margin-top:16px;">
+          <h4>Simple example</h4>
+          <p>Use the buttons below to simulate scroll steps. In a real scrollytelling page, Scrollama or similar code would activate these states as each text step enters the viewport.</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin:14px 0;">
+            <button type="button" class="secondary demo-scroll-step" data-step="1">Overview</button>
+            <button type="button" class="secondary demo-scroll-step" data-step="2">River</button>
+            <button type="button" class="secondary demo-scroll-step" data-step="3">Factories</button>
+          </div>
+          <svg viewBox="0 0 500 220" style="width:100%; max-width:620px; display:block; margin:auto;">
+            <rect x="20" y="20" width="460" height="180" rx="16" fill="#f7f4ec"></rect>
+            <path id="demo-scroll-river" d="M35 145 C130 80, 210 175, 465 95" fill="none" stroke="#4b86b4" stroke-width="24" opacity=".35"></path>
+            <g id="demo-scroll-factories" opacity=".25">
+              <rect x="120" y="55" width="45" height="70" fill="#d8893a"></rect>
+              <rect x="235" y="45" width="52" height="80" fill="#d8893a"></rect>
+              <rect x="350" y="60" width="44" height="65" fill="#d8893a"></rect>
+            </g>
+          </svg>
+          <p id="demo-scroll-info" style="margin-top:14px;">Overview state.</p>
+        </div>
+        <div class="code-note"><strong>Strong combination:</strong> Scrollama can detect which text step is active; your JavaScript can then add a class to the SVG; CSS controls what changes visually.</div>
+      </section>
+
+
+    </main>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const menuBackdrop = document.getElementById('mobileMenuBackdrop');
+
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuBackdrop.hidden = true;
+    }
+
+    if (menuToggle && menuBackdrop) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        menuBackdrop.hidden = !isOpen;
+      });
+
+      menuBackdrop.addEventListener('click', closeMenu);
+
+      document
+        .querySelectorAll('.sidebar a')
+        .forEach(link => link.addEventListener('click', closeMenu));
+    }
+
+    const demoBill = document.getElementById('demo-bill');
+    const demoWing = document.getElementById('demo-wing');
+    const demoPartInfo = document.getElementById('demo-part-info');
+
+    if (demoBill && demoWing && demoPartInfo) {
+      demoBill.addEventListener('click', () => {
+        demoPartInfo.textContent = 'Bill: this part could reveal information about feeding adaptation.';
+      });
+
+      demoWing.addEventListener('click', () => {
+        demoPartInfo.textContent = 'Wing: this part could reveal information about flight or migration.';
+      });
+    }
+
+    document.querySelectorAll('.demo-district').forEach(district => {
+      district.addEventListener('click', () => {
+        document.querySelectorAll('.demo-district').forEach(item => item.setAttribute('opacity', '.45'));
+        district.setAttribute('opacity', '1');
+        const info = document.getElementById('demo-map-info');
+        if (info) info.textContent = `${district.dataset.name}: this region could reveal local information or comparisons.`;
+      });
+    });
+
+    const railroad = document.getElementById('demo-railroad');
+    const buildings = document.getElementById('demo-buildings');
+    const stateInfo = document.getElementById('demo-state-info');
+
+    document.querySelectorAll('.demo-year').forEach(button => {
+      button.addEventListener('click', () => {
+        const year = button.dataset.year;
+
+        if (railroad && buildings) {
+          railroad.setAttribute('opacity', year === '1900' ? '.15' : '1');
+          buildings.setAttribute('opacity', year === '2000' ? '1' : year === '1950' ? '.55' : '.15');
+        }
+
+        if (stateInfo) {
+          stateInfo.textContent =
+            year === '1900' ? '1900: mostly landscape, with little infrastructure shown.' :
+            year === '1950' ? '1950: transportation becomes prominent and development begins to grow.' :
+            '2000: development is fully visible.';
+        }
+      });
+    });
+
+    document.querySelectorAll('.demo-process').forEach(button => {
+      button.addEventListener('click', () => {
+        const step = button.dataset.step;
+
+        document.querySelectorAll('.demo-process-node').forEach(node => {
+          const active = node.dataset.step === step;
+          node.setAttribute('opacity', active ? '1' : '.3');
+          const circle = node.querySelector('circle');
+          if (circle) circle.setAttribute('fill', active ? '#d8893a' : '#d9e7dd');
+        });
+
+        const info = document.getElementById('demo-process-info');
+        if (info) info.textContent = `Step ${step} is active. A real graphic could update explanation text here.`;
+      });
+    });
+
+    const scrollRiver = document.getElementById('demo-scroll-river');
+    const scrollFactories = document.getElementById('demo-scroll-factories');
+    const scrollInfo = document.getElementById('demo-scroll-info');
+
+    document.querySelectorAll('.demo-scroll-step').forEach(button => {
+      button.addEventListener('click', () => {
+        const step = button.dataset.step;
+
+        if (scrollRiver && scrollFactories) {
+          if (step === '1') {
+            scrollRiver.setAttribute('opacity', '.35');
+            scrollFactories.setAttribute('opacity', '.25');
+          } else if (step === '2') {
+            scrollRiver.setAttribute('opacity', '1');
+            scrollFactories.setAttribute('opacity', '.15');
+          } else {
+            scrollRiver.setAttribute('opacity', '.25');
+            scrollFactories.setAttribute('opacity', '1');
+          }
+        }
+
+        if (scrollInfo) {
+          scrollInfo.textContent =
+            step === '1' ? 'Overview state.' :
+            step === '2' ? 'River state: the river becomes the visual focus.' :
+            'Factories state: industrial sites become the visual focus.';
+        }
+      });
+    });
+
+  </script>
+</body>
+</html>

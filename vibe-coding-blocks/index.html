@@ -133,7 +133,7 @@
 <section class="step" id="step-2">
 <div class="step-header"><div class="step-number">2</div><div><h3>Production context</h3><p>This keeps the AI from writing a full web page or global CSS that could interfere with the builder page.</p></div><span class="tag">Production context</span></div>
 <div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" type="button" data-copy="step2">Copy</button></div>
-<pre><code id="step2">I will paste this into a custom HTML block in Tilda. Give me a self-contained HTML snippet with embedded CSS and JavaScript. Do not include a full HTML document unless necessary. Scope all CSS to this interactive so it does not affect the rest of the page. Do not use external libraries unless there is a strong reason.</code></pre></div>
+<pre><code id="step2">I will paste this into a custom HTML block in Tilda. Give me a self-contained HTML snippet with embedded CSS and JavaScript. Do not include a full HTML document unless necessary. Scope all CSS to this interactive so it does not affect the rest of the page. Prefer plain HTML, CSS, and JavaScript for simple interactions. Use an external library when it provides a clear advantage for the requested interaction, such as mapping, data visualization, scroll-driven behavior, animation, or 3D content.</code></pre></div>
 </section>
 
 <section class="step" id="step-3">
