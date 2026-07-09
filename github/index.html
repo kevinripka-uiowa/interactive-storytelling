@@ -77,6 +77,19 @@
     .pill { display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border-radius:999px; background:#eef3ef; border:1px solid var(--line); color:var(--accent); font-weight:800; font-size:.82rem; }
 
     .warning { border-left:5px solid var(--accent-2); }
+    .install-alert {
+      margin:18px 0 0;
+      padding:22px 24px;
+      border:2px solid #c99700;
+      border-radius:18px;
+      background:#fff1a8;
+      color:#3b3100;
+      box-shadow:0 8px 20px rgba(23,33,27,.08);
+    }
+    .install-alert strong { color:#241d00; }
+    .install-alert p { margin:0; color:#3b3100; }
+    .install-alert p + p { margin-top:8px; }
+    .install-alert a { font-weight:900; text-decoration-thickness:2px; text-underline-offset:2px; }
     .table-wrap { width:100%; overflow-x:auto; border:1px solid var(--line); border-radius:16px; background:#fffdf7; }
     table { width:100%; border-collapse:separate; border-spacing:0; min-width:760px; }
     th, td { padding:14px 16px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
@@ -152,6 +165,8 @@
 <div class="nav-group-title">Account</div>
 <a href="#create-account">Create an account</a>
 <a href="#account-checklist">Account checklist</a>
+<div class="nav-group-title">Git setup</div>
+<a href="#install-git">Install Git</a>
 <div class="nav-group-title">VS Code setup</div>
 <a href="#project-folder">Project folder</a>
 <a href="#connect-vscode">Connect VS Code</a>
@@ -261,6 +276,41 @@
 </article>
 </div>
 </section>
+
+<section class="section-group" id="install-git">
+<h2>Installing Git</h2>
+<p>VS Code gives you a visual interface for Git, but Git still needs to be installed on the computer. This is a one-time setup on a personal computer.</p>
+</section>
+<section class="pattern">
+<div class="pattern-header">
+<div>
+<h3>Check the computer before you begin</h3>
+<p>The university lab computers are already set up. Students using their own computers need to install Git before using the Git features in VS Code.</p>
+</div>
+<span class="tag">One-time setup</span>
+</div>
+<div class="install-alert" role="alert">
+<p><strong>Git is already installed in the SJMC labs.</strong></p>
+<p>If you use your own computer, you will need to install Git yourself before using the Source Control workflow in VS Code.</p>
+<p>Start here: <a href="https://git-scm.com/install/" target="_blank" rel="noopener noreferrer">git-scm.com/install</a></p>
+</div>
+<div class="grid two" style="margin-top:18px;">
+<article class="card">
+<h4>Windows</h4>
+<p>Use the Windows installer linked from the official Git installation page. After installation, restart VS Code so it can detect Git.</p>
+</article>
+<article class="card">
+<h4>Mac</h4>
+<p>The simplest option for most students is to install Apple’s <strong>Xcode Command Line Tools</strong>. You do not need the full Xcode application.</p>
+<div class="code-block"><code>xcode-select --install</code></div>
+<p style="margin-top:12px;">macOS will open an installation prompt. After it finishes, restart VS Code.</p>
+</article>
+</div>
+<div class="note">
+<p><strong>Check whether Git is installed:</strong> Open the VS Code terminal and run <code>git --version</code>. If Git is available, you will see a version number.</p>
+</div>
+</section>
+
 <section class="section-group" id="project-folder">
 <h2>Setting up the project in VS Code</h2>
 <p>A GitHub project works best when students start with a clean folder and keep all required files inside it.</p>
