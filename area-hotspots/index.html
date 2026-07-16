@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interactive SVG for Storytelling</title>
+  <title>Area-Based Hotspots and Interactive SVG for Storytelling</title>
   <style>
     :root {
       --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
@@ -88,6 +88,19 @@
     td:first-child, th:first-child { position:sticky; left:0; background:#fffdf7; z-index:1; font-weight:900; min-width:170px; }
     th:first-child { background:#e2eee5; z-index:2; }
 
+
+    .method-choice { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .hotspot-demo { position:relative; max-width:760px; margin:0 auto; }
+    .hotspot-demo img { display:block; width:100%; height:auto; border-radius:14px; }
+    .annotation-panel { margin-top:16px; padding:16px 18px; border:1px solid var(--line); border-radius:14px; background:#fffdf7; color:var(--muted); }
+    .annotation-panel h4 { margin:0 0 5px; color:var(--ink); }
+    .annotation-dialog { border:0; border-radius:18px; padding:0; width:min(92vw,520px); box-shadow:0 24px 70px rgba(23,33,27,.28); }
+    .annotation-dialog::backdrop { background:rgba(23,33,27,.58); }
+    .annotation-dialog-inner { padding:24px; }
+    .annotation-dialog h3 { margin:0 0 8px; }
+    .annotation-dialog p { margin:0 0 18px; color:var(--muted); }
+    .annotation-dialog-close { margin-left:auto; }
+
     .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
     @media (max-width: 860px) {
       body { padding-top:64px; }
@@ -103,7 +116,7 @@
       main { margin-left:0 !important; width:100% !important; max-width:1120px; padding:24px 16px 56px; }
       .pattern-header, .syntax-grid, .object-demo { grid-template-columns:1fr; }
       .tag { justify-self:start; white-space:normal; }
-      .grid.three, .grid.two, .responsibility-list { grid-template-columns:1fr; }
+      .grid.three, .grid.two, .responsibility-list, .method-choice { grid-template-columns:1fr; }
       .hero { border-radius:20px; }
     }
     .home-button {
@@ -121,14 +134,18 @@
   <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
 
   <div class="layout">
-    <aside class="sidebar" id="siteSidebar" aria-label="Interactive SVG page navigation">
+    <aside class="sidebar" id="siteSidebar" aria-label="Area-based hotspots page navigation">
       <a href="../" class="home-button">&larr; Back to Home</a>
-      <h1>Interactive SVG for Storytelling</h1>
-      <p>A practical guide to turning vector graphics into responsive, clickable, scroll-driven, and explanatory interactives.</p>
+      <h1>Area-Based Hotspots</h1>
+      <p>A practical guide to adding clickable regions, annotations, and explanatory states to raster images and SVG graphics.</p>
 
       <nav>
         <div class="nav-group-title">Start here</div>
         <a href="#intro">Intro</a>
+        <a href="#choose-a-method">Choose a method</a>
+        <a href="#html-image-maps">HTML image maps</a>
+        <a href="#image-map-popups">Popups and annotations</a>
+        <a href="#image-map-responsive">Responsive image maps</a>
         <a href="#why-use-svg">Why use SVG?</a>
         <a href="#how-svg-works">How SVG works</a>
 
@@ -150,10 +167,206 @@
     <main>
       <section class="hero" id="intro">
         <div class="eyebrow">Interactive storytelling reference</div>
-        <h2>Turn a vector graphic into an interactive explainer</h2>
-        <p>An SVG can be more than a scalable illustration. Because its shapes and groups can exist as elements in the page, you can make individual parts clickable, reveal information, change states, respond to scrolling, or connect a designed graphic to story text.</p>
-        <div class="concept-callout"><strong>Core idea:</strong> use SVG when the graphic itself is part of the explanation. Instead of treating an illustration as a flat image, make meaningful parts of it respond to the user.</div>
+        <h2>Turn regions of an image into interactive hotspots</h2>
+        <p>Area-based hotspots let users select meaningful regions of a visual and reveal an annotation, popup, comparison, or explanation. You can build them with a raster image and an HTML image map, or with an inline SVG whose individual shapes remain available to CSS and JavaScript.</p>
+        <div class="concept-callout"><strong>Core idea:</strong> choose the simplest method that matches the visual. Use an HTML image map when you already have a finished raster image and mainly need clickable regions. Use inline SVG when the graphic needs responsive shapes, visual state changes, animation, or more precise control.</div>
       </section>
+
+
+      <section class="section-group" id="choose-a-method">
+        <h2>Choose the hotspot method</h2>
+        <p>HTML image maps and inline SVG can both create clickable regions, but they solve slightly different production problems.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Start with the visual you already have</h3>
+            <p>The best method depends on the source artwork and how much the graphic must change during the interaction.</p>
+          </div>
+          <span class="tag">Purpose → Pattern → Production</span>
+        </div>
+
+        <div class="method-choice">
+          <article class="card">
+            <h4>Raster image + HTML image map</h4>
+            <p>Use this for a finished JPEG or PNG when users mainly need to click regions and open annotations. It is often the fastest route for photographs, scans, illustrated maps, floor plans, and complex artwork.</p>
+          </article>
+          <article class="card">
+            <h4>Inline SVG</h4>
+            <p>Use this when individual shapes must change color, fade, animate, respond to scrolling, or remain precisely scalable. SVG requires more production setup but provides more control.</p>
+          </article>
+        </div>
+
+        <div class="code-note"><strong>Working rule:</strong> do not redraw a complex raster illustration as SVG only to create hotspots. An HTML image map may be the more efficient production choice.</div>
+      </section>
+
+      <section class="section-group" id="html-image-maps">
+        <h2>HTML image maps</h2>
+        <p>An HTML image map places invisible clickable areas over a raster image. Each <code>&lt;area&gt;</code> defines a rectangle, circle, or polygon using pixel coordinates measured from the image’s upper-left corner.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Generate the hotspot coordinates visually</h3>
+            <p>Use <a href="https://www.image-map.net/" target="_blank" rel="noopener">Image-Map.net</a> to upload a raster image, draw rectangular, circular, or polygonal areas, and generate the starting HTML.</p>
+          </div>
+          <span class="tag">Recommended workflow</span>
+        </div>
+
+        <div class="responsibility-list">
+          <article class="card"><span class="number-label">1</span><h4>Prepare the image</h4><p>Export the finished artwork as a reasonably sized JPEG or PNG.</p></article>
+          <article class="card"><span class="number-label">2</span><h4>Draw areas</h4><p>Upload it to Image-Map.net and trace each meaningful region with a rectangle, circle, or polygon.</p></article>
+          <article class="card"><span class="number-label">3</span><h4>Generate code</h4><p>Choose <strong>Show Me The Code</strong> and copy the image and map markup.</p></article>
+          <article class="card"><span class="number-label">4</span><h4>Replace links</h4><p>Instead of sending each area to another page, give it data attributes that identify the annotation it should open.</p></article>
+          <article class="card"><span class="number-label">5</span><h4>Add JavaScript</h4><p>Listen for clicks and display the matching popup or annotation panel.</p></article>
+          <article class="card"><span class="number-label">6</span><h4>Test all devices</h4><p>Confirm that coordinates continue to align when the image changes size.</p></article>
+        </div>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>The image and map are connected by name</h3>
+            <p>The image’s <code>usemap</code> value must match the map’s <code>name</code>. Each area then defines a shape and a set of coordinates.</p>
+          </div>
+          <span class="tag">HTML structure</span>
+        </div>
+
+        <div class="syntax-grid">
+          <div class="demo-frame">
+            <pre><code>&lt;img
+  src="img/campus-map.jpg"
+  alt="Illustrated map of campus"
+  usemap="#campus-map"
+&gt;
+
+&lt;map name="campus-map"&gt;
+  &lt;area
+    shape="poly"
+    coords="125,80,240,65,265,170,140,190"
+    href="#"
+    alt="Main Library"
+    data-annotation="library"
+  &gt;
+&lt;/map&gt;</code></pre>
+          </div>
+
+          <div class="demo-frame">
+            <ul class="mini-list">
+              <li><strong>shape="rect"</strong> uses left, top, right, and bottom coordinates.</li>
+              <li><strong>shape="circle"</strong> uses center-x, center-y, and radius.</li>
+              <li><strong>shape="poly"</strong> uses a sequence of x/y points and fits irregular regions.</li>
+              <li><strong>alt</strong> gives the hotspot a meaningful accessible name.</li>
+              <li><strong>data-annotation</strong> connects the area to your own JavaScript and content.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-group" id="image-map-popups">
+        <h2>Connect image-map areas to popups or annotations</h2>
+        <p>The code generated by an image-map tool normally treats each hotspot as a link. For an explanatory interactive, prevent that link behavior and use the clicked area to open an HTML dialog or update an annotation panel.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Example: a raster map with three clickable regions</h3>
+            <p>This demo uses a real PNG with HTML <code>&lt;area&gt;</code> elements. Selecting a region opens an accessible HTML dialog rather than trying to place long text inside the image itself.</p>
+          </div>
+          <span class="tag">Reveal + Annotate</span>
+        </div>
+
+        <div class="demo-frame">
+          <div class="hotspot-demo">
+            <img src="img/hotspot-map-demo.png" alt="Simplified illustrated landscape with a north site, east site, wetland, and river" usemap="#demo-raster-map" id="demo-raster-image">
+            <map name="demo-raster-map">
+              <area shape="rect" coords="70,80,400,300" href="#" alt="North Site" data-title="North Site" data-copy="A rectangular hotspot can work well for buildings, photographs, signs, and other box-like regions.">
+              <area shape="rect" coords="570,70,920,260" href="#" alt="East Site" data-title="East Site" data-copy="Each area can open a separate annotation, even though every hotspot belongs to the same raster image.">
+              <area shape="circle" coords="525,450,195" href="#" alt="Wetland" data-title="Wetland" data-copy="Circular areas are useful for compact objects. Use a polygon when the meaningful region has an irregular boundary.">
+            </map>
+          </div>
+          <div class="annotation-panel">
+            <h4>Try the demo</h4>
+            <p>Select North Site, East Site, or Wetland in the image.</p>
+          </div>
+        </div>
+
+        <dialog class="annotation-dialog" id="imageMapDialog" aria-labelledby="imageMapDialogTitle">
+          <div class="annotation-dialog-inner">
+            <h3 id="imageMapDialogTitle">Annotation</h3>
+            <p id="imageMapDialogCopy"></p>
+            <button type="button" class="annotation-dialog-close" id="imageMapDialogClose">Close</button>
+          </div>
+        </dialog>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Use JavaScript to open the matching annotation</h3>
+            <p>Store short identifiers or content in data attributes, then use a click listener to update a dialog or panel.</p>
+          </div>
+          <span class="tag">JavaScript</span>
+        </div>
+
+        <div class="demo-frame">
+          <pre><code>const dialog =
+  document.querySelector("#annotation-dialog");
+
+document
+  .querySelectorAll("area[data-annotation]")
+  .forEach(area =&gt; {
+    area.addEventListener("click", event =&gt; {
+      event.preventDefault();
+
+      const id = area.dataset.annotation;
+      const content = annotations[id];
+
+      dialog.querySelector("h2").textContent =
+        content.title;
+
+      dialog.querySelector("p").textContent =
+        content.text;
+
+      dialog.showModal();
+    });
+  });</code></pre>
+        </div>
+
+        <div class="code-note"><strong>Content strategy:</strong> keep the hotspot itself small and the annotation content in ordinary HTML. This makes headings, paragraphs, links, images, captions, and close controls easier to build and access.</div>
+      </section>
+
+      <section class="section-group" id="image-map-responsive">
+        <h2>Responsive image maps need extra handling</h2>
+        <p>Traditional image-map coordinates are pixel-based. If the displayed image becomes smaller than the source image, the hotspot coordinates do not automatically scale with it.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header">
+          <div>
+            <h3>Scale the coordinates when the image scales</h3>
+            <p>Use a responsive image-map script or write JavaScript that recalculates the coordinates from the image’s natural width and displayed width.</p>
+          </div>
+          <span class="tag">All devices</span>
+        </div>
+
+        <div class="grid two">
+          <article class="card">
+            <h4>Fast production route</h4>
+            <p>Generate the map at Image-Map.net, then add a small responsive image-map library. Test after every layout change.</p>
+          </article>
+          <article class="card">
+            <h4>More controlled route</h4>
+            <p>Store the original coordinates and use JavaScript to multiply each value by the current image scale. Recalculate on load and window resize.</p>
+          </article>
+        </div>
+
+        <div class="code-note"><strong>Accessibility warning:</strong> image-map areas can receive keyboard focus, but the active region is not always visually obvious. Provide meaningful <code>alt</code> text, visible focus treatment where possible, and an equivalent list of buttons or links when the information is important.</div>
+      </section>
+
 
       <section class="section-group" id="why-use-svg">
         <h2>Why interactive SVG is useful</h2>
@@ -837,6 +1050,66 @@ graphic.classList.add("step-2");</code></pre>
         }
       });
     });
+
+
+    function makeImageMapResponsive(image) {
+      if (!image || !image.useMap) return;
+
+      const mapName = image.useMap.replace("#", "");
+      const map = document.querySelector(`map[name="${mapName}"]`);
+      if (!map) return;
+
+      const areas = [...map.querySelectorAll("area")];
+
+      areas.forEach(area => {
+        if (!area.dataset.originalCoords) {
+          area.dataset.originalCoords = area.coords;
+        }
+      });
+
+      function resizeAreas() {
+        if (!image.naturalWidth || !image.clientWidth) return;
+        const scale = image.clientWidth / image.naturalWidth;
+
+        areas.forEach(area => {
+          const original = area.dataset.originalCoords
+            .split(",")
+            .map(Number);
+
+          area.coords = original
+            .map(value => Math.round(value * scale))
+            .join(",");
+        });
+      }
+
+      if (image.complete) resizeAreas();
+      image.addEventListener("load", resizeAreas);
+      window.addEventListener("resize", resizeAreas);
+    }
+
+    const demoRasterImage = document.getElementById("demo-raster-image");
+    makeImageMapResponsive(demoRasterImage);
+
+    const imageMapDialog = document.getElementById("imageMapDialog");
+    const imageMapDialogTitle = document.getElementById("imageMapDialogTitle");
+    const imageMapDialogCopy = document.getElementById("imageMapDialogCopy");
+    const imageMapDialogClose = document.getElementById("imageMapDialogClose");
+
+    document.querySelectorAll('map[name="demo-raster-map"] area').forEach(area => {
+      area.addEventListener("click", event => {
+        event.preventDefault();
+
+        if (imageMapDialog && imageMapDialogTitle && imageMapDialogCopy) {
+          imageMapDialogTitle.textContent = area.dataset.title;
+          imageMapDialogCopy.textContent = area.dataset.copy;
+          imageMapDialog.showModal();
+        }
+      });
+    });
+
+    if (imageMapDialogClose && imageMapDialog) {
+      imageMapDialogClose.addEventListener("click", () => imageMapDialog.close());
+    }
 
   </script>
 </body>
