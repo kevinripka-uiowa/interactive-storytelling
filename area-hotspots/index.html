@@ -11,8 +11,8 @@
       --radius:18px; --code:#162019;
     }
     * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
-    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; width:100%; max-width:100%; overflow-x:hidden; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:clip; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; width:100%; max-width:100%; overflow-x:clip; }
     a { color:inherit; }
     img, video, iframe, svg { max-width:100%; }
 
@@ -101,6 +101,17 @@
     .annotation-dialog p { margin:0 0 18px; color:var(--muted); }
     .annotation-dialog-close { margin-left:auto; }
 
+
+    .scroll-demo-frame { overflow:visible; }
+    .scroll-demo { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr); gap:24px; align-items:start; }
+    .scroll-graphic { position:sticky; top:24px; align-self:start; height:max-content; min-width:0; }
+    .scroll-graphic svg { width:100%; display:block; }
+    .scroll-steps { display:grid; gap:55vh; padding:18vh 0 28vh; }
+    .scroll-step { min-height:42vh; display:flex; flex-direction:column; justify-content:center; padding:24px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; opacity:.38; transition:opacity .25s ease, transform .25s ease, box-shadow .25s ease; }
+    .scroll-step.is-active { opacity:1; transform:translateY(-4px); box-shadow:0 12px 28px rgba(23,33,27,.12); }
+    .scroll-step h4 { margin:0 0 8px; }
+    #demo-scroll-river, #demo-scroll-factories { transition:opacity .4s ease; }
+
     .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
     @media (max-width: 860px) {
       body { padding-top:64px; }
@@ -116,7 +127,10 @@
       main { margin-left:0 !important; width:100% !important; max-width:1120px; padding:24px 16px 56px; }
       .pattern-header, .syntax-grid, .object-demo { grid-template-columns:1fr; }
       .tag { justify-self:start; white-space:normal; }
-      .grid.three, .grid.two, .responsibility-list, .method-choice { grid-template-columns:1fr; }
+      .grid.three, .grid.two, .responsibility-list, .method-choice, .scroll-demo { grid-template-columns:1fr; }
+      .scroll-graphic { position:relative; top:auto; }
+      .scroll-steps { gap:24px; padding:24px 0 0; }
+      .scroll-step { min-height:55vh; }
       .hero { border-radius:20px; }
     }
     .home-button {
@@ -910,24 +924,37 @@ bill.addEventListener("click", () =&gt; {
 graphic.classList.add("step-2");</code></pre>
         </div>
 
-        <div class="demo-frame" style="margin-top:16px;">
-          <h4>Simple example</h4>
-          <p>Use the buttons below to simulate scroll steps. In a real scrollytelling page, Scrollama or similar code would activate these states as each text step enters the viewport.</p>
-          <div style="display:flex; gap:8px; flex-wrap:wrap; margin:14px 0;">
-            <button type="button" class="secondary demo-scroll-step" data-step="1">Overview</button>
-            <button type="button" class="secondary demo-scroll-step" data-step="2">River</button>
-            <button type="button" class="secondary demo-scroll-step" data-step="3">Factories</button>
+        <div class="demo-frame scroll-demo-frame" style="margin-top:16px;">
+          <h4>Scroll-driven example</h4>
+          <p>Scroll through the text steps. The SVG remains visible while each step changes the graphic’s emphasis.</p>
+          <div class="scroll-demo" id="scrollDemo">
+            <div class="scroll-graphic" aria-live="polite">
+              <svg viewBox="0 0 500 220" aria-label="Diagram that highlights an overview, river, and factories as the page scrolls">
+                <rect x="20" y="20" width="460" height="180" rx="16" fill="#f7f4ec"></rect>
+                <path id="demo-scroll-river" d="M35 145 C130 80, 210 175, 465 95" fill="none" stroke="#4b86b4" stroke-width="24" opacity=".35"></path>
+                <g id="demo-scroll-factories" opacity=".25">
+                  <rect x="120" y="55" width="45" height="70" fill="#d8893a"></rect>
+                  <rect x="235" y="45" width="52" height="80" fill="#d8893a"></rect>
+                  <rect x="350" y="60" width="44" height="65" fill="#d8893a"></rect>
+                </g>
+              </svg>
+              <p id="demo-scroll-info" style="margin-top:14px;">Overview state.</p>
+            </div>
+            <div class="scroll-steps">
+              <article class="scroll-step is-active" data-step="1">
+                <h4>Overview</h4>
+                <p>Begin with the whole system visible so the reader understands the visual structure before details become prominent.</p>
+              </article>
+              <article class="scroll-step" data-step="2">
+                <h4>The river</h4>
+                <p>The river becomes the visual focus while the factories recede. The accompanying text can explain why the waterway shaped development.</p>
+              </article>
+              <article class="scroll-step" data-step="3">
+                <h4>Industrial sites</h4>
+                <p>The factories become prominent while the river fades. This step can explain where industry appeared and how the sites relate to transportation.</p>
+              </article>
+            </div>
           </div>
-          <svg viewBox="0 0 500 220" style="width:100%; max-width:620px; display:block; margin:auto;">
-            <rect x="20" y="20" width="460" height="180" rx="16" fill="#f7f4ec"></rect>
-            <path id="demo-scroll-river" d="M35 145 C130 80, 210 175, 465 95" fill="none" stroke="#4b86b4" stroke-width="24" opacity=".35"></path>
-            <g id="demo-scroll-factories" opacity=".25">
-              <rect x="120" y="55" width="45" height="70" fill="#d8893a"></rect>
-              <rect x="235" y="45" width="52" height="80" fill="#d8893a"></rect>
-              <rect x="350" y="60" width="44" height="65" fill="#d8893a"></rect>
-            </g>
-          </svg>
-          <p id="demo-scroll-info" style="margin-top:14px;">Overview state.</p>
         </div>
         <div class="code-note"><strong>Strong combination:</strong> Scrollama can detect which text step is active; your JavaScript can then add a class to the SVG; CSS controls what changes visually.</div>
       </section>
@@ -1024,32 +1051,51 @@ graphic.classList.add("step-2");</code></pre>
     const scrollRiver = document.getElementById('demo-scroll-river');
     const scrollFactories = document.getElementById('demo-scroll-factories');
     const scrollInfo = document.getElementById('demo-scroll-info');
+    const scrollSteps = document.querySelectorAll('.scroll-step');
 
-    document.querySelectorAll('.demo-scroll-step').forEach(button => {
-      button.addEventListener('click', () => {
-        const step = button.dataset.step;
-
-        if (scrollRiver && scrollFactories) {
-          if (step === '1') {
-            scrollRiver.setAttribute('opacity', '.35');
-            scrollFactories.setAttribute('opacity', '.25');
-          } else if (step === '2') {
-            scrollRiver.setAttribute('opacity', '1');
-            scrollFactories.setAttribute('opacity', '.15');
-          } else {
-            scrollRiver.setAttribute('opacity', '.25');
-            scrollFactories.setAttribute('opacity', '1');
-          }
-        }
-
-        if (scrollInfo) {
-          scrollInfo.textContent =
-            step === '1' ? 'Overview state.' :
-            step === '2' ? 'River state: the river becomes the visual focus.' :
-            'Factories state: industrial sites become the visual focus.';
-        }
+    function activateScrollStep(step) {
+      scrollSteps.forEach(item => {
+        item.classList.toggle('is-active', item.dataset.step === step);
       });
-    });
+
+      if (scrollRiver && scrollFactories) {
+        if (step === '1') {
+          scrollRiver.setAttribute('opacity', '.35');
+          scrollFactories.setAttribute('opacity', '.25');
+        } else if (step === '2') {
+          scrollRiver.setAttribute('opacity', '1');
+          scrollFactories.setAttribute('opacity', '.15');
+        } else {
+          scrollRiver.setAttribute('opacity', '.25');
+          scrollFactories.setAttribute('opacity', '1');
+        }
+      }
+
+      if (scrollInfo) {
+        scrollInfo.textContent =
+          step === '1' ? 'Overview state.' :
+          step === '2' ? 'River state: the river becomes the visual focus.' :
+          'Factories state: industrial sites become the visual focus.';
+      }
+    }
+
+    if ('IntersectionObserver' in window && scrollSteps.length) {
+      const scrollObserver = new IntersectionObserver(entries => {
+        const visible = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visible) activateScrollStep(visible.target.dataset.step);
+      }, {
+        root: null,
+        rootMargin: '-35% 0px -35% 0px',
+        threshold: [0, .25, .5, .75, 1]
+      });
+
+      scrollSteps.forEach(step => scrollObserver.observe(step));
+    } else {
+      activateScrollStep('1');
+    }
 
 
     function makeImageMapResponsive(image) {
