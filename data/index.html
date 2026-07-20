@@ -367,6 +367,16 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
   .data-viz-body { grid-template-columns:1fr; }
 }
 
+
+/* Guided data story concepts */
+.argument-grid, .transition-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:16px 0 20px; }
+.argument-card, .transition-card { padding:15px 16px; border:1px solid var(--line); border-radius:16px; background:#f6f1e7; }
+.argument-card h4, .transition-card h4 { margin:0 0 6px; color:var(--accent); font-size:1rem; }
+.argument-card p, .transition-card p { margin:0; color:var(--muted); font-size:.94rem; }
+.transition-card { background:#fff8ed; }
+.transition-label { display:inline-block; margin-bottom:7px; color:var(--accent-2); font-size:.75rem; font-weight:900; letter-spacing:.07em; text-transform:uppercase; }
+@media (max-width:860px) { .argument-grid, .transition-grid { grid-template-columns:1fr; } }
+
 /* Mobile menu */
 .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
 @media (max-width:860px) {
@@ -403,16 +413,15 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 <a class="home-button" href="../">← Back to Home</a>
 <h1>Explain a Pattern, Process, or Change</h1>
 <p>Data and information graphic patterns for explaining evidence, sequence, systems, and change.</p>
-<nav><div class="nav-group-title">Explanatory data visualization</div>
+<nav><div class="nav-group-title">Data visualization types</div>
+<a href="#data-viz-types-section">Data viz types by job</a>
+<div class="nav-group-title">Explanatory data visualization</div>
 <a href="#data-chart-interactions">Explanatory Data Visualization</a>
 <div class="nav-group-title">Exploratory data visualization</div>
 <a href="#filterable-explorer">Filterable data visualization</a>
 <a href="#sort-compare">Sort-and-compare view</a>
-<div class="nav-group-title">Guided views</div>
-<a href="#revisualization-switcher">Revisualization switcher</a>
+<div class="nav-group-title">Guided data stories</div>
 <a href="#step-data-story">Step-through data story</a>
-<div class="nav-group-title">Data visualization types</div>
-<a href="#data-viz-types-section">Data viz types by job</a>
 <div class="nav-group-title">Beyond charts</div>
 <a href="#labeled-diagram-types">Labeled diagrams</a>
 <a href="#visual-list-types">Visual lists</a>
@@ -424,107 +433,9 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 <section class="hero" id="intro">
 <div class="eyebrow">Module 3</div>
 <h2>Explain a Pattern, Process, or Change</h2>
-<p>Data visualizations and information graphics help viewers understand what is happening, how it varies, how it changes over time, and how parts connect.</p>
-<div class="concept-callout"><strong>Core idea:</strong> this module is not just about making charts. It is about choosing the right visual explanation: a focused data pattern, an exploratory data view, a guided story sequence, a timeline, or a diagram.</div>
+<p>Data visualizations and information graphics help viewers understand what is happening, how it varies, how it changes over time, and how parts connect. Start by choosing a visual form, then decide whether the experience should explain, invite exploration, or guide viewers through an argument.</p>
+<div class="concept-callout"><strong>Core idea:</strong> this module is not just about making charts. It is about choosing the right visual explanation: a suitable visualization type, an explanatory chart, an exploratory view, a guided data story, a timeline, or a diagram.</div>
 </section>
-<section class="section-group" id="focused-data-section">
-<h2>Explanatory Data Visualization</h2>
-<p>Use this when the author has found the pattern and needs the viewer to understand it clearly. The interaction should support reading the evidence: tooltips, hover/focus highlights, labels, callouts, and guided inspection.</p>
-</section>
-<section class="pattern" id="data-chart-interactions">
-<div class="pattern-header"><div><h3>Explanatory Data Visualization</h3><p>An explanatory data visualization focuses the viewer on one important pattern in the evidence. The chart can still be interactive, but the interaction should help readers inspect values, highlight a data point or set, and understand the author’s main point.</p></div><span class="tag">Explain</span></div>
-<div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Explain. <strong>Also useful for:</strong> Compare when interaction highlights differences between groups.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural because the chart responds to hover/focus; encyclopedic because exact data values sit behind the visual marks.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided inspection. The author chooses the pattern, while the viewer checks details within the graphic.</p></div></div>
-<div class="key-interactions"><h4>Key interactions</h4><ul><li>Tooltip labels for exact values and short context.</li><li>Hover or keyboard focus to highlight one bar, point, line, or data set.</li><li>Persistent annotation or callout for the most important pattern.</li><li>Optional legend hover to isolate one series.</li></ul></div>
-<div class="demo-frame">
-<div class="demo-note"><strong>Example:</strong> The chart explains one finding: grassland birds show the steepest decline. Hover or focus each bar to read the value.</div>
-<div class="chart-shell" id="interactiveChartShell">
-<div class="chart-title"><div><h4>Population change by bird group</h4><p>Example data showing why the story would focus on grassland species.</p></div><span class="pill">Hover / focus to inspect</span></div>
-<div aria-live="polite" class="chart-tooltip" id="chartTooltip" role="status"></div>
-<svg aria-label="Bar chart showing grassland birds with the largest decline" class="svg-chart" role="img" viewbox="0 0 840 360">
-<line class="grid-line" x1="88" x2="780" y1="110" y2="110"></line><line class="grid-line" x1="88" x2="780" y1="180" y2="180"></line><line class="grid-line" x1="88" x2="780" y1="280" y2="280"></line>
-<text class="chart-small" x="70" y="109">0%</text><text class="chart-small" x="62" y="179">-25%</text><text class="chart-small" x="62" y="284">-60%</text>
-<g class="data-point" data-note="A serious decline, but not the steepest group in this example." data-title="Forest birds" data-value="-34%" data-x="185" data-y="160" role="button" tabindex="0"><rect class="chart-bar" height="112" rx="8" width="76" x="160" y="168"></rect></g>
-<g class="data-point" data-note="This is the main explanatory pattern: one habitat group stands out." data-title="Grassland birds" data-value="-57%" data-x="310" data-y="80" role="button" tabindex="0"><rect class="chart-bar highlight" height="198" rx="8" width="76" x="285" y="82"></rect></g>
-<g class="data-point" data-note="A comparison group that helps viewers understand relative severity." data-title="Shorebirds" data-value="-42%" data-x="435" data-y="135" role="button" tabindex="0"><rect class="chart-bar" height="140" rx="8" width="76" x="410" y="140"></rect></g>
-<g class="data-point" data-note="Lower decline in this simplified example." data-title="Wetland birds" data-value="-25%" data-x="560" data-y="190" role="button" tabindex="0"><rect class="chart-bar" height="90" rx="8" width="76" x="535" y="190"></rect></g>
-<g class="data-point" data-note="Some species groups are less affected or have mixed trends." data-title="Urban adapters" data-value="-18%" data-x="685" data-y="210" role="button" tabindex="0"><rect class="chart-bar" height="70" rx="8" width="76" x="660" y="210"></rect></g>
-<text class="chart-label" x="148" y="310">Forest</text><text class="chart-label" x="270" y="310">Grassland</text><text class="chart-label" x="405" y="310">Shore</text><text class="chart-label" x="530" y="310">Wetland</text><text class="chart-label" x="650" y="310">Urban</text>
-<rect class="annotation-box" height="52" rx="12" width="265" x="380" y="54"></rect><text class="annotation-text" x="398" y="77">Callout: the explanatory focus</text><text class="chart-small" x="398" y="96">Grassland decline is the pattern to explain.</text>
-</svg>
-</div>
-<div class="tool-fit">Good tool fit: Datawrapper chart, Flourish chart, or custom SVG/HTML.</div>
-</div>
-</section>
-<section class="section-group" id="exploratory-data-section">
-<h2>Exploratory Data Visualization</h2>
-<p>Use these when the dataset is large enough that readers need controlled ways to explore, narrow, filter, sort, or compare. The author still designs the available questions, but the viewer has more agency than in a single explanatory chart.</p>
-</section>
-<section class="pattern" id="filterable-explorer">
-<div class="pattern-header"><div><h3>Filterable data visualization</h3><p>A filterable data visualization lets viewers narrow a chart by group, habitat, season, place, or status. It is useful when the dataset is larger than one focused view, but the available questions are still bounded.</p></div><span class="tag">Explore</span></div>
-<div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Explore. <strong>Also useful for:</strong> Compare when filters help readers isolate groups against one another.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory because the reader chooses filters; procedural because the chart redraws; encyclopedic because the dataset contains more than one view.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Limited exploratory agency. The viewer can ask small questions using author-defined controls.</p></div></div>
-<div class="key-interactions"><h4>Key interactions</h4><ul><li>Dropdowns, buttons, or checkboxes to filter the displayed data.</li><li>Line or mark highlighting when a group is selected.</li><li>Tooltips that still work after filtering.</li><li>Clear “show all” state so the viewer can return to the overview.</li></ul></div>
-<div class="demo-frame">
-<div class="demo-note"><strong>Example:</strong> Filter the line chart by habitat group. The pattern changes from “overall migration reports” to a more specific story about where birds are being observed.</div>
-<div aria-label="Filter chart by habitat" class="control-row" role="group">
-<button class="filter-button active" data-filter="all" type="button">All groups</button>
-<button class="filter-button secondary" data-filter="grassland" type="button">Grassland</button>
-<button class="filter-button secondary" data-filter="wetland" type="button">Wetland</button>
-<button class="filter-button secondary" data-filter="forest" type="button">Forest</button>
-</div>
-<div class="chart-shell">
-<div class="chart-title"><div><h4>Spring migration reports by habitat group</h4><p id="filterChartSummary">All groups are visible. Select a group to focus the chart.</p></div><span class="pill" id="filterChartPill">Overview</span></div>
-<svg aria-label="Line chart of migration reports by habitat group" class="svg-chart" role="img" viewbox="0 0 840 360">
-<line class="grid-line" x1="80" x2="800" y1="80" y2="80"></line><line class="grid-line" x1="80" x2="800" y1="160" y2="160"></line><line class="grid-line" x1="80" x2="800" y1="240" y2="240"></line><line class="axis-line" x1="80" x2="800" y1="290" y2="290"></line>
-<path class="chart-line habitat-line" d="M90 270 L200 245 L310 210 L420 135 L530 95 L640 125 L750 210" data-group="grassland"></path>
-<path class="chart-line secondary habitat-line" d="M90 255 L200 220 L310 170 L420 120 L530 130 L640 185 L750 235" data-group="wetland"></path>
-<path class="chart-line secondary habitat-line" d="M90 280 L200 260 L310 225 L420 160 L530 110 L640 145 L750 205" data-group="forest"></path>
-<circle class="chart-dot habitat-dot" cx="530" cy="95" data-group="grassland" r="8"></circle><circle class="chart-dot habitat-dot" cx="420" cy="120" data-group="wetland" r="8"></circle><circle class="chart-dot habitat-dot" cx="530" cy="110" data-group="forest" r="8"></circle>
-<text class="chart-label" x="84" y="318">Mar</text><text class="chart-label" x="295" y="318">Apr</text><text class="chart-label" x="515" y="318">May</text><text class="chart-label" x="735" y="318">Jun</text>
-<text class="chart-small" x="610" y="96">Grassland</text><text class="chart-small" x="610" y="135">Wetland</text><text class="chart-small" x="610" y="166">Forest</text>
-</svg>
-</div>
-<div class="tool-fit">Good tool fit: Flourish filters, Datawrapper with highlighting, or custom HTML/JS chart.</div>
-</div>
-</section>
-<section class="pattern" id="sort-compare">
-<div class="pattern-header"><div><h3>Sort-and-compare view</h3><p>A sort-and-compare view lets readers reorder the same records by different measures. It works when the main task is comparison: biggest, smallest, fastest, longest, most severe, or most common.</p></div><span class="tag">Compare</span></div>
-<div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Compare. <strong>Also useful for:</strong> Explore when sorting becomes a way to browse the dataset.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural because order changes; participatory because the reader chooses the sort; encyclopedic because records can be reorganized.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Limited choice. The viewer controls the comparison order, but the available measures are author selected.</p></div></div>
-<div class="key-interactions"><h4>Key interactions</h4><ul><li>Sort buttons or dropdowns for changing the ranking measure.</li><li>Animated reorder or bar-length change to make the comparison visible.</li><li>Labels that keep exact values readable without relying only on bar length.</li><li>Optional hover/focus to explain why a measure matters.</li></ul></div>
-<div class="demo-frame">
-<div class="control-row"><label for="sortMetric">Sort birds by</label><select id="sortMetric"><option value="distance">Migration distance</option><option value="wingspan">Wingspan</option><option value="trend">Conservation concern</option></select></div>
-<div aria-live="polite" class="sort-list" id="sortList"></div>
-<div class="tool-fit">Good tool fit: Flourish cards, sortable table, Datawrapper table, or custom JavaScript.</div>
-</div>
-</section>
-<section class="section-group" id="multi-view-section">
-<h2>Guide viewers through data views</h2>
-<p>Use these when one dataset can answer several related questions. The key is not “more charts.” It is changing the view to change what the viewer can understand.</p>
-</section>
-<section class="pattern" id="revisualization-switcher">
-<div class="pattern-header"><div><h3>Revisualization switcher</h3><p>A revisualization switcher shows the same data in multiple visual arrangements. Each view should answer a different question, such as trend, ranking, category, or seasonal timing.</p></div><span class="tag">Compare / Explain</span></div>
-<div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Compare and Explain. Each view should reveal a different reading of the same evidence.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural because the visualization changes; participatory when readers choose the view; encyclopedic because one dataset supports multiple readings.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Limited choice or guided, depending on whether the reader switches views or the story advances them.</p></div></div>
-<div class="key-interactions"><h4>Key interactions</h4><ul><li>Buttons or tabs that change the analytical view, not just the content panel.</li><li>Consistent labels so readers understand they are seeing the same data reorganized.</li><li>Highlighting to keep the same species, group, or pattern visible across views.</li><li>Short captions that state what each view helps answer.</li></ul></div>
-<div class="demo-frame">
-<div aria-label="Switch data view" class="switch-controls" role="group"><button class="active" data-view="view-trend">Trend</button><button class="secondary" data-view="view-rank">Ranking</button><button class="secondary" data-view="view-groups">Groups</button></div>
-<div class="view-panel active" id="view-trend"><div class="chart-shell"><div class="chart-title"><div><h4>View 1: reports over the season</h4><p>This view answers: when do reports peak?</p></div></div><svg class="svg-chart" viewbox="0 0 840 240"><polyline class="chart-line" points="90,200 210,185 330,130 450,70 570,88 690,150 780,190"></polyline><line class="axis-line" x1="80" x2="800" y1="210" y2="210"></line><text class="chart-label" x="90" y="232">Mar</text><text class="chart-label" x="435" y="232">May</text><text class="chart-label" x="760" y="232">Jun</text></svg></div></div>
-<div class="view-panel" id="view-rank"><div class="chart-shell"><div class="chart-title"><div><h4>View 2: species ranked by peak reports</h4><p>This view answers: which species dominate the peak?</p></div></div><svg class="svg-chart" viewbox="0 0 840 240"><rect class="chart-bar highlight" height="28" rx="8" width="390" x="190" y="45"></rect><rect class="chart-bar" height="28" rx="8" width="310" x="190" y="92"></rect><rect class="chart-bar" height="28" rx="8" width="250" x="190" y="139"></rect><rect class="chart-bar" height="28" rx="8" width="180" x="190" y="186"></rect><text class="chart-label" x="35" y="65">Yellow Warbler</text><text class="chart-label" x="35" y="112">Redstart</text><text class="chart-label" x="35" y="159">Magnolia</text><text class="chart-label" x="35" y="206">Blackpoll</text></svg></div></div>
-<div class="view-panel" id="view-groups"><div class="chart-shell"><div class="chart-title"><div><h4>View 3: grouped by migration strategy</h4><p>This view answers: which strategy explains timing?</p></div></div><svg class="svg-chart" viewbox="0 0 840 240"><rect class="chart-bar" height="110" rx="12" width="140" x="150" y="80"></rect><rect class="chart-bar highlight" height="150" rx="12" width="140" x="350" y="40"></rect><rect class="chart-bar" height="70" rx="12" width="140" x="550" y="120"></rect><line class="axis-line" x1="90" x2="760" y1="200" y2="200"></line><text class="chart-label" x="140" y="225">Short-distance</text><text class="chart-label" x="345" y="225">Long-distance</text><text class="chart-label" x="560" y="225">Resident</text></svg></div></div>
-<div class="tool-fit">Good tool fit: Flourish revisualization, Flourish stories, or custom view switcher.</div>
-</div>
-</section>
-<section class="pattern" id="step-data-story">
-<div class="pattern-header"><div><h3>Step-through data story</h3><p>A step-through data story guides viewers through a sequence of claims. It works when readers need help seeing which part of the data matters first, second, and third.</p></div><span class="tag">Explain</span></div>
-<div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Explain. <strong>Also useful for:</strong> Compare when each step contrasts groups or moments.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural because the view changes step by step; participatory because the reader controls pace; encyclopedic because each step draws from the same dataset.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided. The viewer advances, but the author controls the order and meaning of the sequence.</p></div></div>
-<div class="key-interactions"><h4>Key interactions</h4><ul><li>Next/back or step buttons that move through a planned argument.</li><li>Highlights that shift to the relevant bar, line, region, or group.</li><li>Captions that explain what changed in the visual at each step.</li><li>Optional scroll-driven steps for a more article-like reading flow.</li></ul></div>
-<div class="demo-frame">
-<div class="story-layout">
-<div class="story-steps"><button class="story-step active" data-step="0"><h4>1. Start broad</h4><p>Bird trends differ by group.</p></button><button class="story-step" data-step="1"><h4>2. Focus</h4><p>Grassland birds stand out.</p></button><button class="story-step" data-step="2"><h4>3. Explain why</h4><p>Habitat connects to decline.</p></button><button class="story-step" data-step="3"><h4>4. Make concrete</h4><p>A species example gives the pattern a face.</p></button></div>
-<div class="story-panel chart-shell" id="storyPanel"></div>
-</div>
-<div class="tool-fit">Good tool fit: Flourish stories, Datawrapper locator-style annotations, scrollytelling, or custom HTML/JS.</div>
-</div>
-</section>
-
 <section class="section-group" id="data-viz-types-section">
 <h2>Data visualization types by job</h2>
 <p>Use this accordion to connect a data job to possible chart forms and interactions. For more chart-type references, visit the <a href="https://datavizcatalogue.com/" rel="noopener" target="_blank">Data Viz Catalogue</a>; the chart type links below point to likely method pages that can be corrected if needed.</p>
@@ -606,7 +517,107 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 </details>
 </div>
 </section>
-
+<section class="section-group" id="focused-data-section">
+<h2>Explanatory Data Visualization</h2>
+<p>Use this when the author has found the pattern and needs the viewer to understand it clearly. The interaction should support reading the evidence: tooltips, hover/focus highlights, labels, callouts, and guided inspection.</p>
+</section>
+<section class="pattern" id="data-chart-interactions">
+<div class="pattern-header"><div><h3>Explanatory Data Visualization</h3><p>An explanatory data visualization focuses the viewer on one important pattern in the evidence. The chart can still be interactive, but the interaction should help readers inspect values, highlight a data point or set, and understand the author’s main point.</p></div><span class="tag">Explain</span></div>
+<div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Explain. <strong>Also useful for:</strong> Compare when interaction highlights differences between groups.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural because the chart responds to hover/focus; encyclopedic because exact data values sit behind the visual marks.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided inspection. The author chooses the pattern, while the viewer checks details within the graphic.</p></div></div>
+<div class="key-interactions"><h4>Key interactions</h4><ul><li>Tooltip labels for exact values and short context.</li><li>Hover or keyboard focus to highlight one bar, point, line, or data set.</li><li>Persistent annotation or callout for the most important pattern.</li><li>Optional legend hover to isolate one series.</li></ul></div>
+<div class="demo-frame">
+<div class="demo-note"><strong>Example:</strong> The chart explains one finding: grassland birds show the steepest decline. Hover or focus each bar to read the value.</div>
+<div class="chart-shell" id="interactiveChartShell">
+<div class="chart-title"><div><h4>Population change by bird group</h4><p>Example data showing why the story would focus on grassland species.</p></div><span class="pill">Hover / focus to inspect</span></div>
+<div aria-live="polite" class="chart-tooltip" id="chartTooltip" role="status"></div>
+<svg aria-label="Bar chart showing grassland birds with the largest decline" class="svg-chart" role="img" viewbox="0 0 840 360">
+<line class="grid-line" x1="88" x2="780" y1="110" y2="110"></line><line class="grid-line" x1="88" x2="780" y1="180" y2="180"></line><line class="grid-line" x1="88" x2="780" y1="280" y2="280"></line>
+<text class="chart-small" x="70" y="109">0%</text><text class="chart-small" x="62" y="179">-25%</text><text class="chart-small" x="62" y="284">-60%</text>
+<g class="data-point" data-note="A serious decline, but not the steepest group in this example." data-title="Forest birds" data-value="-34%" data-x="185" data-y="160" role="button" tabindex="0"><rect class="chart-bar" height="112" rx="8" width="76" x="160" y="168"></rect></g>
+<g class="data-point" data-note="This is the main explanatory pattern: one habitat group stands out." data-title="Grassland birds" data-value="-57%" data-x="310" data-y="80" role="button" tabindex="0"><rect class="chart-bar highlight" height="198" rx="8" width="76" x="285" y="82"></rect></g>
+<g class="data-point" data-note="A comparison group that helps viewers understand relative severity." data-title="Shorebirds" data-value="-42%" data-x="435" data-y="135" role="button" tabindex="0"><rect class="chart-bar" height="140" rx="8" width="76" x="410" y="140"></rect></g>
+<g class="data-point" data-note="Lower decline in this simplified example." data-title="Wetland birds" data-value="-25%" data-x="560" data-y="190" role="button" tabindex="0"><rect class="chart-bar" height="90" rx="8" width="76" x="535" y="190"></rect></g>
+<g class="data-point" data-note="Some species groups are less affected or have mixed trends." data-title="Urban adapters" data-value="-18%" data-x="685" data-y="210" role="button" tabindex="0"><rect class="chart-bar" height="70" rx="8" width="76" x="660" y="210"></rect></g>
+<text class="chart-label" x="148" y="310">Forest</text><text class="chart-label" x="270" y="310">Grassland</text><text class="chart-label" x="405" y="310">Shore</text><text class="chart-label" x="530" y="310">Wetland</text><text class="chart-label" x="650" y="310">Urban</text>
+<rect class="annotation-box" height="52" rx="12" width="265" x="380" y="54"></rect><text class="annotation-text" x="398" y="77">Callout: the explanatory focus</text><text class="chart-small" x="398" y="96">Grassland decline is the pattern to explain.</text>
+</svg>
+</div>
+<div class="tool-fit">Good tool fit: Datawrapper chart, Flourish chart, or custom SVG/HTML.</div>
+</div>
+</section>
+<section class="section-group" id="exploratory-data-section">
+<h2>Exploratory Data Visualization</h2>
+<p>Use these when the dataset is large enough that readers need controlled ways to explore, narrow, filter, sort, or compare. The author still designs the available questions, but the viewer has more agency than in a single explanatory chart.</p>
+</section>
+<section class="pattern" id="filterable-explorer">
+<div class="pattern-header"><div><h3>Filterable data visualization</h3><p>A filterable data visualization lets viewers narrow a chart by group, habitat, season, place, or status. It is useful when the dataset is larger than one focused view, but the available questions are still bounded.</p></div><span class="tag">Explore</span></div>
+<div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Explore. <strong>Also useful for:</strong> Compare when filters help readers isolate groups against one another.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory because the reader chooses filters; procedural because the chart redraws; encyclopedic because the dataset contains more than one view.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Limited exploratory agency. The viewer can ask small questions using author-defined controls.</p></div></div>
+<div class="key-interactions"><h4>Key interactions</h4><ul><li>Dropdowns, buttons, or checkboxes to filter the displayed data.</li><li>Line or mark highlighting when a group is selected.</li><li>Tooltips that still work after filtering.</li><li>Clear “show all” state so the viewer can return to the overview.</li></ul></div>
+<div class="demo-frame">
+<div class="demo-note"><strong>Example:</strong> Filter the line chart by habitat group. The pattern changes from “overall migration reports” to a more specific story about where birds are being observed.</div>
+<div aria-label="Filter chart by habitat" class="control-row" role="group">
+<button class="filter-button active" data-filter="all" type="button">All groups</button>
+<button class="filter-button secondary" data-filter="grassland" type="button">Grassland</button>
+<button class="filter-button secondary" data-filter="wetland" type="button">Wetland</button>
+<button class="filter-button secondary" data-filter="forest" type="button">Forest</button>
+</div>
+<div class="chart-shell">
+<div class="chart-title"><div><h4>Spring migration reports by habitat group</h4><p id="filterChartSummary">All groups are visible. Select a group to focus the chart.</p></div><span class="pill" id="filterChartPill">Overview</span></div>
+<svg aria-label="Line chart of migration reports by habitat group" class="svg-chart" role="img" viewbox="0 0 840 360">
+<line class="grid-line" x1="80" x2="800" y1="80" y2="80"></line><line class="grid-line" x1="80" x2="800" y1="160" y2="160"></line><line class="grid-line" x1="80" x2="800" y1="240" y2="240"></line><line class="axis-line" x1="80" x2="800" y1="290" y2="290"></line>
+<path class="chart-line habitat-line" d="M90 270 L200 245 L310 210 L420 135 L530 95 L640 125 L750 210" data-group="grassland"></path>
+<path class="chart-line secondary habitat-line" d="M90 255 L200 220 L310 170 L420 120 L530 130 L640 185 L750 235" data-group="wetland"></path>
+<path class="chart-line secondary habitat-line" d="M90 280 L200 260 L310 225 L420 160 L530 110 L640 145 L750 205" data-group="forest"></path>
+<circle class="chart-dot habitat-dot" cx="530" cy="95" data-group="grassland" r="8"></circle><circle class="chart-dot habitat-dot" cx="420" cy="120" data-group="wetland" r="8"></circle><circle class="chart-dot habitat-dot" cx="530" cy="110" data-group="forest" r="8"></circle>
+<text class="chart-label" x="84" y="318">Mar</text><text class="chart-label" x="295" y="318">Apr</text><text class="chart-label" x="515" y="318">May</text><text class="chart-label" x="735" y="318">Jun</text>
+<text class="chart-small" x="610" y="96">Grassland</text><text class="chart-small" x="610" y="135">Wetland</text><text class="chart-small" x="610" y="166">Forest</text>
+</svg>
+</div>
+<div class="tool-fit">Good tool fit: Flourish filters, Datawrapper with highlighting, or custom HTML/JS chart.</div>
+</div>
+</section>
+<section class="pattern" id="sort-compare">
+<div class="pattern-header"><div><h3>Sort-and-compare view</h3><p>A sort-and-compare view lets readers reorder the same records by different measures. It works when the main task is comparison: biggest, smallest, fastest, longest, most severe, or most common.</p></div><span class="tag">Compare</span></div>
+<div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Compare. <strong>Also useful for:</strong> Explore when sorting becomes a way to browse the dataset.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural because order changes; participatory because the reader chooses the sort; encyclopedic because records can be reorganized.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Limited choice. The viewer controls the comparison order, but the available measures are author selected.</p></div></div>
+<div class="key-interactions"><h4>Key interactions</h4><ul><li>Sort buttons or dropdowns for changing the ranking measure.</li><li>Animated reorder or bar-length change to make the comparison visible.</li><li>Labels that keep exact values readable without relying only on bar length.</li><li>Optional hover/focus to explain why a measure matters.</li></ul></div>
+<div class="demo-frame">
+<div class="control-row"><label for="sortMetric">Sort birds by</label><select id="sortMetric"><option value="distance">Migration distance</option><option value="wingspan">Wingspan</option><option value="trend">Conservation concern</option></select></div>
+<div aria-live="polite" class="sort-list" id="sortList"></div>
+<div class="tool-fit">Good tool fit: Flourish cards, sortable table, Datawrapper table, or custom JavaScript.</div>
+</div>
+</section>
+<section class="section-group" id="guided-story-section">
+<h2>Step-through data stories and guided views</h2>
+<p>A guided data story leads viewers through a planned sequence of claims. The viewer controls the pace, but the author controls the order, emphasis, and argument. The steps can be triggered with buttons, tabs, or scrolling.</p>
+</section>
+<section class="pattern" id="step-data-story">
+<div class="pattern-header"><div><h3>Step-through data story</h3><p>Use a sequence of data views when one chart cannot communicate the full argument at once. Each step should make one clear claim and deliberately change what the viewer sees.</p></div><span class="tag">Explain / Guide</span></div>
+<div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Explain. <strong>Also useful for:</strong> Compare when steps contrast groups, periods, or possible explanations.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural because the view changes in sequence; participatory because viewers control the pace; encyclopedic because each step can draw from a larger dataset.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided. Viewers move forward or backward, while the author determines the sequence and interpretation.</p></div></div>
+<div class="key-interactions"><h4>Ways to move through the story</h4><ul><li><strong>Buttons or step controls:</strong> viewers click next, back, or a labeled step.</li><li><strong>Scrolling:</strong> text sections trigger changes in a sticky visualization.</li><li>Keep the current step visible and allow viewers to return to earlier views.</li><li>Pair every visual change with a short claim explaining why it matters.</li></ul></div>
+<h4>Patterns for making an argument</h4>
+<div class="argument-grid">
+<article class="argument-card"><h4>Overview → evidence → conclusion</h4><p>Establish the broad pattern, show the strongest supporting evidence, then state what the evidence means.</p></article>
+<article class="argument-card"><h4>Claim → comparison → explanation</h4><p>Make a claim, compare groups or periods, then introduce the factor that helps explain the difference.</p></article>
+<article class="argument-card"><h4>Pattern → exception → refinement</h4><p>Show the dominant pattern, reveal an exception, then refine the argument so it better matches the evidence.</p></article>
+<article class="argument-card"><h4>Problem → cause → consequence</h4><p>Quantify a problem, connect it to a likely cause, then show who or what is affected.</p></article>
+<article class="argument-card"><h4>Before → change → after</h4><p>Establish a baseline, identify the intervention or turning point, and show the resulting condition.</p></article>
+<article class="argument-card"><h4>General pattern → concrete case</h4><p>Begin with aggregated evidence, then use one place, person, species, or event to make the pattern tangible.</p></article>
+</div>
+<h4>Three transitions between guided views</h4>
+<div class="transition-grid">
+<article class="transition-card"><span class="transition-label">Transition 1</span><h4>Revisualization</h4><p>Show the same data in a different visual form or arrangement because the next claim requires a different purpose, such as moving from a trend to a ranking or from totals to proportions.</p></article>
+<article class="transition-card"><span class="transition-label">Transition 2</span><h4>Focus</h4><p>Keep the same visualization but isolate a subset, category, region, period, or single data point. Dim, filter, zoom, or annotate the rest so the viewer knows where to look.</p></article>
+<article class="transition-card"><span class="transition-label">Transition 3</span><h4>Introduce new evidence</h4><p>Bring in a second dataset, measure, or source when the argument needs additional context or an explanation the first dataset cannot provide on its own.</p></article>
+</div>
+<div class="demo-frame">
+<div class="demo-note"><strong>Example:</strong> The sequence begins with a broad comparison, focuses on grassland birds, introduces habitat data as new evidence, and ends with a species-level case.</div>
+<div class="story-layout">
+<div class="story-steps"><button class="story-step active" data-step="0"><h4>1. Establish the pattern</h4><p>Bird trends differ by group.</p></button><button class="story-step" data-step="1"><h4>2. Focus</h4><p>Grassland birds stand out.</p></button><button class="story-step" data-step="2"><h4>3. Add new evidence</h4><p>Habitat data helps explain the decline.</p></button><button class="story-step" data-step="3"><h4>4. Make it concrete</h4><p>A species case connects the pattern to experience.</p></button></div>
+<div class="story-panel chart-shell" id="storyPanel"></div>
+</div>
+<div class="tool-fit">Good tool fit: Flourish stories, button-driven custom HTML/JS, or a scrollytelling layout with a sticky chart.</div>
+</div>
+</section>
 <section class="section-group" id="beyond-charts-section">
 <h2>Explain beyond charts</h2>
 <p>Information graphics are visual explanations that may use data, labels, sequence, scale, parts, or systems. This section separates the <strong>visualization type</strong> from the <strong>interaction pattern</strong>. A type gives the material its structure; interaction controls how viewers inspect, switch, compare, filter, or move through that structure.</p>
@@ -634,13 +645,13 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 </div><div class="tool-fit">Good tool fit: Flourish cards, Datawrapper tables, custom HTML/CSS cards, Illustrator/Figma static exports, or a spreadsheet-backed visual list.</div></div>
 </section>
 <section class="pattern" id="system-process-types">
-<div class="pattern-header"><div><h3>System and process diagrams</h3><p>System and process diagrams explain how something works, how parts relate, or how one condition moves into another. The type can show states of one subject or a sequence of actions, causes, and effects.</p></div><span class="tag">Explain</span></div>
+<div class="pattern-header"><div><h3>System, state, and process diagrams</h3><p>These diagrams explain how something works, how parts relate, how conditions change, or how actions, information, materials, or people move through an ordered sequence.</p></div><span class="tag">Explain</span></div>
 <div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Explain. <strong>Also useful for:</strong> Compare when the same system is shown before/after, healthy/unhealthy, or normal/problem/intervention.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Spatial because relationships are arranged visually; procedural when stages advance; encyclopedic because each state or step can carry additional explanation.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided or step-driven. The viewer follows the logic of the system and may inspect parts or move through steps.</p></div></div>
-<div class="possible-interactions"><h4>Possible interactions</h4><ul><li><strong>Reveal, Explore, Compare Patterns:</strong> rich annotations, button-guided focus, tabs, layer toggles, and scrolly focus can all guide system diagrams.</li><li><strong>State comparison:</strong> use toggles, before/after states, side-by-side comparison, or step buttons to show one thing in different conditions.</li><li><strong>Process diagram:</strong> use next/back controls, animated path highlighting, cause-effect reveals, or scroll-driven steps to pace the workflow.</li><li><strong>System-specific:</strong> dependency highlighting, node inspection, layer controls, and “show intervention” toggles help explain how parts affect one another.</li></ul></div>
+<div class="possible-interactions"><h4>Possible interactions</h4><ul><li><strong>Reveal, Explore, Compare Patterns:</strong> use rich annotations, button-guided focus, tabs, layer toggles, and scrolly focus to guide viewers through complex diagrams.</li><li><strong>State and system diagrams:</strong> use toggles, before-and-after views, node highlighting, dependency tracing, and intervention layers to show conditions and relationships.</li><li><strong>Process and flow diagrams:</strong> use next/back controls, animated path highlighting, progressive reveals, or scroll-driven steps to show movement through a sequence.</li><li><strong>Decision points and loops:</strong> reveal branches only when they matter, clearly label outcomes, and show when a process returns to an earlier stage.</li></ul></div>
 <div class="demo-frame"><div class="type-grid">
-<article class="type-card"><button class="type-image-button inspect-image" data-caption="Shows the same subject in different conditions." data-src="img/state.jpg" data-title="State comparison" type="button"><span class="type-image-wrap"><img alt="State comparison" loading="lazy" src="img/state.jpg"/></span></button><div class="type-card-body"><h4>State comparison</h4><p>Shows the same subject in different conditions.</p></div></article>
-<article class="type-card"><button class="type-image-button inspect-image" data-caption="Shows a sequence of causes, actions, or decisions." data-src="img/process.jpg" data-title="Process diagram" type="button"><span class="type-image-wrap"><img alt="Process diagram" loading="lazy" src="img/process.jpg"/></span></button><div class="type-card-body"><h4>Process diagram</h4><p>Shows a sequence of causes, actions, or decisions.</p></div></article>
-</div><div class="tool-fit">Good tool fit: custom SVG/HTML, Genially, Flourish story cards, Illustrator/Figma export plus annotation layers, or page-builder step sections.</div></div>
+<article class="type-card"><button class="type-image-button inspect-image" data-caption="Show the possible conditions of a subject, the parts of a larger system, and the relationships or transitions connecting them." data-src="img/state.jpg" data-title="State and system diagrams" type="button"><span class="type-image-wrap"><img alt="State and system diagram" loading="lazy" src="img/state.jpg"/></span></button><div class="type-card-body"><h4>State and system diagrams</h4><p>Show conditions, components, relationships, dependencies, and transitions within a system.</p></div></article>
+<article class="type-card"><button class="type-image-button inspect-image" data-caption="Show how actions, information, materials, or people move through an ordered sequence." data-src="img/process.jpg" data-title="Process and flow diagrams" type="button"><span class="type-image-wrap"><img alt="Process and flow diagram" loading="lazy" src="img/process.jpg"/></span></button><div class="type-card-body"><h4>Process and flow diagrams</h4><p>Show how actions, information, materials, or people move through an ordered sequence.</p></div></article>
+</div><div class="tool-fit">Good tool fit: Illustrator or Figma for static diagrams; custom SVG/HTML, Genially, Flourish stories, or page-builder step sections for interactive and guided versions.</div></div>
 </section>
 <section class="pattern" id="timeline-flow-types">
 <div class="pattern-header"><div><h3>Timelines and time flows</h3><p>Timelines explain when things happen. Time flows move closer to data visualization by showing rhythm, duration, accumulation, intensity, or seasonal pattern across time.</p></div><span class="tag">Explain / Compare</span></div>
@@ -648,7 +659,7 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 <div class="possible-interactions"><h4>Possible interactions</h4><ul><li><strong>Reveal, Explore, Compare Patterns:</strong> horizontal overflow, vertical overflow, slideshows, accordions, and scrolly focus work well for timelines.</li><li><strong>Normal timeline:</strong> use step-through controls, event modals, expandable entries, or scroll-based focus to reveal details in order.</li><li><strong>Time flow:</strong> use scrubbers, sliders, autoplay, date filters, and hover tooltips to make rhythm, intensity, or accumulation readable.</li><li><strong>Comparative time:</strong> add species filters, group highlighting, or small multiples when readers need to compare timing across groups.</li></ul></div>
 <div class="demo-frame"><div class="type-grid">
 <article class="type-card"><button class="type-image-button inspect-image" data-caption="Uses ordered events." data-src="img/timeline.jpeg" data-title="Normal timeline" type="button"><span class="type-image-wrap"><img alt="Normal timeline" loading="lazy" src="img/timeline.jpeg"/></span></button><div class="type-card-body"><h4>Normal timeline</h4><p>Uses ordered events.</p></div></article>
-<article class="type-card"><button class="type-image-button inspect-image" data-caption="Shows intensity, volume, or pattern across time. Example: migration reports rising and falling by month." data-src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20900%20520%22%20role%3D%22img%22%20aria-label%3D%22Time%20flow%22%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20fill%3D%22%23f7f4ec%22/%3E%0A%20%20%3Crect%20x%3D%2230%22%20y%3D%2230%22%20width%3D%22840%22%20height%3D%22460%22%20rx%3D%2228%22%20fill%3D%22%23fffdf7%22%20stroke%3D%22%23d9d2c2%22%20stroke-width%3D%223%22/%3E%0A%20%20%3Cstyle%3E%0A%20%20%20%20.ink%7Bfill%3A%2317211b%3Bfont-family%3AInter%2CArial%2Csans-serif%3Bfont-weight%3A800%7D%0A%20%20%20%20.muted%7Bfill%3A%235c675f%3Bfont-family%3AInter%2CArial%2Csans-serif%3Bfont-weight%3A700%7D%0A%20%20%20%20.green%7Bfill%3A%23edf4ee%3Bstroke%3A%2337634e%3Bstroke-width%3A5%7D%0A%20%20%20%20.orange%7Bfill%3A%23fff8ed%3Bstroke%3A%23d8893a%3Bstroke-width%3A5%7D%0A%20%20%20%20.line%7Bstroke%3A%2317211b%3Bstroke-width%3A4%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3Bfill%3Anone%7D%0A%20%20%20%20.thin%7Bstroke%3A%2337634e%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bfill%3Anone%7D%0A%20%20%20%20.small%7Bfont-size%3A24px%7D%0A%20%20%20%20.label%7Bfont-size%3A28px%7D%0A%20%20%20%20.title%7Bfont-size%3A38px%7D%0A%20%20%20%20.tiny%7Bfont-size%3A18px%7D%0A%20%20%3C/style%3E%0A%20%20%0A%3Ctext%20class%3D%22ink%20title%22%20x%3D%2262%22%20y%3D%2285%22%3ETime%20flow%3C/text%3E%0A%3Cpath%20class%3D%22line%22%20d%3D%22M90%20350%20C170%20170%20285%20285%20375%20190%20C475%2090%20600%20210%20775%2095%22/%3E%0A%3Cpath%20class%3D%22thin%22%20d%3D%22M90%20390%20C205%20330%20300%20360%20410%20265%20C525%20175%20630%20245%20775%20190%22/%3E%0A%3Crect%20class%3D%22green%22%20x%3D%22150%22%20y%3D%22330%22%20width%3D%2270%22%20height%3D%2245%22/%3E%3Crect%20class%3D%22orange%22%20x%3D%22370%22%20y%3D%22250%22%20width%3D%2270%22%20height%3D%22125%22/%3E%3Crect%20class%3D%22green%22%20x%3D%22590%22%20y%3D%22195%22%20width%3D%2270%22%20height%3D%22180%22/%3E%0A%3Ctext%20class%3D%22ink%20label%22%20x%3D%22150%22%20y%3D%22425%22%3EMar%3C/text%3E%3Ctext%20class%3D%22ink%20label%22%20x%3D%22370%22%20y%3D%22425%22%3EJun%3C/text%3E%3Ctext%20class%3D%22ink%20label%22%20x%3D%22590%22%20y%3D%22425%22%3ESep%3C/text%3E%0A%3Ctext%20class%3D%22muted%20small%22%20x%3D%2264%22%20y%3D%22455%22%3EMoves%20toward%20data%20visualization%20by%20showing%20rhythm%2C%20intensity%2C%20or%20accumulation%20across%20time.%3C/text%3E%0A%0A%3C/svg%3E" data-title="Time flow" type="button"><span class="type-image-wrap"><img alt="Time flow" loading="lazy" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20900%20520%22%20role%3D%22img%22%20aria-label%3D%22Time%20flow%22%3E%0A%20%20%3Crect%20width%3D%22900%22%20height%3D%22520%22%20fill%3D%22%23f7f4ec%22/%3E%0A%20%20%3Crect%20x%3D%2230%22%20y%3D%2230%22%20width%3D%22840%22%20height%3D%22460%22%20rx%3D%2228%22%20fill%3D%22%23fffdf7%22%20stroke%3D%22%23d9d2c2%22%20stroke-width%3D%223%22/%3E%0A%20%20%3Cstyle%3E%0A%20%20%20%20.ink%7Bfill%3A%2317211b%3Bfont-family%3AInter%2CArial%2Csans-serif%3Bfont-weight%3A800%7D%0A%20%20%20%20.muted%7Bfill%3A%235c675f%3Bfont-family%3AInter%2CArial%2Csans-serif%3Bfont-weight%3A700%7D%0A%20%20%20%20.green%7Bfill%3A%23edf4ee%3Bstroke%3A%2337634e%3Bstroke-width%3A5%7D%0A%20%20%20%20.orange%7Bfill%3A%23fff8ed%3Bstroke%3A%23d8893a%3Bstroke-width%3A5%7D%0A%20%20%20%20.line%7Bstroke%3A%2317211b%3Bstroke-width%3A4%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3Bfill%3Anone%7D%0A%20%20%20%20.thin%7Bstroke%3A%2337634e%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bfill%3Anone%7D%0A%20%20%20%20.small%7Bfont-size%3A24px%7D%0A%20%20%20%20.label%7Bfont-size%3A28px%7D%0A%20%20%20%20.title%7Bfont-size%3A38px%7D%0A%20%20%20%20.tiny%7Bfont-size%3A18px%7D%0A%20%20%3C/style%3E%0A%20%20%0A%3Ctext%20class%3D%22ink%20title%22%20x%3D%2262%22%20y%3D%2285%22%3ETime%20flow%3C/text%3E%0A%3Cpath%20class%3D%22line%22%20d%3D%22M90%20350%20C170%20170%20285%20285%20375%20190%20C475%2090%20600%20210%20775%2095%22/%3E%0A%3Cpath%20class%3D%22thin%22%20d%3D%22M90%20390%20C205%20330%20300%20360%20410%20265%20C525%20175%20630%20245%20775%20190%22/%3E%0A%3Crect%20class%3D%22green%22%20x%3D%22150%22%20y%3D%22330%22%20width%3D%2270%22%20height%3D%2245%22/%3E%3Crect%20class%3D%22orange%22%20x%3D%22370%22%20y%3D%22250%22%20width%3D%2270%22%20height%3D%22125%22/%3E%3Crect%20class%3D%22green%22%20x%3D%22590%22%20y%3D%22195%22%20width%3D%2270%22%20height%3D%22180%22/%3E%0A%3Ctext%20class%3D%22ink%20label%22%20x%3D%22150%22%20y%3D%22425%22%3EMar%3C/text%3E%3Ctext%20class%3D%22ink%20label%22%20x%3D%22370%22%20y%3D%22425%22%3EJun%3C/text%3E%3Ctext%20class%3D%22ink%20label%22%20x%3D%22590%22%20y%3D%22425%22%3ESep%3C/text%3E%0A%3Ctext%20class%3D%22muted%20small%22%20x%3D%2264%22%20y%3D%22455%22%3EMoves%20toward%20data%20visualization%20by%20showing%20rhythm%2C%20intensity%2C%20or%20accumulation%20across%20time.%3C/text%3E%0A%0A%3C/svg%3E"/></span></button><div class="type-card-body"><h4>Time flow</h4><p>Shows intensity, volume, or pattern across time.</p></div></article>
+<article class="type-card"><button class="type-image-button inspect-image" data-caption="Shows intensity, volume, or pattern across time." data-src="img/timeflow.jpg" data-title="Time flow" type="button"><span class="type-image-wrap"><img alt="Time flow" loading="lazy" src="img/timeflow.jpg"/></span></button><div class="type-card-body"><h4>Time flow</h4><p>Shows intensity, volume, or pattern across time.</p></div></article>
 </div><div class="tool-fit">Good tool fit: Flourish timeline/story, Datawrapper line chart or locator chart, custom HTML/SVG, or illustrated sequence with scroll/step controls.</div></div>
 </section>
 </main>
@@ -755,10 +766,10 @@ document.querySelectorAll('.switch-controls button').forEach(button => {
 });
 
 const storyContent = [
-  {title:'Bird trends do not move as one group', text:'The opening view establishes that species groups have different trajectories, so the story should not talk about “birds” as one single category.', emphasis:'broad'},
-  {title:'Grassland birds become the focus', text:'The second step highlights the group with the steepest decline and makes the story angle more specific.', emphasis:'grassland'},
-  {title:'Habitat connects pattern to process', text:'The third step explains why decline is not just a number. Nesting cover, mowing, development, and fragmentation affect survival.', emphasis:'habitat'},
-  {title:'A species case makes the pattern concrete', text:'The final step gives viewers a bird they can picture, hear, and follow through the rest of the story.', emphasis:'case'}
+  {title:'Bird trends do not move as one group', text:'The opening view establishes the broad comparison. This is the baseline the rest of the argument will refine.', emphasis:'broad'},
+  {title:'Grassland birds become the focus', text:'The visualization stays recognizable, but the other groups recede so the viewer can concentrate on the steepest decline.', emphasis:'grassland'},
+  {title:'Habitat data adds explanatory evidence', text:'A new measure enters the story. Nesting cover, mowing, development, and fragmentation help explain why the decline may be occurring.', emphasis:'habitat'},
+  {title:'A species case makes the pattern concrete', text:'The final step shifts from aggregated evidence to one bird the viewer can picture, hear, and follow.', emphasis:'case'}
 ];
 const storyPanel = document.getElementById('storyPanel');
 function renderStoryStep(index) {
