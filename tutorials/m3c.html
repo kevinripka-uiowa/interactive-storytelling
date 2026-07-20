@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build a Simple Guided Data Story in Flourish</title>
+  <style>
+    :root {
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --warn:#fff8ed;
+      --shadow:0 14px 35px rgba(23,33,27,.12); --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    img, video, iframe, svg { max-width:100%; }
+    .layout { min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow:auto; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+    .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+    main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+    .hero p, .section-group p, .pattern p, .note, .meta-card p, li, td { color:var(--muted); }
+    .hero p { max-width:830px; margin:0 0 10px; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:860px; }
+    .concept-callout strong { color:var(--ink); }
+    .overview-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:22px; }
+    .meta-card { padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; min-width:0; }
+    .meta-card h4 { margin:0 0 8px; font-size:1.12rem; }
+    .meta-card p { margin:0; }
+    .meta-card a { color:var(--accent); font-weight:900; text-decoration-thickness:2px; text-underline-offset:3px; }
+    .video-section { margin-bottom:34px; }
+    .video-card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,26px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .video-card h3 { margin:0 0 8px; font-size:clamp(1.25rem,2.2vw,1.65rem); letter-spacing:-.03em; }
+    .video-card p { margin:0 0 14px; color:var(--muted); }
+    .video-embed { position:relative; width:100%; aspect-ratio:16/9; border-radius:16px; overflow:hidden; background:#17211b; border:1px solid var(--line); }
+    .video-embed iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0 0 12px; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
+    .steps { margin:8px 0 16px; padding-left:1.4rem; color:var(--muted); }
+    .steps li + li { margin-top:6px; }
+    .callout { margin:16px 0; padding:14px 16px; border-radius:16px; border:1px solid var(--line); border-left:5px solid var(--accent-2); background:#fff8ed; color:var(--muted); }
+    .callout strong { display:block; color:var(--ink); margin-bottom:4px; }
+    .callout p { margin:0; }
+    .subsection { margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
+    .data-table { width:100%; border-collapse:collapse; margin:12px 0 16px; }
+    .data-table th, .data-table td { border:1px solid var(--line); padding:8px 10px; text-align:left; }
+    .data-table th { background:var(--soft); color:var(--ink); }
+    .slide-plan { display:grid; gap:12px; margin:14px 0; }
+    .slide-card { border:1px solid var(--line); border-radius:14px; padding:14px 16px; background:#fffdf7; }
+    .slide-card h4 { margin:0 0 5px; color:var(--accent); }
+    .slide-card p { margin:0; }
+    pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
+    code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
+    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+    button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+    button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+    @media (max-width: 860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-text { font-weight:900; }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important; padding:76px 22px 28px; overflow-y:auto!important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
+      .pattern-header { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+      .overview-grid { grid-template-columns:1fr; }
+      .hero { border-radius:20px; }
+    }
+    @media (max-width:520px) {
+      .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+      .demo-frame { padding:14px; }
+    }
+    @media print {
+      @page { margin:0.45in; }
+      * { box-shadow:none!important; text-shadow:none!important; }
+      html, body { overflow:visible!important; background:#fff!important; color:#111!important; font-family:Georgia, "Times New Roman", serif; font-size:10pt!important; line-height:1.22!important; }
+      .sidebar, .mobile-menu-toggle, .mobile-menu-backdrop, .video-section { display:none!important; }
+      main { margin:0!important; width:100%!important; padding:0!important; }
+      main > * { max-width:none!important; }
+      .hero, .pattern, .demo-frame, .meta-card, .callout, .submission-box, .slide-card { border:0!important; background:#fff!important; border-radius:0!important; padding:0!important; color:#111!important; }
+      .hero { margin:0 0 10pt!important; }
+      .hero h2 { font-size:18pt!important; line-height:1.02!important; margin:0 0 5pt!important; }
+      .eyebrow, .tag { color:#333!important; background:transparent!important; border:0!important; padding:0!important; font-size:8pt!important; }
+      p, li, td, th, .hero p, .section-group p, .pattern p, .note, .meta-card p, .callout, .submission-box p { color:#111!important; font-size:10pt!important; line-height:1.22!important; }
+      .concept-callout, .callout { border-left:2pt solid #555!important; padding-left:7pt!important; margin:6pt 0!important; }
+      .overview-grid, .slide-plan { display:block!important; }
+      .meta-card, .slide-card { margin:0 0 6pt!important; }
+      .meta-card h4, .slide-card h4 { font-size:10.5pt!important; margin:0 0 2pt!important; }
+      .section-group { margin:12pt 0 4pt!important; padding-top:5pt!important; border-top:0.75pt solid #111!important; break-after:avoid; }
+      .section-group h2 { font-size:13pt!important; line-height:1.08!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern { margin:0 0 10pt!important; break-inside:auto; }
+      .pattern h3 { font-size:11.5pt!important; line-height:1.12!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern-header { display:block!important; margin-bottom:4pt!important; }
+      .steps, ol, ul { margin-top:3pt!important; margin-bottom:4pt!important; padding-left:18pt!important; }
+      .steps li + li, li + li { margin-top:1.5pt!important; }
+      .subsection { margin-top:6pt!important; padding-top:4pt!important; border-top:0.75pt solid #aaa!important; }
+      .subsection h4 { color:#111!important; font-size:10.5pt!important; line-height:1.1!important; margin:0 0 3pt!important; }
+      .demo-frame { margin:0!important; }
+      a { text-decoration:none!important; color:#111!important; }
+    }
+  </style>
+</head>
+<body>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false">
+    <span class="mobile-menu-icon" aria-hidden="true"></span>
+    <span class="mobile-menu-text">Menu</span>
+  </button>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="siteSidebar" aria-label="Tutorial navigation">
+      <a href="../" class="home-button">&larr; Back to Home</a>
+      <h1>Build a Flourish Data Story</h1>
+      <p>Guide viewers through one revisualization, one focus, and one new dataset.</p>
+      <nav>
+        <div class="nav-group-title">Tutorial</div>
+        <a href="#overview">Overview</a>
+        <a href="#video">Video</a>
+        <a href="#before">Download the data</a>
+        <a href="#plan">Plan four slides</a>
+        <a href="#opening">Build the opening view</a>
+        <a href="#story">Create the story</a>
+        <a href="#revisualize">Revisualize</a>
+        <a href="#focus">Focus</a>
+        <a href="#new-data">Introduce new data</a>
+        <a href="#appearance">Refine and test</a>
+        <a href="#submission">Submission</a>
+      </nav>
+    </aside>
+
+    <main>
+      <section class="hero" id="overview">
+        <div class="eyebrow">Flourish tutorial</div>
+        <h2>Build a Simple Guided Data Story in Flourish</h2>
+        <p>Create a four-slide story about when warbler species can be seen in Iowa. Each transition has a different storytelling job: revisualize the same data, focus attention, and introduce new evidence.</p>
+        <div class="concept-callout"><strong>A guided data story makes an argument in steps.</strong> The viewer advances with buttons, while the author controls the sequence and explains why each visual change matters.</div>
+        <div class="overview-grid">
+          <article class="meta-card">
+            <h4>What you will build</h4>
+            <p>One Flourish story with four slides: overview, revisualization, focus, and new evidence.</p>
+          </article>
+          <article class="meta-card">
+            <h4>What you will submit</h4>
+            <p>The public URL to the published Flourish story.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="video-section" id="video">
+        <div class="video-card">
+          <h3>Video tutorial</h3>
+          <p>A video will be added after this written tutorial has been tested.</p>
+          <div class="video-embed">
+            <iframe src="about:blank" title="Build a Simple Guided Data Story in Flourish video tutorial"></iframe>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-group" id="before">
+        <h2>Download the data</h2>
+        <p>This story uses one dataset for the first three slides and a second dataset for the final slide.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Prepare the files</h3></div><span class="tag">Setup</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Download <a href="iowa-warbler-monthly-counts.csv" download><strong>iowa-warbler-monthly-counts.csv</strong></a>.</li>
+            <li>Download <a href="iowa-warbler-seasonal-status.csv" download><strong>iowa-warbler-seasonal-status.csv</strong></a>.</li>
+            <li>Sign in to Flourish and open your Projects page.</li>
+            <li>Keep this tutorial open in another tab.</li>
+          </ol>
+          <div class="callout">
+            <strong>Tutorial data</strong>
+            <p>These small datasets are invented for practice. They are designed to make the storytelling transitions easy to see.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-group" id="plan">
+        <h2>Plan the four-slide argument</h2>
+        <p>Each slide should add a new idea rather than simply changing the chart.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Define the sequence</h3></div><span class="tag">Purpose</span></div>
+        <div class="demo-frame">
+          <div class="slide-plan">
+            <article class="slide-card">
+              <h4>Slide 1: Overview</h4>
+              <p>A line chart shows two migration peaks and a smaller summer population.</p>
+            </article>
+            <article class="slide-card">
+              <h4>Slide 2: Revisualization</h4>
+              <p>The same monthly data becomes ranked bars so viewers can compare months precisely.</p>
+            </article>
+            <article class="slide-card">
+              <h4>Slide 3: Focus</h4>
+              <p>The chart keeps the same arrangement but emphasizes May and July.</p>
+            </article>
+            <article class="slide-card">
+              <h4>Slide 4: New evidence</h4>
+              <p>A second dataset shows that most species are migration visitors rather than Iowa breeders.</p>
+            </article>
+          </div>
+          <div class="callout">
+            <strong>The argument</strong>
+            <p>Warbler variety peaks during migration, falls in summer, and remains lower because only part of the larger migration group breeds in Iowa.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-group" id="opening">
+        <h2>Build the opening view</h2>
+        <p>Start with the broad seasonal pattern.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Slide 1: Create a line chart</h3></div><span class="tag">Overview</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Choose <strong>New visualization</strong> in Flourish.</li>
+            <li>Select a line-chart template.</li>
+            <li>Open the <strong>Data</strong> tab and import <strong>iowa-warbler-monthly-counts.csv</strong>.</li>
+            <li>Bind <strong>Month</strong> to the x-axis and <strong>Warbler species</strong> to the numeric values.</li>
+            <li>Keep the months in chronological order.</li>
+            <li>Add the title <strong>Warbler variety rises during spring and fall migration</strong>.</li>
+            <li>Use a visible line and points. Keep the y-axis starting at zero.</li>
+          </ol>
+
+          <table class="data-table">
+            <thead><tr><th scope="col">Month</th><th scope="col">Warbler species</th></tr></thead>
+            <tbody><tr><td>March</td><td>2</td></tr>
+<tr><td>April</td><td>18</td></tr>
+<tr><td>May</td><td>34</td></tr>
+<tr><td>June</td><td>15</td></tr>
+<tr><td>July</td><td>12</td></tr>
+<tr><td>August</td><td>21</td></tr>
+<tr><td>September</td><td>31</td></tr>
+<tr><td>October</td><td>14</td></tr>
+<tr><td>November</td><td>3</td></tr></tbody>
+          </table>
+
+          <p><strong>Suggested caption:</strong> The number of warbler species visible in Iowa rises sharply in May and September, then falls between the two migration periods.</p>
+        </div>
+      </section>
+
+      <section class="section-group" id="story">
+        <h2>Create the Flourish story</h2>
+        <p>Turn the finished line chart into a story before creating the remaining views.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Add the opening visualization to a story</h3></div><span class="tag">Story</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Choose <strong>Create a story</strong> from the finished visualization.</li>
+            <li>Use the line chart as Slide 1.</li>
+            <li>Add the suggested caption.</li>
+            <li>Rename the story <strong>Iowa Warblers Through the Year</strong>.</li>
+          </ol>
+          <div class="callout">
+            <strong>Use visible story navigation</strong>
+            <p>Flourish stories use buttons or arrows to move through slides. In other tools, the same guided sequence could be triggered by scrolling.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-group" id="revisualize">
+        <h2>Revisualize the same data</h2>
+        <p>Change the visual form because the question changes.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Slide 2: Change the line chart into ranked bars</h3></div><span class="tag">Revisualization</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Duplicate Slide 1.</li>
+            <li>Use Flourish’s revisualization or chart-type controls to change the line chart into horizontal bars.</li>
+            <li>Sort the bars from highest to lowest.</li>
+            <li>Show value labels at the ends of the bars.</li>
+            <li>Change the title to <strong>May has the most warbler species</strong>.</li>
+          </ol>
+          <p><strong>Suggested caption:</strong> Ranking the same monthly data makes the comparison exact. May leads with 34 species, followed by September with 31.</p>
+          <div class="callout">
+            <strong>Why revisualize?</strong>
+            <p>The line chart shows seasonal shape. The ranked bar chart answers a different question: which months have the most species?</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-group" id="focus">
+        <h2>Focus on the key comparison</h2>
+        <p>Keep the chart stable and direct attention to the evidence that supports the next claim.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Slide 3: Emphasize May and July</h3></div><span class="tag">Focus</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Duplicate Slide 2.</li>
+            <li>Keep the bars in the same ranked order.</li>
+            <li>Use the accent color for <strong>May</strong> and <strong>July</strong>.</li>
+            <li>Mute the other bars.</li>
+            <li>Add a short annotation if the template allows it.</li>
+            <li>Change the title to <strong>Species variety drops sharply after spring migration</strong>.</li>
+          </ol>
+          <p><strong>Suggested caption:</strong> Iowa goes from 34 visible warbler species in May to 12 in July. The focus transition isolates the comparison without making viewers relearn the chart.</p>
+          <div class="callout">
+            <strong>Focus is not a new chart</strong>
+            <p>The data and arrangement stay the same. Only emphasis changes, helping the viewer see the subset or data points that matter.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-group" id="new-data">
+        <h2>Introduce a new dataset</h2>
+        <p>Add evidence that helps explain the pattern shown in the first dataset.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Build a second visualization</h3></div><span class="tag">New evidence</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Return to the Flourish Projects page.</li>
+            <li>Create a new bar-chart visualization.</li>
+            <li>Import <strong>iowa-warbler-seasonal-status.csv</strong>.</li>
+            <li>Bind <strong>Seasonal status</strong> to the categories and <strong>Warbler species</strong> to the values.</li>
+            <li>Use two simple bars with direct value labels.</li>
+            <li>Add the title <strong>Most Iowa warblers are migration visitors</strong>.</li>
+          </ol>
+
+          <table class="data-table">
+            <thead><tr><th scope="col">Seasonal status</th><th scope="col">Warbler species</th></tr></thead>
+            <tbody><tr><td>Migration visitors</td><td>22</td></tr>
+<tr><td>Breed in Iowa</td><td>12</td></tr></tbody>
+          </table>
+
+          <div class="subsection">
+            <h4>Add the second visualization to the story</h4>
+            <ol class="steps">
+              <li>Open the existing <strong>Iowa Warblers Through the Year</strong> story.</li>
+              <li>Add a new slide.</li>
+              <li>Select the seasonal-status bar chart as the visualization for Slide 4.</li>
+              <li>Add the caption below.</li>
+            </ol>
+          </div>
+
+          <p><strong>Suggested caption:</strong> The summer total is lower because only 12 species in this practice dataset breed in Iowa. Another 22 appear mainly during migration.</p>
+          <div class="callout">
+            <strong>Why introduce new evidence?</strong>
+            <p>The first dataset establishes what happens through the year. The second dataset helps explain why the summer total is smaller.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-group" id="appearance">
+        <h2>Refine and test the story</h2>
+        <p>Make the four slides feel like one connected explanation.</p>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Complete the final checks</h3></div><span class="tag">5 A’s</span></div>
+        <div class="demo-frame">
+          <div class="subsection">
+            <h4>Appearance</h4>
+            <ul class="steps">
+              <li>Use one accent color consistently across all slides.</li>
+              <li>Use neutral colors for context.</li>
+              <li>Keep titles and captions short.</li>
+            </ul>
+          </div>
+          <div class="subsection">
+            <h4>All devices and accessibility</h4>
+            <ul class="steps">
+              <li>Preview the story on desktop and mobile.</li>
+              <li>Do not rely only on color. Use titles, captions, values, and annotations.</li>
+              <li>Check contrast and keyboard navigation.</li>
+              <li>Add a text description in Flourish when available.</li>
+            </ul>
+          </div>
+          <div class="subsection">
+            <h4>Attribution</h4>
+            <ul class="steps">
+              <li>Add the source note: <strong>Source: invented tutorial data for classroom practice.</strong></li>
+            </ul>
+          </div>
+          <div class="subsection">
+            <h4>Story test</h4>
+            <ul class="steps">
+              <li>Slide 1 establishes the broad pattern.</li>
+              <li>Slide 2 revisualizes the same data for comparison.</li>
+              <li>Slide 3 focuses on two values without changing the arrangement.</li>
+              <li>Slide 4 introduces a separate dataset that explains the pattern.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-group" id="submission">
+        <h2>Submission</h2>
+        <p>Publish the story and submit its public URL.</p>
+      </section>
+
+      <section class="pattern submission-box">
+        <div class="pattern-header"><div><h3>What to submit</h3></div><span class="tag">Deliverable</span></div>
+        <div class="demo-frame">
+          <ul class="steps">
+            <li>One published Flourish story URL.</li>
+            <li>Exactly four story slides.</li>
+            <li>One revisualization using the monthly dataset.</li>
+            <li>One focus slide that preserves the previous chart arrangement.</li>
+            <li>One final slide using the separate seasonal-status dataset.</li>
+            <li>A title, caption, source note, readable labels, and accessible contrast.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const sidebar = document.getElementById('siteSidebar');
+    const backdrop = document.getElementById('mobileMenuBackdrop');
+
+    function setMenu(open) {
+      document.body.classList.toggle('menu-open', open);
+      menuToggle.setAttribute('aria-expanded', String(open));
+      backdrop.hidden = !open;
+    }
+
+    menuToggle.addEventListener('click', () => {
+      setMenu(!document.body.classList.contains('menu-open'));
+    });
+
+    backdrop.addEventListener('click', () => setMenu(false));
+
+    sidebar.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => setMenu(false));
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') setMenu(false);
+    });
+  </script>
+</body>
+</html>

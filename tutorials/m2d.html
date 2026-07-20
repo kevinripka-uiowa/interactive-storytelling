@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Build, Publish, and Embed a Custom Master-Detail Interactive</title>
+<style>
+    :root {
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --warn:#fff8ed;
+      --shadow:0 14px 35px rgba(23,33,27,.12); --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    img, video, iframe, svg { max-width:100%; }
+    .layout { min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow:auto; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+    .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+    main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+    .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
+    .hero p { max-width:830px; margin:0 0 10px; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:860px; }
+    .concept-callout strong { color:var(--ink); }
+    .overview-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:22px; }
+    .meta-card { padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; min-width:0; }
+    .meta-card h4 { margin:0 0 8px; font-size:1.12rem; }
+    .meta-card p { margin:0; }
+    .meta-card a { color:var(--accent); font-weight:900; text-decoration-thickness:2px; text-underline-offset:3px; }
+    .video-section { margin-bottom:34px; }
+    .video-card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,26px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .video-card h3 { margin:0 0 8px; font-size:clamp(1.25rem,2.2vw,1.65rem); letter-spacing:-.03em; }
+    .video-card p { margin:0 0 14px; color:var(--muted); }
+    .video-embed { position:relative; width:100%; aspect-ratio:16/9; border-radius:16px; overflow:hidden; background:#17211b; border:1px solid var(--line); }
+    .video-embed iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0 0 12px; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
+    .steps { margin:8px 0 16px; padding-left:1.4rem; color:var(--muted); }
+    .steps li + li { margin-top:6px; }
+    .callout { margin:16px 0; padding:14px 16px; border-radius:16px; border:1px solid var(--line); border-left:5px solid var(--accent-2); background:#fff8ed; color:var(--muted); }
+    .callout strong { display:block; color:var(--ink); margin-bottom:4px; }
+    .callout p { margin:0; }
+    .subsection { margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
+    pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
+    code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
+    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+    button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+    button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+    @media (max-width: 860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-text { font-weight:900; }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important; padding:76px 22px 28px; overflow-y:auto!important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
+      .pattern-header { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+      .overview-grid { grid-template-columns:1fr; }
+      .hero { border-radius:20px; }
+    }
+    @media (max-width:520px) {
+      .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+      .demo-frame { padding:14px; }
+    }
+    @media print {
+      @page { margin:0.45in; }
+      * { box-shadow:none!important; text-shadow:none!important; }
+      html, body { overflow:visible!important; background:#fff!important; color:#111!important; font-family:Georgia, "Times New Roman", serif; font-size:10pt!important; line-height:1.22!important; }
+      .sidebar, .mobile-menu-toggle, .mobile-menu-backdrop, .video-section { display:none!important; }
+      main { margin:0!important; width:100%!important; padding:0!important; }
+      main > * { max-width:none!important; }
+      .hero, .pattern, .demo-frame, .meta-card, .callout, .submission-box { border:0!important; background:#fff!important; border-radius:0!important; padding:0!important; color:#111!important; }
+      .hero { margin:0 0 10pt!important; }
+      .hero h2 { font-size:18pt!important; line-height:1.02!important; margin:0 0 5pt!important; }
+      .eyebrow, .tag { color:#333!important; background:transparent!important; border:0!important; padding:0!important; font-size:8pt!important; }
+      p, li, td, th, .hero p, .section-group p, .pattern p, .note, .meta-card p, .callout, .submission-box p { color:#111!important; font-size:10pt!important; line-height:1.22!important; }
+      .concept-callout, .callout { border-left:2pt solid #555!important; padding-left:7pt!important; margin:6pt 0!important; }
+      .overview-grid { display:block!important; }
+      .meta-card { margin:0 0 6pt!important; }
+      .meta-card h4 { font-size:10.5pt!important; margin:0 0 2pt!important; }
+      .section-group { margin:12pt 0 4pt!important; padding-top:5pt!important; border-top:0.75pt solid #111!important; break-after:avoid; }
+      .section-group h2 { font-size:13pt!important; line-height:1.08!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern { margin:0 0 10pt!important; break-inside:auto; }
+      .pattern h3 { font-size:11.5pt!important; line-height:1.12!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern-header { display:block!important; margin-bottom:4pt!important; }
+      .steps, ol, ul { margin-top:3pt!important; margin-bottom:4pt!important; padding-left:18pt!important; }
+      .steps li + li, li + li { margin-top:1.5pt!important; }
+      .subsection { margin-top:6pt!important; padding-top:4pt!important; border-top:0.75pt solid #aaa!important; }
+      .subsection h4 { color:#111!important; font-size:10.5pt!important; line-height:1.1!important; margin:0 0 3pt!important; }
+      .demo-frame { margin:0!important; }
+      pre { white-space:pre-wrap!important; font-size:9pt!important; padding:4pt!important; border:0.5pt solid #777!important; background:#f7f7f7!important; color:#111!important; }
+      a { text-decoration:none!important; color:#111!important; }
+    }
+
+  
+    .day-heading { margin-top:72px; padding:26px 0 0; border-top:5px solid var(--accent); }
+    .day-heading h2 { font-size:clamp(1.9rem,4vw,3rem); }
+</style>
+</head>
+<body>
+<button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span class="mobile-menu-text">Menu</span></button>
+<div class="mobile-menu-backdrop" hidden="" id="mobileMenuBackdrop"></div>
+<div class="layout">
+<aside aria-label="Tutorial navigation" class="sidebar" id="siteSidebar">
+<a class="home-button" href="../">← Back to Home</a>
+<h1>Build, Publish, and Embed a Custom Master-Detail Interactive</h1>
+<p>Tutorial M2 - D1–D2. Build locally, publish with GitHub Pages, and integrate the interactive into a larger story.</p>
+<nav><div class="nav-group-title">Start here</div><a href="#overview">Overview</a><div class="nav-group-title">Day 1</div><a href="#day-1">Day 1 overview</a><a href="#day-1-video">Day 1 video</a><a href="#before-you-start">Before you start</a><a href="#section-1-create-the-project-folder">Create the project folder</a><a href="#section-2-open-the-folder-in-vs-code">Open the folder in VS Code</a><a href="#section-3-add-the-starter-assets">Add the starter assets</a><a href="#section-4-understand-the-csv">Understand the CSV</a><a href="#section-5-art-direct-the-ai-prompt">Art-direct the AI prompt</a><a href="#section-6-add-the-generated-code">Add the generated code</a><a href="#section-7-install-and-run-live-server">Run Live Server</a><a href="#section-8-fix-the-csv-file-path">Fix the CSV path</a><a href="#section-9-fix-the-thumbnail-path">Fix the thumbnail path</a><a href="#section-10-optimize-and-add-the-detail-image">Add the detail image</a><a href="#section-11-test-responsive-behavior">Test responsive behavior</a><a href="#section-12-use-developer-tools-to-inspect-the-page">Inspect with Developer Tools</a><a href="#section-13-adjust-typography">Adjust typography</a><a href="#section-14-adjust-the-food-grid">Adjust the food grid</a><a href="#section-15-refine-responsive-type-and-color">Refine type and color</a><a href="#section-16-refine-the-introduction-layout">Refine the introduction</a><a href="#section-17-final-check">Day 1 final check</a><div class="nav-group-title">Day 2</div><a href="#day-2">Day 2 overview</a><a href="#day-2-video">Day 2 video</a><a href="#day-2-before-you-start">Before you start</a><a href="#day-2-section-1-install-git">Install Git</a><a href="#day-2-section-2-initialize">Initialize the repository</a><a href="#day-2-section-3-publish-repository">Publish to GitHub</a><a href="#day-2-section-4-enable-pages">Enable GitHub Pages</a><a href="#day-2-section-5-update-data">Add Wilson’s Warbler</a><a href="#day-2-section-6-commit-sync">Commit and sync</a><a href="#day-2-section-7-cache">Troubleshoot caching</a><a href="#day-2-section-8-iframe">Test an iframe</a><a href="#day-2-section-9-choose-strategy">Choose an embed strategy</a><a href="#day-2-section-10-build-hybrid">Build the hybrid embed</a><a href="#day-2-section-11-absolute-paths">Fix hosted asset paths</a><a href="#day-2-section-12-fix-scroll">Fix page jumping</a><a href="#day-2-section-13-namespace-css">Namespace the CSS</a><a href="#day-2-section-14-final">Final integration check</a></nav>
+</aside>
+<main>
+<section class="hero" id="overview">
+<div class="eyebrow">Tutorial M2 - D1–D2</div>
+<h2>Build, Publish, and Embed a Custom Master-Detail Interactive</h2>
+<p>Across two tutorial days, you will build and refine a CSV-driven master-detail interactive, place it under version control, publish it with GitHub Pages, and integrate it into a larger web story.</p>
+<p>The example is an interactive about warblers that can be seen in Iowa. Readers begin with a grid of bird thumbnails, then select a bird to see a larger image and detailed information loaded from a CSV file.</p>
+<div class="concept-callout"><strong>AI can write starter code, but you remain responsible for the result.</strong> Define the pattern, data, layout, behavior, accessibility, responsiveness, and file structure before generating code. Then inspect, test, troubleshoot, and revise what the AI produces rather than accepting its decisions unchanged.</div>
+<div aria-label="Tutorial summary" class="overview-grid">
+<article class="meta-card"><h4>Day 1: Build locally</h4><p>Set up the project, connect its data and images, test it through Live Server, and refine the responsive design.</p></article>
+<article class="meta-card"><h4>Day 2: Publish and integrate</h4><p>Use Git and GitHub Pages, update the published project, and choose an iframe or hybrid embed strategy for a larger story.</p></article>
+</div>
+</section>
+<section class="section-group day-heading" id="day-1"><h2>Day 1: Build and refine the interactive</h2><p>Set up the project locally, connect the CSV and image assets, troubleshoot file paths, and art-direct the generated design.</p></section><section class="video-section" id="day-1-video">
+<div class="video-card">
+<h3>Day 1 video walkthrough</h3>
+<div class="video-embed"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" src="https://www.youtube.com/embed/kPmZKTTklNo" title="Build and refine a custom master-detail interactive tutorial video"></iframe></div>
+</div>
+</section>
+<section class="section-group" id="before-you-start"><h2>Before you start</h2><p>Download the tutorial files from ICON and make sure you have the software needed to work locally.</p></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Preparation checklist</h3><p>Have these items ready before you begin.</p></div><span class="tag">Setup</span></div><div class="demo-frame"><ul class="steps">
+<li>Download the M2 - D1 asset folder from ICON.</li><li>Make sure the download includes the images folder, the warbler CSV, the AI prompt, and the generated code ZIP.</li><li>Use Visual Studio Code on a lab computer, or install it on your own computer.</li><li>Use Chrome for testing so you can follow the Developer Tools steps shown in the tutorial.</li><li>Keep the ICON download available. You will move selected files into a separate working folder.</li>
+</ul><div class="callout"><strong>Work from a project folder</strong><p>A web project is a folder containing files that refer to one another. Keeping the complete project together is necessary for relative file paths, local testing, version control, and publishing.</p></div></div></section>
+<section class="section-group" id="section-1-create-the-project-folder"><h2>Section 1: Create the project folder</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Create and name the working folder</h3></div><span class="tag">Step 1</span></div><div class="demo-frame"><ol class="steps">
+<li>Create a new folder on your Desktop.</li><li>Name it <code>master-detail</code>.</li><li>Use lowercase letters and a hyphen instead of a space.</li>
+</ol><div class="callout"><strong>Use web-safe file names</strong><p>URLs are case-sensitive on many servers, and spaces can create awkward encoded URLs. Use lowercase letters, hyphens between words, and no unnecessary punctuation for folders and web files.</p></div></div></section>
+<section class="section-group" id="section-2-open-the-folder-in-vs-code"><h2>Section 2: Open the folder in VS Code</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Open the full project context</h3></div><span class="tag">Step 2</span></div><div class="demo-frame"><ol class="steps">
+<li>Open Visual Studio Code.</li><li>Choose <strong>File &gt; Open Folder</strong>.</li><li>Select the <code>master-detail</code> folder and open it.</li><li>In the Explorer panel, create a new file named <code>index.html</code>.</li>
+</ol><div class="callout"><strong>Why index.html?</strong><p><code>index.html</code> is the default page a web server looks for when someone visits a folder URL. Each folder can have one default <code>index.html</code> file.</p></div></div></section>
+<section class="section-group" id="section-3-add-the-starter-assets"><h2>Section 3: Add the starter assets</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Move the images and data into the project</h3></div><span class="tag">Step 3</span></div><div class="demo-frame"><ol class="steps">
+<li>Return to the ICON download folder.</li><li>Move or copy the supplied <code>images</code> folder into <code>master-detail</code>.</li><li>Move or copy the warbler CSV file into the root of <code>master-detail</code>.</li><li>Return to VS Code and confirm that the Explorer panel shows the new files and folders.</li><li>Expand the image folders and verify that the thumbnail images are present.</li></ol>
+<div class="callout"><strong>Watch which copy you edit</strong><p>The files in the ICON download and the files in your project folder are separate copies. Make all project changes inside <code>master-detail</code>.</p></div></div></section>
+<section class="section-group" id="section-4-understand-the-csv"><h2>Section 4: Understand the CSV</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Inspect the project data</h3></div><span class="tag">Step 4</span></div><div class="demo-frame"><p>A CSV is a plain-text representation of a spreadsheet. The first row contains column names, and each later row is one bird record.</p><ul class="steps">
+<li>Open the CSV in VS Code to see its underlying comma-separated structure.</li><li>Open it in Excel or Google Sheets when you need a more familiar spreadsheet view.</li><li>Notice which columns contain text, booleans, comma-separated lists, local image names, or external image URLs.</li><li>Remember that images are separate resources. The CSV stores a path or URL that tells the page where to find each image.</li><li>Use appropriately sized external image versions rather than linking to unnecessarily large originals.</li>
+</ul><div class="callout"><strong>Keep the CSV as the source of truth</strong><p>The interactive should read the CSV when the page loads. Do not let an AI tool convert the data into a hard-coded JavaScript object if you expect to update the spreadsheet later.</p></div></div></section>
+<section class="section-group" id="section-5-art-direct-the-ai-prompt"><h2>Section 5: Art-direct the AI prompt</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Specify the pattern, data, appearance, and behavior</h3></div><span class="tag">Step 5</span></div><div class="demo-frame"><p>The supplied prompt demonstrates how to direct an AI coding tool. You will use the generated files provided for the tutorial, but you should understand the decisions built into the request.</p>
+<div class="subsection"><h4>A. Describe the content and data</h4></div><ul class="steps"><li>Identify the project as a master-detail interactive about warblers seen in Iowa.</li><li>Upload the CSV so the tool can inspect its exact column names.</li><li>Require the page to read the CSV rather than embedding a converted copy of the data.</li><li>Allow an appropriate library to parse the CSV.</li></ul>
+<div class="subsection"><h4>B. Describe the default state</h4></div><ul class="steps"><li>Show square thumbnails for all birds.</li><li>Use seven birds per row on desktop and five on mobile.</li><li>Define the thumbnail path and naming convention: lowercase, spaces changed to hyphens, and apostrophes removed.</li><li>Show the bird name in a tooltip on hover.</li></ul>
+<div class="subsection"><h4>C. Describe the detail state</h4></div><ul class="steps"><li>Replace the grid with one bird’s detail view after a thumbnail is selected.</li><li>Include a visible back or close button and keyboard support such as the Escape key.</li><li>Place the horizontal bird image beside the common and scientific names on desktop.</li><li>Organize Iowa-specific information and general information according to the CSV fields.</li><li>Include citations and attribution.</li></ul>
+<div class="subsection"><h4>D. Describe technical requirements</h4></div><ul class="steps"><li>Make the interactive accessible and responsive.</li><li>Prepare it for GitHub Pages and eventual placement in a Tilda page.</li><li>Make it respond to the width of its container, with an optimal maximum width near 1160 pixels.</li><li>Ask for a complete project folder delivered as a ZIP with separate HTML, CSS, and JavaScript files.</li></ul>
+<div class="callout"><strong>Do not delegate the core decisions</strong><p>Terminology helps the AI understand the pattern, but terminology alone is not enough. Decide what the reader sees first, how they move to the detail state, what information appears, how it responds across devices, and how the project will be maintained.</p></div>
+</div></section>
+<section class="section-group" id="section-6-add-the-generated-code"><h2>Section 6: Add the generated code</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Replace the placeholder file and add the supporting files</h3></div><span class="tag">Step 6</span></div><div class="demo-frame"><ol class="steps">
+<li>Unzip the supplied <code>code.zip</code> file.</li><li>Move its <code>index.html</code> into <code>master-detail</code>.</li><li>When asked, replace the empty <code>index.html</code> you created earlier.</li><li>Move <code>styles.css</code> and <code>script.js</code> into the project folder.</li><li>Confirm in VS Code that all three code files appear beside the CSV and images folder.</li><li>Open each file briefly so you can see the separation of structure, appearance, and behavior.</li>
+</ol><div class="callout"><strong>Separate files are easier to manage</strong><p>The HTML establishes the page structure, the CSS controls appearance and responsive layout, and the JavaScript loads the CSV and builds the interactive behavior.</p></div></div></section>
+<section class="section-group" id="section-7-install-and-run-live-server"><h2>Section 7: Install and run Live Server</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Preview the project through a local web server</h3></div><span class="tag">Step 7</span></div><div class="demo-frame"><ol class="steps">
+<li>In VS Code, open Extensions.</li><li>Search for <strong>Live Server</strong>.</li><li>Install the widely used Live Server extension.</li><li>Return to <code>index.html</code>.</li><li>Click <strong>Go Live</strong> in the VS Code status bar.</li><li>Allow the extension to open the project in your browser.</li></ol>
+<div class="subsection"><h4>Understand the local address</h4></div><ul class="steps"><li><code>127.0.0.1</code> and <code>localhost</code> both refer to your own computer.</li><li>The number after the colon is the port selected by Live Server.</li><li>The page exists only on your computer at this stage. It is not yet published online.</li></ul>
+<div class="callout"><strong>Do not rely on double-clicking index.html</strong><p>Opening the file directly uses a <code>file://</code> address. Browser security rules can prevent JavaScript from loading a CSV that way. A local server more accurately imitates the environment the project will use after publication.</p></div>
+</div></section>
+<section class="section-group" id="section-8-fix-the-csv-file-path"><h2>Section 8: Fix the CSV file path</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Connect the JavaScript to the actual data location</h3></div><span class="tag">Step 8</span></div><div class="demo-frame"><p>The starter page displays an error because the generated JavaScript expects the CSV inside a <code>data</code> folder, but the supplied CSV is in the project root.</p><ol class="steps">
+<li>Open <code>script.js</code>.</li><li>Find the constant or variable that stores the CSV path near the beginning of the file.</li><li>Remove the incorrect <code>data/</code> folder from the path.</li><li>Leave only the CSV file name, or begin it with <code>./</code>.</li><li>Save the file.</li><li>Return to the browser and confirm that Live Server refreshes the page automatically.</li></ol>
+<pre><code>// File in the same folder as index.html
+const CSV_PATH = "iowa-warblers.csv";
+
+// This is equivalent
+const CSV_PATH = "./iowa-warblers.csv";</code></pre>
+<div class="callout"><strong>Use relative paths</strong><p>A path with no folder name looks in the same folder as the current project file. A leading slash points to the server root and may fail when the project is published inside a repository subfolder.</p></div>
+</div></section>
+<section class="section-group" id="section-9-fix-the-thumbnail-path"><h2>Section 9: Fix the thumbnail path</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Diagnose missing images</h3></div><span class="tag">Step 9</span></div><div class="demo-frame"><p>The data now loads, but the thumbnails remain broken because the prompt referred to an <code>img</code> folder while the supplied folder is named <code>images</code>.</p><ol class="steps">
+<li>Control-click a broken thumbnail in Chrome and open it in a new tab.</li><li>Use the “Cannot GET” message and the address bar to inspect the requested path.</li><li>Return to <code>script.js</code>.</li><li>Use <strong>Command-F</strong> to search for <code>img</code>.</li><li>Find the line that creates the thumbnail image’s <code>src</code> path.</li><li>Change <code>img/thumbnails/</code> to <code>images/thumbnails/</code>.</li><li>Save and verify that the thumbnail grid appears.</li><li>Select a bird and press Escape to confirm that the generated close behavior works from the keyboard.</li></ol>
+<div class="callout"><strong>Broken images are often path problems</strong><p>Check the exact folder name, capitalization, file extension, punctuation, and normalized file name. The code and the file system must match exactly.</p></div>
+</div></section>
+<section class="section-group" id="section-10-optimize-and-add-the-detail-image"><h2>Section 10: Optimize and add the detail image</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Prepare the missing Prothonotary Warbler image</h3></div><span class="tag">Step 10</span></div><div class="demo-frame"><p>The detail view for one bird still lacks an image because the local <code>images/birds</code> folder does not yet contain the required file.</p><ol class="steps">
+<li>Confirm that the detail-image path in <code>script.js</code> begins with <code>images/birds/</code>, not <code>img/birds/</code>.</li><li>Return to the ICON download and locate the supplied Prothonotary Warbler photograph.</li><li>Open the image in Photoshop.</li><li>Resize it to approximately 960 pixels on its long dimension.</li><li>Convert or embed the sRGB color profile.</li><li>Save an optimized copy into <code>master-detail/images/birds</code>.</li><li>Use the exact normalized file name expected by the JavaScript.</li><li>Return to the browser and verify that the image appears in the detail view.</li></ol>
+<div class="subsection"><h4>WebP option</h4></div><ul class="steps"><li>Choose <strong>File &gt; Save As</strong> and select WebP.</li><li>Use lossy compression near quality 60 as a reasonable starting point.</li><li>WebP will often produce a substantially smaller file than JPEG at similar visual quality.</li></ul>
+<div class="subsection"><h4>JPEG option used by the starter code</h4></div><ul class="steps"><li>Choose <strong>File &gt; Export &gt; Save for Web</strong>.</li><li>Select JPEG and start near quality 60.</li><li>Resize to about 960 pixels and enable Convert to sRGB.</li><li>Save the file into <code>images/birds</code>.</li></ul>
+<div class="callout"><strong>Do not serve the original 5.6 MB image</strong><p>Resize and compress media for its actual display size. The tutorial’s optimized WebP is roughly 43 KB and the JPEG roughly 106 KB, both far smaller than the original.</p></div>
+</div></section>
+<section class="section-group" id="section-11-test-responsive-behavior"><h2>Section 11: Test responsive behavior</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Use Chrome’s device toolbar</h3></div><span class="tag">Step 11</span></div><div class="demo-frame"><ol class="steps">
+<li>Open Chrome Developer Tools with <strong>Command-Option-I</strong>, or choose <strong>View &gt; Developer &gt; Developer Tools</strong>.</li><li>Use the three-dot menu to dock Developer Tools at the bottom if that gives you more horizontal room.</li><li>Turn on the device toolbar.</li><li>Drag the responsive viewport from desktop widths down to common phone widths.</li><li>Check the thumbnail count, spacing, text size, and detail-view layout at multiple widths.</li><li>Test selecting a bird in touch emulation, where hover tooltips are unavailable.</li><li>Confirm that the close button and Escape key still work.</li></ol>
+<div class="callout"><strong>Do not test only one desktop and one phone preset</strong><p>Responsive problems often appear between common device widths. Drag through the full range and watch for abrupt changes, oversized elements, wrapping problems, and horizontal scrolling.</p></div>
+</div></section>
+<section class="section-group" id="section-12-use-developer-tools-to-inspect-the-page"><h2>Section 12: Use Developer Tools to inspect the page</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Identify the HTML and CSS behind an element</h3></div><span class="tag">Step 12</span></div><div class="demo-frame"><ol class="steps">
+<li>Control-click the element you want to change.</li><li>Choose <strong>Inspect</strong>.</li><li>Use the Elements panel to identify its HTML element, class, or ID.</li><li>Use the Styles panel to see which CSS rules currently apply.</li><li>Temporarily turn properties on and off or edit values directly in the browser.</li><li>Use the Computed panel when you need to trace where a final value came from.</li><li>After finding a better value, make the permanent change in <code>styles.css</code>.</li></ol>
+<div class="callout"><strong>Browser edits are temporary</strong><p>Developer Tools are a safe place to experiment. Refreshing the page erases those changes, so copy the successful rule or value into your project file and save it.</p></div>
+</div></section>
+<section class="section-group" id="section-13-adjust-typography"><h2>Section 13: Adjust typography</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Change paragraphs and chips to sans serif</h3></div><span class="tag">Step 13</span></div><div class="demo-frame"><ol class="steps">
+<li>Open <code>styles.css</code>.</li><li>Add a rule for paragraph elements.</li><li>Use a system sans-serif stack such as Arial, Helvetica, and the generic <code>sans-serif</code> keyword.</li><li>Inspect one of the status labels and identify its class as <code>chip</code>.</li><li>Add <code>.chip</code> to the same selector list.</li><li>Save and verify that both paragraphs and chips change.</li></ol>
+<pre><code>p,
+.chip {
+  font-family: Arial, Helvetica, sans-serif;
+}</code></pre>
+<div class="callout"><strong>Learn enough syntax to direct the code</strong><p>A class selector begins with a period. Multiple selectors can share one declaration block when they need the same styling.</p></div>
+</div></section>
+<section class="section-group" id="section-14-adjust-the-food-grid"><h2>Section 14: Adjust the food grid</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Show more food icons per row</h3></div><span class="tag">Step 14</span></div><div class="demo-frame"><p>The generated food icons are too large and compete with the bird photograph. The list uses CSS Grid, so you can change how many equal-width columns it creates.</p><ol class="steps">
+<li>Inspect the food-icon list and identify its class as <code>food-list</code>.</li><li>In Developer Tools, change <code>grid-template-columns</code> and compare the result.</li><li>Set the main desktop rule to three columns.</li><li>Search <code>styles.css</code> for every <code>.food-list</code> rule.</li><li>At the media query for screens up to about 700 pixels, use four columns.</li><li>At the media query for screens up to about 420 pixels, use three columns.</li><li>Save and drag through the responsive range again.</li></ol>
+<pre><code>.food-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 700px) {
+  .food-list { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 420px) {
+  .food-list { grid-template-columns: repeat(3, 1fr); }
+}</code></pre>
+<div class="callout"><strong>Read a media query as a condition</strong><p><code>@media (max-width: 700px)</code> means: when the viewport is 700 pixels wide or narrower, use these declarations to override the default rules.</p></div>
+</div></section>
+<section class="section-group" id="section-15-refine-responsive-type-and-color"><h2>Section 15: Refine responsive type and color</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Reduce the bird name and add heading color</h3></div><span class="tag">Step 15</span></div><div class="demo-frame">
+<div class="subsection"><h4>A. Reduce the detail heading</h4></div><ol class="steps"><li>Inspect the selected bird’s name.</li><li>Identify the CSS rule controlling the detail-view heading.</li><li>Notice that its font size uses <code>clamp()</code>.</li><li>Reduce the maximum value to about <code>2.5rem</code>.</li><li>Save and check the heading at desktop and mobile widths.</li></ol>
+<pre><code>.bird-heading h2 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+}</code></pre>
+<div class="subsection"><h4>B. Add a purposeful heading color</h4></div><ol class="steps"><li>Choose a color that belongs to the visual system for the complete explainer.</li><li>Add a color rule for the appropriate <code>h3</code> headings.</li><li>Check the foreground and background combination for sufficient contrast.</li><li>Avoid adding a random accent color only because it looked appealing in isolation.</li></ol>
+<div class="callout"><strong>How clamp() works</strong><p>The first value is the minimum size, the middle value is the preferred fluid size, and the third value is the maximum. The browser scales within those limits.</p></div>
+</div></section>
+<section class="section-group" id="section-16-refine-the-introduction-layout"><h2>Section 16: Refine the introduction layout</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Balance the title and align the introduction</h3></div><span class="tag">Step 16</span></div><div class="demo-frame"><ol class="steps">
+<li>Find the selector for the introductory <code>h1</code>.</li><li>Add <code>text-wrap: balance</code> to improve the distribution of words across short headline lines.</li><li>Inspect the parent <code>header</code> with the class <code>intro</code>.</li><li>Change its text alignment from center to left.</li><li>Use the same maximum width as the main content so the introduction aligns with the interactive below it.</li><li>Adjust the bottom margin to preserve enough space before the thumbnail grid.</li><li>Save and check the layout at several widths.</li></ol>
+<pre><code>.intro {
+  max-width: 1040px;
+  margin: 0 auto 32px;
+  text-align: left;
+}
+
+.intro h1 {
+  text-wrap: balance;
+}</code></pre>
+<div class="callout"><strong>Reuse the project’s existing measurements</strong><p>When two regions should align, inspect the working region and reuse its maximum width or spacing rather than guessing unrelated values.</p></div>
+</div></section>
+<section class="section-group" id="section-17-final-check"><h2>Section 17: Final check</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Review the local project before Day 2</h3></div><span class="tag">Step 17</span></div><div class="demo-frame"><ul class="steps">
+<li>Confirm that Live Server loads the page without a data error.</li><li>Confirm that all bird thumbnails appear.</li><li>Open several detail views and check the text, images, food icons, and back control.</li><li>Confirm that the Prothonotary Warbler detail image loads from <code>images/birds</code>.</li><li>Use the Tab and Escape keys to test basic keyboard behavior.</li><li>Drag through desktop, tablet, and phone widths.</li><li>Check for horizontal scrolling, awkward line breaks, oversized icons, and abrupt responsive changes.</li><li>Confirm that your edits were made in the <code>master-detail</code> project, not in the original download folder.</li><li>Keep <code>index.html</code>, <code>styles.css</code>, <code>script.js</code>, the CSV, and the full images folder together.</li></ul>
+<div class="callout"><strong>Stop Live Server when finished</strong><p>Click the port indicator in the VS Code status bar when you are done testing. The local server is only a development tool; the next tutorial will publish the project online.</p></div>
+</div></section>
+
+
+<section class="section-group day-heading" id="day-2"><h2>Day 2: Publish and integrate the interactive</h2><p>Turn the local project into a Git repository, publish it with GitHub Pages, update it through commits, and place it into a larger story without breaking its assets or styles.</p></section><section class="video-section" id="day-2-video">
+<div class="video-card">
+<h3>Day 2 video walkthrough</h3>
+<div class="video-embed"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" src="https://www.youtube.com/embed/KTOjSCWFCek" title="Publish and integrate a custom master-detail interactive tutorial video"></iframe></div>
+</div>
+</section><section class="section-group" id="day-2-before-you-start"><h2>Before you start Day 2</h2><p>Open the completed <code>master-detail</code> folder from Day 1 in VS Code. You will also need a GitHub account and permission to edit the larger story where the interactive will appear.</p></section><section class="pattern"><div class="pattern-header"><div><h3>Preparation checklist</h3><p>Confirm the project works locally before publishing it.</p></div><span class="tag">Setup</span></div><div class="demo-frame"><ul class="steps">
+<li>Open the complete <code>master-detail</code> folder in VS Code.</li><li>Run Live Server and confirm that the thumbnail grid, detail views, CSV, and images still load.</li><li>Create or sign in to a GitHub account.</li><li>Know where the interactive will be integrated, such as a Tilda page or another web builder that accepts custom HTML.</li>
+</ul><div class="callout"><strong>Keep the local and published versions distinct</strong><p>Live Server shows the files on your computer. GitHub Pages shows a separate published copy. Saving locally does not update the public version until you commit and sync the changes.</p></div></div></section><section class="section-group" id="day-2-section-1-install-git"><h2>Section 1: Check for Git and install it if needed</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Prepare VS Code for source control</h3></div><span class="tag">Step 1</span></div><div class="demo-frame"><p>Open the Source Control panel in VS Code. If Git is installed, VS Code will offer to initialize the project repository. If it is not installed, VS Code will direct you to installation instructions.</p><ol class="steps">
+<li>Open the <strong>Source Control</strong> panel in VS Code.</li><li>On Windows, use the Git for Windows standalone installer.</li><li>On macOS, open <strong>Terminal &gt; New Terminal</strong> in VS Code and run <code>xcode-select --install</code>.</li><li>Approve the installation of Apple’s Command Line Tools.</li><li>Close and restart VS Code after Git finishes installing.</li><li>Reopen the <code>master-detail</code> folder and approve Workspace Trust when prompted.</li>
+</ol><div class="callout"><strong>Git and GitHub are different</strong><p>Git tracks versions inside the project folder on your computer. GitHub stores a remote copy online and can publish that copy as a website.</p></div></div></section><section class="section-group" id="day-2-section-2-initialize"><h2>Section 2: Initialize the Git repository</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Start tracking the project</h3></div><span class="tag">Step 2</span></div><div class="demo-frame"><ol class="steps">
+<li>Make sure the complete project folder is open in VS Code.</li><li>Open Source Control and select <strong>Initialize Repository</strong>.</li><li>Enter <code>Initial commit</code> as the commit message.</li><li>Select <strong>Commit</strong>.</li></ol><div class="callout"><strong>A commit is a named checkpoint</strong><p>Each commit records the state of the tracked files at that moment. Useful commit messages briefly describe the completed change.</p></div></div></section><section class="section-group" id="day-2-section-3-publish-repository"><h2>Section 3: Publish the repository to GitHub</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Create the remote copy</h3></div><span class="tag">Step 3</span></div><div class="demo-frame"><ol class="steps">
+<li>Select <strong>Publish Branch</strong> in VS Code.</li><li>Allow VS Code to open GitHub and authorize the connection.</li><li>Sign in with your GitHub credentials.</li><li>Choose a public repository for this course project.</li><li>Open the new repository on GitHub and confirm that the project files appear.</li></ol><div class="callout"><strong>The repository is not yet a website</strong><p>Publishing the branch copies the files to GitHub. GitHub Pages must still be enabled before the browser can display the project as a web page.</p></div></div></section><section class="section-group" id="day-2-section-4-enable-pages"><h2>Section 4: Enable GitHub Pages</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Deploy the main branch</h3></div><span class="tag">Step 4</span></div><div class="demo-frame"><ol class="steps">
+<li>Open the repository on GitHub.</li><li>Choose <strong>Settings</strong>.</li><li>Select <strong>Pages</strong> in the left navigation.</li><li>Under Build and deployment, choose <strong>Deploy from a branch</strong>.</li><li>Select the <code>main</code> branch and the root folder, then save.</li><li>Open the Pages URL after GitHub finishes building the site.</li></ol><pre><code>https://YOUR-USERNAME.github.io/master-detail/</code></pre><div class="callout"><strong>A temporary 404 can be normal</strong><p>The first deployment may take a few minutes. Refresh after GitHub completes the build rather than changing working code immediately.</p></div></div></section><section class="section-group" id="day-2-section-5-update-data"><h2>Section 5: Add the missing Wilson’s Warbler record</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Make a visible project update</h3></div><span class="tag">Step 5</span></div><div class="demo-frame"><ol class="steps">
+<li>Open the project CSV in Excel or another spreadsheet editor.</li><li>Use the supplied Wilson’s Warbler information to add one complete row.</li><li>Preserve the existing column order and data formats.</li><li>Save the CSV inside the <code>master-detail</code> project folder.</li><li>Check the Live Server version and confirm that Wilson’s Warbler appears.</li><li>Refresh the GitHub Pages version and notice that it has not changed yet.</li></ol><div class="callout"><strong>The CSV remains the source of truth</strong><p>Because the interactive loads the spreadsheet when the page starts, adding one valid row updates the local visualization without editing the JavaScript.</p></div></div></section><section class="section-group" id="day-2-section-6-commit-sync"><h2>Section 6: Commit and sync the update</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Send the changed CSV to GitHub</h3></div><span class="tag">Step 6</span></div><div class="demo-frame"><ol class="steps">
+<li>Return to Source Control in VS Code.</li><li>Review the changed CSV listed under Changes.</li><li>Enter a message such as <code>Add Wilson's Warbler</code>.</li><li>Select <strong>Commit</strong>.</li><li>Select <strong>Sync Changes</strong> to push the commit to GitHub.</li><li>After GitHub Pages rebuilds, refresh the public site and confirm the new bird appears.</li></ol><div class="callout"><strong>Commit, then sync</strong><p>A commit records the checkpoint locally. Sync sends that commit to GitHub. GitHub Pages then rebuilds the public website from the updated repository.</p></div></div></section><section class="section-group" id="day-2-section-7-cache"><h2>Section 7: Troubleshoot delayed changes and browser caching</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Separate deployment delay from cached files</h3></div><span class="tag">Step 7</span></div><div class="demo-frame"><ol class="steps">
+<li>Give GitHub Pages time to rebuild after syncing changes.</li><li>Open Developer Tools in Chrome.</li><li>In the Network panel, enable <strong>Disable cache</strong> while Developer Tools remains open.</li><li>Alternatively, use <strong>Empty Cache and Hard Reload</strong> from the browser’s reload menu.</li><li>Open the public page in a new tab when needed to test a fresh request.</li></ol><div class="callout"><strong>Do not assume the code failed</strong><p>A working local update that does not appear publicly may be waiting for deployment or may be hidden by the browser’s cached copy.</p></div></div></section><section class="section-group" id="day-2-section-8-iframe"><h2>Section 8: Test a standard iframe embed</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Embed the published page as a separate document</h3></div><span class="tag">Step 8</span></div><div class="demo-frame"><ol class="steps">
+<li>Add a custom HTML block in Tilda or your chosen builder.</li><li>Copy the GitHub Pages URL for the interactive.</li><li>Use it as the iframe’s <code>src</code>.</li><li>Set the iframe to display as a block, center it, use the full available width, limit its maximum width, assign a height, and remove the border.</li><li>Publish the story page and test both the thumbnail grid and detail state.</li></ol><pre><code>&lt;iframe
+  src="https://YOUR-USERNAME.github.io/master-detail/"
+  title="Warblers that can be seen in Iowa"
+  style="display:block; margin:0 auto; width:100%; max-width:1160px; height:100vh; border:0;"
+&gt;&lt;/iframe&gt;</code></pre><div class="callout"><strong>An iframe needs a predictable height</strong><p>The master-detail project changes height between states and may require its own internal scrollbar. A full-screen map or visualization with a fixed viewport is usually a better candidate for a pure iframe.</p></div></div></section><section class="section-group" id="day-2-section-9-choose-strategy"><h2>Section 9: Choose between an iframe and a hybrid embed</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Match the integration method to the interactive</h3></div><span class="tag">Step 9</span></div><div class="demo-frame"><div class="subsection"><h4>Use a pure iframe when:</h4></div><ul class="steps"><li>The interactive has a stable or viewport-based height.</li><li>It should remain isolated from the story page’s CSS and JavaScript.</li><li>An internal scrollbar will not harm the experience.</li></ul><div class="subsection"><h4>Use a hybrid embed when:</h4></div><ul class="steps"><li>The content height changes substantially between states.</li><li>You need the interactive to participate in the parent page’s natural scrolling.</li><li>You can convert local asset paths to absolute hosted URLs and control CSS conflicts.</li></ul><div class="callout"><strong>Hybrid means hosted assets plus pasted structure</strong><p>The HTML structure and initialization scripts are pasted into the builder, while the CSV, images, and other assets remain hosted in the GitHub Pages project.</p></div></div></section><section class="section-group" id="day-2-section-10-build-hybrid"><h2>Section 10: Build the hybrid embed</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Paste only the parts the builder needs</h3></div><span class="tag">Step 10</span></div><div class="demo-frame"><ol class="steps">
+<li>Delete or disable the test iframe block.</li><li>Open <code>index.html</code> in VS Code.</li><li>Copy the complete <code>&lt;main&gt;</code> element used by the interactive.</li><li>Copy the required script tags at the end of the page.</li><li>Paste them into the builder’s custom HTML block.</li><li>Bring in the project’s CSS, either by pasting the relevant styles or linking to the hosted stylesheet.</li><li>Publish and inspect what loads before making additional changes.</li></ol><div class="callout"><strong>Do not paste a second document skeleton</strong><p>The builder already supplies <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, and <code>&lt;body&gt;</code>. Paste the interactive’s content and required resources, not an entire standalone page inside another page.</p></div></div></section><section class="section-group" id="day-2-section-11-absolute-paths"><h2>Section 11: Convert relative asset paths to absolute URLs</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Point the hybrid embed back to GitHub Pages</h3></div><span class="tag">Step 11</span></div><div class="demo-frame"><p>Relative paths are resolved from the page where the code is running. After the script is pasted into Tilda, a path such as <code>iowa-warblers.csv</code> points toward Tilda rather than the GitHub repository.</p><ol class="steps">
+<li>Copy the GitHub Pages base URL for the repository.</li><li>In <code>script.js</code>, replace the relative CSV path with its full public URL.</li><li>Update generated thumbnail paths and local detail-image paths in the same way.</li><li>Check the CSV for any local image paths that also need full URLs.</li><li>Leave external image URLs unchanged.</li><li>Commit and sync the path changes.</li></ol><pre><code>const BASE_URL = "https://YOUR-USERNAME.github.io/master-detail/";
+const CSV_PATH = `${BASE_URL}iowa-warblers.csv`;
+
+// Examples used when building image src values
+`${BASE_URL}images/thumbnails/${fileName}`
+`${BASE_URL}images/birds/${fileName}`</code></pre><div class="callout"><strong>Test the asset URL directly</strong><p>Paste a suspected CSV or image URL into the browser. If it opens or downloads, the resource exists. If the embed still fails, inspect the console and the code that requests it.</p></div></div></section><section class="section-group" id="day-2-section-12-fix-scroll"><h2>Section 12: Stop the embedded interactive from jumping to the page top</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Remove page-level scrolling that no longer fits the context</h3></div><span class="tag">Step 12</span></div><div class="demo-frame"><p>The generated JavaScript uses <code>window.scrollTo()</code> when opening or closing the detail view. Once the interactive sits inside a longer story page, that command scrolls the entire browser window rather than only the interactive.</p><ol class="steps">
+<li>Search <code>script.js</code> for <code>scrollTo</code>.</li><li>Locate the calls used when opening and closing the detail state.</li><li>Comment them out or remove them.</li><li>Commit and sync the change.</li><li>Retest the interaction inside the complete story page.</li></ol><pre><code>// window.scrollTo({ top: 0, behavior: "smooth" });</code></pre><div class="callout"><strong>A more targeted option</strong><p>When repositioning is useful, scroll the interactive container into view with <code>document.querySelector('#app').scrollIntoView()</code> rather than sending the whole page to its absolute top.</p></div></div></section><section class="section-group" id="day-2-section-13-namespace-css"><h2>Section 13: Prevent the interactive CSS from changing the story page</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Namespace broad selectors</h3></div><span class="tag">Step 13</span></div><div class="demo-frame"><p>Pasting a standalone stylesheet into a builder can change unrelated headings, paragraphs, body styles, and layout rules. Scope the interactive’s selectors to its wrapper, such as <code>#app</code>.</p><ol class="steps">
+<li>Identify the interactive’s outer wrapper, such as <code>&lt;div id="app"&gt;</code>.</li><li>Find broad CSS selectors including <code>p</code>, <code>h2</code>, <code>h3</code>, <code>img</code>, and the universal selector <code>*</code>.</li><li>Prefix selectors that belong only to the interactive with <code>#app</code>.</li><li>Remove or rewrite page-wide <code>body</code> and root-level layout rules that should not affect the builder.</li><li>Retest the story typography, spacing, and the interactive itself.</li><li>Commit and sync the CSS corrections.</li></ol><pre><code>/* Too broad in a pasted embed */
+p { font-family: Arial, sans-serif; }
+
+/* Scoped to the interactive */
+#app p { font-family: Arial, sans-serif; }
+
+/* Scope box sizing without changing the whole page */
+#app, #app * { box-sizing: border-box; }</code></pre><div class="callout"><strong>Plan namespacing before generation</strong><p>For future custom snippets, require every class and selector to be scoped to a unique wrapper. Retrofitting a large stylesheet after embedding is slower and easier to get wrong.</p></div></div></section><section class="section-group" id="day-2-section-14-final"><h2>Section 14: Final integration check</h2></section><section class="pattern"><div class="pattern-header"><div><h3>Review the published project and complete story</h3></div><span class="tag">Final</span></div><div class="demo-frame"><ul class="steps">
+<li>Confirm the GitHub Pages URL loads without a 404 or missing assets.</li><li>Confirm Wilson’s Warbler appears in the published data.</li><li>Open several detail views and verify all thumbnail, bird, and food images.</li><li>Test the embedded version at desktop, tablet, and phone widths.</li><li>Confirm opening and closing details does not jump to the top of the story.</li><li>Check that the interactive stylesheet does not change unrelated story text or layout.</li><li>Make the interactive’s typography, colors, and spacing consistent with the surrounding explanatory story.</li><li>Use clear commit messages for the final fixes and sync all changes to GitHub.</li></ul><div class="callout"><strong>The interactive is one part of a larger explanation</strong><p>Technical integration is complete only when the hosted assets, interaction behavior, responsive layout, accessibility, and visual system all work within the full story.</p></div></div></section></main>
+</div>
+<script>
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const menuBackdrop = document.getElementById('mobileMenuBackdrop');
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      menuToggle?.setAttribute('aria-expanded', 'false');
+      if (menuBackdrop) menuBackdrop.hidden = true;
+    }
+    if (menuToggle && menuBackdrop) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        menuBackdrop.hidden = !isOpen;
+      });
+      menuBackdrop.addEventListener('click', closeMenu);
+      document.querySelectorAll('.sidebar a').forEach(link => link.addEventListener('click', closeMenu));
+    }
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+  </script>
+</body>
+</html>
