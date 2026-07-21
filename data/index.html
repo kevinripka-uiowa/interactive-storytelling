@@ -536,7 +536,8 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 <div class="pattern-header"><div><h3>Explanatory Data Visualization</h3><p>An explanatory data visualization focuses the viewer on one important pattern in the evidence. The chart can still be interactive, but the interaction should help readers inspect values, highlight a data point or set, and understand the author’s main point.</p></div><span class="tag">Explain</span></div>
 <div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Explain. <strong>Also useful for:</strong> Compare when interaction highlights differences between groups.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Procedural because the chart responds to hover/focus; encyclopedic because exact data values sit behind the visual marks.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Guided inspection. The author chooses the pattern, while the viewer checks details within the graphic.</p></div></div>
 <div class="key-interactions"><h4>Key interactions</h4><ul><li>Tooltip labels for exact values and short context.</li><li>Hover or keyboard focus to highlight one bar, point, line, or data set.</li><li>Persistent annotation or callout for the most important pattern.</li><li>Optional legend hover to isolate one series.</li></ul></div>
-<div class="demo-frame">
+<iframe title="Population change by bird group" aria-label="Column Chart" id="datawrapper-chart-EgyWp" src="https://datawrapper.dwcdn.net/EgyWp/2/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="454" data-external="1"></iframe><script type="text/javascript">(function(){function e(){window.addEventListener(`message`,function(e){if(e.data[`datawrapper-height`]!==void 0){var t=document.querySelectorAll(`iframe`);for(var n in e.data[`datawrapper-height`])for(var r=0,i;i=t[r];r++)if(i.contentWindow===e.source){var a=e.data[`datawrapper-height`][n]+`px`;i.style.height=a}}})}e()})();</script>
+<!-- <div class="demo-frame">
 <div class="demo-note"><strong>Example:</strong> The chart explains one finding: grassland birds show the steepest decline. Hover or focus each bar to read the value.</div>
 <div class="chart-shell" id="interactiveChartShell">
 <div class="chart-title"><div><h4>Population change by bird group</h4><p>Example data showing why the story would focus on grassland species.</p></div><span class="pill">Hover / focus to inspect</span></div>
@@ -554,14 +555,14 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 </svg>
 </div>
 <div class="tool-fit">Good tool fit: Datawrapper chart, Flourish chart, or custom SVG/HTML.</div>
-</div>
+</div> -->
 </section>
 <section class="section-group" id="exploratory-data-section">
 <h2>Exploratory Data Visualization</h2>
 <p>Use these when the dataset is large enough that readers need controlled ways to explore, narrow, filter, sort, or compare. The author still designs the available questions, but the viewer has more agency than in a single explanatory chart.</p>
 </section>
 <section class="pattern" id="filterable-explorer">
-<div class="pattern-header"><div><h3>Filterable data visualization</h3><p>A filterable data visualization lets viewers narrow a chart by group, habitat, season, place, or status. It is useful when the dataset is larger than one focused view, but the available questions are still bounded.</p></div><span class="tag">Explore</span></div>
+<div class="pattern-header"><div><h3>Filterable data visualization</h3><p>A filterable data visualization lets viewers narrow a chart by group, value, or measure. It is useful when the dataset is larger than one focused view, but the available questions are still bounded.</p></div><span class="tag">Explore</span></div>
 <div aria-label="Teaching analysis" class="pattern-analysis"><div class="pattern-analysis-card"><h4>Story job</h4><p><strong>Primary:</strong> Explore. <strong>Also useful for:</strong> Compare when filters help readers isolate groups against one another.</p></div><div class="pattern-analysis-card"><h4>Affordances</h4><p>Participatory because the reader chooses filters; procedural because the chart redraws; encyclopedic because the dataset contains more than one view.</p></div><div class="pattern-analysis-card"><h4>Agency</h4><p>Limited exploratory agency. The viewer can ask small questions using author-defined controls.</p></div></div>
 <div class="key-interactions"><h4>Key interactions</h4><ul><li>Dropdowns, buttons, or checkboxes to filter the displayed data.</li><li>Line or mark highlighting when a group is selected.</li><li>Tooltips that still work after filtering.</li><li>Clear “show all” state so the viewer can return to the overview.</li></ul></div>
 <div class="demo-frame">
