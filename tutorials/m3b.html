@@ -1,779 +1,460 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Build an MLB Hitter Explorer in Flourish</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build an Exploratory Data Visualization in Flourish</title>
   <style>
     :root {
-      --bg:#f6f4ee;
-      --panel:#fffdf8;
-      --ink:#17211b;
-      --muted:#5d675f;
-      --line:#d9d2c4;
-      --accent:#37634e;
-      --accent-dark:#244735;
-      --accent-soft:#eaf2ed;
-      --yellow:#fff4c9;
-      --shadow:0 12px 32px rgba(23,33,27,.10);
-      --radius:18px;
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --warn:#fff8ed;
+      --shadow:0 14px 35px rgba(23,33,27,.12); --radius:18px;
     }
     * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; width:100%; overflow-x:hidden; }
-    body {
-      margin:0;
-      background:var(--bg);
-      color:var(--ink);
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height:1.58;
-      overflow-x:hidden;
-    }
-    a { color:var(--accent-dark); }
-    img, iframe, svg { max-width:100%; }
-    .sidebar {
-      position:fixed;
-      inset:0 auto 0 0;
-      width:280px;
-      height:100vh;
-      overflow:auto;
-      padding:28px 22px;
-      background:var(--ink);
-      color:#fff;
-      z-index:20;
-    }
-    .sidebar h1 {
-      margin:0 0 8px;
-      font-size:1.32rem;
-      line-height:1.15;
-    }
-    .sidebar p {
-      margin:0 0 22px;
-      color:rgba(255,255,255,.7);
-      font-size:.92rem;
-    }
-    .sidebar a {
-      display:block;
-      margin:2px 0;
-      padding:8px 10px;
-      border-radius:9px;
-      color:rgba(255,255,255,.88);
-      text-decoration:none;
-      font-size:.94rem;
-    }
-    .sidebar a:hover,
-    .sidebar a:focus {
-      background:rgba(255,255,255,.1);
-      outline:none;
-    }
-    .home-button {
-      margin-bottom:18px!important;
-      border:1px solid rgba(255,255,255,.35);
-    }
-    .nav-title {
-      margin:22px 0 8px;
-      color:#83e4b6;
-      font-size:.73rem;
-      font-weight:850;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
-    main {
-      width:calc(100% - 280px);
-      margin-left:280px;
-      padding:44px 36px 80px;
-    }
-    main > * {
-      max-width:1080px;
-      margin-left:auto;
-      margin-right:auto;
-    }
-    .hero {
-      margin-bottom:34px;
-      padding:clamp(30px,5vw,58px);
-      border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(135deg,#fffdf8 0%,#eaf2ed 100%);
-      box-shadow:var(--shadow);
-    }
-    .eyebrow {
-      display:inline-block;
-      margin-bottom:12px;
-      color:var(--accent);
-      font-size:.78rem;
-      font-weight:850;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
-    .hero h2 {
-      max-width:900px;
-      margin:0 0 14px;
-      font-size:clamp(2.1rem,5vw,4.25rem);
-      line-height:1;
-      letter-spacing:-.04em;
-    }
-    .hero p {
-      max-width:850px;
-      margin:0 0 10px;
-      color:var(--muted);
-      font-size:clamp(1.04rem,2vw,1.2rem);
-    }
-    .overview-grid {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:14px;
-      margin-top:24px;
-    }
-    .overview-card {
-      padding:17px;
-      border:1px solid var(--line);
-      border-radius:14px;
-      background:#fff;
-    }
-    .overview-card h3 {
-      margin:0 0 6px;
-      font-size:1.04rem;
-      color:var(--accent-dark);
-    }
-    .overview-card p { margin:0; font-size:.98rem; }
-    .section-header {
-      margin:54px auto 22px;
-      padding-top:12px;
-      border-top:2px solid var(--ink);
-      scroll-margin-top:24px;
-    }
-    .section-header h2 {
-      margin:0 0 6px;
-      color:var(--accent);
-      font-size:clamp(1.6rem,3vw,2.25rem);
-      letter-spacing:-.03em;
-    }
-    .section-header p {
-      max-width:820px;
-      margin:0;
-      color:var(--muted);
-    }
-    .card {
-      margin:0 auto 30px;
-      padding:clamp(20px,3vw,30px);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:var(--panel);
-      box-shadow:0 8px 22px rgba(23,33,27,.06);
-      scroll-margin-top:24px;
-    }
-    .card-header {
-      display:grid;
-      grid-template-columns:minmax(0,1fr) auto;
-      gap:16px;
-      align-items:start;
-      margin-bottom:16px;
-    }
-    .card h3 {
-      margin:0 0 5px;
-      font-size:clamp(1.3rem,2.4vw,1.8rem);
-      letter-spacing:-.025em;
-    }
-    .card p,
-    li,
-    td { color:var(--muted); }
-    .tag {
-      display:inline-block;
-      padding:6px 10px;
-      border-radius:999px;
-      background:var(--accent-soft);
-      color:var(--accent-dark);
-      font-size:.78rem;
-      font-weight:800;
-      white-space:nowrap;
-    }
-    ol, ul { padding-left:1.35rem; }
-    li + li { margin-top:6px; }
-    .note {
-      margin:16px 0;
-      padding:14px 16px;
-      border-left:5px solid var(--accent);
-      border-radius:14px;
-      background:var(--accent-soft);
-      color:var(--muted);
-    }
-    .note strong {
-      display:block;
-      margin-bottom:4px;
-      color:var(--ink);
-    }
-    .warning {
-      border-left-color:#b78016;
-      background:var(--yellow);
-    }
-    .example {
-      margin:16px 0;
-      padding:16px 18px;
-      border:1px solid var(--line);
-      border-radius:14px;
-      background:#fff;
-    }
-    .example h4 {
-      margin:0 0 8px;
-      color:var(--accent-dark);
-    }
-    .example p { margin:0; }
-    table {
-      width:100%;
-      margin:14px 0;
-      border-collapse:collapse;
-      background:#fff;
-    }
-    th, td {
-      padding:9px 10px;
-      border:1px solid var(--line);
-      text-align:left;
-      vertical-align:top;
-    }
-    th {
-      background:var(--accent-soft);
-      color:var(--ink);
-    }
-    code {
-      padding:.1rem .32rem;
-      border-radius:5px;
-      background:#eef0ec;
-      color:#24342b;
-      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-      font-size:.9em;
-    }
-    .checklist {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-    }
-    .check {
-      padding:14px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      background:#fff;
-    }
-    .check strong {
-      display:block;
-      margin-bottom:3px;
-      color:var(--accent-dark);
-    }
-    .mobile-toggle,
-    .backdrop { display:none; }
-    @media (max-width:900px) {
-      .sidebar {
-        width:min(84vw,340px);
-        padding-top:72px;
-        transform:translateX(-105%);
-        transition:transform .22s ease;
-        z-index:1000;
-      }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    img, video, iframe, svg { max-width:100%; }
+
+    .layout { min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow:auto; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+    .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+
+    main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+    .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
+    .hero p { max-width:820px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:var(--warn); color:var(--muted); max-width:860px; }
+    .concept-callout strong { color:var(--ink); }
+
+    .video-section { margin-bottom:34px; }
+    .video-card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,26px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .video-card h3 { margin:0 0 8px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .video-wrap { position:relative; width:100%; aspect-ratio:16 / 9; overflow:hidden; border-radius:16px; border:1px solid var(--line); background:#17211b; margin-top:16px; }
+    .video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .video-note { margin-top:12px; font-size:.92rem; color:var(--muted); }
+    .video-note code { background:#f0eadf; border:1px solid var(--line); border-radius:7px; padding:.08rem .32rem; }
+
+    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+
+    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
+
+    .overview-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:22px; }
+    .meta-card { padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; min-width:0; }
+    .meta-card h4 { margin:0 0 8px; font-size:1.12rem; }
+    .meta-card p { margin:0; }
+
+    .steps { margin:0; padding-left:1.25rem; }
+    .steps li + li { margin-top:8px; }
+    .mini-list { margin:0; padding-left:1.15rem; }
+    .mini-list li + li { margin-top:7px; }
+    .callout { margin-top:18px; padding:15px 16px; border-radius:16px; border:1px solid var(--line); background:var(--warn); border-left:5px solid var(--accent-2); color:var(--muted); }
+    .callout strong { color:var(--ink); }
+    .subsection { margin:24px 0 0; padding-top:18px; border-top:1px solid var(--line); }
+    .subsection h4 { margin:0 0 10px; font-size:1.15rem; color:var(--accent); }
+    .section-label { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:999px; background:var(--accent); color:white; font-weight:900; margin-bottom:10px; }
+
+    .submission-box { background:#17211b; color:#fffdf7; border-radius:18px; padding:22px; }
+    .submission-box p { color:rgba(255,255,255,.78); margin:0; }
+    .submission-box strong { color:#fffdf7; }
+
+    button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+    button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+
+    @media (max-width: 980px) { .overview-grid { grid-template-columns:1fr; } }
+    @media (max-width: 860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important; padding:76px 22px 28px; overflow-y:auto!important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
       body.menu-open .sidebar { transform:translateX(0); }
-      .mobile-toggle {
-        position:fixed;
-        top:12px;
-        left:12px;
-        z-index:1002;
-        display:inline-flex;
-        padding:10px 14px;
-        border:0;
-        border-radius:999px;
-        background:var(--ink);
-        color:#fff;
-        box-shadow:0 8px 20px rgba(0,0,0,.2);
-        font:inherit;
-        font-weight:800;
-      }
-      .backdrop {
-        position:fixed;
-        inset:0;
-        z-index:999;
-        display:block;
-        background:rgba(0,0,0,.42);
-      }
-      .backdrop[hidden] { display:none; }
-      main {
-        width:100%;
-        margin-left:0;
-        padding:80px 16px 56px;
-      }
-    }
-    @media (max-width:600px) {
-      .overview-grid,
-      .checklist { grid-template-columns:1fr; }
-      .card-header { grid-template-columns:1fr; }
+      main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
+      .pattern-header { grid-template-columns:1fr; }
       .tag { justify-self:start; white-space:normal; }
       .hero { border-radius:20px; }
-      table { font-size:.88rem; }
     }
+    @media (max-width: 520px) {
+      .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+      .demo-frame { padding:14px; }
+    }
+
     @media print {
-      .sidebar,.mobile-toggle,.backdrop { display:none!important; }
-      main { width:100%; margin:0; padding:0; }
-      body { background:#fff; font-family:Georgia,"Times New Roman",serif; font-size:10pt; line-height:1.28; }
-      .hero,.card,.overview-card,.example,.check { background:#fff; box-shadow:none; }
-      .hero,.card { border:0; padding:0; }
-      .hero h2 { font-size:20pt; }
-      .section-header { margin-top:14pt; }
+      @page { margin:0.45in; }
+      * { box-shadow:none!important; text-shadow:none!important; }
+      html, body {
+        overflow:visible!important;
+        background:#fff!important;
+        color:#111!important;
+        font-family:Georgia, "Times New Roman", serif;
+        font-size:10pt!important;
+        line-height:1.22!important;
+      }
+      .sidebar, .mobile-menu-toggle, .mobile-menu-backdrop, .video-section { display:none!important; }
+      main { margin:0!important; width:100%!important; padding:0!important; }
+      main > * { max-width:none!important; }
+      .hero, .pattern, .demo-frame, .meta-card, .callout, .submission-box {
+        border:0!important;
+        background:#fff!important;
+        border-radius:0!important;
+        padding:0!important;
+        color:#111!important;
+      }
+      .hero { margin:0 0 10pt!important; }
+      .hero h2 { font-size:18pt!important; line-height:1.02!important; margin:0 0 5pt!important; }
+      .eyebrow, .tag {
+        color:#333!important;
+        background:transparent!important;
+        border:0!important;
+        padding:0!important;
+        font-size:8pt!important;
+      }
+      p, li, td, th, .hero p, .section-group p, .pattern p, .note, .meta-card p, .callout, .submission-box p {
+        color:#111!important;
+        font-size:10pt!important;
+        line-height:1.22!important;
+      }
+      .concept-callout, .callout {
+        border-left:2pt solid #555!important;
+        padding-left:7pt!important;
+        margin:6pt 0!important;
+      }
+      .overview-grid { display:block!important; }
+      .meta-card { margin:0 0 6pt!important; }
+      .section-group {
+        margin:12pt 0 4pt!important;
+        padding-top:5pt!important;
+        border-top:0.75pt solid #111!important;
+        break-after:avoid;
+      }
+      .section-group h2 { font-size:13pt!important; line-height:1.08!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern { margin:0 0 10pt!important; break-inside:auto; }
+      .pattern h3 { font-size:11.5pt!important; line-height:1.12!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern-header { display:block!important; margin-bottom:4pt!important; }
+      .steps, .mini-list, ol, ul { margin-top:3pt!important; margin-bottom:4pt!important; padding-left:18pt!important; }
+      .steps li + li, .mini-list li + li, li + li { margin-top:1.5pt!important; }
+      .subsection { margin-top:6pt!important; padding-top:4pt!important; border-top:0.75pt solid #aaa!important; }
+      .subsection h4 { color:#111!important; font-size:10.5pt!important; line-height:1.1!important; margin:0 0 3pt!important; }
+      .demo-frame { margin:0!important; }
+      a { text-decoration:none!important; color:#111!important; }
     }
-  </style>
+  
+
+    .code-block {
+      margin:14px 0 0;
+      padding:14px 16px;
+      overflow-x:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#17211b;
+      color:#fffdf7;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:.9rem;
+      line-height:1.5;
+      white-space:pre;
+    }
+    .resource-link { display:inline-block; margin-top:10px; font-weight:800; color:var(--accent); }
+    .warning-card { background:var(--warn); border-left:5px solid var(--accent-2); }
+    @media print { .code-block { white-space:pre-wrap; background:#fff!important; color:#111!important; border:0!important; padding:0!important; } }
+</style>
 </head>
 <body>
-  <button class="mobile-toggle" id="mobileToggle" type="button" aria-controls="sidebar" aria-expanded="false">Menu</button>
-  <div class="backdrop" id="backdrop" hidden></div>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
 
-  <aside class="sidebar" id="sidebar" aria-label="Tutorial navigation">
-    <a class="home-button" href="../">&larr; Back to Home</a>
-    <h1>MLB Hitter Explorer</h1>
-    <p>Build a filterable and sortable exploratory data visualization in Flourish.</p>
+  <div class="layout">
+    <aside class="sidebar" id="siteSidebar" aria-label="Tutorial navigation">
+      <a href="../" class="home-button">&larr; Back to Home</a>
+      <h1>Flourish Exploratory Visualization</h1>
+      <p>Tutorial M3 - B. Build a searchable, filterable explorer for the top 100 MLB players by career WAR.</p>
+      <nav>
+        <div class="nav-group-title">Start here</div>
+        <a href="#overview">Overview</a>
+        <a href="#video">Video</a>
+        <a href="#purpose">Purpose and tool choice</a>
+        <a href="#data">1. Import the data</a>
+        <div class="nav-group-title">Build the explorer</div>
+        <a href="#columns">2. Assign columns</a>
+        <a href="#frame">3. Frame the exploration</a>
+        <a href="#encoding">4. Encode WAR visually</a>
+        <a href="#controls">5. Configure controls</a>
+        <a href="#details">6. Refine details</a>
+        <div class="nav-group-title">Production checks</div>
+        <a href="#accessibility">7. Accessibility and devices</a>
+        <a href="#publish">8. Publish and embed</a>
+        <a href="#repair">9. Fix and republish</a>
+        <a href="#submission">Submission</a>
+      </nav>
+    </aside>
 
-    <div class="nav-title">Setup</div>
-    <a href="#overview">Overview</a>
-    <a href="#data">Understand the data</a>
-    <a href="#create">Create the visualization</a>
-    <a href="#bindings">Bind the columns</a>
-
-    <div class="nav-title">Exploration</div>
-    <a href="#view">Build the default view</a>
-    <a href="#filters">Add filters</a>
-    <a href="#sorting">Add sorting and metrics</a>
-    <a href="#popups">Build useful popups</a>
-
-    <div class="nav-title">Frame and finish</div>
-    <a href="#framing">Add headline and introduction</a>
-    <a href="#appearance">Refine appearance</a>
-    <a href="#testing">Test the exploration</a>
-    <a href="#publish">Publish and submit</a>
-  </aside>
-
-  <main>
-    <section class="hero" id="overview">
-      <span class="eyebrow">Flourish tutorial</span>
-      <h2>Build an MLB Hitter Explorer</h2>
-      <p>Which hitters stood out in 2025, and what changes when you define offensive success differently? In this tutorial, you will build an exploratory visualization that lets viewers filter the top 100 hitters by league or team and reorganize them using statistics such as home runs, stolen bases, OPS, OPS+, and WAR.</p>
-
-      <div class="overview-grid">
-        <article class="overview-card">
-          <h3>What you will build</h3>
-          <p>A Flourish Data Explorer that displays one mark for each hitter and gives viewers controls for filtering, changing metrics, and comparing player rankings.</p>
-        </article>
-        <article class="overview-card">
-          <h3>What you will submit</h3>
-          <p>The public URL to the published visualization.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section-header" id="data">
-      <h2>Setup: Understand the data</h2>
-      <p>The dataset contains one row for each of the top 100 hitters from the 2025 season.</p>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div>
-          <h3>1. Download and inspect the CSV</h3>
+    <main>
+      <section class="hero" id="overview">
+        <div class="eyebrow">Tutorial M3 - B</div>
+        <h2>Build an Exploratory Data Visualization in Flourish</h2>
+        <p>In this tutorial, you will use Flourish’s Data Explorer template to create a searchable and filterable visualization of the top 100 Major League Baseball players by career wins above replacement, or WAR.</p>
+        <div class="concept-callout"><strong>Exploration still needs a purpose.</strong> Do not present a data dump and expect the reader to find the story. Frame the visualization around a question, then provide controls that help the reader investigate it.</div>
+        <div class="overview-grid" aria-label="Tutorial summary">
+          <article class="meta-card"><h4>What you will build</h4><p>An interactive player explorer in which readers can search for a player, filter hitters and pitchers, and order the display by different statistics.</p></article>
+          <article class="meta-card"><h4>What you will submit</h4><p>The public URL to the published Tilda page containing your embedded Flourish visualization.</p></article>
         </div>
-        <span class="tag">Setup</span>
-      </div>
+      </section>
 
-      <ol>
-        <li>Download <a href="hitters_top_100_cleaned.csv" download><strong>hitters_top_100_cleaned.csv</strong></a>.</li>
-        <li>Open the file in a spreadsheet application.</li>
-        <li>Confirm that each row represents one player and each column represents a player characteristic or statistic.</li>
-        <li>Do not delete the column names in the first row. Flourish will use them when you bind data to visual properties and controls.</li>
-      </ol>
-
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Field</th>
-            <th scope="col">Meaning</th>
-            <th scope="col">How it can be used</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td><code>Player</code></td><td>Player name</td><td>Item label</td></tr>
-          <tr><td><code>Team</code></td><td>Team abbreviation</td><td>Filter or grouping</td></tr>
-          <tr><td><code>Lg</code></td><td>American or National League</td><td>Filter or grouping</td></tr>
-          <tr><td><code>HR</code></td><td>Home runs</td><td>Position, ranking, or size</td></tr>
-          <tr><td><code>SB</code></td><td>Stolen bases</td><td>Position, ranking, or size</td></tr>
-          <tr><td><code>OPS</code></td><td>On-base plus slugging</td><td>Position or ranking</td></tr>
-          <tr><td><code>OPS+</code></td><td>OPS adjusted for league and ballpark</td><td>Position or ranking</td></tr>
-          <tr><td><code>WAR</code></td><td>Wins above replacement</td><td>Position, ranking, or size</td></tr>
-        </tbody>
-      </table>
-
-      <div class="note">
-        <strong>The data has already been cleaned</strong>
-        Players who appeared for multiple teams have been collapsed into one combined season row. The file contains 100 unique hitters.
-      </div>
-    </section>
-
-    <section class="section-header" id="create">
-      <h2>Setup: Create the visualization</h2>
-      <p>Use Flourish’s Data Explorer template rather than a standard chart template.</p>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div>
-          <h3>2. Start a Data Explorer</h3>
+      <section class="video-section" id="video">
+        <div class="video-card">
+          <h3>Video walkthrough</h3>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/B14e2VZoFQM" title="Build an exploratory data visualization in Flourish" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
         </div>
-        <span class="tag">Template</span>
-      </div>
+      </section>
 
-      <ol>
-        <li>Sign in to Flourish and choose <strong>New visualization</strong>.</li>
-        <li>Find and select the <strong>Data Explorer</strong> template.</li>
-        <li>Open the <strong>Data</strong> tab.</li>
-        <li>Upload <strong>hitters_top_100_cleaned.csv</strong> and replace the sample data.</li>
-        <li>Confirm that the imported values align with the correct column headings.</li>
-      </ol>
-
-      <div class="note warning">
-        <strong>Do not choose the Cards template</strong>
-        This lesson uses a data visualization in which each hitter becomes a visual mark. The purpose is to compare distributions and rankings, not to browse profile cards.
-      </div>
-    </section>
-
-    <section class="section-header" id="bindings">
-      <h2>Setup: Bind the columns</h2>
-      <p>Tell Flourish which columns identify the hitters and which columns viewers can use to explore them.</p>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div>
-          <h3>3. Assign the essential fields</h3>
+      <section class="section-group" id="purpose"><h2>Purpose and tool choice</h2><p>Begin with the interaction you want, then select the builder that gets closest to it.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Define the exploration</h3><p>The data includes the actual top 100 players and career WAR values, but the remaining statistics were generated only for this tutorial.</p></div><span class="tag">Purpose</span></div>
+        <div class="demo-frame">
+          <ul class="mini-list">
+            <li>The reader should be able to search for an individual player.</li>
+            <li>The reader should be able to compare hitters and pitchers.</li>
+            <li>The reader should be able to reorder the players by different statistics and consider how those statistics relate to WAR.</li>
+            <li>The visualization should support an explanatory story rather than function as an unframed database.</li>
+          </ul>
+          <div class="callout"><strong>Data warning:</strong> Only the player list and career WAR are intended as real data. Treat the other values as fabricated tutorial data and label them clearly.</div>
         </div>
-        <span class="tag">Data binding</span>
-      </div>
+      </section>
 
-      <p>The exact labels in the binding panel may vary slightly as Flourish updates its interface. Use the following plan:</p>
-
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Flourish role</th>
-            <th scope="col">CSV column</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Item label or name</td><td><code>Player</code></td></tr>
-          <tr><td>Category or group</td><td><code>Team</code></td></tr>
-          <tr><td>Filter</td><td><code>Lg</code> and, when supported, <code>Team</code></td></tr>
-          <tr><td>Numeric measures</td><td><code>HR</code>, <code>SB</code>, <code>OPS</code>, <code>OPS+</code>, and <code>WAR</code></td></tr>
-          <tr><td>Popup information</td><td><code>Age</code>, <code>Team</code>, <code>Lg</code>, <code>PA</code>, <code>BA</code>, <code>OBP</code>, <code>SLG</code>, <code>OPS</code>, <code>OPS+</code>, <code>HR</code>, <code>SB</code>, and <code>WAR</code></td></tr>
-        </tbody>
-      </table>
-
-      <ol>
-        <li>Bind <code>Player</code> as the item label.</li>
-        <li>Add <code>HR</code>, <code>SB</code>, <code>OPS</code>, <code>OPS+</code>, and <code>WAR</code> as numerical fields that can control position, grouping, or sorting.</li>
-        <li>Bind <code>Lg</code> as a categorical filter.</li>
-        <li>Bind <code>Team</code> as a second filter or grouping field.</li>
-      </ol>
-    </section>
-
-    <section class="section-header" id="view">
-      <h2>Build the default view</h2>
-      <p>The opening state should be useful before the viewer touches any controls.</p>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div>
-          <h3>4. Rank hitters by OPS</h3>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Compare available builder templates</h3><p>Flourish offers many more templates than Datawrapper, but more options do not guarantee the exact interaction you need.</p></div><span class="tag">Tool choice</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Review Flourish’s available templates and filters for visualization type and purpose.</li>
+            <li>Consider a bar chart, searchable table, or table of charts.</li>
+            <li>Reject templates that allow only one bar or line measure when the exploration requires several statistics.</li>
+            <li>Open the <strong>Data Explorer</strong> template because it supports search, filters, visual encodings, and multiple measures.</li>
+          </ol>
+          <a class="resource-link" href="https://www.datawrapper.de/_/zGOBW/" target="_blank" rel="noopener">View the Datawrapper version discussed in the video.</a>
+          <div class="callout"><strong>Builders are constraints:</strong> Test a likely template quickly. Within a few minutes, you should know whether it can support the purpose of the visualization.</div>
         </div>
-        <span class="tag">Default view</span>
-      </div>
+      </section>
 
-      <ol>
-        <li>Return to the <strong>Preview</strong> tab.</li>
-        <li>Choose a one-dimensional grouped or ranked layout rather than a geographic view.</li>
-        <li>Use <code>OPS</code> as the initial numerical measure.</li>
-        <li>Arrange or sort the hitters from highest OPS to lowest OPS.</li>
-        <li>Show player names when the layout remains readable. Otherwise, show names through hover or click.</li>
-        <li>Limit the amount of overlap by reducing mark size or increasing the visualization height.</li>
-      </ol>
+      <section class="section-group" id="data"><h2>Section 1: Import the data</h2><p>Flourish begins with sample data so you can inspect the template before replacing it with your own.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Create the visualization and upload the CSV</h3><p>Use the sample visualization to understand the template, then replace the dummy data.</p></div><span class="tag">Setup</span></div>
+        <div class="demo-frame"><ol class="steps">
+          <li>Log in to Flourish and choose <strong>New visualization</strong>.</li>
+          <li>Search for and select the <strong>Data Explorer</strong> template.</li>
+          <li>Give the visualization a useful project name, such as <strong>WAR Explorer</strong>.</li>
+          <li>Open the <strong>Data</strong> tab.</li>
+          <li>Download <strong>fake-war.csv</strong> from ICON and upload it to replace the sample data.</li>
+          <li>Confirm that the first row has become the set of column names.</li>
+        </ol></div>
+      </section>
 
-      <div class="example">
-        <h4>Why begin with OPS?</h4>
-        <p>OPS combines a hitter’s ability to reach base with the ability to hit for power. It provides a useful opening view, while the controls allow viewers to challenge that definition of offensive success.</p>
-      </div>
-    </section>
-
-    <section class="section-header" id="filters">
-      <h2>Add filters</h2>
-      <p>Filters let viewers remove irrelevant records and investigate a smaller group of hitters.</p>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div>
-          <h3>5. Filter by league and team</h3>
+      <section class="section-group" id="columns"><h2>Section 2: Assign the data columns</h2><p>Tell Flourish which columns contain names, categories, numbers, and filters.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Map columns to the Data Explorer</h3><p>The column selectors may not look interactive, but clicking them allows you to enter column letters and ranges.</p></div><span class="tag">Data mapping</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Use the <strong>Player</strong> column as the item name or label.</li>
+            <li>Assign <strong>Position</strong> as the categorical column.</li>
+            <li>Assign the statistical fields as numeric columns. Include the numeric ranges on both sides of the Position column.</li>
+            <li>Do not treat Rank as the primary label. The player’s name should remain the visible identifier.</li>
+            <li>Preview the visualization and confirm that all players appear.</li>
+          </ol>
+          <div class="callout"><strong>Column letters depend on the CSV:</strong> Follow the letters shown in your Flourish data table. The purpose is to include Player as the name, Position as the category, and the statistical measures as numeric data.</div>
         </div>
-        <span class="tag">Filter</span>
-      </div>
+      </section>
 
-      <ol>
-        <li>Open the settings for <strong>Controls</strong> or <strong>Filters</strong>.</li>
-        <li>Turn on the control connected to the <code>Lg</code> field.</li>
-        <li>Use buttons for the league filter if the choices are only <strong>All</strong>, <strong>AL</strong>, and <strong>NL</strong>.</li>
-        <li>Turn on the control connected to <code>Team</code>.</li>
-        <li>Use a dropdown for teams because there are too many choices to display as buttons.</li>
-        <li>Include an <strong>All</strong> option so viewers can return to the complete dataset.</li>
-        <li>Test the filters together. Selecting a league should reduce the available set of teams and hitters.</li>
-      </ol>
-
-      <div class="note">
-        <strong>Filtering changes which hitters are included</strong>
-        A filter does not merely recolor the chart. It narrows the dataset so the viewer can ask a more specific question, such as “Who led the National League in OPS?” or “Which Yankees hitter had the highest WAR?”
-      </div>
-    </section>
-
-    <section class="section-header" id="sorting">
-      <h2>Add sorting and metric controls</h2>
-      <p>Sorting changes the order of the remaining hitters. A metric control changes what definition of performance is being compared.</p>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div>
-          <h3>6. Let viewers reorganize the hitters</h3>
+      <section class="section-group" id="frame"><h2>Section 3: Frame the exploration</h2><p>Use the header to explain what readers should investigate and how to use the controls.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Add a headline and directional subtitle</h3><p>The surrounding article should explain WAR in depth. The visualization header should orient readers and cue interaction.</p></div><span class="tag">Headline</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Open the <strong>Header</strong> settings.</li>
+            <li>Add a clear title, such as <strong>Wins Above Replacement Explorer</strong>.</li>
+            <li>Add a subtitle that tells readers what to do, such as <strong>Use the controls to compare how the top 100 baseball players accumulated career WAR.</strong></li>
+            <li>Keep the framing tied to a question. For example: What statistics distinguish the players with the highest WAR?</li>
+          </ol>
+          <div class="callout"><strong>Attendant text matters:</strong> A searchable graphic still needs a frame. The reader should know why exploration is worthwhile before interacting.</div>
         </div>
-        <span class="tag">Sort and compare</span>
-      </div>
+      </section>
 
-      <ol>
-        <li>In the Data Explorer controls, make the numerical measures available as selectable fields.</li>
-        <li>Include at least <code>OPS</code>, <code>OPS+</code>, <code>HR</code>, <code>SB</code>, and <code>WAR</code>.</li>
-        <li>Set the arrangement to sort the selected measure in descending order.</li>
-        <li>When Flourish offers group-order settings, choose descending order so the highest values appear first.</li>
-        <li>Keep the selected metric visible in the control label or axis title so the viewer always knows what determines the order.</li>
-        <li>Use ascending order only when a lower value is meaningfully better. None of the five selected measures require ascending order.</li>
-      </ol>
-
-      <div class="note">
-        <strong>Filter and sort answer different questions</strong>
-        Filtering asks, “Which hitters should be included?” Sorting asks, “How should those hitters be ordered?” Changing the metric asks, “What characteristic are we using to define the ranking?”
-      </div>
-
-      <div class="example">
-        <h4>Questions the finished explorer should support</h4>
-        <ul>
-          <li>Who had the highest OPS among the top 100 hitters?</li>
-          <li>Who led the American League in home runs?</li>
-          <li>Which National League hitters combined power and speed?</li>
-          <li>Which team had multiple hitters near the top in WAR?</li>
-          <li>How different is the ranking by stolen bases from the ranking by OPS?</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="section-header" id="popups">
-      <h2>Build useful popups</h2>
-      <p>The marks should remain visually simple while detailed statistics are available on demand.</p>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div>
-          <h3>7. Add details for each hitter</h3>
+      <section class="section-group" id="encoding"><h2>Section 4: Encode WAR visually</h2><p>Use position, size, and color to make the central measure visible before the reader touches a control.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Use size and color to emphasize WAR</h3><p>WAR is the organizing measure, so it should control the most immediate visual attributes.</p></div><span class="tag">Visual encoding</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>In the visualization settings, set <strong>Size by</strong> to <strong>WAR</strong>.</li>
+            <li>Set <strong>Color by</strong> to <strong>WAR</strong>.</li>
+            <li>Use a sequential linear color scale because WAR progresses from lower to higher values.</li>
+            <li>Select a readable single-hue palette, such as the green palette used in the video.</li>
+            <li>Adjust the maximum point radius only when the largest circles overwhelm the display.</li>
+          </ol>
+          <div class="callout"><strong>Redundant encoding can help:</strong> Size and color both communicate WAR. Readers can identify the highest-WAR players more quickly because two preattentive attributes reinforce the same measure.</div>
         </div>
-        <span class="tag">Details on demand</span>
-      </div>
+      </section>
 
-      <ol>
-        <li>Open the popup or item-information settings.</li>
-        <li>Use <code>Player</code> as the popup heading.</li>
-        <li>Include the team and league directly below the name.</li>
-        <li>Add the key statistics in a compact order: OPS, OPS+, HR, SB, and WAR.</li>
-        <li>Add batting average, on-base percentage, and slugging percentage as supporting measures.</li>
-        <li>Remove fields that do not help viewers interpret the hitter’s performance.</li>
-      </ol>
-
-      <div class="example">
-        <h4>Suggested popup structure</h4>
-        <p><strong>Player name</strong><br>Team · League<br>OPS · OPS+ · HR · SB · WAR<br>BA · OBP · SLG</p>
-      </div>
-
-      <div class="note">
-        <strong>Do not put every spreadsheet column in the popup</strong>
-        Exploration still requires editorial judgment. Include enough information to compare hitters without forcing viewers to scan a statistical record book.
-      </div>
-    </section>
-
-    <section class="section-header" id="framing">
-      <h2>Add a headline and introduction</h2>
-      <p>Exploratory graphics still need framing. Tell viewers what the data contains and what they can do with it.</p>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div>
-          <h3>8. Frame the exploration</h3>
+      <section class="section-group" id="controls"><h2>Section 5: Configure and label the controls</h2><p>Keep only the controls that support the intended exploration, then rewrite their labels and data names for readers.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Simplify the available controls</h3><p>Do not expose settings that should remain fixed or that add no useful agency.</p></div><span class="tag">Interaction</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Open the <strong>Controls</strong> settings.</li>
+            <li>Keep the search box available so readers can locate a player.</li>
+            <li>Use the main position control to let readers order the visualization by a selected statistic.</li>
+            <li>Turn off a second position control, map-shape controls, and other options that do not support this project.</li>
+            <li>Set the filter field to <strong>Position</strong> so readers can choose all players, hitters, or pitchers.</li>
+            <li>Set color and size to WAR. Initially hide those controls so users do not change the central encoding.</li>
+            <li>Turn off aggregation because the visualization is showing individual players rather than grouped summaries.</li>
+          </ol>
         </div>
-        <span class="tag">Headline and context</span>
-      </div>
+      </section>
 
-      <ol>
-        <li>Open the settings for the visualization header, title, or text area.</li>
-        <li>Add the headline below.</li>
-        <li>Add the introductory paragraph as a subtitle or description.</li>
-        <li>Add a short instruction near the controls when their purpose is not immediately obvious.</li>
-      </ol>
-
-      <div class="example">
-        <h4>Headline</h4>
-        <p><strong>Explore the top MLB hitters of 2025</strong></p>
-      </div>
-
-      <div class="example">
-        <h4>Introductory paragraph</h4>
-        <p>Filter the top 100 hitters by league or team, then change the statistic used to arrange them. Compare traditional results such as home runs and stolen bases with broader measures such as OPS, OPS+, and WAR.</p>
-      </div>
-
-      <div class="example">
-        <h4>Control instruction</h4>
-        <p>Choose a league or team to narrow the field. Select a statistic to change the ranking.</p>
-      </div>
-
-      <div class="note">
-        <strong>Do not write a conclusion for an exploratory graphic</strong>
-        The text should establish the topic, scope, and interaction. It can suggest useful questions, but it should leave room for viewers to make their own comparisons.
-      </div>
-    </section>
-
-    <section class="section-header" id="appearance">
-      <h2>Refine the appearance</h2>
-      <p>Create a clear visual hierarchy without overwhelming the data with baseball decoration.</p>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div>
-          <h3>9. Apply the 5 A’s</h3>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Improve the interface microcopy</h3><p>Generic builder labels and raw spreadsheet headers may not tell readers what the controls do.</p></div><span class="tag">Microcopy</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Change the label <strong>Position</strong> to <strong>Order by stat</strong>.</li>
+            <li>Change the filter label to <strong>Filter by position</strong>.</li>
+            <li>Return to the Data tab and edit the visible column names that appear in the menus.</li>
+            <li>Replace machine-style headers such as <code>offensive_war</code> and <code>seasons_played</code> with reader-facing labels such as <strong>Offensive WAR</strong> and <strong>Seasons Played</strong>.</li>
+            <li>Capitalize abbreviations and baseball statistics consistently.</li>
+            <li>Publish the changes so the corrected names appear in the embedded controls.</li>
+          </ol>
+          <div class="callout"><strong>You do not need to re-upload the spreadsheet:</strong> Flourish allows you to edit the displayed column headers directly in its Data tab.</div>
         </div>
-        <span class="tag">Production</span>
-      </div>
+      </section>
 
-      <div class="checklist">
-        <div class="check">
-          <strong>Appearance</strong>
-          Use one restrained color for marks or a limited palette for league or team. Keep the background, labels, and controls simple.
+      <section class="section-group" id="details"><h2>Section 6: Refine labels, popups, and source information</h2><p>Review the remaining settings, but change only those that improve understanding.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Finish the presentation details</h3><p>The template includes many settings. Treat them as possibilities, not requirements.</p></div><span class="tag">Refinement</span></div>
+        <div class="demo-frame">
+          <div class="subsection"><h4>A. Item labels and popups</h4><ul class="mini-list">
+            <li>Keep player names as the item labels.</li>
+            <li>Avoid switching labels to Rank unless rank is central to the exploration.</li>
+            <li>Leave popup content on automatic, or customize it with column names inside double curly brackets when a deliberate popup is needed.</li>
+          </ul></div>
+          <div class="subsection"><h4>B. Search</h4><ul class="mini-list">
+            <li>Decide whether the search field should always remain expanded.</li>
+            <li>Test a known player, such as Babe Ruth, to confirm that search highlights the correct item.</li>
+          </ul></div>
+          <div class="subsection"><h4>C. Footer and source</h4><ul class="mini-list">
+            <li>Add a source label that makes the tutorial data unmistakable.</li>
+            <li>Use wording such as <strong>AI-generated fake data for tutorial use</strong>.</li>
+            <li>Do not attach a source URL when there is no legitimate source page for the fabricated statistics.</li>
+          </ul></div>
         </div>
-        <div class="check">
-          <strong>Asset optimization</strong>
-          The project uses no large images. Avoid decorative media that increases loading time without improving the comparison.
+      </section>
+
+      <section class="section-group" id="accessibility"><h2>Section 7: Accessibility and all devices</h2><p>Describe the visualization for screen readers and test how the explorer behaves at different widths.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Add accessibility information</h3><p>The description should explain both the content and the available interaction.</p></div><span class="tag">Accessibility</span></div>
+        <div class="demo-frame"><ol class="steps">
+          <li>Open the <strong>Accessibility</strong> settings.</li>
+          <li>Add a screen-reader description, such as: <strong>An explorable plot of the top 100 MLB players by career WAR. Users can order players by statistics, search for a player, or filter hitters and pitchers.</strong></li>
+          <li>Add a concise screen-reader label, such as <strong>Wins Above Replacement Explorer</strong>.</li>
+          <li>Confirm that the title, instructions, controls, and source remain understandable without relying only on color.</li>
+        </ol></div>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Test responsive behavior</h3><p>The editor preview may make the mobile version look too small, so also test the visualization at a wider preview size and on the published page.</p></div><span class="tag">All devices</span></div>
+        <div class="demo-frame"><ol class="steps">
+          <li>Use Flourish’s preview controls to inspect the visualization at several widths.</li>
+          <li>Increase the preview width to confirm that the visualization expands responsively.</li>
+          <li>Check whether the controls, labels, and plotted items remain usable on a narrow screen.</li>
+          <li>Do not assume the editor preview exactly matches the final embedded page.</li>
+        </ol></div>
+      </section>
+
+      <section class="section-group" id="publish"><h2>Section 8: Publish and embed in Tilda</h2><p>Publish the visualization, copy Flourish’s embed code, and place it inside a Custom HTML block.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Publish from Flourish</h3><p>Flourish’s embed uses JavaScript rather than a simple fixed-height iframe, which can make responsive height easier to manage.</p></div><span class="tag">Publish</span></div>
+        <div class="demo-frame"><ol class="steps">
+          <li>Choose <strong>Export &amp; publish</strong>.</li>
+          <li>Publish the visualization.</li>
+          <li>Copy the website embed code.</li>
+          <li>Open the assigned Module 3 tutorial page in Tilda.</li>
+          <li>Add a <strong>Custom HTML</strong> block and paste the Flourish embed code into its Content panel.</li>
+          <li>Save, publish the Tilda page, and open the public page.</li>
+        </ol></div>
+      </section>
+
+      <section class="section-group" id="repair"><h2>Section 9: Diagnose the embed, fix it, and republish</h2><p>The first published result exposes two builder limitations. Keep this troubleshooting step because testing the real embed is part of the production process.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Restore the fixed WAR encodings</h3><p>On the published Tilda page, the visualization may not initially preserve the selected WAR size and color settings.</p></div><span class="tag">Troubleshooting</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Return to Flourish and reopen <strong>Controls</strong>.</li>
+            <li>Turn the <strong>Size</strong> and <strong>Color</strong> controls back on.</li>
+            <li>Limit each control so that <strong>WAR</strong> is the only available option.</li>
+            <li>Republish the Flourish visualization.</li>
+            <li>Refresh the Tilda page and confirm that the updated embed loads from Flourish.</li>
+          </ol>
+          <div class="callout warning-card"><strong>Imperfect result:</strong> Readers may still need to select WAR in the visible controls. The builder cannot fully deliver the intended default behavior, but the tutorial keeps the result so you can see the limitation rather than hide it.</div>
         </div>
-        <div class="check">
-          <strong>All devices</strong>
-          Preview the visualization at desktop and phone widths. Make sure controls wrap cleanly and player labels remain usable.
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Constrain the embedded visualization’s width</h3><p>The first embed may become too large. Wrap the Flourish code in a centered container, then republish the Tilda page.</p></div><span class="tag">Layout fix</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Return to the Custom HTML block in Tilda.</li>
+            <li>Add an opening wrapper before the Flourish embed and a closing <code>&lt;/div&gt;</code> after it.</li>
+            <li>Give the wrapper a maximum width of 800 pixels and automatic horizontal margins.</li>
+            <li>Use a vertical margin to create space above and below the visualization.</li>
+            <li>Save the block and publish the Tilda page again.</li>
+            <li>Open the public page and confirm that the visualization is centered and no wider than 800 pixels.</li>
+          </ol>
+          <pre class="code-block"><code>&lt;div style="max-width: 800px; margin: 3rem auto;"&gt;
+  &lt;!-- Paste the Flourish embed code here. --&gt;
+&lt;/div&gt;</code></pre>
+          <div class="callout"><strong>Republishing matters:</strong> Updating Flourish refreshes the hosted visualization. Updating the wrapper requires saving and republishing the Tilda page.</div>
         </div>
-        <div class="check">
-          <strong>Accessibility</strong>
-          Do not rely only on color to distinguish leagues or teams. Include text labels, readable controls, and a useful alternative description.
-        </div>
-        <div class="check">
-          <strong>Attribution</strong>
-          Add a source line identifying the baseball statistics source and note that the file contains the tutorial’s selected top 100 hitters.
-        </div>
-        <div class="check">
-          <strong>Number formatting</strong>
-          Show BA, OBP, SLG, and OPS to three decimal places. Show counting statistics as whole numbers and WAR to one decimal place.
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section-header" id="testing">
-      <h2>Test the exploration</h2>
-      <p>Use the finished visualization as a viewer would and confirm that every control produces a meaningful state.</p>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div>
-          <h3>10. Complete a final check</h3>
-        </div>
-        <span class="tag">Testing</span>
-      </div>
-
-      <ol>
-        <li>Reset all filters and confirm that the visualization begins with all 100 hitters.</li>
-        <li>Filter to the American League and then the National League.</li>
-        <li>Select several teams, including a combined <code>2TM</code> entry if Flourish presents it as a filter value.</li>
-        <li>Switch among OPS, OPS+, HR, SB, and WAR.</li>
-        <li>Confirm that the order changes when the selected metric changes.</li>
-        <li>Hover over or select several hitters and check the popup values.</li>
-        <li>Test the visualization at a narrow mobile width.</li>
-        <li>Use the keyboard to reach the controls and inspect whether focus is visible.</li>
-      </ol>
-
-      <div class="note warning">
-        <strong>Check the combined-team category</strong>
-        Players who changed teams during the season use values such as <code>2TM</code>. You may leave this as a valid category, rename it “Multiple teams” in the CSV, or exclude it from the team filter if that produces a clearer experience.
-      </div>
-    </section>
-
-    <section class="section-header" id="publish">
-      <h2>Publish and submit</h2>
-      <p>Publish the visualization only after the default view and all exploratory controls have been tested.</p>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div>
-          <h3>11. Finish the project</h3>
-        </div>
-        <span class="tag">Deliverable</span>
-      </div>
-
-      <ol>
-        <li>Add a source note and alternative description.</li>
-        <li>Publish the visualization.</li>
-        <li>Open the public URL in a new tab and test it again.</li>
-        <li>Republish after making any later changes.</li>
-        <li>Submit the public Flourish URL.</li>
-      </ol>
-
-      <h3>Required features</h3>
-      <ul>
-        <li>A headline and introductory paragraph or subtitle.</li>
-        <li>One visual mark for each hitter in the current filtered set.</li>
-        <li>A league filter.</li>
-        <li>A team filter.</li>
-        <li>At least five selectable performance measures.</li>
-        <li>Descending sorting based on the selected measure.</li>
-        <li>Player details available through hover, click, or another details-on-demand interaction.</li>
-        <li>A source note and alternative description.</li>
-      </ul>
-    </section>
-  </main>
+      <section class="section-group" id="submission"><h2>Submission</h2><p>Submit the published page after testing the real embed.</p></section>
+      <section class="pattern"><div class="submission-box"><p><strong>Upload the public URL to your published Tilda page.</strong> Do not submit the Flourish editor URL or the Tilda editor URL.</p></div></section>
+    </main>
+  </div>
 
   <script>
-    const button = document.getElementById("mobileToggle");
-    const sidebar = document.getElementById("sidebar");
-    const backdrop = document.getElementById("backdrop");
-
-    function setMenu(open) {
-      document.body.classList.toggle("menu-open", open);
-      button.setAttribute("aria-expanded", String(open));
-      backdrop.hidden = !open;
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const backdrop = document.getElementById('mobileMenuBackdrop');
+    const sidebar = document.getElementById('siteSidebar');
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+      if (backdrop) backdrop.hidden = true;
     }
-
-    button.addEventListener("click", () => {
-      setMenu(!document.body.classList.contains("menu-open"));
-    });
-
-    backdrop.addEventListener("click", () => setMenu(false));
-
-    sidebar.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", () => setMenu(false));
-    });
-
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") setMenu(false);
-    });
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        if (backdrop) backdrop.hidden = !isOpen;
+      });
+    }
+    if (backdrop) backdrop.addEventListener('click', closeMenu);
+    if (sidebar) sidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
   </script>
 </body>
 </html>
