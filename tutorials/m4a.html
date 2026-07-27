@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build a Choropleth Map in Datawrapper</title>
+  <style>
+    :root {
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --warn:#fff8ed;
+      --shadow:0 14px 35px rgba(23,33,27,.12); --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    img, video, iframe, svg { max-width:100%; }
+
+    .layout { min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow:auto; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+    .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+
+    main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+    .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
+    .hero p { max-width:820px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:var(--warn); color:var(--muted); max-width:860px; }
+    .concept-callout strong { color:var(--ink); }
+
+    .video-section { margin-bottom:34px; }
+    .video-card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,26px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .video-card h3 { margin:0 0 8px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .video-wrap { position:relative; width:100%; aspect-ratio:16 / 9; overflow:hidden; border-radius:16px; border:1px solid var(--line); background:#17211b; margin-top:16px; }
+    .video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .video-note { margin-top:12px; font-size:.92rem; color:var(--muted); }
+    .video-note code { background:#f0eadf; border:1px solid var(--line); border-radius:7px; padding:.08rem .32rem; }
+
+    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+
+    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
+
+    .overview-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:22px; }
+    .meta-card { padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; min-width:0; }
+    .meta-card h4 { margin:0 0 8px; font-size:1.12rem; }
+    .meta-card p { margin:0; }
+
+    .steps { margin:0; padding-left:1.25rem; }
+    .steps li + li { margin-top:8px; }
+    .mini-list { margin:0; padding-left:1.15rem; }
+    .mini-list li + li { margin-top:7px; }
+    .callout { margin-top:18px; padding:15px 16px; border-radius:16px; border:1px solid var(--line); background:var(--warn); border-left:5px solid var(--accent-2); color:var(--muted); }
+    .callout strong { color:var(--ink); }
+    .subsection { margin:24px 0 0; padding-top:18px; border-top:1px solid var(--line); }
+    .subsection h4 { margin:0 0 10px; font-size:1.15rem; color:var(--accent); }
+    .section-label { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:999px; background:var(--accent); color:white; font-weight:900; margin-bottom:10px; }
+
+    .submission-box { background:#17211b; color:#fffdf7; border-radius:18px; padding:22px; }
+    .submission-box p { color:rgba(255,255,255,.78); margin:0; }
+    .submission-box strong { color:#fffdf7; }
+
+    button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+    button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+
+    @media (max-width: 980px) { .overview-grid { grid-template-columns:1fr; } }
+    @media (max-width: 860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important; padding:76px 22px 28px; overflow-y:auto!important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
+      .pattern-header { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+      .hero { border-radius:20px; }
+    }
+    @media (max-width: 520px) {
+      .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+      .demo-frame { padding:14px; }
+    }
+
+    @media print {
+      @page { margin:0.45in; }
+      * { box-shadow:none!important; text-shadow:none!important; }
+      html, body {
+        overflow:visible!important;
+        background:#fff!important;
+        color:#111!important;
+        font-family:Georgia, "Times New Roman", serif;
+        font-size:10pt!important;
+        line-height:1.22!important;
+      }
+      .sidebar, .mobile-menu-toggle, .mobile-menu-backdrop, .video-section { display:none!important; }
+      main { margin:0!important; width:100%!important; padding:0!important; }
+      main > * { max-width:none!important; }
+      .hero, .pattern, .demo-frame, .meta-card, .callout, .submission-box {
+        border:0!important;
+        background:#fff!important;
+        border-radius:0!important;
+        padding:0!important;
+        color:#111!important;
+      }
+      .hero { margin:0 0 10pt!important; }
+      .hero h2 { font-size:18pt!important; line-height:1.02!important; margin:0 0 5pt!important; }
+      .eyebrow, .tag {
+        color:#333!important;
+        background:transparent!important;
+        border:0!important;
+        padding:0!important;
+        font-size:8pt!important;
+      }
+      p, li, td, th, .hero p, .section-group p, .pattern p, .note, .meta-card p, .callout, .submission-box p {
+        color:#111!important;
+        font-size:10pt!important;
+        line-height:1.22!important;
+      }
+      .concept-callout, .callout {
+        border-left:2pt solid #555!important;
+        padding-left:7pt!important;
+        margin:6pt 0!important;
+      }
+      .overview-grid { display:block!important; }
+      .meta-card { margin:0 0 6pt!important; }
+      .section-group {
+        margin:12pt 0 4pt!important;
+        padding-top:5pt!important;
+        border-top:0.75pt solid #111!important;
+        break-after:avoid;
+      }
+      .section-group h2 { font-size:13pt!important; line-height:1.08!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern { margin:0 0 10pt!important; break-inside:auto; }
+      .pattern h3 { font-size:11.5pt!important; line-height:1.12!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern-header { display:block!important; margin-bottom:4pt!important; }
+      .steps, .mini-list, ol, ul { margin-top:3pt!important; margin-bottom:4pt!important; padding-left:18pt!important; }
+      .steps li + li, .mini-list li + li, li + li { margin-top:1.5pt!important; }
+      .subsection { margin-top:6pt!important; padding-top:4pt!important; border-top:0.75pt solid #aaa!important; }
+      .subsection h4 { color:#111!important; font-size:10.5pt!important; line-height:1.1!important; margin:0 0 3pt!important; }
+      .demo-frame { margin:0!important; }
+      a { text-decoration:none!important; color:#111!important; }
+    }
+  
+
+    .code-block {
+      margin:14px 0 0;
+      padding:14px 16px;
+      overflow-x:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#17211b;
+      color:#fffdf7;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:.9rem;
+      line-height:1.5;
+      white-space:pre;
+    }
+    .resource-link { display:inline-block; margin-top:10px; font-weight:800; color:var(--accent); }
+    .warning-card { background:var(--warn); border-left:5px solid var(--accent-2); }
+    @media print { .code-block { white-space:pre-wrap; background:#fff!important; color:#111!important; border:0!important; padding:0!important; } }
+</style>
+</head>
+<body>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="siteSidebar" aria-label="Tutorial navigation">
+      <a href="../" class="home-button">&larr; Back to Home</a>
+      <h1>Datawrapper Choropleth Map</h1>
+      <p>Tutorial M4 - A. Build an interactive world population-density map and embed it in Tilda.</p>
+      <nav>
+        <div class="nav-group-title">Start here</div>
+        <a href="#overview">Overview</a>
+        <a href="#video">Video</a>
+        <a href="#purpose">Purpose and map choice</a>
+        <a href="#map">1. Select the map</a>
+        <a href="#data">2. Upload and match data</a>
+        <div class="nav-group-title">Build the map</div>
+        <a href="#measure">3. Choose the measure</a>
+        <a href="#scale">4. Refine the color scale</a>
+        <a href="#frame">5. Add framing</a>
+        <a href="#tooltips">6. Customize tooltips</a>
+        <a href="#annotation">7. Add an annotation</a>
+        <div class="nav-group-title">Production checks</div>
+        <a href="#accessibility">8. Accessibility and devices</a>
+        <a href="#publish">9. Publish and embed</a>
+        <a href="#submission">Submission</a>
+      </nav>
+    </aside>
+
+    <main>
+      <section class="hero" id="overview">
+        <div class="eyebrow">Tutorial M4 - A</div>
+        <h2>Build a Choropleth Map in Datawrapper</h2>
+        <p>In this tutorial, you will create an interactive world map showing population density by country. You will match spreadsheet data to geographic regions, refine a color scale affected by extreme values, customize the tooltips, add an annotation, and embed the finished map in Tilda.</p>
+        <div class="concept-callout"><strong>Choropleth maps are easy to make and easy to misuse.</strong> The mapped value, geographic units, color scale, and visual framing all affect what the reader believes the map shows.</div>
+        <div class="overview-grid" aria-label="Tutorial summary">
+          <article class="meta-card"><h4>What you will build</h4><p>A zoomable choropleth map of world population density with customized tooltips and a text annotation.</p></article>
+          <article class="meta-card"><h4>What you will submit</h4><p>The public URL to the published Tilda page containing your embedded Datawrapper map.</p></article>
+        </div>
+      </section>
+
+      <section class="video-section" id="video">
+        <div class="video-card">
+          <h3>Video walkthrough</h3>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/5z0tLP4sP58" title="Build a choropleth map in Datawrapper" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-group" id="purpose"><h2>Purpose and map choice</h2><p>Begin by identifying what each Datawrapper map type does and why a choropleth map fits this data.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Compare the three map types</h3><p>Datawrapper separates maps according to the geographic marks and interaction they use.</p></div><span class="tag">Tool choice</span></div>
+        <div class="demo-frame">
+          <ul class="mini-list">
+            <li><strong>Locator maps</strong> identify and label places. In Datawrapper, they are static rather than pan-and-zoom slippy maps.</li>
+            <li><strong>Symbol maps</strong> place symbols at locations and can vary their size, color, or both according to data.</li>
+            <li><strong>Choropleth maps</strong> fill geographic areas with color according to a value.</li>
+          </ul>
+          <div class="callout"><strong>This tutorial uses a choropleth:</strong> Each country is a geographic area, and the color will represent population density within that area.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="map"><h2>Section 1: Select the map</h2><p>Choose the geographic boundaries that Datawrapper will join to your spreadsheet.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Create the map and choose World</h3><p>Datawrapper includes built-in vector maps made from selectable geographic regions.</p></div><span class="tag">Setup</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Log in to Datawrapper.</li>
+            <li>Choose <strong>Create new</strong>, then select <strong>Map</strong>.</li>
+            <li>Select <strong>Choropleth map</strong>.</li>
+            <li>Use the map search to examine the available boundaries. For example, searching Iowa reveals options such as Iowa school districts.</li>
+            <li>Return to the map search, select <strong>World</strong>, and proceed.</li>
+          </ol>
+          <div class="callout"><strong>Built-in maps are vector data:</strong> Each country is a selectable region rather than a flat image. Datawrapper can connect those regions to rows in your data.</div>
+          <div class="callout"><strong>Custom maps come later:</strong> The upload option accepts GeoJSON when the built-in maps do not provide the boundaries you need.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="data"><h2>Section 2: Upload and match the data</h2><p>Geographic names in the spreadsheet must match the region identifiers used by the selected map.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Inspect Datawrapper’s region names</h3><p>The initial data table shows how Datawrapper expects the countries to be identified.</p></div><span class="tag">Data matching</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Locate the default column named <code>DW name</code>.</li>
+            <li>Use those entries to understand Datawrapper’s expected country names.</li>
+            <li>Remember that outside data may use different spellings, abbreviations, or country names.</li>
+          </ol>
+          <div class="callout"><strong>Names are join keys:</strong> A map cannot color a country unless Datawrapper can connect a row in the spreadsheet to the correct geographic feature.</div>
+        </div>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Upload the uncleaned file and inspect errors</h3><p>Use the first file to see what happens when region names do not match.</p></div><span class="tag">Data cleaning</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Choose <strong>Upload file</strong>.</li>
+            <li>Upload <code>countries.csv</code>.</li>
+            <li>Look for red indicators beside country names that Datawrapper cannot match.</li>
+            <li>Click an unmatched name to inspect Datawrapper’s suggested region.</li>
+            <li>Use the error-checking control to jump between unresolved rows.</li>
+          </ol>
+          <div class="callout"><strong>Automatic matching is not perfect:</strong> Review every suggested match. A close spelling does not guarantee that Datawrapper selected the correct place.</div>
+        </div>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Replace it with the cleaned file</h3><p>The provided corrected file already uses Datawrapper’s expected country names.</p></div><span class="tag">Clean data</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Choose <strong>Upload file</strong> again.</li>
+            <li>Replace the current sheet with the provided fixed countries file.</li>
+            <li>Confirm that no country names are marked red.</li>
+            <li>Check the error count at the bottom of the table.</li>
+            <li>Choose <strong>Visualize</strong>.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section-group" id="measure"><h2>Section 3: Choose an appropriate measure</h2><p>A choropleth generally works better with a rate, percentage, or normalized value than with a raw total.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Change population to population density</h3><p>The initial map displays total population, but totals are often misleading when geographic units differ in size.</p></div><span class="tag">Measure</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Inspect the first map using total population.</li>
+            <li>Change the mapped column to <strong>population density</strong>.</li>
+            <li>Confirm that the values represent people per square mile.</li>
+          </ol>
+          <div class="callout"><strong>Normalize the data:</strong> Counts such as restaurants, crimes, or people usually rise with population or area. Rates such as restaurants per person or people per square mile allow more meaningful comparison.</div>
+          <div class="callout"><strong>Land does not equal people:</strong> A map may devote more visual space to a large, sparsely populated region than to a small, densely populated one. Area can visually dominate even when the people represented do not.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="scale"><h2>Section 4: Refine the color scale</h2><p>Extreme values can compress the useful differences among most countries.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Make the map zoomable and inspect outliers</h3><p>Small, extremely dense places explain why the initial population-density scale appears nearly uniform.</p></div><span class="tag">Diagnosis</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Turn on <strong>Make map zoomable</strong>.</li>
+            <li>Zoom into small countries and territories such as Singapore.</li>
+            <li>Compare their density values with the values for most other countries.</li>
+            <li>Notice that very high values stretch the scale and leave much of the map in similar light colors.</li>
+          </ol>
+          <div class="callout"><strong>Do not delete valid outliers just to improve the map:</strong> Macau, Monaco, Singapore, and Hong Kong are part of the data. Solve the display problem through the scale rather than by removing inconvenient observations.</div>
+        </div>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Set a custom maximum</h3><p>Cap the visual scale so that more of the available color range describes the majority of countries.</p></div><span class="tag">Color scale</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Test stepped and continuous scales to see how each changes the map.</li>
+            <li>Return to a <strong>continuous</strong>, <strong>linear</strong> scale.</li>
+            <li>Open the custom range controls.</li>
+            <li>Test a maximum of 800.</li>
+            <li>Lower the maximum to <strong>500</strong> to create more visible contrast among most countries.</li>
+          </ol>
+          <div class="callout"><strong>A visual cap groups high values together:</strong> Countries above 500 people per square mile will share the darkest color. The legend or surrounding text should communicate that the upper value means 500 or more.</div>
+          <div class="callout"><strong>Art direction requires judgment:</strong> The goal is not to make the map look dramatic. The goal is to reveal meaningful variation without concealing how the scale works.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="frame"><h2>Section 5: Add the map’s framing</h2><p>Use the title, description, source, and alternative description to explain what the map shows.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Add title and source information</h3><p>The map needs enough attendant text to stand on its own when embedded.</p></div><span class="tag">Context</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Open the title and annotation settings.</li>
+            <li>Set the title to <strong>World Population Density</strong>.</li>
+            <li>Add a description that states the unit, such as <strong>People per square mile</strong>.</li>
+            <li>Add the supplied source name and link.</li>
+            <li>Write an alternative description explaining that the choropleth shows population density by country.</li>
+            <li>Leave country labels off if they make the world map too cluttered.</li>
+          </ol>
+          <div class="callout"><strong>Alternative text should describe the graphic:</strong> State the map type, geographic scope, measure, and any major pattern a reader needs in order to understand the content.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="tooltips"><h2>Section 6: Customize the tooltips</h2><p>Use the tooltip to provide useful details beyond the single value encoded by color.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Add density, population, and area</h3><p>Datawrapper’s tooltip editor accepts data placeholders and basic HTML formatting.</p></div><span class="tag">Tooltip</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Open the tooltip customization controls.</li>
+            <li>Keep the region name as the tooltip heading.</li>
+            <li>Insert the population-density field using Datawrapper’s field button.</li>
+            <li>Add total population on a new line.</li>
+            <li>Add total area in square miles on another new line.</li>
+            <li>Use basic HTML tags to control bold text and line breaks.</li>
+          </ol>
+          <pre class="code-block"><code>&lt;b&gt;Density:&lt;/b&gt; {{ density }}
+&lt;br&gt;
+&lt;b&gt;Total population:&lt;/b&gt; {{ population }}
+&lt;br&gt;
+&lt;b&gt;Total area in square miles:&lt;/b&gt; {{ area_sq_mi }}</code></pre>
+          <div class="callout"><strong>Use the actual field buttons:</strong> The placeholder names depend on the spreadsheet columns. Insert them from Datawrapper rather than copying the example literally.</div>
+          <div class="callout"><strong>Format data upstream when necessary:</strong> If the tooltip numbers need commas or cleaner labels, edit or format the data columns rather than trying to run JavaScript in the tooltip.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="annotation"><h2>Section 7: Add a text annotation</h2><p>Use a callout to direct attention to one meaningful pattern or example.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Annotate a country</h3><p>The annotation should explain why a value matters rather than merely repeat the tooltip.</p></div><span class="tag">Callout</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Choose <strong>Add text annotation</strong>.</li>
+            <li>Place the annotation near the country you want to discuss.</li>
+            <li>Write one concise sentence interpreting that country’s population density.</li>
+            <li>Add a line connecting the annotation to the correct location when needed.</li>
+            <li>Reposition the text so it does not cover important parts of the map.</li>
+          </ol>
+          <div class="callout"><strong>Use Headline, Highlight, Callout, Context:</strong> The title frames the topic, the color highlights the pattern, the annotation calls out an example, and the tooltip provides additional context.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="accessibility"><h2>Section 8: Accessibility and all devices</h2><p>Check whether the map remains understandable without labels, mouse hover, or a wide desktop screen.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Complete the production checks</h3><p>Interactive maps need both an accessible description and deliberate responsive testing.</p></div><span class="tag">5 A’s</span></div>
+        <div class="demo-frame">
+          <div class="subsection"><h4>A. Accessibility</h4><ul class="mini-list">
+            <li>Add an alternative description that explains the map and its measure.</li>
+            <li>Make sure the title and description name the unit.</li>
+            <li>Do not rely on color alone to communicate every important conclusion. Use annotation and text as reinforcement.</li>
+            <li>Confirm that the tooltip information is supplemental rather than essential to understanding the entire map.</li>
+          </ul></div>
+          <div class="subsection"><h4>B. All devices</h4><ul class="mini-list">
+            <li>Test the map at narrow and wide widths.</li>
+            <li>Confirm that zooming and tooltips remain usable on a touch screen.</li>
+            <li>Check whether the annotation stays legible without covering the data.</li>
+            <li>Inspect the published Tilda page rather than relying only on the Datawrapper editor preview.</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <section class="section-group" id="publish"><h2>Section 9: Publish and embed in Tilda</h2><p>Use Datawrapper’s responsive iframe so the embed can communicate its changing height to the parent page.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Publish from Datawrapper</h3><p>The responsive embed includes scripts that help the iframe maintain the correct height.</p></div><span class="tag">Publish</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Choose <strong>Publish &amp; Embed</strong>.</li>
+            <li>Select <strong>Publish now</strong>.</li>
+            <li>Copy the <strong>responsive iframe</strong> embed code.</li>
+            <li>Do not replace it with a basic iframe that uses only a fixed height.</li>
+          </ol>
+          <div class="callout"><strong>Why the responsive code matters:</strong> Datawrapper includes scripts that communicate between the embedded map and the parent page so the iframe can adjust to its content.</div>
+        </div>
+      </section>
+
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Place the embed in Tilda</h3><p>Wrap the Datawrapper code in a centered container so the map does not become excessively wide.</p></div><span class="tag">Embed</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Open the assigned Module 4 tutorial page in Tilda.</li>
+            <li>Add a <strong>Custom HTML</strong> block.</li>
+            <li>Create a wrapper with a maximum width of 1160 pixels and automatic horizontal margins.</li>
+            <li>Paste the complete responsive Datawrapper embed inside the wrapper.</li>
+            <li>Save and publish the Tilda page.</li>
+            <li>Open the public page and test the finished map.</li>
+          </ol>
+          <pre class="code-block"><code>&lt;div style="max-width:1160px;margin:0 auto;"&gt;
+  &lt;!-- Paste the complete responsive Datawrapper embed here. --&gt;
+&lt;/div&gt;</code></pre>
+          <div class="callout"><strong>Art direct the final embed:</strong> Check the scale, annotation position, map size, and amount of surrounding space on the real page. The editor preview is not the final production environment.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="submission"><h2>Submission</h2><p>Submit the published page after checking the complete embed.</p></section>
+      <section class="pattern"><div class="submission-box"><p><strong>Upload the public URL to your published Tilda page.</strong> Do not submit the Datawrapper editor URL or the Tilda editor URL.</p></div></section>
+    </main>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const backdrop = document.getElementById('mobileMenuBackdrop');
+    const sidebar = document.getElementById('siteSidebar');
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+      if (backdrop) backdrop.hidden = true;
+    }
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        if (backdrop) backdrop.hidden = !isOpen;
+      });
+    }
+    if (backdrop) backdrop.addEventListener('click', closeMenu);
+    if (sidebar) sidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+  </script>
+</body>
+</html>

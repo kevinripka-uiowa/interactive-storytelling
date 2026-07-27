@@ -221,6 +221,7 @@
       <section class="video-section" id="video">
         <div class="video-card">
           <h3>Video walkthrough</h3>
+          <div class="callout"><strong>Video update:</strong> The video does not include the final section where you set the Flourish visualization height. Follow the written instructions at the end of this tutorial to add the 800-pixel height settings.</div>
           <div class="video-wrap">
             <iframe src="https://www.youtube.com/embed/B14e2VZoFQM" title="Build an exploratory data visualization in Flourish" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
@@ -414,20 +415,26 @@
       </section>
 
       <section class="pattern">
-        <div class="pattern-header"><div><h3>Constrain the embedded visualization’s width</h3><p>The first embed may become too large. Wrap the Flourish code in a centered container, then republish the Tilda page.</p></div><span class="tag">Layout fix</span></div>
+        <div class="pattern-header"><div><h3>Set the embedded visualization’s width and height</h3><p>The first embed may become too large or too short. Wrap the Flourish code in a centered container and set the height in both the wrapper and the Flourish embed.</p></div><span class="tag">Layout fix</span></div>
         <div class="demo-frame">
           <ol class="steps">
             <li>Return to the Custom HTML block in Tilda.</li>
-            <li>Add an opening wrapper before the Flourish embed and a closing <code>&lt;/div&gt;</code> after it.</li>
-            <li>Give the wrapper a maximum width of 800 pixels and automatic horizontal margins.</li>
-            <li>Use a vertical margin to create space above and below the visualization.</li>
+            <li>Wrap the Flourish embed in a <code>&lt;div&gt;</code> with a maximum width of 800 pixels, automatic horizontal margins, and a height of 800 pixels.</li>
+            <li>Add <code>data-height="800px"</code> to the Flourish embed div.</li>
+            <li>Keep the vertical margin at <code>3rem</code> to create space above and below the visualization.</li>
             <li>Save the block and publish the Tilda page again.</li>
-            <li>Open the public page and confirm that the visualization is centered and no wider than 800 pixels.</li>
+            <li>Open the public page and confirm that the visualization is centered, no wider than 800 pixels, and tall enough to use comfortably.</li>
           </ol>
-          <pre class="code-block"><code>&lt;div style="max-width: 800px; margin: 3rem auto;"&gt;
-  &lt;!-- Paste the Flourish embed code here. --&gt;
+          <pre class="code-block"><code>&lt;div style="max-width:800px;margin:3rem auto;height:800px;"&gt;
+  &lt;div class="flourish-embed flourish-data-explorer" data-height="800px" data-src="visualisation/29766660"&gt;
+    &lt;script src="https://public.flourish.studio/resources/embed.js"&gt;&lt;/script&gt;
+    &lt;noscript&gt;
+      &lt;img src="https://public.flourish.studio/visualisation/29766660/thumbnail" width="100%" alt="data-explorer visualization" /&gt;
+    &lt;/noscript&gt;
+  &lt;/div&gt;
 &lt;/div&gt;</code></pre>
-          <div class="callout"><strong>Republishing matters:</strong> Updating Flourish refreshes the hosted visualization. Updating the wrapper requires saving and republishing the Tilda page.</div>
+          <div class="callout"><strong>Set the height twice:</strong> The wrapper reserves 800 pixels of space on the page, while <code>data-height="800px"</code> tells Flourish how tall to render the visualization.</div>
+          <div class="callout"><strong>Republishing matters:</strong> Updating Flourish refreshes the hosted visualization. Updating this wrapper requires saving and republishing the Tilda page.</div>
         </div>
       </section>
 

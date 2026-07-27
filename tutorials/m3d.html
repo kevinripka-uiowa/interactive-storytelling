@@ -1,11 +1,295 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build an Interactive SVG Diagram</title>
+<style>
+    :root {
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --warn:#fff8ed;
+      --shadow:0 14px 35px rgba(23,33,27,.12); --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    img, video, iframe, svg { max-width:100%; }
+
+    .layout { min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow:auto; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+    .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+
+    main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+    .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
+    .hero p { max-width:820px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:var(--warn); color:var(--muted); max-width:860px; }
+    .concept-callout strong { color:var(--ink); }
+
+    .video-section { margin-bottom:34px; }
+    .video-card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,26px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .video-card h3 { margin:0 0 8px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .video-wrap { position:relative; width:100%; aspect-ratio:16 / 9; overflow:hidden; border-radius:16px; border:1px solid var(--line); background:#17211b; margin-top:16px; }
+    .video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .video-note { margin-top:12px; font-size:.92rem; color:var(--muted); }
+    .video-note code { background:#f0eadf; border:1px solid var(--line); border-radius:7px; padding:.08rem .32rem; }
+
+    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+
+    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
+
+    .overview-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:22px; }
+    .meta-card { padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; min-width:0; }
+    .meta-card h4 { margin:0 0 8px; font-size:1.12rem; }
+    .meta-card p { margin:0; }
+
+    .steps { margin:0; padding-left:1.25rem; }
+    .steps li + li { margin-top:8px; }
+    .mini-list { margin:0; padding-left:1.15rem; }
+    .mini-list li + li { margin-top:7px; }
+    .callout { margin-top:18px; padding:15px 16px; border-radius:16px; border:1px solid var(--line); background:var(--warn); border-left:5px solid var(--accent-2); color:var(--muted); }
+    .callout strong { color:var(--ink); }
+    .subsection { margin:24px 0 0; padding-top:18px; border-top:1px solid var(--line); }
+    .subsection h4 { margin:0 0 10px; font-size:1.15rem; color:var(--accent); }
+    .section-label { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:999px; background:var(--accent); color:white; font-weight:900; margin-bottom:10px; }
+
+    .submission-box { background:#17211b; color:#fffdf7; border-radius:18px; padding:22px; }
+    .submission-box p { color:rgba(255,255,255,.78); margin:0; }
+    .submission-box strong { color:#fffdf7; }
+
+    button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+    button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+
+    @media (max-width: 980px) { .overview-grid { grid-template-columns:1fr; } }
+    @media (max-width: 860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important; padding:76px 22px 28px; overflow-y:auto!important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
+      .pattern-header { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+      .hero { border-radius:20px; }
+    }
+    @media (max-width: 520px) {
+      .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+      .demo-frame { padding:14px; }
+    }
+
+    @media print {
+      @page { margin:0.45in; }
+      * { box-shadow:none!important; text-shadow:none!important; }
+      html, body {
+        overflow:visible!important;
+        background:#fff!important;
+        color:#111!important;
+        font-family:Georgia, "Times New Roman", serif;
+        font-size:10pt!important;
+        line-height:1.22!important;
+      }
+      .sidebar, .mobile-menu-toggle, .mobile-menu-backdrop, .video-section { display:none!important; }
+      main { margin:0!important; width:100%!important; padding:0!important; }
+      main > * { max-width:none!important; }
+      .hero, .pattern, .demo-frame, .meta-card, .callout, .submission-box {
+        border:0!important;
+        background:#fff!important;
+        border-radius:0!important;
+        padding:0!important;
+        color:#111!important;
+      }
+      .hero { margin:0 0 10pt!important; }
+      .hero h2 { font-size:18pt!important; line-height:1.02!important; margin:0 0 5pt!important; }
+      .eyebrow, .tag {
+        color:#333!important;
+        background:transparent!important;
+        border:0!important;
+        padding:0!important;
+        font-size:8pt!important;
+      }
+      p, li, td, th, .hero p, .section-group p, .pattern p, .note, .meta-card p, .callout, .submission-box p {
+        color:#111!important;
+        font-size:10pt!important;
+        line-height:1.22!important;
+      }
+      .concept-callout, .callout {
+        border-left:2pt solid #555!important;
+        padding-left:7pt!important;
+        margin:6pt 0!important;
+      }
+      .overview-grid { display:block!important; }
+      .meta-card { margin:0 0 6pt!important; }
+      .section-group {
+        margin:12pt 0 4pt!important;
+        padding-top:5pt!important;
+        border-top:0.75pt solid #111!important;
+        break-after:avoid;
+      }
+      .section-group h2 { font-size:13pt!important; line-height:1.08!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern { margin:0 0 10pt!important; break-inside:auto; }
+      .pattern h3 { font-size:11.5pt!important; line-height:1.12!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern-header { display:block!important; margin-bottom:4pt!important; }
+      .steps, .mini-list, ol, ul { margin-top:3pt!important; margin-bottom:4pt!important; padding-left:18pt!important; }
+      .steps li + li, .mini-list li + li, li + li { margin-top:1.5pt!important; }
+      .subsection { margin-top:6pt!important; padding-top:4pt!important; border-top:0.75pt solid #aaa!important; }
+      .subsection h4 { color:#111!important; font-size:10.5pt!important; line-height:1.1!important; margin:0 0 3pt!important; }
+      .demo-frame { margin:0!important; }
+      a { text-decoration:none!important; color:#111!important; }
+    }
+  
+
+    .code-block {
+      margin:14px 0 0;
+      padding:14px 16px;
+      overflow-x:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#17211b;
+      color:#fffdf7;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:.9rem;
+      line-height:1.5;
+      white-space:pre;
+    }
+    .resource-link { display:inline-block; margin-top:10px; font-weight:800; color:var(--accent); }
+    .warning-card { background:var(--warn); border-left:5px solid var(--accent-2); }
+    @media print { .code-block { white-space:pre-wrap; background:#fff!important; color:#111!important; border:0!important; padding:0!important; } }
+</style>
 </head>
 <body>
-    
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="siteSidebar" aria-label="Tutorial navigation">
+      <a href="../" class="home-button">&larr; Back to Home</a>
+      <h1>Build an Interactive SVG Diagram</h1>
+      <p>Tutorial M3 - D. Prepare an SVG, connect its parts to data, and add hotspot interactions.</p>
+      <nav>
+        <div class="nav-group-title">Start here</div>
+        <a href="#overview">Overview</a>
+        <a href="#video">Video</a>
+        <a href="#before-start">Before you start</a>
+        <div class="nav-group-title">Prepare the SVG</div>
+        <a href="#svg-concepts">1. Understand SVG structure</a>
+        <a href="#illustrator">2. Organize groups in Illustrator</a>
+        <a href="#clean">3. Export and clean the SVG</a>
+        <div class="nav-group-title">Build the interaction</div>
+        <a href="#project">4. Set up the HTML project</a>
+        <a href="#data">5. Connect IDs to data</a>
+        <a href="#prompt">6. Write the AI prompt</a>
+        <a href="#code">7. Add the generated code</a>
+        <a href="#troubleshoot">8. Fix the missing tooltip</a>
+        <div class="nav-group-title">Finish</div>
+        <a href="#devices">9. Test interaction</a>
+        <a href="#publish">10. Publish in Tilda</a>
+        <a href="#production">Production checks</a>
+        <a href="#submission">Submission</a>
+      </nav>
+    </aside>
+
+    <main>
+      <section class="hero" id="overview">
+        <div class="eyebrow">Tutorial M3 - D</div>
+        <h2>Build an Interactive SVG Diagram</h2>
+        <p>In this tutorial, you will turn a labeled bird-wing SVG into an interactive diagram. Hovering or clicking a bone will reveal a tooltip and reduce the opacity of the surrounding parts.</p>
+        <div class="concept-callout"><strong>The main lesson is not simply how to make hotspots.</strong> You will learn how SVG elements, groups, IDs, JavaScript objects, and interaction code connect. That structure can also be used for maps, diagrams, illustrations, and other interactive graphics.</div>
+        <div class="overview-grid" aria-label="Tutorial summary">
+          <article class="meta-card"><h4>What you will build</h4><p>An interactive bird-wing diagram with hover and click states, focus through opacity, and tooltips containing a title and description.</p></article>
+          <article class="meta-card"><h4>What you will submit</h4><p>The public URL to the published Tilda page containing your interactive SVG.</p></article>
+        </div>
+      </section>
+
+      <section class="video-section" id="video">
+        <div class="video-card">
+          <h3>Video walkthrough</h3>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/B_hjIq0stjI" title="Build an interactive SVG diagram video tutorial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-group" id="before-start"><h2>Before you start</h2><p>Download the Module 3D tutorial assets from ICON before opening Illustrator or VS Code.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Gather the files</h3><p>The supplied files keep the tutorial focused on SVG structure and interaction rather than drawing the wing from scratch.</p></div><span class="tag">Setup</span></div><div class="demo-frame"><ul class="mini-list"><li><code>wing.svg</code></li><li>The wing-bone JSON or JavaScript data file</li><li>The supplied CSS, JavaScript, tooltip HTML, and prompt files</li><li>Adobe Illustrator</li><li>VS Code with Live Server</li><li>Access to ChatGPT or another coding assistant</li></ul><div class="callout"><strong>Alternative technique:</strong> Raster images can also have interactive regions through HTML image maps. This tutorial uses SVG because its individual shapes and groups can be selected and styled directly with CSS and JavaScript.</div></div></section>
+
+      <section class="section-group" id="svg-concepts"><h2>Section 1: Understand SVG structure</h2><p>An SVG is an image format, but its contents are also structured markup that behaves much like HTML.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Identify the elements you can target</h3><p>Interactive SVGs work because individual shapes can carry IDs, classes, and other attributes.</p></div><span class="tag">SVG concepts</span></div><div class="demo-frame"><ul class="mini-list"><li><strong><code>&lt;svg&gt;</code>:</strong> the outer element that contains the full graphic.</li><li><strong>Shape elements:</strong> paths, rectangles, circles, polygons, and other drawing instructions.</li><li><strong><code>&lt;g&gt;</code> groups:</strong> collections of shapes that can be treated as one meaningful part.</li><li><strong>IDs and classes:</strong> labels that let CSS and JavaScript find a specific group or set of groups.</li></ul><div class="callout"><strong>Why groups matter:</strong> A single anatomical part may contain several paths. Group those paths so one interaction can control the entire part.</div></div></section>
+
+      <section class="section-group" id="illustrator"><h2>Section 2: Organize the SVG in Illustrator</h2><p>Prepare the artwork so each interactive region is represented by a clearly named top-level group.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Check and name the wing-bone groups</h3><p>The layer names created in Illustrator will become IDs in the exported SVG.</p></div><span class="tag">Illustrator</span></div><div class="demo-frame"><ol class="steps"><li>Open <code>wing.svg</code> in Illustrator.</li><li>Open the Layers panel and inspect the named groups, including humerus, ulna, radius, carpometacarpus, digits, and alula.</li><li>Expand several groups to confirm that they contain the paths belonging to that anatomical part.</li><li>Find the two shapes that form the alula.</li><li>Select both shapes, then choose <strong>Object &gt; Group</strong> or press <strong>Command-G</strong>.</li><li>Rename the new group <strong>alula</strong>.</li><li>Leave unrelated artwork in a separate top-level group named <strong>other</strong>.</li></ol><div class="callout"><strong>Use exact, consistent names:</strong> The group IDs must later match the keys in the JavaScript data object. Avoid spaces and inconsistent spelling.</div></div></section>
+
+      <section class="section-group" id="clean"><h2>Section 3: Export and clean the SVG</h2><p>Export SVG code, then remove Illustrator’s unnecessary markup before placing it in the web page.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Produce usable inline SVG code</h3><p>Inline SVG exposes the internal groups to CSS and JavaScript. An SVG loaded with an image tag does not provide the same direct access.</p></div><span class="tag">Optimization</span></div><div class="demo-frame"><ol class="steps"><li>Choose <strong>File &gt; Save As</strong> and save a separate SVG so the original asset remains unchanged.</li><li>In Illustrator’s SVG options, open or copy the generated SVG code.</li><li>Paste the code into an SVG cleaning or optimization tool.</li><li>Run the cleaner and download the optimized SVG.</li><li>Open the cleaned file in a text editor.</li><li>Inspect the markup and confirm that the expected top-level group IDs remain intact.</li><li>Watch for anonymous path IDs or names changed during export. Correct problems before building the interaction.</li></ol><div class="callout"><strong>Cleaning is not merely cosmetic:</strong> Illustrator often exports metadata and verbose code. Cleaner markup is easier to inspect, debug, and paste into a builder.</div></div></section>
+
+      <section class="section-group" id="project"><h2>Section 4: Set up the HTML project</h2><p>Build and test the interactive locally before moving it into Tilda.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add the inline SVG to a page</h3><p>A simple local project makes it easier to inspect code and test changes immediately.</p></div><span class="tag">HTML</span></div><div class="demo-frame"><ol class="steps"><li>Create a new project folder.</li><li>Open the folder in VS Code.</li><li>Create <code>index.html</code>.</li><li>Add an HTML5 page wrapper.</li><li>Copy the cleaned SVG markup and paste it inside the body.</li><li>Start Live Server to preview the page.</li><li>Wrap the SVG in a container such as <code>&lt;div style=&quot;max-width:600px;margin:0 auto;&quot;&gt;</code>.</li><li>Place the closing <code>&lt;/div&gt;</code> after the closing <code>&lt;/svg&gt;</code> tag.</li></ol><div class="callout"><strong>Control the container, not a fixed SVG width:</strong> A maximum-width wrapper allows the SVG to shrink responsively on smaller screens.</div></div></section>
+
+      <section class="section-group" id="data"><h2>Section 5: Connect SVG IDs to data</h2><p>Use a JavaScript object to store the title and description associated with each wing-bone group.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add the wing-bone object</h3><p>The matching names form the bridge between the artwork and the tooltip content.</p></div><span class="tag">JavaScript data</span></div><div class="demo-frame"><ol class="steps"><li>Add a <code>&lt;script&gt;</code> element near the end of the body.</li><li>Open the supplied JSON or JavaScript data file.</li><li>Paste the <code>wingBones</code> constant inside the script element.</li><li>Inspect the object. Each top-level key represents one bone.</li><li>Confirm that every bone object contains a <code>title</code> and <code>description</code>.</li><li>Compare the object keys with the SVG group IDs. They must match exactly.</li><li>Confirm that <code>other</code> is not included in the data because it will not receive a tooltip.</li></ol><div class="callout"><strong>Understand the hierarchy:</strong> The SVG contains top-level groups that may contain nested groups and paths. The interaction should target only direct child groups of the SVG, not every nested group.</div></div></section>
+
+      <section class="section-group" id="prompt"><h2>Section 6: Write the AI prompt</h2><p>Describe the existing structure and the desired behavior precisely enough that the generated code can work with your file.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Prompt from an understanding of the document</h3><p>AI is useful for producing interaction code, but only after you understand what must be selected and how the data is organized.</p></div><span class="tag">AI-assisted coding</span></div><div class="demo-frame"><div class="subsection"><h4>Include these requirements</h4><ul class="mini-list"><li>The uploaded HTML contains an inline SVG and a JavaScript object.</li><li>Add hover and click events to each top-level SVG group except the group with the ID <code>other</code>.</li><li>Use the group ID to retrieve the matching title and description from <code>wingBones</code>.</li><li>Show a tooltip that follows the pointer.</li><li>Place the tooltip to the right of the pointer over the left half of the SVG and to the left over the right half.</li><li>When a group is hovered or selected, reduce every other top-level group, including <code>other</code>, to <code>opacity: 0.3</code>.</li><li>Support click interaction so the diagram remains usable on touch devices.</li></ul></div><div class="callout"><strong>Do not ask AI to infer everything:</strong> Naming the exact selector level, excluded group, data source, tooltip content, positioning rule, and mobile interaction produces a much more reliable result.</div></div></section>
+
+      <section class="section-group" id="code"><h2>Section 7: Add the generated code</h2><p>Separate the generated CSS and JavaScript, then place each piece in the correct location.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Integrate the response carefully</h3><p>Generated files still need to be inspected rather than pasted blindly.</p></div><span class="tag">Integration</span></div><div class="demo-frame"><ol class="steps"><li>Upload your current HTML file with the prompt.</li><li>Download or inspect the revised file produced by the AI tool.</li><li>Find the generated tooltip and interaction CSS.</li><li>Copy that CSS into a <code>&lt;style&gt;</code> element inside the body or into the supplied CSS area.</li><li>Find the generated JavaScript.</li><li>Copy only the JavaScript code, not another pair of script tags.</li><li>Paste it inside your existing <code>&lt;script&gt;</code> element after the <code>wingBones</code> object.</li><li>Save and test the page.</li></ol><div class="callout"><strong>Avoid duplicate wrappers:</strong> If your page already has <code>&lt;style&gt;</code> or <code>&lt;script&gt;</code> tags, paste the code inside them rather than nesting another set of tags.</div></div></section>
+
+      <section class="section-group" id="troubleshoot"><h2>Section 8: Fix the missing tooltip</h2><p>The first test may show the focus effect without displaying the tooltip. Keep this debugging step rather than hiding it.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add the tooltip element the script expects</h3><p>CSS and JavaScript cannot display a tooltip element that does not exist in the page.</p></div><span class="tag">Troubleshooting</span></div><div class="demo-frame"><ol class="steps"><li>Test the page and confirm whether the hovered group remains fully opaque while other groups fade.</li><li>If no tooltip appears, inspect the AI-generated file.</li><li>Search the file for <code>tooltip</code>.</li><li>Locate the small HTML element used as the tooltip container.</li><li>Copy that element into your project.</li><li>Place it inside the SVG wrapper, after the SVG markup.</li><li>Save and test again.</li></ol><div class="callout"><strong>Read the whole generated solution:</strong> The interaction depended on three parts: CSS, JavaScript, and a tooltip element in the HTML. Missing any one of them produces an incomplete result.</div></div></section>
+
+      <section class="section-group" id="devices"><h2>Section 9: Test hover, click, and touch behavior</h2><p>Hover is useful on desktop, but click support is necessary because touchscreens do not have a persistent hover state.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Check the complete interaction</h3><p>Test both the visual hierarchy and the tooltip behavior at several viewport sizes.</p></div><span class="tag">All devices</span></div><div class="demo-frame"><ol class="steps"><li>Hover over each labeled bone on desktop.</li><li>Confirm that its tooltip displays the correct title and description.</li><li>Move across both halves of the SVG and confirm that the tooltip changes sides to avoid the pointer and page edge.</li><li>Confirm that all non-active top-level groups fade to 0.3 opacity.</li><li>Click a bone and confirm that the active state can remain visible.</li><li>Resize the browser or use device emulation.</li><li>Tap the diagram and confirm that the tooltip appears on a touch-sized layout.</li></ol><div class="callout"><strong>Mobile may need more art direction:</strong> A pointer-following tooltip can be awkward on a small screen. For a polished project, consider a fixed information panel or bottom sheet on mobile.</div></div></section>
+
+      <section class="section-group" id="publish"><h2>Section 10: Publish in Tilda</h2><p>Move only the contents of the body into a Custom HTML block.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add the interactive to the tutorial page</h3><p>The local HTML skeleton is useful for testing, but Tilda already supplies the document structure.</p></div><span class="tag">Publish</span></div><div class="demo-frame"><ol class="steps"><li>Log in to Tilda and open your Module Tutorials page.</li><li>Add or open a Custom HTML block.</li><li>In VS Code, select everything inside the opening and closing <code>&lt;body&gt;</code> tags.</li><li>Do not copy the doctype, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, or body tags themselves.</li><li>Paste the body content into the Custom HTML block.</li><li>Save and close the block.</li><li>Publish the page.</li><li>Open the public page and test the interaction again.</li><li>Add a headline and brief explanatory text so viewers understand that the graphic identifies parts of a bird wing.</li></ol><div class="callout"><strong>Context still matters:</strong> An interactive diagram should not appear as an unexplained object. Attendant text should tell viewers what they are seeing and what they can do.</div></div></section>
+
+      <section class="section-group" id="production"><h2>Production checks</h2><p>Review the interactive through the course’s production concerns before submitting it.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Apply the 5 A’s</h3><p>The SVG technique gives you considerable control, which also gives you responsibility for the result.</p></div><span class="tag">5 A’s</span></div><div class="demo-frame"><ul class="mini-list"><li><strong>Appearance:</strong> Provide a clear headline, readable tooltip, and obvious focus state.</li><li><strong>Asset optimization:</strong> Use cleaned SVG markup and remove unnecessary Illustrator data.</li><li><strong>All Devices:</strong> Support click or tap in addition to hover and test the tooltip on small screens.</li><li><strong>Accessibility:</strong> Do not rely only on color or opacity. Ensure interactive groups can eventually receive keyboard focus and that the same information is available in text.</li><li><strong>Attribution:</strong> Credit the illustration and the source of the anatomical information when required.</li></ul><div class="callout"><strong>Accessibility limitation:</strong> The video build emphasizes pointer and touch interaction. A fully finished version should also add keyboard operation, visible focus styles, and appropriate labels for each interactive group.</div></div></section>
+
+      <section class="section-group" id="submission"><h2>Submission</h2><p>Submit the public-facing result rather than the local development file.</p></section>
+      <section class="pattern"><div class="submission-box"><p><strong>Upload the public URL to your published Tilda tutorial page.</strong> Confirm that the SVG, tooltip, hover state, and click state work on the published page before submitting.</p></div></section>
+    </main>
+  </div>
+
+<script>
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const backdrop = document.getElementById('mobileMenuBackdrop');
+    const sidebar = document.getElementById('siteSidebar');
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+      if (backdrop) backdrop.hidden = true;
+    }
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        if (backdrop) backdrop.hidden = !isOpen;
+      });
+    }
+    if (backdrop) backdrop.addEventListener('click', closeMenu);
+    if (sidebar) sidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+  </script>
 </body>
 </html>

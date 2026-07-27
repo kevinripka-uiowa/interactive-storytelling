@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Build a Simple Guided Data Story in Flourish</title>
-  <style>
+  <title>Build Interactive Timelines with JavaScript Libraries</title>
+<style>
     :root {
       --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
       --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --warn:#fff8ed;
@@ -15,6 +15,7 @@
     body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; width:100%; max-width:100%; overflow-x:hidden; }
     a { color:inherit; }
     img, video, iframe, svg { max-width:100%; }
+
     .layout { min-height:100vh; }
     .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow:auto; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
     .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
@@ -23,62 +24,66 @@
     .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
     .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
     .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
     .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
-    .hero p, .section-group p, .pattern p, .note, .meta-card p, li, td { color:var(--muted); }
-    .hero p { max-width:830px; margin:0 0 10px; font-size:clamp(1.05rem,2vw,1.25rem); }
-    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:860px; }
+    .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
+    .hero p { max-width:820px; margin:0; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:var(--warn); color:var(--muted); max-width:860px; }
     .concept-callout strong { color:var(--ink); }
+
+    .video-section { margin-bottom:34px; }
+    .video-card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,26px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .video-card h3 { margin:0 0 8px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .video-wrap { position:relative; width:100%; aspect-ratio:16 / 9; overflow:hidden; border-radius:16px; border:1px solid var(--line); background:#17211b; margin-top:16px; }
+    .video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .video-note { margin-top:12px; font-size:.92rem; color:var(--muted); }
+    .video-note code { background:#f0eadf; border:1px solid var(--line); border-radius:7px; padding:.08rem .32rem; }
+
+    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+
+    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
+
     .overview-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:22px; }
     .meta-card { padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; min-width:0; }
     .meta-card h4 { margin:0 0 8px; font-size:1.12rem; }
     .meta-card p { margin:0; }
-    .meta-card a { color:var(--accent); font-weight:900; text-decoration-thickness:2px; text-underline-offset:3px; }
-    .video-section { margin-bottom:34px; }
-    .video-card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,26px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
-    .video-card h3 { margin:0 0 8px; font-size:clamp(1.25rem,2.2vw,1.65rem); letter-spacing:-.03em; }
-    .video-card p { margin:0 0 14px; color:var(--muted); }
-    .video-embed { position:relative; width:100%; aspect-ratio:16/9; border-radius:16px; overflow:hidden; background:#17211b; border:1px solid var(--line); }
-    .video-embed iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
-    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
-    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
-    .section-group p { margin:0; max-width:820px; }
-    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
-    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
-    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
-    .pattern p { margin:0 0 12px; }
-    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
-    .demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
-    .steps { margin:8px 0 16px; padding-left:1.4rem; color:var(--muted); }
-    .steps li + li { margin-top:6px; }
-    .callout { margin:16px 0; padding:14px 16px; border-radius:16px; border:1px solid var(--line); border-left:5px solid var(--accent-2); background:#fff8ed; color:var(--muted); }
-    .callout strong { display:block; color:var(--ink); margin-bottom:4px; }
-    .callout p { margin:0; }
-    .subsection { margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
-    .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
-    .data-table { width:100%; border-collapse:collapse; margin:12px 0 16px; }
-    .data-table th, .data-table td { border:1px solid var(--line); padding:8px 10px; text-align:left; }
-    .data-table th { background:var(--soft); color:var(--ink); }
-    .slide-plan { display:grid; gap:12px; margin:14px 0; }
-    .slide-card { border:1px solid var(--line); border-radius:14px; padding:14px 16px; background:#fffdf7; }
-    .slide-card h4 { margin:0 0 5px; color:var(--accent); }
-    .slide-card p { margin:0; }
-    pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
-    code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
-    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+
+    .steps { margin:0; padding-left:1.25rem; }
+    .steps li + li { margin-top:8px; }
+    .mini-list { margin:0; padding-left:1.15rem; }
+    .mini-list li + li { margin-top:7px; }
+    .callout { margin-top:18px; padding:15px 16px; border-radius:16px; border:1px solid var(--line); background:var(--warn); border-left:5px solid var(--accent-2); color:var(--muted); }
+    .callout strong { color:var(--ink); }
+    .subsection { margin:24px 0 0; padding-top:18px; border-top:1px solid var(--line); }
+    .subsection h4 { margin:0 0 10px; font-size:1.15rem; color:var(--accent); }
+    .section-label { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:999px; background:var(--accent); color:white; font-weight:900; margin-bottom:10px; }
+
+    .submission-box { background:#17211b; color:#fffdf7; border-radius:18px; padding:22px; }
+    .submission-box p { color:rgba(255,255,255,.78); margin:0; }
+    .submission-box strong { color:#fffdf7; }
+
     button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
     button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
     .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+
+    @media (max-width: 980px) { .overview-grid { grid-template-columns:1fr; } }
     @media (max-width: 860px) {
       body { padding-top:64px; }
       body.menu-open { overflow:hidden; }
       .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
       .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
       .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
-      .mobile-menu-text { font-weight:900; }
       .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
       .mobile-menu-backdrop[hidden] { display:none; }
       .sidebar { position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important; padding:76px 22px 28px; overflow-y:auto!important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
@@ -86,385 +91,457 @@
       main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
       .pattern-header { grid-template-columns:1fr; }
       .tag { justify-self:start; white-space:normal; }
-      .overview-grid { grid-template-columns:1fr; }
       .hero { border-radius:20px; }
     }
-    @media (max-width:520px) {
+    @media (max-width: 520px) {
       .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
       .demo-frame { padding:14px; }
     }
+
     @media print {
       @page { margin:0.45in; }
       * { box-shadow:none!important; text-shadow:none!important; }
-      html, body { overflow:visible!important; background:#fff!important; color:#111!important; font-family:Georgia, "Times New Roman", serif; font-size:10pt!important; line-height:1.22!important; }
+      html, body {
+        overflow:visible!important;
+        background:#fff!important;
+        color:#111!important;
+        font-family:Georgia, "Times New Roman", serif;
+        font-size:10pt!important;
+        line-height:1.22!important;
+      }
       .sidebar, .mobile-menu-toggle, .mobile-menu-backdrop, .video-section { display:none!important; }
       main { margin:0!important; width:100%!important; padding:0!important; }
       main > * { max-width:none!important; }
-      .hero, .pattern, .demo-frame, .meta-card, .callout, .submission-box, .slide-card { border:0!important; background:#fff!important; border-radius:0!important; padding:0!important; color:#111!important; }
+      .hero, .pattern, .demo-frame, .meta-card, .callout, .submission-box {
+        border:0!important;
+        background:#fff!important;
+        border-radius:0!important;
+        padding:0!important;
+        color:#111!important;
+      }
       .hero { margin:0 0 10pt!important; }
       .hero h2 { font-size:18pt!important; line-height:1.02!important; margin:0 0 5pt!important; }
-      .eyebrow, .tag { color:#333!important; background:transparent!important; border:0!important; padding:0!important; font-size:8pt!important; }
-      p, li, td, th, .hero p, .section-group p, .pattern p, .note, .meta-card p, .callout, .submission-box p { color:#111!important; font-size:10pt!important; line-height:1.22!important; }
-      .concept-callout, .callout { border-left:2pt solid #555!important; padding-left:7pt!important; margin:6pt 0!important; }
-      .overview-grid, .slide-plan { display:block!important; }
-      .meta-card, .slide-card { margin:0 0 6pt!important; }
-      .meta-card h4, .slide-card h4 { font-size:10.5pt!important; margin:0 0 2pt!important; }
-      .section-group { margin:12pt 0 4pt!important; padding-top:5pt!important; border-top:0.75pt solid #111!important; break-after:avoid; }
+      .eyebrow, .tag {
+        color:#333!important;
+        background:transparent!important;
+        border:0!important;
+        padding:0!important;
+        font-size:8pt!important;
+      }
+      p, li, td, th, .hero p, .section-group p, .pattern p, .note, .meta-card p, .callout, .submission-box p {
+        color:#111!important;
+        font-size:10pt!important;
+        line-height:1.22!important;
+      }
+      .concept-callout, .callout {
+        border-left:2pt solid #555!important;
+        padding-left:7pt!important;
+        margin:6pt 0!important;
+      }
+      .overview-grid { display:block!important; }
+      .meta-card { margin:0 0 6pt!important; }
+      .section-group {
+        margin:12pt 0 4pt!important;
+        padding-top:5pt!important;
+        border-top:0.75pt solid #111!important;
+        break-after:avoid;
+      }
       .section-group h2 { font-size:13pt!important; line-height:1.08!important; color:#111!important; margin:0 0 3pt!important; }
       .pattern { margin:0 0 10pt!important; break-inside:auto; }
       .pattern h3 { font-size:11.5pt!important; line-height:1.12!important; color:#111!important; margin:0 0 3pt!important; }
       .pattern-header { display:block!important; margin-bottom:4pt!important; }
-      .steps, ol, ul { margin-top:3pt!important; margin-bottom:4pt!important; padding-left:18pt!important; }
-      .steps li + li, li + li { margin-top:1.5pt!important; }
+      .steps, .mini-list, ol, ul { margin-top:3pt!important; margin-bottom:4pt!important; padding-left:18pt!important; }
+      .steps li + li, .mini-list li + li, li + li { margin-top:1.5pt!important; }
       .subsection { margin-top:6pt!important; padding-top:4pt!important; border-top:0.75pt solid #aaa!important; }
       .subsection h4 { color:#111!important; font-size:10.5pt!important; line-height:1.1!important; margin:0 0 3pt!important; }
       .demo-frame { margin:0!important; }
       a { text-decoration:none!important; color:#111!important; }
     }
-  </style>
+  
+
+    .code-block {
+      margin:14px 0 0;
+      padding:14px 16px;
+      overflow-x:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#17211b;
+      color:#fffdf7;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:.9rem;
+      line-height:1.5;
+      white-space:pre;
+    }
+    .resource-link { display:inline-block; margin-top:10px; font-weight:800; color:var(--accent); }
+    .warning-card { background:var(--warn); border-left:5px solid var(--accent-2); }
+    @media print { .code-block { white-space:pre-wrap; background:#fff!important; color:#111!important; border:0!important; padding:0!important; } }
+</style>
 </head>
 <body>
-  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false">
-    <span class="mobile-menu-icon" aria-hidden="true"></span>
-    <span class="mobile-menu-text">Menu</span>
-  </button>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
   <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
 
   <div class="layout">
     <aside class="sidebar" id="siteSidebar" aria-label="Tutorial navigation">
       <a href="../" class="home-button">&larr; Back to Home</a>
-      <h1>Build a Flourish Data Story</h1>
-      <p>Guide viewers through one revisualization, one focus, and one new dataset.</p>
+      <h1>Interactive Timelines with Libraries</h1>
+      <p>Tutorial M3 - C. Build two timelines while learning how to read and adapt library documentation.</p>
       <nav>
-        <div class="nav-group-title">Tutorial</div>
+        <div class="nav-group-title">Start here</div>
         <a href="#overview">Overview</a>
         <a href="#video">Video</a>
-        <a href="#before">Download the data</a>
-        <a href="#plan">Plan four slides</a>
-        <a href="#opening">Build the opening view</a>
-        <a href="#story">Create the story</a>
-        <a href="#revisualize">Revisualize</a>
-        <a href="#focus">Focus</a>
-        <a href="#new-data">Introduce new data</a>
-        <a href="#appearance">Refine and test</a>
+        <a href="#before-start">Before you start</a>
+        <a href="#libraries">How libraries work</a>
+        <div class="nav-group-title">Timeline 1</div>
+        <a href="#squarechip-setup">1. Set up Squarechip</a>
+        <a href="#squarechip-markup">2. Add markup</a>
+        <a href="#squarechip-init">3. Initialize and configure</a>
+        <a href="#squarechip-content">4. Add content and styles</a>
+        <div class="nav-group-title">Timeline 2</div>
+        <a href="#albe-setup">5. Set up Albe Timeline</a>
+        <a href="#albe-data">6. Build the data array</a>
+        <a href="#albe-init">7. Initialize the plugin</a>
+        <a href="#albe-language">8. Format dates and language</a>
+        <a href="#albe-content">9. Build one event</a>
+        <a href="#albe-finish">10. Finish and animate</a>
+        <div class="nav-group-title">Finish</div>
+        <a href="#production">Production checks</a>
         <a href="#submission">Submission</a>
       </nav>
     </aside>
 
     <main>
       <section class="hero" id="overview">
-        <div class="eyebrow">Flourish tutorial</div>
-        <h2>Build a Simple Guided Data Story in Flourish</h2>
-        <p>Create a four-slide story about when warbler species can be seen in Iowa. Each transition has a different storytelling job: revisualize the same data, focus attention, and introduce new evidence.</p>
-        <div class="concept-callout"><strong>A guided data story makes an argument in steps.</strong> The viewer advances with buttons, while the author controls the sequence and explains why each visual change matters.</div>
-        <div class="overview-grid">
-          <article class="meta-card">
-            <h4>What you will build</h4>
-            <p>One Flourish story with four slides: overview, revisualization, focus, and new evidence.</p>
-          </article>
-          <article class="meta-card">
-            <h4>What you will submit</h4>
-            <p>The public URL to the published Flourish story.</p>
-          </article>
+        <div class="eyebrow">Tutorial M3 - C</div>
+        <h2>Build Interactive Timelines with JavaScript Libraries</h2>
+        <p>In this tutorial, you will build two interactive timelines from existing code libraries. The timeline is the product, but the larger goal is learning how to evaluate documentation, load dependencies, copy the required structure, configure a plugin, and adapt it to your own content.</p>
+        <div class="concept-callout"><strong>A library gives you a head start, not a finished project.</strong> It supplies reusable code and expected patterns. You still need to understand the required files, markup, initialization code, configuration options, data structure, and CSS.</div>
+        <div class="overview-grid" aria-label="Tutorial summary">
+          <article class="meta-card"><h4>What you will build</h4><p>Two timelines: a Squarechip timeline built from HTML markup and a jQuery Albe Timeline built from an array of JavaScript objects.</p></article>
+          <article class="meta-card"><h4>What you will submit</h4><p>A ZIP file containing the complete project folder with both HTML files and any supporting assets.</p></article>
         </div>
       </section>
 
       <section class="video-section" id="video">
         <div class="video-card">
-          <h3>Video tutorial</h3>
-          <p>A video will be added after this written tutorial has been tested.</p>
-          <div class="video-embed">
-            <iframe src="about:blank" title="Build a Simple Guided Data Story in Flourish video tutorial"></iframe>
+          <h3>Video walkthrough</h3>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/ozZ64toLlBo" title="Build interactive timelines with JavaScript libraries" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
         </div>
       </section>
 
-      <section class="section-group" id="before">
-        <h2>Download the data</h2>
-        <p>This story uses one dataset for the first three slides and a second dataset for the final slide.</p>
-      </section>
-
+      <section class="section-group" id="before-start"><h2>Before you start</h2><p>Set up a local project and gather the supplied tutorial assets.</p></section>
       <section class="pattern">
-        <div class="pattern-header"><div><h3>Prepare the files</h3></div><span class="tag">Setup</span></div>
+        <div class="pattern-header"><div><h3>Prepare the project folder</h3><p>You will work locally in VS Code and preview the pages with Live Server.</p></div><span class="tag">Setup</span></div>
         <div class="demo-frame">
           <ol class="steps">
-            <li>Download <a href="iowa-warbler-monthly-counts.csv" download><strong>iowa-warbler-monthly-counts.csv</strong></a>.</li>
-            <li>Download <a href="iowa-warbler-seasonal-status.csv" download><strong>iowa-warbler-seasonal-status.csv</strong></a>.</li>
-            <li>Sign in to Flourish and open your Projects page.</li>
-            <li>Keep this tutorial open in another tab.</li>
+            <li>Download the Module 3C assets from ICON.</li>
+            <li>Create a new project folder. A name such as <code>timeline-libraries</code> is appropriate.</li>
+            <li>Open the folder in VS Code.</li>
+            <li>Create two HTML files: <code>squarechip.html</code> and <code>albe.html</code>.</li>
+            <li>Add a basic HTML5 page wrapper to each file.</li>
+            <li>Start Live Server so you can inspect changes as you work.</li>
           </ol>
-          <div class="callout">
-            <strong>Tutorial data</strong>
-            <p>These small datasets are invented for practice. They are designed to make the storytelling transitions easy to see.</p>
-          </div>
+          <div class="callout"><strong>Keep the whole project together:</strong> You will submit the folder as a ZIP file rather than embedding these timelines in Tilda.</div>
         </div>
       </section>
 
-      <section class="section-group" id="plan">
-        <h2>Plan the four-slide argument</h2>
-        <p>Each slide should add a new idea rather than simply changing the chart.</p>
-      </section>
-
+      <section class="section-group" id="libraries"><h2>How to approach an unfamiliar library</h2><p>Documentation is the map. Read it in a predictable order rather than copying random code.</p></section>
       <section class="pattern">
-        <div class="pattern-header"><div><h3>Define the sequence</h3></div><span class="tag">Purpose</span></div>
-        <div class="demo-frame">
-          <div class="slide-plan">
-            <article class="slide-card">
-              <h4>Slide 1: Overview</h4>
-              <p>A line chart shows two migration peaks and a smaller summer population.</p>
-            </article>
-            <article class="slide-card">
-              <h4>Slide 2: Revisualization</h4>
-              <p>The same monthly data becomes ranked bars so viewers can compare months precisely.</p>
-            </article>
-            <article class="slide-card">
-              <h4>Slide 3: Focus</h4>
-              <p>The chart keeps the same arrangement but emphasizes May and July.</p>
-            </article>
-            <article class="slide-card">
-              <h4>Slide 4: New evidence</h4>
-              <p>A second dataset shows that most species are migration visitors rather than Iowa breeders.</p>
-            </article>
-          </div>
-          <div class="callout">
-            <strong>The argument</strong>
-            <p>Warbler variety peaks during migration, falls in summer, and remains lower because only part of the larger migration group breeds in Iowa.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-group" id="opening">
-        <h2>Build the opening view</h2>
-        <p>Start with the broad seasonal pattern.</p>
-      </section>
-
-      <section class="pattern">
-        <div class="pattern-header"><div><h3>Slide 1: Create a line chart</h3></div><span class="tag">Overview</span></div>
+        <div class="pattern-header"><div><h3>Evaluate the library before building</h3><p>A timeline library may save time, but only if its capabilities and maintenance level fit your project.</p></div><span class="tag">Library literacy</span></div>
         <div class="demo-frame">
           <ol class="steps">
-            <li>Choose <strong>New visualization</strong> in Flourish.</li>
-            <li>Select a line-chart template.</li>
-            <li>Open the <strong>Data</strong> tab and import <strong>iowa-warbler-monthly-counts.csv</strong>.</li>
-            <li>Bind <strong>Month</strong> to the x-axis and <strong>Warbler species</strong> to the numeric values.</li>
-            <li>Keep the months in chronological order.</li>
-            <li>Add the title <strong>Warbler variety rises during spring and fall migration</strong>.</li>
-            <li>Use a visible line and points. Keep the y-axis starting at zero.</li>
+            <li>Open the library’s demo and confirm that the interaction matches what you want.</li>
+            <li>Find the required CSS and JavaScript files.</li>
+            <li>Check whether the files are available through a CDN or must be downloaded.</li>
+            <li>Find the required HTML markup or data structure.</li>
+            <li>Find the initialization code that activates the library.</li>
+            <li>Review the configuration options and note any dependencies.</li>
+            <li>Check how recently the project has been maintained and expect more troubleshooting with older libraries.</li>
           </ol>
-
-          <table class="data-table">
-            <thead><tr><th scope="col">Month</th><th scope="col">Warbler species</th></tr></thead>
-            <tbody><tr><td>March</td><td>2</td></tr>
-<tr><td>April</td><td>18</td></tr>
-<tr><td>May</td><td>34</td></tr>
-<tr><td>June</td><td>15</td></tr>
-<tr><td>July</td><td>12</td></tr>
-<tr><td>August</td><td>21</td></tr>
-<tr><td>September</td><td>31</td></tr>
-<tr><td>October</td><td>14</td></tr>
-<tr><td>November</td><td>3</td></tr></tbody>
-          </table>
-
-          <p><strong>Suggested caption:</strong> The number of warbler species visible in Iowa rises sharply in May and September, then falls between the two migration periods.</p>
+          <div class="callout"><strong>Builders are usually easier:</strong> A Flourish timeline may be the practical choice for a real project. This exercise uses libraries so you can understand what builders normally handle for you.</div>
         </div>
       </section>
 
-      <section class="section-group" id="story">
-        <h2>Create the Flourish story</h2>
-        <p>Turn the finished line chart into a story before creating the remaining views.</p>
-      </section>
-
+      <section class="section-group" id="squarechip-setup"><h2>Timeline 1: Set up Squarechip Timeline</h2><p>The first library uses ordinary HTML markup and plain JavaScript.</p></section>
       <section class="pattern">
-        <div class="pattern-header"><div><h3>Add the opening visualization to a story</h3></div><span class="tag">Story</span></div>
+        <div class="pattern-header"><div><h3>Load the library files</h3><p>Use the CDN links supplied in the tutorial assets.</p></div><span class="tag">Dependencies</span></div>
         <div class="demo-frame">
           <ol class="steps">
-            <li>Choose <strong>Create a story</strong> from the finished visualization.</li>
-            <li>Use the line chart as Slide 1.</li>
-            <li>Add the suggested caption.</li>
-            <li>Rename the story <strong>Iowa Warblers Through the Year</strong>.</li>
+            <li>Open <code>squarechip.html</code>.</li>
+            <li>Open the Squarechip documentation and demo links from the assets folder.</li>
+            <li>Find the library stylesheet URL in <code>asset-links.txt</code>.</li>
+            <li>Add it with a stylesheet link.</li>
+            <li>Find the minified JavaScript library URL and add it near the end of the body.</li>
           </ol>
-          <div class="callout">
-            <strong>Use visible story navigation</strong>
-            <p>Flourish stories use buttons or arrows to move through slides. In other tools, the same guided sequence could be triggered by scrolling.</p>
-          </div>
+          <pre class="code-block"><code>&lt;link rel="stylesheet" href="PASTE-CSS-CDN-URL-HERE"&gt;
+
+&lt;script src="PASTE-JAVASCRIPT-CDN-URL-HERE"&gt;&lt;/script&gt;</code></pre>
+          <div class="callout"><strong>Why a CDN?</strong> A content delivery network hosts commonly used files online. It avoids copying the library into your project, although a locally downloaded copy gives you more control and does not depend on a third-party host.</div>
         </div>
       </section>
 
-      <section class="section-group" id="revisualize">
-        <h2>Revisualize the same data</h2>
-        <p>Change the visual form because the question changes.</p>
-      </section>
-
+      <section class="section-group" id="squarechip-markup"><h2>Timeline 1: Add the required markup</h2><p>This library expects a specific nested HTML structure.</p></section>
       <section class="pattern">
-        <div class="pattern-header"><div><h3>Slide 2: Change the line chart into ranked bars</h3></div><span class="tag">Revisualization</span></div>
+        <div class="pattern-header"><div><h3>Copy the documented HTML pattern</h3><p>The class names connect your HTML to the library’s CSS and JavaScript.</p></div><span class="tag">Markup</span></div>
         <div class="demo-frame">
           <ol class="steps">
-            <li>Duplicate Slide 1.</li>
-            <li>Use Flourish’s revisualization or chart-type controls to change the line chart into horizontal bars.</li>
-            <li>Sort the bars from highest to lowest.</li>
-            <li>Show value labels at the ends of the bars.</li>
-            <li>Change the title to <strong>May has the most warbler species</strong>.</li>
+            <li>Find the HTML markup example in the Squarechip documentation.</li>
+            <li>Copy the timeline wrapper, timeline container, and sample timeline items into the body.</li>
+            <li>Save and inspect the page. It should begin to resemble a timeline even before initialization.</li>
+            <li>Notice that the library controls the timeline structure, but the content inside each item is still ordinary HTML that you can edit.</li>
           </ol>
-          <p><strong>Suggested caption:</strong> Ranking the same monthly data makes the comparison exact. May leads with 34 species, followed by September with 31.</p>
-          <div class="callout">
-            <strong>Why revisualize?</strong>
-            <p>The line chart shows seasonal shape. The ranked bar chart answers a different question: which months have the most species?</p>
-          </div>
+          <pre class="code-block"><code>&lt;div class="timeline"&gt;
+  &lt;div class="timeline__wrap"&gt;
+    &lt;div class="timeline__items"&gt;
+      &lt;div class="timeline__item"&gt;
+        &lt;div class="timeline__content"&gt;
+          &lt;h3&gt;Timeline event&lt;/h3&gt;
+          &lt;p&gt;Event description.&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
         </div>
       </section>
 
-      <section class="section-group" id="focus">
-        <h2>Focus on the key comparison</h2>
-        <p>Keep the chart stable and direct attention to the evidence that supports the next claim.</p>
-      </section>
-
+      <section class="section-group" id="squarechip-init"><h2>Timeline 1: Initialize and configure the library</h2><p>Loading a library does not activate it. You must call its function after the library has loaded.</p></section>
       <section class="pattern">
-        <div class="pattern-header"><div><h3>Slide 3: Emphasize May and July</h3></div><span class="tag">Focus</span></div>
+        <div class="pattern-header"><div><h3>Create the timeline instance</h3><p>The first argument identifies the timeline element. The second is a configuration object.</p></div><span class="tag">JavaScript</span></div>
         <div class="demo-frame">
           <ol class="steps">
-            <li>Duplicate Slide 2.</li>
-            <li>Keep the bars in the same ranked order.</li>
-            <li>Use the accent color for <strong>May</strong> and <strong>July</strong>.</li>
-            <li>Mute the other bars.</li>
-            <li>Add a short annotation if the template allows it.</li>
-            <li>Change the title to <strong>Species variety drops sharply after spring migration</strong>.</li>
+            <li>Add a new script block after the library script.</li>
+            <li>Call the library’s <code>timeline()</code> function.</li>
+            <li>Use <code>document.querySelectorAll('.timeline')</code> to select the timeline.</li>
+            <li>Add a configuration object with curly braces.</li>
+            <li>Set the mode to horizontal, show three items at a time, and switch to vertical mode below 800 pixels.</li>
           </ol>
-          <p><strong>Suggested caption:</strong> Iowa goes from 34 visible warbler species in May to 12 in July. The focus transition isolates the comparison without making viewers relearn the chart.</p>
-          <div class="callout">
-            <strong>Focus is not a new chart</strong>
-            <p>The data and arrangement stay the same. Only emphasis changes, helping the viewer see the subset or data points that matter.</p>
-          </div>
+          <pre class="code-block"><code>&lt;script&gt;
+  timeline(document.querySelectorAll('.timeline'), {
+    mode: 'horizontal',
+    visibleItems: 3,
+    forceVerticalMode: 800
+  });
+&lt;/script&gt;</code></pre>
+          <div class="subsection"><h4>Reading a configuration object</h4><ul class="mini-list"><li>An object is enclosed in curly braces.</li><li>Each setting uses a <strong>key: value</strong> pair.</li><li>Text values require quotation marks.</li><li>Numbers do not use quotation marks.</li><li>Boolean values use the keywords <code>true</code> or <code>false</code>.</li><li>Separate settings with commas and copy the documented key names exactly.</li></ul></div>
+          <div class="callout"><strong>Responsive behavior:</strong> <code>forceVerticalMode: 800</code> tells the horizontal timeline to become vertical when the viewport is narrower than 800 pixels.</div>
         </div>
       </section>
 
-      <section class="section-group" id="new-data">
-        <h2>Introduce a new dataset</h2>
-        <p>Add evidence that helps explain the pattern shown in the first dataset.</p>
-      </section>
-
+      <section class="section-group" id="squarechip-content"><h2>Timeline 1: Add the supplied content and styles</h2><p>Replace the sample events and add project-specific CSS.</p></section>
       <section class="pattern">
-        <div class="pattern-header"><div><h3>Build a second visualization</h3></div><span class="tag">New evidence</span></div>
+        <div class="pattern-header"><div><h3>Finish the Squarechip version</h3><p>The library supplies the timeline mechanics, but you still control the editorial content and visual design.</p></div><span class="tag">Content and CSS</span></div>
         <div class="demo-frame">
           <ol class="steps">
-            <li>Return to the Flourish Projects page.</li>
-            <li>Create a new bar-chart visualization.</li>
-            <li>Import <strong>iowa-warbler-seasonal-status.csv</strong>.</li>
-            <li>Bind <strong>Seasonal status</strong> to the categories and <strong>Warbler species</strong> to the values.</li>
-            <li>Use two simple bars with direct value labels.</li>
-            <li>Add the title <strong>Most Iowa warblers are migration visitors</strong>.</li>
+            <li>Open the supplied Squarechip HTML content file.</li>
+            <li>Replace the sample timeline items with the complete event markup.</li>
+            <li>Open the supplied CSS file.</li>
+            <li>Add a style block after the library stylesheet so your rules can override the defaults.</li>
+            <li>Save and inspect the finished horizontal timeline.</li>
+            <li>Resize the browser below 800 pixels and confirm that it becomes vertical.</li>
           </ol>
-
-          <table class="data-table">
-            <thead><tr><th scope="col">Seasonal status</th><th scope="col">Warbler species</th></tr></thead>
-            <tbody><tr><td>Migration visitors</td><td>22</td></tr>
-<tr><td>Breed in Iowa</td><td>12</td></tr></tbody>
-          </table>
-
-          <div class="subsection">
-            <h4>Add the second visualization to the story</h4>
-            <ol class="steps">
-              <li>Open the existing <strong>Iowa Warblers Through the Year</strong> story.</li>
-              <li>Add a new slide.</li>
-              <li>Select the seasonal-status bar chart as the visualization for Slide 4.</li>
-              <li>Add the caption below.</li>
-            </ol>
-          </div>
-
-          <p><strong>Suggested caption:</strong> The summer total is lower because only 12 species in this practice dataset breed in Iowa. Another 22 appear mainly during migration.</p>
-          <div class="callout">
-            <strong>Why introduce new evidence?</strong>
-            <p>The first dataset establishes what happens through the year. The second dataset helps explain why the summer total is smaller.</p>
-          </div>
+          <div class="callout"><strong>CSS order matters:</strong> Your custom CSS should come after the library CSS so it wins when both styles target the same element.</div>
         </div>
       </section>
 
-      <section class="section-group" id="appearance">
-        <h2>Refine and test the story</h2>
-        <p>Make the four slides feel like one connected explanation.</p>
-      </section>
-
+      <section class="section-group" id="albe-setup"><h2>Timeline 2: Set up jQuery Albe Timeline</h2><p>The second timeline is a jQuery plugin and uses JavaScript data rather than repeated HTML markup.</p></section>
       <section class="pattern">
-        <div class="pattern-header"><div><h3>Complete the final checks</h3></div><span class="tag">5 A’s</span></div>
+        <div class="pattern-header"><div><h3>Load dependencies and recover missing CSS</h3><p>This older plugin requires more investigation because its documentation and hosted files are incomplete.</p></div><span class="tag">Troubleshooting</span></div>
         <div class="demo-frame">
-          <div class="subsection">
-            <h4>Appearance</h4>
-            <ul class="steps">
-              <li>Use one accent color consistently across all slides.</li>
-              <li>Use neutral colors for context.</li>
-              <li>Keep titles and captions short.</li>
-            </ul>
-          </div>
-          <div class="subsection">
-            <h4>All devices and accessibility</h4>
-            <ul class="steps">
-              <li>Preview the story on desktop and mobile.</li>
-              <li>Do not rely only on color. Use titles, captions, values, and annotations.</li>
-              <li>Check contrast and keyboard navigation.</li>
-              <li>Add a text description in Flourish when available.</li>
-            </ul>
-          </div>
-          <div class="subsection">
-            <h4>Attribution</h4>
-            <ul class="steps">
-              <li>Add the source note: <strong>Source: invented tutorial data for classroom practice.</strong></li>
-            </ul>
-          </div>
-          <div class="subsection">
-            <h4>Story test</h4>
-            <ul class="steps">
-              <li>Slide 1 establishes the broad pattern.</li>
-              <li>Slide 2 revisualizes the same data for comparison.</li>
-              <li>Slide 3 focuses on two values without changing the arrangement.</li>
-              <li>Slide 4 introduces a separate dataset that explains the pattern.</li>
-            </ul>
-          </div>
+          <ol class="steps">
+            <li>Open <code>albe.html</code> and the two documentation links supplied in the assets.</li>
+            <li>Add jQuery before the Albe Timeline plugin script. The plugin depends on jQuery and cannot run first.</li>
+            <li>Add the hosted Albe Timeline JavaScript URL from <code>asset-links.txt</code>.</li>
+            <li>Test the documented stylesheet URL. When it fails, open the library’s GitHub repository.</li>
+            <li>Find the horizontal timeline template and open its raw CSS file.</li>
+            <li>Copy that CSS into a style block in your page.</li>
+            <li>Remove broad rules that style <code>body</code> or other global elements if they could interfere with the rest of a page.</li>
+          </ol>
+          <pre class="code-block"><code>&lt;script src="JQUERY-CDN-URL"&gt;&lt;/script&gt;
+&lt;script src="ALBE-TIMELINE-CDN-URL"&gt;&lt;/script&gt;
+
+&lt;style&gt;
+  /* Paste the timeline template CSS here. */
+&lt;/style&gt;</code></pre>
+          <div class="callout"><strong>Scope imported styles:</strong> Older examples may include page-wide styling. Remove or rewrite global selectors before placing the code inside a larger website.</div>
         </div>
       </section>
 
-      <section class="section-group" id="submission">
-        <h2>Submission</h2>
-        <p>Publish the story and submit its public URL.</p>
-      </section>
-
-      <section class="pattern submission-box">
-        <div class="pattern-header"><div><h3>What to submit</h3></div><span class="tag">Deliverable</span></div>
+      <section class="section-group" id="albe-data"><h2>Timeline 2: Create an array of event objects</h2><p>Albe Timeline generates the markup from structured JavaScript data.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Understand arrays and objects</h3><p>An array is an ordered list. Each item in this array is an object representing one timeline event.</p></div><span class="tag">Data structure</span></div>
         <div class="demo-frame">
-          <ul class="steps">
-            <li>One published Flourish story URL.</li>
-            <li>Exactly four story slides.</li>
-            <li>One revisualization using the monthly dataset.</li>
-            <li>One focus slide that preserves the previous chart arrangement.</li>
-            <li>One final slide using the separate seasonal-status dataset.</li>
-            <li>A title, caption, source note, readable labels, and accessible contrast.</li>
-          </ul>
+          <ol class="steps">
+            <li>Create a script block.</li>
+            <li>Declare a constant named <code>timelineData</code>.</li>
+            <li>Assign it an array using square brackets.</li>
+            <li>Copy one sample event object from the documentation into the array.</li>
+          </ol>
+          <pre class="code-block"><code>&lt;script&gt;
+  const timelineData = [
+    {
+      time: '2015-04-30',
+      body: [
+        { tag: 'h2', content: 'Sample event' },
+        { tag: 'p', content: 'Sample description' }
+      ]
+    }
+  ];
+&lt;/script&gt;</code></pre>
+          <div class="subsection"><h4>How the structure nests</h4><ul class="mini-list"><li><code>timelineData</code> is an array because events must remain in order.</li><li>Each event is an object enclosed in curly braces.</li><li>The event’s <code>body</code> is another array.</li><li>Each body item is another object describing an HTML tag and its content or attributes.</li></ul></div>
         </div>
       </section>
+
+      <section class="section-group" id="albe-init"><h2>Timeline 2: Add the target element and initialize the plugin</h2><p>The plugin needs one HTML container and a jQuery call that passes in your data.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Connect the data to the page</h3><p>The selector, method, and variable name must agree with your own code.</p></div><span class="tag">jQuery</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Add a div with the ID <code>myTimeline</code>.</li>
+            <li>Add a jQuery document-ready function after <code>timelineData</code>.</li>
+            <li>Select the div with <code>$('#myTimeline')</code>.</li>
+            <li>Call the <code>albeTimeline()</code> method and pass in <code>timelineData</code>.</li>
+          </ol>
+          <pre class="code-block"><code>&lt;div id="myTimeline"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  $(document).ready(function () {
+    $('#myTimeline').albeTimeline(timelineData);
+  });
+&lt;/script&gt;</code></pre>
+          <div class="callout"><strong>Why the document-ready function?</strong> It waits until the page markup is available before jQuery tries to find and transform the timeline div.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="albe-language"><h2>Timeline 2: Format dates and set the language</h2><p>The plugin defaults to Brazilian Portuguese and requires a manual language definition.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Configure month-year dates in English</h3><p>This step illustrates a common problem with older or incomplete plugins: documented options may require extra setup.</p></div><span class="tag">Configuration</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Add a second argument to <code>albeTimeline()</code>: a configuration object.</li>
+            <li>Set <code>formatDate</code> to the documented month-year pattern.</li>
+            <li>Set the language to U.S. English.</li>
+            <li>When the month remains in Portuguese, use the documentation’s language override method.</li>
+            <li>Copy only the English language definition and place it before the timeline initialization.</li>
+          </ol>
+          <pre class="code-block"><code>$(document).ready(function () {
+  /* Paste the documented English language definition here. */
+
+  $('#myTimeline').albeTimeline(timelineData, {
+    formatDate: 'MMM YYYY',
+    language: 'en-US'
+  });
+});</code></pre>
+          <div class="callout"><strong>Documentation may be incomplete:</strong> Setting a language code does not work unless that language has actually been defined for the plugin.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="albe-content"><h2>Timeline 2: Build one complete event object</h2><p>Construct one event manually so you understand the supplied data file before replacing it.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Create semantic content from object properties</h3><p>Each body object tells the plugin which HTML tag to create, what content to insert, and which attributes to add.</p></div><span class="tag">Objects</span></div>
+        <div class="demo-frame">
+          <div class="subsection"><h4>A. Add an event chip</h4><pre class="code-block"><code>{
+  tag: 'p',
+  content: 'Loss',
+  attr: {
+    cssclass: 'tl-chip tl-chip-loss'
+  }
+}</code></pre></div>
+          <div class="subsection"><h4>B. Add the displayed date</h4><pre class="code-block"><code>{
+  tag: 'time',
+  content: 'September 1, 1914',
+  attr: {
+    cssclass: 'tl-date'
+  }
+}</code></pre></div>
+          <div class="subsection"><h4>C. Add an accessible image</h4><pre class="code-block"><code>{
+  tag: 'img',
+  attr: {
+    src: 'IMAGE-URL-HERE',
+    alt: 'Martha, the last known passenger pigeon'
+  }
+}</code></pre></div>
+          <div class="subsection"><h4>D. Add the title and description</h4><pre class="code-block"><code>{
+  tag: 'h2',
+  content: 'Extinction of the passenger pigeon'
+},
+{
+  tag: 'p',
+  content: 'Your event description goes here.'
+}</code></pre></div>
+          <div class="callout"><strong>Escape quotation marks inside strings:</strong> A quotation mark that belongs inside quoted text must be preceded by a backslash, such as <code>\"quoted words\"</code>. Otherwise, JavaScript interprets it as the end of the string.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="albe-finish"><h2>Timeline 2: Finish the data and add animation</h2><p>Replace the practice event with the supplied complete dataset, then add the optional Animate.css dependency.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Complete and enhance the timeline</h3><p>This final stage also demonstrates dependency-version conflicts.</p></div><span class="tag">Integration</span></div>
+        <div class="demo-frame">
+          <ol class="steps">
+            <li>Open the supplied complete timeline data file.</li>
+            <li>Replace your practice <code>timelineData</code> constant with the full array.</li>
+            <li>Confirm that the variable name remains <code>timelineData</code> everywhere.</li>
+            <li>Add the supplied custom CSS and remove any global selectors that could affect the surrounding page.</li>
+            <li>Open Animate.css and add its stylesheet CDN link.</li>
+            <li>Add an <code>effect</code> setting to the Albe Timeline configuration object.</li>
+            <li>Choose an entrance effect such as <code>jackInTheBox</code>.</li>
+            <li>When the effect fails, replace the current Animate.css URL with version <code>3.7.2</code>.</li>
+            <li>Use the older, non-namespaced class name expected by the plugin.</li>
+          </ol>
+          <pre class="code-block"><code>&lt;link rel="stylesheet" href="ANIMATE-CSS-3.7.2-CDN-URL"&gt;
+
+&lt;script&gt;
+  $(document).ready(function () {
+    $('#myTimeline').albeTimeline(timelineData, {
+      formatDate: 'MMM YYYY',
+      language: 'en-US',
+      effect: 'jackInTheBox'
+    });
+  });
+&lt;/script&gt;</code></pre>
+          <div class="callout"><strong>Version compatibility matters:</strong> Animate.css 4 introduced namespaced class names. This older plugin expects the version 3 naming pattern, so the newest dependency is not automatically the correct dependency.</div>
+          <div class="callout"><strong>Use motion deliberately:</strong> The demonstration effect is intentionally conspicuous. For a real project, choose subtle motion that supports orientation rather than competing with the content.</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="production"><h2>Production checks</h2><p>Before submitting, verify the code, content, accessibility, and folder structure.</p></section>
+      <section class="pattern">
+        <div class="pattern-header"><div><h3>Review both timelines</h3><p>A library can handle the mechanics, but you remain responsible for the final experience.</p></div><span class="tag">5 A's</span></div>
+        <div class="demo-frame">
+          <div class="subsection"><h4>Appearance</h4><ul class="mini-list"><li>Check hierarchy, spacing, image scale, and line length.</li><li>Make sure custom CSS overrides only what you intend.</li><li>Use restrained animation.</li></ul></div>
+          <div class="subsection"><h4>Asset optimization</h4><ul class="mini-list"><li>Use appropriately sized images rather than unnecessarily large files.</li><li>Keep only the files the project actually needs.</li></ul></div>
+          <div class="subsection"><h4>All devices</h4><ul class="mini-list"><li>Resize the browser and test both timelines at narrow widths.</li><li>Confirm that the Squarechip timeline switches to vertical mode.</li><li>Check whether images, labels, and event text remain readable.</li></ul></div>
+          <div class="subsection"><h4>Accessibility</h4><ul class="mini-list"><li>Give every meaningful image useful alt text.</li><li>Use semantic tags such as headings, paragraphs, and <code>time</code>.</li><li>Do not rely on color alone for event categories.</li><li>Confirm that animation does not obscure content or make it difficult to read.</li></ul></div>
+          <div class="subsection"><h4>Attribution</h4><ul class="mini-list"><li>Credit the timeline information and any images that require attribution.</li><li>Retain notices required by the libraries’ licenses.</li></ul></div>
+        </div>
+      </section>
+
+      <section class="section-group" id="submission"><h2>Submission</h2><p>Submit the complete local project rather than a published webpage.</p></section>
+      <section class="pattern"><div class="submission-box"><p><strong>Zip the entire project folder and upload it to the Module 3 participation assignment.</strong> Confirm that both <code>squarechip.html</code> and <code>albe.html</code> open correctly before creating the ZIP file.</p></div></section>
     </main>
   </div>
 
   <script>
     const menuToggle = document.getElementById('mobileMenuToggle');
-    const sidebar = document.getElementById('siteSidebar');
     const backdrop = document.getElementById('mobileMenuBackdrop');
-
-    function setMenu(open) {
-      document.body.classList.toggle('menu-open', open);
-      menuToggle.setAttribute('aria-expanded', String(open));
-      backdrop.hidden = !open;
+    const sidebar = document.getElementById('siteSidebar');
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+      if (backdrop) backdrop.hidden = true;
     }
-
-    menuToggle.addEventListener('click', () => {
-      setMenu(!document.body.classList.contains('menu-open'));
-    });
-
-    backdrop.addEventListener('click', () => setMenu(false));
-
-    sidebar.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => setMenu(false));
-    });
-
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') setMenu(false);
-    });
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        if (backdrop) backdrop.hidden = !isOpen;
+      });
+    }
+    if (backdrop) backdrop.addEventListener('click', closeMenu);
+    if (sidebar) sidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
   </script>
 </body>
 </html>
