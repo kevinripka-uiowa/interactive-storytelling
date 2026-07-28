@@ -130,6 +130,7 @@
 <nav>
 <div class="nav-group-title">Start here</div>
 <a href="#overview">Overview</a>
+<a href="#video">Video</a>
 <a href="#section-1">1. Set up the project</a>
 <div class="nav-group-title">Prepare the data</div>
 <a href="#section-2">2. Download the Shapefile</a>
@@ -153,13 +154,20 @@
 </aside>
 <main>
 <section class="hero" id="overview">
-<div class="eyebrow">Tutorial M4 — Custom Map</div>
+<div class="eyebrow">Tutorial M4C</div>
 <h2>Build a Custom Iowa Map with D3</h2>
 <p>You will prepare Iowa landform data in Mapshaper, draw your own point, line, and polygon features in geojson.io, and combine the three datasets in a responsive SVG map.</p>
 <div class="concept-callout"><strong>The workflow has two parts:</strong> prepare clean geographic data first, then write the code that projects, draws, styles, and adds interaction to it.</div>
 <div class="overview-grid">
 <article class="meta-card"><h4>What you will build</h4><p>An Iowa landform map with individually colored lobes, custom point, line, and polygon annotations, tooltips, and a checkbox that shows or hides the custom layer.</p></article>
 <article class="meta-card"><h4>What you will submit</h4><p>A zipped project folder containing your HTML, CSS, JavaScript, and three GeoJSON files.</p></article>
+</div>
+</section>
+<section class="video-section" id="video">
+<div class="video-card">
+<h3>Video walkthrough</h3>
+<p>Follow the complete process in the recorded tutorial, then use the written steps below as a reference while you work.</p>
+<div class="video-embed"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen src="https://www.youtube.com/embed/JzuoIjBi-iM" title="Build a custom Iowa map with D3 video tutorial"></iframe></div>
 </div>
 </section>
 <section class="section-group" id="section-1"><h2>Section 1: Set up the project folder</h2><p>Create the complete working structure before downloading or editing data.</p></section>
@@ -541,6 +549,7 @@ addTooltipEvents(customLayer.selectAll("path"));</code></pre>
     .attr("aria-hidden", String(isHidden));
 });</code></pre>
 <p>The checkbox changes one class on the group containing the point, line, and polygon. The CSS fades the group and disables pointer interaction while it is hidden.</p>
+<div class="callout"><strong>Try the same pattern with the landform lobes</strong><p>Duplicate the existing checkbox in <code>index.html</code> and change its ID and label so it controls the lobes. Then duplicate the checkbox JavaScript, change the selector to the new ID, and apply the hidden class to <code>lobeLayer</code> instead of <code>customLayer</code>. You will also need a matching hidden-state CSS rule for the lobe layer.</p></div>
 </div></section>
 <section class="section-group" id="section-16"><h2>Section 16: Test and submit</h2></section>
 <section class="pattern submission-box"><div class="pattern-header"><div><h3>Check the complete project</h3></div><span class="tag">Finish</span></div><div class="demo-frame">
@@ -549,6 +558,7 @@ addTooltipEvents(customLayer.selectAll("path"));</code></pre>
 <li>Confirm that the lobes align with the Iowa outline.</li>
 <li>Hover over and keyboard-focus the lobes and custom features.</li>
 <li>Turn the custom-feature checkbox off and on.</li>
+<li>Confirm that your duplicated checkbox also hides and shows the landform lobes.</li>
 <li>Resize the browser and confirm that the SVG remains responsive.</li>
 <li>Check the browser console for loading or JavaScript errors.</li>
 <li>Zip the complete project folder and submit the ZIP file.</li>
