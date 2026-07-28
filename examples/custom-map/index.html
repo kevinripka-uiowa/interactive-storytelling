@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iowa Landform Map</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <h1>Iowa Landform Regions</h1>
+    <p>Explore Iowa's landform lobes and selected custom features.</p>
+
+    <label class="map-toggle">
+      <input type="checkbox" id="featureToggle" checked>
+      Show custom features
+    </label>
+
+    <label class="map-toggle">
+      <input type="checkbox" id="lobeToggle" checked>
+      Show landform lobes
+    </label>
+
+    <div id="map"></div>
+    <div id="tooltip" class="tooltip" role="status" aria-live="polite"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="script.js"></script>
+</body>
+</html>

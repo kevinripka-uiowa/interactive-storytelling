@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bird Conservation Timeline</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/squarechip/timeline@master/dist/css/timeline.min.css">
+
+  <style>
+    :root {
+      --ink: #202522;
+      --muted: #626b66;
+      --surface: #ffffff;
+      --surface-soft: #f4f6f5;
+      --border: #d9dfdc;
+      --accent: #435f70;
+      --accent-soft: #e9eff2;
+      --win: #1f6f54;
+      --win-soft: #e8f3ee;
+      --loss: #7b2d35;
+      --loss-soft: #f8eaec;
+      --turning: #765519;
+      --turning-soft: #f8f0df;
+    }
+
+   .timeline__wrap {
+      margin: 0;
+      color: var(--ink);
+      background: transparent;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .timeline__content {
+      display: flex;
+      flex-direction: column;
+      height: 24rem;
+      padding: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      box-shadow: 0 0.25rem 0.9rem rgb(22 34 28 / 8%);
+      margin-right: 0.75rem;
+      margin-left: 0.75rem;
+    }
+
+    .event-image {
+      display: block;
+      width: 100%;
+      height: 8rem;
+      object-fit: contain;
+      object-position: center 30%;
+      background: var(--surface-soft);
+    }
+
+    .event-body {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+      padding: 1rem;
+    }
+
+    .event-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .event-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.7rem;
+      padding: 0.3rem 0.65rem;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .event-chip--win {
+      color: var(--win);
+      background: var(--win-soft);
+    }
+
+    .event-chip--loss {
+      color: var(--loss);
+      background: var(--loss-soft);
+    }
+
+    .event-chip--turning {
+      color: var(--turning);
+      background: var(--turning-soft);
+    }
+
+    .event-date {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .event-title {
+      margin: 0 0 0.65rem;
+      font-size: 1.15rem;
+      line-height: 1.2;
+    }
+
+    .event-text {
+      flex: 1;
+      min-height: 0;
+      margin: 0;
+      padding-right: 0.35rem;
+      overflow-y: auto;
+      color: var(--ink);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) var(--accent-soft);
+    }
+
+    .event-text::-webkit-scrollbar {
+      width: 0.4rem;
+    }
+
+    .event-text::-webkit-scrollbar-track {
+      background: var(--accent-soft);
+    }
+
+    .event-text::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    /* Override the library's default orange timeline styling. */
+    .timeline--horizontal .timeline-divider {
+      background-color: var(--accent);
+    }
+
+
+    .timeline-nav-button {
+      border-color: var(--accent);
+      background-color: var(--accent);
+      color: #fff;
+    }
+
+    .timeline-nav-button::before {
+      border-color: var(--accent);
+    }
+
+    @media (max-width: 799px) {
+      .timeline__wrap {
+        padding: 1rem 1rem 2rem;
+      }
+
+      .timeline__content {
+        height: auto;
+        min-height: 20rem;
+      }
+
+      .event-text {
+        overflow: visible;
+      }
+    }
+  </style>
+</head>
+<body>
+    <div class="timeline" aria-label="Bird conservation timeline">
+      <div class="timeline__wrap">
+        <div class="timeline__items">
+          <div class="timeline__item">
+            <article class="timeline__content">
+              <div class="event-body">
+                <div class="event-meta">
+                  <span class="event-chip event-chip--win">Win</span>
+                  <time class="event-date" datetime="1900-05-01">May 1900</time>
+                </div>
+
+                <h2 class="event-title">Passage of the Lacey Act</h2>
+                <p class="event-text">Signed into law by President William McKinley in May 1900, the Lacey Act became the first U.S. federal law to protect wildlife by making it a federal crime to transport illegally taken game or birds across state lines. Driven largely by public outrage over commercial hunting for the fashion industry, particularly the feather and plume trade, it severely curtailed the open-market slaughter of wild birds and established a precedent for federal wildlife protection.</p>
+              </div>
+            </article>
+          </div>
+          <div class="timeline__item">
+            <article class="timeline__content">
+              <div class="event-body">
+                <div class="event-meta">
+                  <span class="event-chip event-chip--win">Win</span>
+                  <time class="event-date" datetime="1903-03-01">March 1903</time>
+                </div>
+
+                <h2 class="event-title">Pelican Island Federal Bird Reservation Established</h2>
+                <p class="event-text">In March 1903, President Theodore Roosevelt issued an executive order designating Pelican Island off Florida's Atlantic coast as a protected breeding ground for native birds. Created specifically to protect brown pelicans, egrets, and herons from plume hunters, this single act gave birth to the U.S. National Wildlife Refuge System, which today encompasses hundreds of millions of acres dedicated to wildlife preservation.</p>
+              </div>
+            </article>
+          </div>
+          <div class="timeline__item">
+            <article class="timeline__content">
+              <img class="event-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Martha_last_passenger_pigeon_1912.jpg/500px-Martha_last_passenger_pigeon_1912.jpg" alt="Martha, the last known Passenger Pigeon, at the Cincinnati Zoo">
+              <div class="event-body">
+                <div class="event-meta">
+                  <span class="event-chip event-chip--loss">Loss</span>
+                  <time class="event-date" datetime="1914-09-01">September 1914</time>
+                </div>
+
+                <h2 class="event-title">Extinction of the Passenger Pigeon</h2>
+                <p class="event-text">On September 1, 1914, "Martha," the world's last known Passenger Pigeon, died in captivity at the Cincinnati Zoo. Once the most abundant bird species in North America, numbering an estimated 3 to 5 billion individuals, unregulated commercial hunting, habitat loss from deforestation, and expanding rail networks drove the species to complete extinction in just a few decades. The loss served as a stark, sobering wake-up call for wildlife conservation.</p>
+              </div>
+            </article>
+          </div>
+          <div class="timeline__item">
+            <article class="timeline__content">
+              <img class="event-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Conuropsis_carolinensis_male_Ulaval.jpg/330px-Conuropsis_carolinensis_male_Ulaval.jpg" alt="Carolina Parakeet">
+              <div class="event-body">
+                <div class="event-meta">
+                  <span class="event-chip event-chip--loss">Loss</span>
+                  <time class="event-date" datetime="1918-02-01">February 1918</time>
+                </div>
+
+                <h2 class="event-title">Extinction of the Carolina Parakeet</h2>
+                <p class="event-text">In February 1918, "Incas," the last captive Carolina Parakeet, died at the Cincinnati Zoo, marking the extinction of the only native parrot species in the eastern United States. The species suffered a rapid decline due to extensive forest clearing, agricultural retaliatory shooting by farmers who viewed them as fruit pests, and intensive hunting for their vibrant green and yellow feathers.</p>
+              </div>
+            </article>
+          </div>
+          <div class="timeline__item">
+            <article class="timeline__content">
+              <div class="event-body">
+                <div class="event-meta">
+                  <span class="event-chip event-chip--win">Win</span>
+                  <time class="event-date" datetime="1918-07-01">July 1918</time>
+                </div>
+
+                <h2 class="event-title">Ratification of the Migratory Bird Treaty Act</h2>
+                <p class="event-text">Enacted in July 1918 to fulfill a 1916 treaty between the United States and Great Britain on behalf of Canada, the Migratory Bird Treaty Act made it illegal to pursue, hunt, take, capture, or kill migratory birds, or trade their feathers, eggs, or nests, without a federal permit. It remains one of the strongest legal safeguards for over 1,000 avian species across North America.</p>
+              </div>
+            </article>
+          </div>
+          <div class="timeline__item">
+            <article class="timeline__content">
+              <div class="event-body">
+                <div class="event-meta">
+                  <span class="event-chip event-chip--win">Win</span>
+                  <time class="event-date" datetime="1972-06-01">June 1972</time>
+                </div>
+
+                <h2 class="event-title">EPA Bans Domestic Agricultural Use of DDT</h2>
+                <p class="event-text">Following years of public advocacy spearheaded by Rachel Carson's 1962 book Silent Spring, the U.S. Environmental Protection Agency banned agricultural use of the synthetic pesticide DDT in June 1972. DDT had contaminated aquatic ecosystems and caused severe eggshell thinning in apex avian predators, causing populations of Bald Eagles, Peregrine Falcons, Ospreys, and Brown Pelicans to crash. The ban ignited massive recoveries across affected species over subsequent decades.</p>
+              </div>
+            </article>
+          </div>
+          <div class="timeline__item">
+            <article class="timeline__content">
+              <div class="event-body">
+                <div class="event-meta">
+                  <span class="event-chip event-chip--win">Win</span>
+                  <time class="event-date" datetime="1973-12-01">December 1973</time>
+                </div>
+
+                <h2 class="event-title">Passage of the Endangered Species Act</h2>
+                <p class="event-text">Signed into law by President Richard Nixon in December 1973, the Endangered Species Act established comprehensive protection for imperiled plants and animals and their critical habitats. For birds, the ESA provided the essential federal framework, funding, and critical habitat designations required to launch targeted recovery and reintroduction programs.</p>
+              </div>
+            </article>
+          </div>
+          <div class="timeline__item">
+            <article class="timeline__content">
+              <img class="event-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/California_condor_AC-4_%2823186853134%29.jpg/330px-California_condor_AC-4_%2823186853134%29.jpg" alt="Captured California Condor">
+              <div class="event-body">
+                <div class="event-meta">
+                  <span class="event-chip event-chip--turning">Loss / Turning Point</span>
+                  <time class="event-date" datetime="1987-04-19">April 1987</time>
+                </div>
+
+                <h2 class="event-title">Capture of the Last Wild California Condor</h2>
+                <p class="event-text">On April 19, 1987, biologists captured the last remaining wild California Condor, designated "AC-9," in the southern California mountains, bringing the wild population to zero and leaving only 27 individuals alive in captive breeding facilities. While a tragic loss of the bird in its natural environment, this controversial intervention prevented total extinction and allowed intensive breeding programs to rebuild the population, eventually allowing condors to be reintroduced back into the wild.</p>
+              </div>
+            </article>
+          </div>
+          <div class="timeline__item">
+            <article class="timeline__content">
+              <img class="event-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Bald_eagle_about_to_fly_in_Alaska_%282016%29.jpg/330px-Bald_eagle_about_to_fly_in_Alaska_%282016%29.jpg" alt="Bald Eagle">
+              <div class="event-body">
+                <div class="event-meta">
+                  <span class="event-chip event-chip--win">Win</span>
+                  <time class="event-date" datetime="2007-08-01">August 2007</time>
+                </div>
+
+                <h2 class="event-title">Official Delisting of the Bald Eagle</h2>
+                <p class="event-text">In August 2007, the U.S. Department of the Interior officially removed the Bald Eagle from the federal list of Threatened and Endangered Species in the lower 48 states. After plummeting to fewer than 500 nesting pairs in the 1960s, decades of habitat protection, nest monitoring, and the DDT ban allowed populations to rebound to over 10,000 active breeding pairs by the time of delisting.</p>
+              </div>
+            </article>
+          </div>
+          <div class="timeline__item">
+            <article class="timeline__content">
+              <div class="event-body">
+                <div class="event-meta">
+                  <span class="event-chip event-chip--turning">Loss / Call to Action</span>
+                  <time class="event-date" datetime="2019-09-01">September 2019</time>
+                </div>
+
+                <h2 class="event-title">Publication of the '3 Billion Birds Lost' Study</h2>
+                <p class="event-text">In September 2019, a landmark study published in Science revealed that North America had lost over 2.9 billion breeding birds since 1970, a net 29% population drop across almost all biomes, including once-abundant generalist species like sparrows, warblers, and blackbirds. The findings highlighted widespread ongoing habitat degradation, agricultural pesticide impacts, and outdoor cat predation, renewing urgent international efforts to update conservation policies.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/gh/squarechip/timeline@master/dist/js/timeline.min.js"></script>
+
+  <script>
+    timeline(document.querySelectorAll(".timeline"), {
+      mode: "horizontal",
+      visibleItems: 3,
+      moveItems: 3,
+      forceVerticalMode: 800,
+      horizontalStartPosition: "top"
+    });
+  </script>
+</body>
+</html>

@@ -125,134 +125,239 @@
 <div class="layout">
 <aside aria-label="Tutorial navigation" class="sidebar" id="siteSidebar">
 <a class="home-button" href="../">← Back to Home</a>
-<h1>Build a Custom Locator Map with D3</h1>
-<p>Tutorial M4 - Custom Map. Prepare geographic data, project it into SVG, add tooltips, and toggle a custom annotation layer.</p>
+<h1>Build a Custom Iowa Map with D3</h1>
+<p>Tutorial M4 — Prepare GeoJSON in Mapshaper, draw custom features, and build a responsive interactive SVG map.</p>
 <nav>
 <div class="nav-group-title">Start here</div>
 <a href="#overview">Overview</a>
-<a href="#video">Video</a>
-<a href="#before">Before you start</a>
+<a href="#section-1">1. Set up the project</a>
 <div class="nav-group-title">Prepare the data</div>
-<a href="#section-1">1. Understand the layers</a>
-<a href="#section-2">2. Set up the project</a>
-<a href="#section-3">3. Prepare the landform lobes</a>
-<a href="#section-4">4. Add tooltip text</a>
-<a href="#section-5">5. Draw custom polygons</a>
+<a href="#section-2">2. Download the Shapefile</a>
+<a href="#section-3">3. Import into Mapshaper</a>
+<a href="#section-4">4. Reproject to WGS84</a>
+<a href="#section-5">5. Simplify and add tooltips</a>
+<a href="#section-6">6. Dissolve the Iowa outline</a>
+<a href="#section-7">7. Draw custom features</a>
 <div class="nav-group-title">Build the map</div>
-<a href="#section-6">6. Set up the HTML</a>
-<a href="#section-7">7. Create the SVG</a>
-<a href="#section-8">8. Load the GeoJSON</a>
-<a href="#section-9">9. Project the layers</a>
-<a href="#section-10">10. Add tooltips</a>
-<a href="#section-11">11. Toggle custom features</a>
-<div class="nav-group-title">Production checks</div>
-<a href="#section-12">12. Style and label the map</a>
-<a href="#section-13">13. Test the final project</a>
-<a href="#submission">Submission</a>
+<a href="#section-8">8. Set up the HTML and CSS</a>
+<a href="#section-9">9. Create the SVG</a>
+<a href="#section-10">10. Load the GeoJSON</a>
+<a href="#section-11">11. Project and draw layers</a>
+<a href="#section-12">12. Correct polygon winding</a>
+<a href="#section-13">13. Customize lobe colors</a>
+<a href="#section-14">14. Add tooltips</a>
+<a href="#section-15">15. Add the layer toggle</a>
+<div class="nav-group-title">Finish</div>
+<a href="#section-16">16. Test and submit</a>
 </nav>
 </aside>
 <main>
 <section class="hero" id="overview">
-<div class="eyebrow">Tutorial M4 - Custom Map</div>
-<h2>Build a Custom Locator Map with D3</h2>
-<p>In this tutorial, you will build a custom map of Iowa from multiple GeoJSON files. You will use an Iowa boundary for geographic context, add polygons showing Iowa landform regions, and draw a separate layer that points out selected geological features.</p>
-<p>D3 will convert the geographic coordinates into SVG paths. The landform polygons will display tooltip information, and readers will be able to turn the custom feature layer on and off.</p>
-<div class="concept-callout"><strong>A custom map uses only the geographic context the story needs.</strong> Instead of starting with a full basemap, you will choose the boundaries, labels, layers, and interactions that help readers understand this specific place.</div>
-<div aria-label="Tutorial summary" class="overview-grid">
-<article class="meta-card"><h4>What you will build</h4><p>A responsive SVG locator map with an Iowa background, landform-region polygons, hover and focus tooltips, and a toggleable custom polygon layer.</p></article>
-<article class="meta-card"><h4>What you will submit</h4><p>The public GitHub Pages URL for the completed map and the complete project folder containing the HTML, CSS, JavaScript, and GeoJSON files.</p></article>
+<div class="eyebrow">Tutorial M4 — Custom Map</div>
+<h2>Build a Custom Iowa Map with D3</h2>
+<p>You will prepare Iowa landform data in Mapshaper, draw your own point, line, and polygon features in geojson.io, and combine the three datasets in a responsive SVG map.</p>
+<div class="concept-callout"><strong>The workflow has two parts:</strong> prepare clean geographic data first, then write the code that projects, draws, styles, and adds interaction to it.</div>
+<div class="overview-grid">
+<article class="meta-card"><h4>What you will build</h4><p>An Iowa landform map with individually colored lobes, custom point, line, and polygon annotations, tooltips, and a checkbox that shows or hides the custom layer.</p></article>
+<article class="meta-card"><h4>What you will submit</h4><p>A zipped project folder containing your HTML, CSS, JavaScript, and three GeoJSON files.</p></article>
 </div>
 </section>
-<section class="video-section" id="video">
-<div class="video-card">
-<h3>Video walkthrough</h3>
-<p>Replace <code>VIDEO_ID</code> with the ID from the recorded tutorial.</p>
-<div class="video-embed"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" src="https://www.youtube.com/embed/VIDEO_ID" title="Build a custom locator map with D3 video tutorial"></iframe></div>
-</div>
-</section>
-<section class="section-group" id="before"><h2>Before you start</h2><p>Download the supplied Iowa GeoJSON and prepare the software and source data used in the tutorial.</p></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Preparation checklist</h3></div><span class="tag">Setup</span></div><div class="demo-frame"><ul class="steps">
-<li>Download the supplied <code>iowa.geojson</code> file from ICON.</li>
-<li>Download the Iowa landform-region Shapefile from the source provided in ICON.</li>
-<li>Open <a href="https://mapshaper.org/" rel="noopener" target="_blank">mapshaper.org</a> for simplifying and editing the landform data.</li>
-<li>Open <a href="https://geojson.io/" rel="noopener" target="_blank">geojson.io</a> for drawing the custom geological-feature polygons.</li>
-<li>Use Visual Studio Code and Live Server to build and test the map.</li>
-</ul><div class="callout"><strong>A Shapefile is a bundle</strong><p>Keep the <code>.shp</code>, <code>.shx</code>, <code>.dbf</code>, and <code>.prj</code> files together. Import all available parts into Mapshaper at the same time.</p></div></div></section>
-<section class="section-group" id="section-1"><h2>Section 1: Understand the map layers</h2><p>The final map uses three separate datasets with three different jobs.</p></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Separate context, information, and annotation</h3></div><span class="tag">Concept</span></div><div class="demo-frame"><ul class="steps">
-<li><strong>Iowa boundary:</strong> An administrative boundary that establishes the map extent and provides geographic context.</li>
-<li><strong>Landform lobes:</strong> The main thematic layer. These polygons divide Iowa into geological regions and carry tooltip attributes.</li>
-<li><strong>Custom features:</strong> Hand-drawn polygons that call attention to a few especially interesting geological areas.</li>
-</ul><div class="callout"><strong>GeoJSON does not formally create visual layers</strong><p>The datasets become layers when your JavaScript places each group of SVG paths inside a separate <code>&lt;g&gt;</code> element. That structure lets you style, reorder, hide, or show each group independently.</p></div></div></section>
-<section class="section-group" id="section-2"><h2>Section 2: Set up the project folder</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Create a predictable file structure</h3></div><span class="tag">Step 2</span></div><div class="demo-frame"><ol class="steps">
-<li>Create a folder named <code>iowa-geology-map</code>.</li>
+<section class="section-group" id="section-1"><h2>Section 1: Set up the project folder</h2><p>Create the complete working structure before downloading or editing data.</p></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Create the files in Visual Studio Code</h3></div><span class="tag">Setup</span></div><div class="demo-frame">
+<ol class="steps">
+<li>Create a folder named <code>iowa-custom-map</code>.</li>
+<li>Open that folder in Visual Studio Code.</li>
 <li>Create <code>index.html</code>, <code>styles.css</code>, and <code>script.js</code>.</li>
 <li>Create a folder named <code>data</code>.</li>
-<li>Place the supplied Iowa boundary inside it as <code>data/iowa.geojson</code>.</li>
-<li>Later, add <code>landform-lobes.geojson</code> and <code>custom-features.geojson</code> to the same folder.</li>
-</ol><pre><code>iowa-geology-map/
+</ol>
+<pre><code>iowa-custom-map/
 ├── index.html
 ├── styles.css
 ├── script.js
-└── data/
-    ├── iowa.geojson
-    ├── landform-lobes.geojson
-    └── custom-features.geojson</code></pre></div></section>
-<section class="section-group" id="section-3"><h2>Section 3: Prepare the landform-lobe Shapefile</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Import and simplify the polygons in Mapshaper</h3></div><span class="tag">Step 3</span></div><div class="demo-frame"><ol class="steps">
-<li>Open Mapshaper and add all parts of the landform-region Shapefile together.</li>
-<li>Confirm that the polygons appear and that the attribute table is attached.</li>
-<li>Click <strong>Simplify</strong>.</li>
-<li>Use the default weighted-area method unless the geometry develops obvious problems.</li>
-<li>Reduce the detail enough to make the file smaller while preserving recognizable boundaries.</li>
-<li>Turn on <strong>Prevent shape removal</strong> if small polygons begin disappearing.</li>
-<li>Apply the simplification and inspect the result at several zoom levels.</li>
-</ol><div class="callout"><strong>Simplification removes unnecessary vertices</strong><p>The goal is not to make the shapes crude. It is to remove coordinate detail that will not be visible at the map’s final display size.</p></div></div></section>
-<section class="section-group" id="section-4"><h2>Section 4: Add tooltip information in Mapshaper</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Create a field named tooltip</h3></div><span class="tag">Step 4</span></div><div class="demo-frame"><p>You can complete this step in Mapshaper. You do not need to move the landform data into geojson.io.</p><ol class="steps">
-<li>Turn on Mapshaper’s data-inspection tool and select a polygon.</li>
-<li>Review the existing attributes to see whether a useful region-name field already exists.</li>
+└── data/</code></pre>
+</div></section>
+<section class="section-group" id="section-2"><h2>Section 2: Download the Iowa landform Shapefile</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Download the source data</h3></div><span class="tag">Data</span></div><div class="demo-frame">
+<ol class="steps">
+<li>Open the <a href="https://geodata.iowa.gov/documents/6ae753dc8f2b4993a8a02910ff13ef0b/about" rel="noopener" target="_blank">Iowa landform regions dataset page</a>.</li>
+<li>Download the Shapefile version.</li>
+<li>Unzip the download.</li>
+<li>Keep all Shapefile parts together.</li>
+</ol>
+<div class="callout"><strong>A Shapefile is a bundle</strong><p>The geometry, attributes, and coordinate-system information are split across files such as <code>.shp</code>, <code>.dbf</code>, <code>.shx</code>, and <code>.prj</code>. Mapshaper needs the related files together.</p></div>
+</div></section>
+<section class="section-group" id="section-3"><h2>Section 3: Import the Shapefile into Mapshaper</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Upload all related files at once</h3></div><span class="tag">Mapshaper</span></div><div class="demo-frame">
+<ol class="steps">
+<li>Open <a href="https://mapshaper.org/" rel="noopener" target="_blank">mapshaper.org</a>.</li>
+<li>Drag the complete set of Shapefile parts into the import window, or select all of them together with the file picker.</li>
+<li>Do not upload only the <code>.shp</code> file. The <code>.dbf</code> contains the attribute table, and the <code>.prj</code> identifies the source projection.</li>
+<li>Choose <strong>Import</strong> and confirm that the polygons appear.</li>
+<li>Open the data table and verify that the landform-name field is present.</li>
+</ol>
+</div></section>
+<section class="section-group" id="section-4"><h2>Section 4: Reproject the data to WGS84</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Convert projected coordinates to longitude and latitude</h3></div><span class="tag">Projection</span></div><div class="demo-frame">
+<p>The source data uses a projected coordinate system measured in linear units. D3 geographic projections work most predictably when GeoJSON uses WGS84 longitude and latitude.</p>
+<ol class="steps">
+<li>Open Mapshaper’s <strong>Console</strong>.</li>
+<li>Run:</li>
+</ol>
+<pre><code>-proj wgs84</code></pre>
+<ol class="steps" start="3">
+<li>Export the layer as GeoJSON before simplifying it.</li>
+<li>Record the downloaded file size. This gives you a baseline for comparison.</li>
+</ol>
+<div class="callout"><strong>How to recognize WGS84</strong><p>Iowa coordinates should look approximately like longitude <code>-97</code> to <code>-90</code> and latitude <code>40</code> to <code>44</code>. Six- or seven-digit coordinate values usually indicate a projected system rather than longitude and latitude.</p></div>
+</div></section>
+<section class="section-group" id="section-5"><h2>Section 5: Simplify the lobes and add tooltip data</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Reduce the file to 10 percent of its detail</h3></div><span class="tag">Optimize</span></div><div class="demo-frame">
+<ol class="steps">
+<li>Choose <strong>Simplify</strong>.</li>
+<li>Keep the default weighted-area method.</li>
+<li>Set the retained detail to <strong>10%</strong>.</li>
+<li>Turn on <strong>Prevent shape removal</strong> if small polygons disappear.</li>
+<li>Apply the simplification and inspect the boundaries.</li>
+<li>Open the data table.</li>
 <li>Add a field named <code>tooltip</code>.</li>
-<li>Enter the sentence or short description that should appear for that polygon.</li>
-<li>Repeat for each landform region.</li>
-<li>Export the layer as GeoJSON and name it <code>landform-lobes.geojson</code>.</li>
-<li>Move the exported file into the project’s <code>data</code> folder.</li>
-</ol><div class="subsection"><h4>Console option</h4></div><p>The Mapshaper console can also create a field with <code>-each</code>. This is useful when a value can be copied or calculated consistently.</p><pre><code>-each 'tooltip = NAME'</code></pre><p>Replace <code>NAME</code> with the existing attribute that contains the landform name. For individually written descriptions, editing the records through the inspection interface is more direct.</p></div></section>
-<section class="section-group" id="section-5"><h2>Section 5: Draw custom geological features</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Create a separate annotation layer in geojson.io</h3></div><span class="tag">Step 5</span></div><div class="demo-frame"><ol class="steps">
-<li>Open geojson.io.</li>
-<li>Load the supplied <code>iowa.geojson</code> file so you can draw in the correct location.</li>
-<li>Use the polygon tool to outline the first geological feature.</li>
-<li>Add a <code>name</code> property and a short <code>description</code> property.</li>
-<li>Draw the remaining feature polygons and add the same properties to each one.</li>
-<li>Delete the Iowa background feature before exporting so this file contains only your custom polygons.</li>
-<li>Save the result as <code>custom-features.geojson</code> inside the project’s <code>data</code> folder.</li>
-</ol><div class="callout"><strong>These polygons are explanatory, not authoritative</strong><p>Draw only as precisely as the story requires. The map should identify and discuss the feature without implying a surveyed or legally exact boundary.</p></div></div></section>
-<section class="section-group" id="section-6"><h2>Section 6: Set up the HTML</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Add the map container, toggle, tooltip, and D3</h3></div><span class="tag">Step 6</span></div><div class="demo-frame"><pre><code>&lt;main class="map-page"&gt;
-  &lt;header class="intro"&gt;
-    &lt;p class="eyebrow"&gt;Iowa geology&lt;/p&gt;
-    &lt;h1&gt;How glaciers shaped Iowa&lt;/h1&gt;
-    &lt;p&gt;Explore Iowa's major landform regions and selected geological features.&lt;/p&gt;
-  &lt;/header&gt;
+<li>Enter the text that should appear for each lobe. You may copy the landform name into this field or write a fuller description.</li>
+<li>Export the simplified layer as GeoJSON.</li>
+<li>Record the new file size and compare it with the unsimplified export.</li>
+</ol>
+<div class="subsection"><h4>Console shortcut for the tooltip field</h4></div>
+<pre><code>-each 'tooltip = LANDFORM_R'</code></pre>
+<p>Replace <code>LANDFORM_R</code> if the landform-name field uses a different name.</p>
+</div></section>
+<section class="section-group" id="section-6"><h2>Section 6: Dissolve the lobes into an Iowa outline</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Create one background polygon</h3></div><span class="tag">Context layer</span></div><div class="demo-frame">
+<ol class="steps">
+<li>Duplicate or re-import the simplified lobe layer so you can preserve the original lobes.</li>
+<li>Select the copy.</li>
+<li>Run this command in the console:</li>
+</ol>
+<pre><code>-dissolve</code></pre>
+<ol class="steps" start="4">
+<li>The internal lobe boundaries should disappear, leaving one Iowa outline.</li>
+<li>Add a data field named <code>name</code> and give it the value <code>Iowa</code>.</li>
+<li>Export the dissolved layer as GeoJSON.</li>
+</ol>
+<div class="callout"><strong>Rename Mapshaper exports</strong><p>Mapshaper may download GeoJSON with a <code>.json</code> extension. Rename the files to <code>lobes.geojson</code> and <code>iowa.geojson</code>, then move them into the project’s <code>data</code> folder.</p></div>
+</div></section>
+<section class="section-group" id="section-7"><h2>Section 7: Draw custom features in geojson.io</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Create a point, line, and polygon</h3></div><span class="tag">Custom layer</span></div><div class="demo-frame">
+<ol class="steps">
+<li>Open <a href="https://geojson.io/" rel="noopener" target="_blank">geojson.io</a>.</li>
+<li>Load <code>iowa.geojson</code> for geographic reference.</li>
+<li>Draw one point, one line, and one polygon.</li>
+<li>Select each feature and add a property named <code>tooltip</code>.</li>
+<li>Enter a short description for each feature.</li>
+<li>Delete the Iowa reference polygon before exporting.</li>
+<li>Export the custom features as GeoJSON.</li>
+<li>Rename the file <code>custom-features.geojson</code> and place it in the <code>data</code> folder.</li>
+</ol>
+<pre><code>data/
+├── iowa.geojson
+├── lobes.geojson
+└── custom-features.geojson</code></pre>
+</div></section>
+<section class="section-group" id="section-8"><h2>Section 8: Set up the HTML and CSS</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Build the page structure</h3></div><span class="tag">HTML</span></div><div class="demo-frame">
+<p>Paste this into <code>index.html</code>:</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;Iowa Landform Map&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;main&gt;
+    &lt;h1&gt;Iowa Landform Regions&lt;/h1&gt;
+    &lt;p&gt;Explore Iowa's landform lobes and selected custom features.&lt;/p&gt;
 
-  &lt;div class="map-controls"&gt;
-    &lt;label&gt;
+    &lt;label class="map-toggle"&gt;
       &lt;input type="checkbox" id="featureToggle" checked&gt;
-      Show featured geological areas
+      Show custom features
     &lt;/label&gt;
-  &lt;/div&gt;
 
-  &lt;div id="map" aria-label="Map of Iowa landform regions"&gt;&lt;/div&gt;
-  &lt;div id="tooltip" class="tooltip" role="status" aria-live="polite"&gt;&lt;/div&gt;
-&lt;/main&gt;
+    &lt;div id="map"&gt;&lt;/div&gt;
+    &lt;div id="tooltip" class="tooltip" role="status" aria-live="polite"&gt;&lt;/div&gt;
+  &lt;/main&gt;
 
-&lt;script src="https://cdn.jsdelivr.net/npm/d3@7"&gt;&lt;/script&gt;
-&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre><div class="callout"><strong>Load D3 before your own JavaScript</strong><p>Your script uses the global <code>d3</code> object. The library must load first.</p></div></div></section>
-<section class="section-group" id="section-7"><h2>Section 7: Create a responsive SVG</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Use a viewBox instead of fixed display dimensions</h3></div><span class="tag">Step 7</span></div><div class="demo-frame"><pre><code>const width = 900;
-const height = 650;
+  &lt;script src="https://cdn.jsdelivr.net/npm/d3@7"&gt;&lt;/script&gt;
+  &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<div class="callout"><strong>Order matters</strong><p>Load D3 before <code>script.js</code> because your code uses the global <code>d3</code> object.</p></div>
+<div class="subsection"><h4>Move the styles into styles.css</h4></div>
+<pre><code>* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  color: #17211b;
+  background: #f7f4ec;
+}
+
+main { max-width: 1100px; margin: 0 auto; }
+
+#map {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+#map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.iowa {
+  fill: #f2efe6;
+  stroke: #202820;
+  stroke-width: 1.5;
+}
+
+.lobe {
+  fill: #b9cbb7;
+  stroke: white;
+  stroke-width: 1;
+}
+
+/* You will customize these colors later. */
+.southern-iowa-drift-plain { fill: #b9cbb7; }
+.des-moines-lobe { fill: #91ad9c; }
+.iowan-surface { fill: #d2bd8d; }
+
+.custom-point { fill: #d8893a; stroke: #6e3c12; stroke-width: 2; }
+.custom-line { fill: none; stroke: #8a4e18; stroke-width: 4; }
+.custom-polygon { fill: #d8893a; fill-opacity: .35; stroke: #8a4e18; stroke-width: 2; stroke-dasharray: 6 4; }
+
+.custom-layer { transition: opacity 200ms ease; }
+.custom-layer.is-hidden { opacity: 0; pointer-events: none; }
+
+.tooltip {
+  position: fixed;
+  z-index: 10;
+  max-width: 280px;
+  padding: .75rem;
+  color: white;
+  background: #17211b;
+  border-radius: .5rem;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.tooltip.is-visible { opacity: 1; }</code></pre>
+</div></section>
+<section class="section-group" id="section-9"><h2>Section 9: Create a responsive SVG</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Create the canvas and layer groups</h3></div><span class="tag">JavaScript</span></div><div class="demo-frame">
+<p>Add this to <code>script.js</code>:</p>
+<pre><code>const width = 900;
+const height = 600;
 
 const svg = d3.select("#map")
   .append("svg")
@@ -266,159 +371,190 @@ svg.append("title")
 
 svg.append("desc")
   .attr("id", "mapDescription")
-  .text("A map showing Iowa landform regions and selected geological features.");
+  .text("A map of Iowa landform lobes with custom point, line, and polygon features.");
 
 const iowaLayer = svg.append("g").attr("class", "iowa-layer");
-const landformLayer = svg.append("g").attr("class", "landform-layer");
-const featureLayer = svg.append("g").attr("class", "feature-layer");</code></pre><p>The order matters. SVG draws later elements on top of earlier elements, so the Iowa context goes first and the custom feature layer goes last.</p></div></section>
-<section class="section-group" id="section-8"><h2>Section 8: Load all three GeoJSON files</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Wait until every dataset is available</h3></div><span class="tag">Step 8</span></div><div class="demo-frame"><pre><code>Promise.all([
+const lobeLayer = svg.append("g").attr("class", "lobe-layer");
+const customLayer = svg.append("g").attr("class", "custom-layer");</code></pre>
+</div></section>
+<section class="section-group" id="section-10"><h2>Section 10: Load all three GeoJSON files</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Wait until every dataset has loaded</h3></div><span class="tag">JavaScript</span></div><div class="demo-frame">
+<pre><code>Promise.all([
   d3.json("data/iowa.geojson"),
-  d3.json("data/landform-lobes.geojson"),
+  d3.json("data/lobes.geojson"),
   d3.json("data/custom-features.geojson")
-]).then(([iowa, landforms, customFeatures]) =&gt; {
-  drawMap(iowa, landforms, customFeatures);
-}).catch(error =&gt; {
-  console.error("Map data failed to load:", error);
-  d3.select("#map").append("p")
-    .text("The map data could not be loaded.");
-});</code></pre><div class="callout"><strong>Run the project through Live Server</strong><p>Do not open <code>index.html</code> by double-clicking it. Browser security rules can block JavaScript from loading local GeoJSON files from a <code>file://</code> address.</p></div></div></section>
-<section class="section-group" id="section-9"><h2>Section 9: Project and draw the map layers</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Use one Albers USA projection for every layer</h3></div><span class="tag">Step 9</span></div><div class="demo-frame"><pre><code>function drawMap(iowa, landforms, customFeatures) {
+])
+  .then(([iowa, lobes, customFeatures]) =&gt; {
+    drawMap(iowa, lobes, customFeatures);
+  })
+  .catch(error =&gt; {
+    console.error("Map data failed to load:", error);
+    d3.select("#map").append("p")
+      .text("The map data could not be loaded.");
+  });</code></pre>
+<div class="callout"><strong>Use Live Server</strong><p>Do not open the HTML file by double-clicking it. Browsers may block local GeoJSON requests from a <code>file://</code> address.</p></div>
+</div></section>
+<section class="section-group" id="section-11"><h2>Section 11: Project and draw the map layers</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Use one projection for all geometry types</h3></div><span class="tag">JavaScript</span></div><div class="demo-frame">
+<pre><code>function slugify(value = "") {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function drawMap(iowa, lobes, customFeatures) {
   const projection = d3.geoAlbersUsa()
     .fitExtent([[30, 30], [width - 30, height - 30]], iowa);
 
-  const path = d3.geoPath(projection);
+  const path = d3.geoPath(projection).pointRadius(7);
 
   iowaLayer.selectAll("path")
     .data(iowa.features)
     .join("path")
+    .attr("class", "iowa")
     .attr("d", path);
 
-  landformLayer.selectAll("path")
-    .data(landforms.features)
+  lobeLayer.selectAll("path")
+    .data(lobes.features)
     .join("path")
+    .attr("class", d =&gt; {
+      const name = d.properties.LANDFORM_R || d.properties.name || "lobe";
+      return `lobe ${slugify(name)}`;
+    })
     .attr("d", path)
     .attr("tabindex", 0);
 
-  featureLayer.selectAll("path")
+  customLayer.selectAll("path")
     .data(customFeatures.features)
     .join("path")
-    .attr("d", path);
-}</code></pre><div class="callout"><strong>Fit the projection to the Iowa boundary</strong><p><code>fitExtent()</code> calculates the scale and translation needed to place Iowa inside the SVG with consistent margins. Reuse that projection for the landforms and custom polygons so the layers align.</p></div></div></section>
-<section class="section-group" id="section-10"><h2>Section 10: Add accessible tooltips</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Show the same information on hover and keyboard focus</h3></div><span class="tag">Step 10</span></div><div class="demo-frame"><pre><code>const tooltip = d3.select("#tooltip");
+    .attr("class", d =&gt; {
+      const type = d.geometry.type;
+      if (type === "Point" || type === "MultiPoint") return "custom-point";
+      if (type === "LineString" || type === "MultiLineString") return "custom-line";
+      return "custom-polygon";
+    })
+    .attr("d", path)
+    .attr("tabindex", 0);
+}</code></pre>
+<p><code>geoPath()</code> can draw polygons, lines, and points. <code>pointRadius(7)</code> tells it how large the point symbol should be.</p>
+</div></section>
+<section class="section-group" id="section-12"><h2>Section 12: Correct polygon winding</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Fix polygons that D3 reads as the outside of the shape</h3></div><span class="tag">Debugging</span></div><div class="demo-frame">
+<p>You may see the SVG fill with black or another solid color. The coordinates can be correct while the polygon rings travel in a direction that makes D3 interpret the polygon as nearly the entire globe.</p>
+<div class="callout"><strong>A polygon identifies both a border and a side</strong><p>The coordinate order tells geographic software which side of the border is the polygon’s interior. Different GIS tools do not always use the same winding convention.</p></div>
+<p>Add this function above <code>drawMap()</code>:</p>
+<pre><code>function fixWinding(geojson) {
+  geojson.features.forEach(feature =&gt; {
+    const type = feature.geometry?.type;
+
+    if ((type === "Polygon" || type === "MultiPolygon") &amp;&amp;
+        d3.geoArea(feature) &gt; 2 * Math.PI) {
+
+      if (type === "Polygon") {
+        feature.geometry.coordinates.forEach(ring =&gt; ring.reverse());
+      } else {
+        feature.geometry.coordinates.forEach(polygon =&gt; {
+          polygon.forEach(ring =&gt; ring.reverse());
+        });
+      }
+    }
+  });
+
+  return geojson;
+}</code></pre>
+<p>Then add these lines at the beginning of <code>drawMap()</code>:</p>
+<pre><code>iowa = fixWinding(iowa);
+lobes = fixWinding(lobes);
+customFeatures = fixWinding(customFeatures);</code></pre>
+<p>The test uses <code>d3.geoArea()</code>. A small Iowa polygon should cover a tiny part of the sphere. If D3 reports more than half the globe, the code reverses that polygon’s rings.</p>
+</div></section>
+<section class="section-group" id="section-13"><h2>Section 13: Customize individual lobe colors</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Use the generated class names in CSS</h3></div><span class="tag">Style</span></div><div class="demo-frame">
+<p>The JavaScript turns each landform name into a CSS-safe class. For example, <code>Southern Iowa Drift Plain</code> becomes <code>southern-iowa-drift-plain</code>.</p>
+<pre><code>.southern-iowa-drift-plain { fill: #b7c8a6; }
+.des-moines-lobe { fill: #8fb3a2; }
+.iowan-surface { fill: #d8bd83; }
+.paleozoic-plateau { fill: #a5a7c7; }</code></pre>
+<p>Open the browser inspector or examine the landform names in the data table to find the classes you need. Keep a visible stroke between adjacent lobes.</p>
+</div></section>
+<section class="section-group" id="section-14"><h2>Section 14: Add tooltip functionality</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Use one tooltip for lobes and custom features</h3></div><span class="tag">Interaction</span></div><div class="demo-frame">
+<p>Add this below the layer declarations:</p>
+<pre><code>const tooltip = d3.select("#tooltip");
+
+function tooltipText(feature) {
+  return feature.properties.tooltip ||
+    feature.properties.LANDFORM_R ||
+    feature.properties.name ||
+    "No description available";
+}
 
 function showTooltip(event, feature) {
   tooltip
-    .text(feature.properties.tooltip || "No description available")
+    .text(tooltipText(feature))
+    .classed("is-visible", true);
+
+  moveTooltip(event);
+}
+
+function moveTooltip(event) {
+  tooltip
+    .style("left", `${event.clientX + 14}px`)
+    .style("top", `${event.clientY + 14}px`);
+}
+
+function showFocusedTooltip(feature) {
+  tooltip
+    .text(tooltipText(feature))
     .classed("is-visible", true)
-    .style("left", `${event.pageX + 12}px`)
-    .style("top", `${event.pageY + 12}px`);
+    .style("left", "1rem")
+    .style("top", "1rem");
 }
 
 function hideTooltip() {
   tooltip.classed("is-visible", false);
+}</code></pre>
+<p>At the end of <code>drawMap()</code>, add:</p>
+<pre><code>function addTooltipEvents(selection) {
+  selection
+    .on("pointerenter", showTooltip)
+    .on("pointermove", moveTooltip)
+    .on("pointerleave", hideTooltip)
+    .on("focus", (event, feature) =&gt; showFocusedTooltip(feature))
+    .on("blur", hideTooltip);
 }
 
-landformLayer.selectAll("path")
-  .on("pointerenter pointermove", showTooltip)
-  .on("pointerleave", hideTooltip)
-  .on("focus", function(event, feature) {
-    tooltip
-      .text(feature.properties.tooltip || "No description available")
-      .classed("is-visible", true)
-      .style("left", "1rem")
-      .style("top", "1rem");
-  })
-  .on("blur", hideTooltip);</code></pre><p>Each landform path receives <code>tabindex="0"</code> in the previous step. That makes the polygons keyboard-focusable rather than limiting the information to mouse users.</p></div></section>
-<section class="section-group" id="section-11"><h2>Section 11: Toggle the custom feature layer</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Connect the checkbox to the SVG group</h3></div><span class="tag">Step 11</span></div><div class="demo-frame"><pre><code>d3.select("#featureToggle").on("change", function() {
-  featureLayer
-    .classed("is-hidden", !this.checked)
-    .attr("aria-hidden", String(!this.checked));
-});</code></pre><pre><code>.feature-layer {
-  opacity: 1;
-  transition: opacity 200ms ease;
-}
+addTooltipEvents(lobeLayer.selectAll("path"));
+addTooltipEvents(customLayer.selectAll("path"));</code></pre>
 
-.feature-layer.is-hidden {
-  opacity: 0;
-  pointer-events: none;
-}</code></pre><div class="callout"><strong>Hide the group, not each polygon separately</strong><p>Because the custom polygons are collected in one SVG group, a single class can control the complete layer.</p></div></div></section>
-<section class="section-group" id="section-12"><h2>Section 12: Style and label the map</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Create a clear visual hierarchy</h3></div><span class="tag">Step 12</span></div><div class="demo-frame"><pre><code>#map svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
+</div></section>
+<section class="section-group" id="section-15"><h2>Section 15: Add the custom-layer checkbox</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Hide or show the complete SVG group</h3></div><span class="tag">Interaction</span></div><div class="demo-frame">
+<p>Add this after <code>drawMap()</code>:</p>
+<pre><code>d3.select("#featureToggle").on("change", function() {
+  const isHidden = !this.checked;
 
-.iowa-layer path {
-  fill: #f3f1e9;
-  stroke: #303732;
-  stroke-width: 1.5;
-}
-
-.landform-layer path {
-  fill: #b9cbb7;
-  fill-opacity: 0.78;
-  stroke: #ffffff;
-  stroke-width: 1;
-  cursor: help;
-}
-
-.landform-layer path:hover,
-.landform-layer path:focus {
-  fill-opacity: 1;
-  stroke: #17211b;
-  outline: none;
-}
-
-.feature-layer path {
-  fill: #d8893a;
-  fill-opacity: 0.4;
-  stroke: #8a4e18;
-  stroke-width: 2;
-  stroke-dasharray: 6 4;
-}
-
-.tooltip {
-  position: absolute;
-  max-width: 280px;
-  padding: 0.75rem;
-  background: #17211b;
-  color: white;
-  border-radius: 0.5rem;
-  pointer-events: none;
-  opacity: 0;
-}
-
-.tooltip.is-visible { opacity: 1; }</code></pre><ul class="steps">
-<li>Keep the Iowa boundary visually quiet because it provides context.</li>
-<li>Give the landform layer enough contrast to show its internal divisions.</li>
-<li>Use a distinct treatment for the custom annotation polygons.</li>
-<li>Add only labels that improve orientation or identify the featured locations.</li>
-<li>Do not rely on color alone to separate the custom features; the dashed outline provides a second cue.</li>
-</ul></div></section>
-<section class="section-group" id="section-13"><h2>Section 13: Test the final project</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Check data, interaction, and production quality</h3></div><span class="tag">Step 13</span></div><div class="demo-frame"><ul class="steps">
-<li>Confirm that the Iowa boundary, landform polygons, and custom polygons align.</li>
-<li>Check the browser console for missing files or GeoJSON errors.</li>
-<li>Hover over every landform region and review its tooltip text.</li>
-<li>Use the Tab key to reach every landform polygon and confirm the tooltip also appears on focus.</li>
-<li>Turn the custom feature layer off and on several times.</li>
-<li>Test the map from wide desktop screens down to narrow phone widths.</li>
-<li>Check that the map has no horizontal scrolling and that the tooltip remains readable.</li>
-<li>Confirm that the map title, introductory text, legend or explanatory key, and source attribution are present.</li>
-<li>Credit the source of the Iowa boundary and landform-region data. Identify the custom polygons as approximate annotations created for the project.</li>
-</ul></div></section>
-<section class="section-group" id="submission"><h2>Submission</h2></section>
-<section class="pattern submission-box"><div class="pattern-header"><div><h3>Submit the published map</h3><p>Your submission should include the working public project and its supporting files.</p></div><span class="tag">Final</span></div><div class="demo-frame"><ul class="steps">
-<li>Publish the complete <code>iowa-geology-map</code> folder with GitHub Pages.</li>
-<li>Submit the public GitHub Pages URL, not a local Live Server address.</li>
-<li>Confirm that the repository includes all three GeoJSON files.</li>
-<li>Test the public URL in a private browser window before submitting it.</li>
-</ul></div></section>
+  customLayer
+    .classed("is-hidden", isHidden)
+    .attr("aria-hidden", String(isHidden));
+});</code></pre>
+<p>The checkbox changes one class on the group containing the point, line, and polygon. The CSS fades the group and disables pointer interaction while it is hidden.</p>
+</div></section>
+<section class="section-group" id="section-16"><h2>Section 16: Test and submit</h2></section>
+<section class="pattern submission-box"><div class="pattern-header"><div><h3>Check the complete project</h3></div><span class="tag">Finish</span></div><div class="demo-frame">
+<ul class="steps">
+<li>Confirm that Iowa, all lobes, and all three custom geometry types appear.</li>
+<li>Confirm that the lobes align with the Iowa outline.</li>
+<li>Hover over and keyboard-focus the lobes and custom features.</li>
+<li>Turn the custom-feature checkbox off and on.</li>
+<li>Resize the browser and confirm that the SVG remains responsive.</li>
+<li>Check the browser console for loading or JavaScript errors.</li>
+<li>Zip the complete project folder and submit the ZIP file.</li>
+</ul>
+<div class="callout"><strong>Using the map in a larger project</strong><p>You could publish the folder with GitHub Pages and embed it with an iframe. You could also use a hybrid method in which the surrounding story is built in another platform while the custom map is hosted separately.</p></div>
+</div></section>
 </main>
 </div>
 <script>

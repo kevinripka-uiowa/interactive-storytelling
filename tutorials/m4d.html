@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Build a Scroll-Driven Bird Map with Mapbox</title>
+<style>
+    :root {
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --warn:#fff8ed;
+      --shadow:0 14px 35px rgba(23,33,27,.12); --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    img, video, iframe, svg { max-width:100%; }
+    .layout { min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow:auto; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+    .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+    main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+    .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
+    .hero p { max-width:830px; margin:0 0 10px; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:860px; }
+    .concept-callout strong { color:var(--ink); }
+    .overview-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:22px; }
+    .meta-card { padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; min-width:0; }
+    .meta-card h4 { margin:0 0 8px; font-size:1.12rem; }
+    .meta-card p { margin:0; }
+    .meta-card a { color:var(--accent); font-weight:900; text-decoration-thickness:2px; text-underline-offset:3px; }
+    .video-section { margin-bottom:34px; }
+    .video-card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,26px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .video-card h3 { margin:0 0 8px; font-size:clamp(1.25rem,2.2vw,1.65rem); letter-spacing:-.03em; }
+    .video-card p { margin:0 0 14px; color:var(--muted); }
+    .video-embed { position:relative; width:100%; aspect-ratio:16/9; border-radius:16px; overflow:hidden; background:#17211b; border:1px solid var(--line); }
+    .video-embed iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0 0 12px; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
+    .steps { margin:8px 0 16px; padding-left:1.4rem; color:var(--muted); }
+    .steps li + li { margin-top:6px; }
+    .callout { margin:16px 0; padding:14px 16px; border-radius:16px; border:1px solid var(--line); border-left:5px solid var(--accent-2); background:#fff8ed; color:var(--muted); }
+    .callout strong { display:block; color:var(--ink); margin-bottom:4px; }
+    .callout p { margin:0; }
+    .subsection { margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
+    pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
+    code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
+    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+    button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+    button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+    @media (max-width: 860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-text { font-weight:900; }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important; padding:76px 22px 28px; overflow-y:auto!important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
+      .pattern-header { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+      .overview-grid { grid-template-columns:1fr; }
+      .hero { border-radius:20px; }
+    }
+    @media (max-width:520px) {
+      .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+      .demo-frame { padding:14px; }
+    }
+    @media print {
+      @page { margin:0.45in; }
+      * { box-shadow:none!important; text-shadow:none!important; }
+      html, body { overflow:visible!important; background:#fff!important; color:#111!important; font-family:Georgia, "Times New Roman", serif; font-size:10pt!important; line-height:1.22!important; }
+      .sidebar, .mobile-menu-toggle, .mobile-menu-backdrop, .video-section { display:none!important; }
+      main { margin:0!important; width:100%!important; padding:0!important; }
+      main > * { max-width:none!important; }
+      .hero, .pattern, .demo-frame, .meta-card, .callout, .submission-box { border:0!important; background:#fff!important; border-radius:0!important; padding:0!important; color:#111!important; }
+      .hero { margin:0 0 10pt!important; }
+      .hero h2 { font-size:18pt!important; line-height:1.02!important; margin:0 0 5pt!important; }
+      .eyebrow, .tag { color:#333!important; background:transparent!important; border:0!important; padding:0!important; font-size:8pt!important; }
+      p, li, td, th, .hero p, .section-group p, .pattern p, .note, .meta-card p, .callout, .submission-box p { color:#111!important; font-size:10pt!important; line-height:1.22!important; }
+      .concept-callout, .callout { border-left:2pt solid #555!important; padding-left:7pt!important; margin:6pt 0!important; }
+      .overview-grid { display:block!important; }
+      .meta-card { margin:0 0 6pt!important; }
+      .meta-card h4 { font-size:10.5pt!important; margin:0 0 2pt!important; }
+      .section-group { margin:12pt 0 4pt!important; padding-top:5pt!important; border-top:0.75pt solid #111!important; break-after:avoid; }
+      .section-group h2 { font-size:13pt!important; line-height:1.08!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern { margin:0 0 10pt!important; break-inside:auto; }
+      .pattern h3 { font-size:11.5pt!important; line-height:1.12!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern-header { display:block!important; margin-bottom:4pt!important; }
+      .steps, ol, ul { margin-top:3pt!important; margin-bottom:4pt!important; padding-left:18pt!important; }
+      .steps li + li, li + li { margin-top:1.5pt!important; }
+      .subsection { margin-top:6pt!important; padding-top:4pt!important; border-top:0.75pt solid #aaa!important; }
+      .subsection h4 { color:#111!important; font-size:10.5pt!important; line-height:1.1!important; margin:0 0 3pt!important; }
+      .demo-frame { margin:0!important; }
+      pre { white-space:pre-wrap!important; font-size:9pt!important; padding:4pt!important; border:0.5pt solid #777!important; background:#f7f7f7!important; color:#111!important; }
+      a { text-decoration:none!important; color:#111!important; }
+    }
+
+  </style>
+</head>
+<body>
+
+<button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
+<div class="layout">
+<aside class="sidebar" id="siteSidebar" aria-label="Tutorial navigation">
+<a href="../" class="home-button">&larr; Back to Home</a>
+<h1>Build a Scroll-Driven Bird Map with Mapbox</h1>
+<p>Tutorial M4 - Guided Map. Create a map story with Mapbox Studio and the Storytelling template.</p>
+<nav>
+<div class="nav-group-title">Start here</div>
+<a href="#overview">Overview</a><a href="#video">Video</a><a href="#before">Before you start</a>
+<div class="nav-group-title">Mapbox Studio</div>
+<a href="#section-1">1. Understand the workflow</a><a href="#section-2">2. Prepare the bird data</a><a href="#section-3">3. Create a custom style</a><a href="#section-4">4. Add and style layers</a><a href="#section-5">5. Prepare layer opacity</a><a href="#section-6">6. Publish the style</a>
+<div class="nav-group-title">Story configuration</div>
+<a href="#section-7">7. Download the template</a><a href="#section-8">8. Add the token and style</a><a href="#section-9">9. Build the opening chapter</a><a href="#section-10">10. Add terrain and 3D views</a><a href="#section-11">11. Change data layers</a><a href="#section-12">12. Add images and credits</a>
+<div class="nav-group-title">Production checks</div>
+<a href="#section-13">13. Test and revise</a><a href="#section-14">14. Publish with GitHub Pages</a><a href="#submission">Submission</a>
+</nav></aside>
+<main>
+<section class="hero" id="overview">
+<div class="eyebrow">Tutorial M4 - Guided Map</div>
+<h2>Build a Scroll-Driven Bird Map with Mapbox</h2>
+<p>In this tutorial, you will create a guided map story about bird migration. As the reader scrolls, the map will move from a continental overview to stopover habitat, an urban hazard, mountain terrain, and a breeding range.</p>
+<p>You will create and style the geographic layers in Mapbox Studio. You will then use the Mapbox Storytelling template and edit only <code>config.js</code> to control the story text, camera position, 3D terrain, and layer visibility.</p>
+<div class="concept-callout"><strong>Mapbox Studio builds the map; <code>config.js</code> directs the story.</strong> Studio controls the basemap and geographic layers. The configuration file controls where the camera moves and which prepared layers become visible in each chapter.</div>
+<div class="overview-grid" aria-label="Tutorial summary">
+<article class="meta-card"><h4>What you will build</h4><p>A full-page, scroll-driven bird migration story with custom points, lines, and polygons; pitched 3D views; mountain terrain; and chapter-based layer changes.</p></article>
+<article class="meta-card"><h4>What you will submit</h4><p>The public GitHub Pages URL and the complete project repository. Your project should use the standard template without adding custom JavaScript.</p></article>
+</div></section>
+<section class="video-section" id="video"><div class="video-card"><h3>Video walkthrough</h3><p>Replace <code>VIDEO_ID</code> with the ID from the recorded tutorial.</p><div class="video-embed"><iframe src="https://www.youtube.com/embed/VIDEO_ID" title="Build a scroll-driven bird map with Mapbox video tutorial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></div></section>
+<section class="section-group" id="before"><h2>Before you start</h2><p>Prepare the accounts, software, story material, and geographic data used in the project.</p></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Preparation checklist</h3></div><span class="tag">Setup</span></div><div class="demo-frame"><ul class="steps">
+<li>Create a Mapbox account and locate your public access token.</li><li>Open <a href="https://studio.mapbox.com/" target="_blank" rel="noopener">Mapbox Studio</a>.</li><li>Install Visual Studio Code and the Live Server extension.</li><li>Create or download three small GeoJSON files: a migration route, bird observation or stopover points, and a breeding or habitat range.</li><li>Prepare a short story of four to six chapters. Each chapter should have a geographic reason to move the map.</li><li>Prepare any photographs and record their sources, licenses, and alt text.</li></ul>
+<div class="callout"><strong>Use a public token, not a secret token</strong><p>A public Mapbox token normally begins with <code>pk.</code>. It will be visible in the published project. Never place a secret token in a public repository.</p></div></div></section>
+<section class="section-group" id="section-1"><h2>Section 1: Understand the workflow</h2><p>This project uses three connected pieces, but you will write story-specific content in only one file.</p></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Separate data, design, and choreography</h3></div><span class="tag">Concept</span></div><div class="demo-frame"><ul class="steps"><li><strong>GeoJSON:</strong> Stores the bird locations, routes, and range boundaries.</li><li><strong>Mapbox Studio:</strong> Uploads the data, converts it into hosted map data, styles each layer, and publishes a custom map style.</li><li><strong><code>config.js</code>:</strong> Stores the story chapters, camera locations, transition settings, and instructions for showing or hiding prepared layers.</li></ul><div class="callout"><strong>Do not add raw GeoJSON in <code>config.js</code></strong><p>The standard Storytelling template expects custom layers to already exist in the Mapbox Studio style. The configuration file changes their opacity as the reader moves through the story.</p></div></div></section>
+<section class="section-group" id="section-2"><h2>Section 2: Prepare the bird data</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Use a different geometry for each story job</h3></div><span class="tag">Step 2</span></div><div class="demo-frame"><ul class="steps"><li><strong>Points:</strong> Stopover sites, nesting locations, collision reports, or notable observations.</li><li><strong>Lines:</strong> A simplified migration route or movement corridor.</li><li><strong>Polygons:</strong> Breeding range, wintering range, wetland habitat, or a conservation area.</li></ul><p>Keep the example data small. Every feature should include useful properties such as <code>name</code>, <code>type</code>, <code>season</code>, or <code>description</code>.</p><pre><code>{
+  "type": "Feature",
+  "properties": {
+    "name": "Iowa River Corridor",
+    "type": "stopover habitat"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [-91.53, 41.66]
+  }
+}</code></pre><div class="callout"><strong>Use demonstration data responsibly</strong><p>Do not draw a migration route and present it as a precise scientific track. Label simplified or fictional data clearly, or use authoritative data and cite it.</p></div></div></section>
+<section class="section-group" id="section-3"><h2>Section 3: Create a custom Mapbox style</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Start with Mapbox Standard</h3></div><span class="tag">Step 3</span></div><div class="demo-frame"><ol class="steps"><li>In Mapbox Studio, open the <strong>Styles</strong> area.</li><li>Choose <strong>New style</strong>.</li><li>Use Mapbox Standard as the basemap.</li><li>Rename the style something specific, such as <strong>Bird Migration Story</strong>.</li><li>Adjust the basemap theme and label density so the custom bird layers will remain dominant.</li></ol><div class="callout"><strong>Mapbox Standard includes 3D context</strong><p>At a close zoom and high pitch, Standard can display 3D buildings and detailed landmarks without requiring you to add a custom building layer.</p></div></div></section>
+<section class="section-group" id="section-4"><h2>Section 4: Add and style the custom layers</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Upload each dataset and name every layer clearly</h3></div><span class="tag">Step 4</span></div><div class="demo-frame"><ol class="steps"><li>Choose <strong>Add new layer</strong>, then upload the first GeoJSON file.</li><li>Allow Mapbox Studio to convert the uploaded data into a tileset.</li><li>Choose the correct layer type: circle or symbol for points, line for routes, and fill for ranges.</li><li>Give the layer a short ID that will be easy to copy into <code>config.js</code>.</li><li>Repeat for the remaining datasets.</li></ol><pre><code>migration-route
+stopover-sites
+urban-hazards
+breeding-range</code></pre><div class="subsection"><h4>Style for hierarchy</h4><ul class="steps"><li>Make the migration route prominent enough to follow at a continental zoom.</li><li>Give points a visible stroke so they remain legible over varied basemap colors.</li><li>Use partial opacity for polygons so readers can still see geographic context.</li><li>Use more than color when possible. A dashed route or outlined polygon adds a second visual cue.</li></ul></div></div></section>
+<section class="section-group" id="section-5"><h2>Section 5: Prepare the layers for chapter control</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Set story-controlled layers to zero opacity</h3></div><span class="tag">Step 5</span></div><div class="demo-frame"><ol class="steps"><li>Select a custom layer that should be hidden when the story first loads.</li><li>Set its relevant opacity property to <code>0</code>.</li><li>For a circle layer, check both circle opacity and stroke opacity.</li><li>For a line layer, set line opacity to <code>0</code>.</li><li>For a fill layer, set fill opacity to <code>0</code> and consider whether the outline also needs to begin hidden.</li><li>Repeat for every layer that chapters will reveal later.</li></ol><div class="callout"><strong>Do not use the eye icon to hide the layer</strong><p>The Storytelling template changes paint opacity. A layer disabled in Studio may remain unavailable even when <code>config.js</code> tries to reveal it.</p></div></div></section>
+<section class="section-group" id="section-6"><h2>Section 6: Publish the Mapbox style</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Copy the style URL and layer IDs</h3></div><span class="tag">Step 6</span></div><div class="demo-frame"><ol class="steps"><li>Click <strong>Publish</strong> in Mapbox Studio.</li><li>Review the changes and confirm the publication.</li><li>Open the style’s sharing or developer resources.</li><li>Copy the Style URL. It should begin with <code>mapbox://styles/</code>.</li><li>Record the exact IDs of all custom layers. Spelling and capitalization must match.</li></ol><pre><code>mapbox://styles/your-username/your-style-id</code></pre></div></section>
+<section class="section-group" id="section-7"><h2>Section 7: Download and open the Storytelling template</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Use the official Mapbox repository</h3></div><span class="tag">Step 7</span></div><div class="demo-frame"><ol class="steps"><li>Open the <a href="https://github.com/mapbox/storytelling" target="_blank" rel="noopener">Mapbox Storytelling repository</a>.</li><li>Choose <strong>Code</strong>, then <strong>Download ZIP</strong>.</li><li>Unzip the project and rename the folder for your story.</li><li>Open the complete folder in Visual Studio Code.</li><li>Open <code>config.js.template</code> or the supplied configuration example.</li><li>Save a working copy as <code>config.js</code> if the downloaded version does not already include one.</li><li>Start Live Server from <code>index.html</code>.</li></ol><div class="callout"><strong>Leave the template JavaScript alone</strong><p>For this tutorial, do not edit the application code. Your work should be limited to Mapbox Studio, <code>config.js</code>, story images, and minor visual changes only when directed.</p></div></div></section>
+<section class="section-group" id="section-8"><h2>Section 8: Add the access token and custom style</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Configure the story-level settings</h3></div><span class="tag">Step 8</span></div><div class="demo-frame"><pre><code>var config = {
+  style: 'mapbox://styles/your-username/your-style-id',
+  accessToken: 'YOUR_PUBLIC_MAPBOX_TOKEN',
+  showMarkers: false,
+  markerColor: '#37634e',
+  theme: 'light',
+  use3dTerrain: true,
+  title: 'A Bird\'s Journey North',
+  subtitle: 'Migration connects habitats across a continent',
+  byline: 'By Your Name',
+  footer: 'Sources and image credits go here.',
+  chapters: [
+    // Story chapters go here
+  ]
+};</code></pre><ul class="steps"><li>Paste your public token into <code>accessToken</code>.</li><li>Paste the published custom Style URL into <code>style</code>.</li><li>Set <code>use3dTerrain</code> to <code>true</code> so pitched mountain views use elevation.</li><li>Use <code>showMarkers: false</code> when custom point layers already identify locations.</li></ul></div></section>
+<section class="section-group" id="section-9"><h2>Section 9: Build the opening chapter</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Introduce the full migration system</h3></div><span class="tag">Step 9</span></div><div class="demo-frame"><pre><code>{
+  id: 'continental-overview',
+  alignment: 'left',
+  hidden: false,
+  title: 'A continental journey',
+  image: './images/warbler.jpg',
+  description: 'Each spring, migratory birds move through a connected chain of habitats.',
+  location: {
+    center: [-96.5, 39.5],
+    zoom: 3.4,
+    pitch: 0,
+    bearing: 0
+  },
+  mapAnimation: 'flyTo',
+  rotateAnimation: false,
+  callback: '',
+  onChapterEnter: [
+    { layer: 'migration-route', opacity: 0.85, duration: 1000 }
+  ],
+  onChapterExit: []
+}</code></pre><div class="subsection"><h4>Chapter anatomy</h4><ul class="steps"><li><code>id</code> must be unique and should use lowercase words separated by hyphens.</li><li><code>alignment</code> controls where the text panel sits over the map.</li><li><code>location</code> controls center, zoom, pitch, and bearing.</li><li><code>mapAnimation</code> can use <code>flyTo</code>, <code>easeTo</code>, or <code>jumpTo</code>.</li><li><code>onChapterEnter</code> reveals or mutes prepared Studio layers.</li></ul></div><div class="callout"><strong>Longitude comes first</strong><p>Mapbox coordinates use <code>[longitude, latitude]</code>. Reversing them usually sends the camera to the wrong place or outside the valid map range.</p></div></div></section>
+<section class="section-group" id="section-10"><h2>Section 10: Add 3D terrain and city views</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Use pitch and bearing to reveal depth</h3></div><span class="tag">Step 10</span></div><div class="demo-frame"><p>The global <code>use3dTerrain: true</code> setting enables terrain. Individual chapters determine whether the reader can actually see the depth.</p><pre><code>{
+  id: 'mountain-passage',
+  alignment: 'right',
+  title: 'Crossing the mountains',
+  description: 'Elevation changes the route and concentrates birds in usable corridors.',
+  location: {
+    center: [-110.75, 43.75],
+    zoom: 9.2,
+    pitch: 65,
+    bearing: 28,
+    speed: 0.7,
+    curve: 1.3
+  },
+  mapAnimation: 'flyTo',
+  rotateAnimation: true,
+  callback: '',
+  onChapterEnter: [],
+  onChapterExit: []
+}</code></pre><p>For an urban chapter, move to a close zoom in a city and keep a high pitch. Mapbox Standard can display 3D buildings automatically where building data is available.</p><pre><code>location: {
+  center: [-87.6298, 41.8781],
+  zoom: 15.5,
+  pitch: 68,
+  bearing: -25
+}</code></pre><div class="callout"><strong>3D should explain something</strong><p>Use mountain relief to discuss terrain or use buildings to discuss urban hazards. Do not add dramatic pitch only because it looks impressive.</p></div></div></section>
+<section class="section-group" id="section-11"><h2>Section 11: Change data layers between chapters</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Reveal one layer and mute another</h3></div><span class="tag">Step 11</span></div><div class="demo-frame"><pre><code>onChapterEnter: [
+  { layer: 'migration-route', opacity: 0.2, duration: 800 },
+  { layer: 'stopover-sites', opacity: 1, duration: 800 },
+  { layer: 'wetland-habitat', opacity: 0.55, duration: 800 }
+],
+onChapterExit: [
+  { layer: 'stopover-sites', opacity: 0, duration: 500 },
+  { layer: 'wetland-habitat', opacity: 0, duration: 500 }
+]</code></pre><ul class="steps"><li>Use the exact layer ID from Mapbox Studio.</li><li>Use values between <code>0</code> and <code>1</code> for opacity.</li><li>Use duration values in milliseconds.</li><li>Keep important context visible at reduced opacity rather than turning everything off.</li><li>Set a layer’s exit state when the next chapter should no longer show it.</li></ul><div class="callout"><strong>The template changes opacity, not arbitrary filters</strong><p>For a config-only project, create separate Studio layers for categories such as spring observations and fall observations. Then reveal the correct layer in each chapter.</p></div></div></section>
+<section class="section-group" id="section-12"><h2>Section 12: Add images, text, and attribution</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Keep story assets inside the project</h3></div><span class="tag">Step 12</span></div><div class="demo-frame"><ol class="steps"><li>Create an <code>images</code> folder inside the Storytelling project.</li><li>Optimize each image before adding it. Use an appropriate display size and compressed JPEG or WebP format.</li><li>Reference the image with a relative path such as <code>./images/warbler.jpg</code>.</li><li>Keep chapter descriptions brief enough that readers can still see the map.</li><li>Add source citations and image credits in the footer or in the relevant chapter descriptions.</li><li>Use meaningful link text instead of pasting raw URLs into the visible story.</li></ol><div class="callout"><strong>The template’s image option does not include a separate alt-text field</strong><p>Inspect the finished output. When accessibility requirements cannot be met through configuration alone, choose images that are supplementary and describe essential information in the chapter text.</p></div></div></section>
+<section class="section-group" id="section-13"><h2>Section 13: Test and revise the story</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Check map behavior and story clarity</h3></div><span class="tag">Step 13</span></div><div class="demo-frame"><ul class="steps"><li>Scroll forward and backward through every chapter.</li><li>Confirm that every chapter moves to the intended place.</li><li>Check that all custom layers appear and disappear at the correct time.</li><li>Look for layer IDs that are misspelled or use the wrong capitalization.</li><li>Check the browser console for errors in <code>config.js</code>.</li><li>Test wide desktop, tablet, and phone widths.</li><li>Reduce pitch or zoom when the text panel blocks the map feature being discussed.</li><li>Confirm that the story still makes sense when motion is reduced.</li><li>Check that the final footer identifies data, map, image, and reporting sources.</li></ul><div class="callout"><strong>Punctuation errors can stop the entire configuration</strong><p>Check commas between chapters, matching braces and brackets, straight quotation marks, and apostrophes inside quoted text.</p></div></div></section>
+<section class="section-group" id="section-14"><h2>Section 14: Publish with GitHub Pages</h2></section>
+<section class="pattern"><div class="pattern-header"><div><h3>Publish the complete project folder</h3></div><span class="tag">Step 14</span></div><div class="demo-frame"><ol class="steps"><li>Create a GitHub repository for the project.</li><li>Commit and sync the complete Storytelling folder, including <code>index.html</code>, <code>config.js</code>, supporting scripts, styles, and images.</li><li>Open the repository settings and enable GitHub Pages from the main branch.</li><li>Open the public Pages URL and test it in a private browser window.</li><li>Confirm that the published map loads with your token and custom style.</li></ol><div class="callout"><strong>Publish this as a full page</strong><p>The Storytelling repository warns that its scroll-driven interface does not work as expected inside an iframe. Link to the full-page project rather than embedding it in another page.</p></div></div></section>
+<section class="section-group" id="submission"><h2>Submission</h2></section>
+<section class="pattern submission-box"><div class="pattern-header"><div><h3>Submit the published bird map story</h3><p>Your final project should demonstrate both geographic storytelling and responsible production.</p></div><span class="tag">Final</span></div><div class="demo-frame"><ul class="steps"><li>Submit the public GitHub Pages URL.</li><li>Submit the GitHub repository URL.</li><li>Include at least four chapters with meaningful camera changes.</li><li>Include at least three custom Mapbox Studio layers representing more than one geometry type.</li><li>Use at least one pitched 3D terrain or building view.</li><li>Change the visibility or emphasis of custom layers between chapters.</li><li>Credit all data, map, reporting, and image sources.</li><li>Do not add custom JavaScript for this tutorial.</li></ul></div></section>
+</main></div>
+<script>
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const menuBackdrop = document.getElementById('mobileMenuBackdrop');
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      menuToggle?.setAttribute('aria-expanded', 'false');
+      if (menuBackdrop) menuBackdrop.hidden = true;
+    }
+    if (menuToggle && menuBackdrop) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        menuBackdrop.hidden = !isOpen;
+      });
+      menuBackdrop.addEventListener('click', closeMenu);
+      document.querySelectorAll('.sidebar a').forEach(link => link.addEventListener('click', closeMenu));
+    }
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+  </script>
+</body>
+</html>

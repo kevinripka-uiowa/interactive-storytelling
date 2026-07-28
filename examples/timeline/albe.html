@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bird Conservation Timeline Visualization</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+    <style>
+        :root {
+            --course-green: #1f6f54;
+            --course-green-dark: #154f3d;
+            --course-green-light: #e8f3ee;
+            --timeline-accent: #526b86;
+            --loss: #8b1e1e;
+            --loss-light: #fff0f0;
+            --turning-point: #705000;
+            --turning-point-light: #fff7d6;
+            --ink: #1f2421;
+            --muted: #606863;
+            --border: #d7ddd9;
+            --surface: #ffffff;
+            --page: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--page);
+            color: var(--ink);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+   
+
+        #myTimeline {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 1rem 0 1.5rem;
+            scroll-behavior: smooth;
+            scrollbar-color: var(--timeline-accent) #e8edf2;
+            scrollbar-width: thin;
+        }
+
+        #myTimeline::-webkit-scrollbar {
+            height: 0.8rem;
+        }
+
+        #myTimeline::-webkit-scrollbar-track {
+            background: #e8edf2;
+        }
+
+        #myTimeline::-webkit-scrollbar-thumb {
+            background: var(--timeline-accent);
+            border: 3px solid #e8edf2;
+            border-radius: 999px;
+        }
+
+        #timeline-menu {
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            display: flex;
+            width: max-content;
+            margin: 0 0 1rem;
+            padding: 0;
+            list-style: none;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 0.5rem rgb(0 0 0 / 10%);
+        }
+
+        #timeline-menu > li {
+            border: 1px solid var(--timeline-accent);
+            border-right: 0;
+            background: var(--surface);
+        }
+
+        #timeline-menu > li:first-child {
+            border-radius: 0.35rem 0 0 0.35rem;
+        }
+
+        #timeline-menu > li:last-child {
+            border-right: 1px solid var(--timeline-accent);
+            border-radius: 0 0.35rem 0.35rem 0;
+        }
+
+        #timeline-menu > li > a {
+            display: block;
+            padding: 0.45rem 0.7rem;
+            color: var(--timeline-accent);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        #timeline-menu > li > a:hover,
+        #timeline-menu > li > a:focus-visible {
+            background: #e8edf2;
+        }
+
+        .tl-chip {
+            display: inline-block;
+            margin: 0 0 1rem;
+            padding: 0.35rem 0.7rem;
+            border: 1px solid var(--timeline-accent);
+            border-radius: 999px;
+            background: var(--course-green-light);
+            color: var(--course-green-dark);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .tl-chip--loss {
+            border-color: var(--loss);
+            background: var(--loss-light);
+            color: var(--loss);
+        }
+
+        .tl-chip--turning-point {
+            border-color: var(--turning-point);
+            background: var(--turning-point-light);
+            color: var(--turning-point);
+        }
+
+        .tl-date {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        section#timeline {
+            position: relative;
+            display: inline-block;
+            margin: 0;
+            padding: 2.5rem 0 3.5rem;
+            list-style: none;
+        }
+
+        section#timeline::before {
+            position: absolute;
+            right: 0;
+            bottom: 2.1rem;
+            left: 0;
+            height: 3px;
+            background: var(--timeline-accent);
+            content: "";
+        }
+
+        section#timeline div[class*="group"],
+        section#timeline article {
+            position: relative;
+            display: table-cell;
+            float: none !important;
+            width: 22rem;
+            min-width: 22rem;
+            max-width: 22rem;
+            padding: 0 0.65rem;
+            vertical-align: bottom;
+        }
+
+        section#timeline article::after {
+            display: block;
+            clear: both;
+            content: "";
+        }
+
+        section#timeline > article > div.panel {
+            position: relative;
+            right: 0 !important;
+            bottom: 2.75rem;
+            left: 0 !important;
+            display: inline-block;
+            float: none !important;
+            width: 100%;
+            margin: 0;
+            overflow: visible;
+            border: 1px solid var(--border);
+            border-radius: 0.55rem;
+            background: var(--surface);
+            box-shadow: 0 0.25rem 0.8rem rgb(0 0 0 / 8%);
+        }
+
+        section#timeline article div.panel::after {
+            position: absolute;
+            bottom: -0.45rem;
+            left: calc(50% - 0.45rem);
+            width: 0.9rem;
+            height: 0.9rem;
+            transform: rotate(45deg);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            content: "";
+        }
+
+        section#timeline > article > div.panel .panel-heading,
+        section#timeline > article > div.panel .panel-footer {
+            display: none;
+        }
+
+        section#timeline > article > div.panel .panel-body {
+            position: relative;
+            height: 25rem;
+            padding: 1.25rem;
+            overflow: auto;
+        }
+
+        #timeline .panel-body h1 {
+            margin: 0 0 0.85rem;
+            color: var(--ink);
+            font-size: 1.4rem;
+            line-height: 1.15;
+        }
+
+        #timeline .panel-body p:not(.tl-chip) {
+            margin: 0;
+            padding-right: 0.5rem;
+            color: var(--ink);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            scrollbar-color: var(--timeline-accent) #e8edf2;
+            scrollbar-width: thin;
+        }
+
+        #timeline .panel-body img {
+            display: block;
+            float: none !important;
+            width: 100%;
+            max-height: 200px;
+            margin: 0 0 1rem !important;
+            border-radius: 0.35rem;
+            object-fit: contain;
+            object-position: center 35%;
+        }
+
+        #timeline .panel-body p:not(.tl-chip)::-webkit-scrollbar {
+            width: 0.45rem;
+        }
+
+        #timeline .panel-body p:not(.tl-chip)::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+            background: var(--timeline-accent);
+        }
+
+        section#timeline article div.panel div.badge {
+            position: absolute;
+            bottom: -5.25rem;
+            left: 50%;
+            display: grid;
+            width: 2rem;
+            height: 2rem;
+            margin-left: -1rem;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--surface);
+            color: var(--timeline-accent);
+            font-size: 10px;
+            box-shadow: 0 0 0 3px var(--timeline-accent);
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* section#timeline article div.panel div.badge::after {
+            width: 0.65rem;
+            height: 0.65rem;
+            border-radius: 50%;
+            background: var(--timeline-accent);
+            content: "";
+        } */
+
+        section#timeline div[class*="group"] {
+            width: 4.25rem;
+            min-width: 4.25rem;
+            max-width: 4.25rem;
+            padding: 0 0 0.65rem;
+            border-bottom: 5px solid var(--timeline-accent);
+            color: var(--course-green-dark);
+            font-weight: 700;
+            text-align: center;
+        }
+
+        section#timeline article:nth-last-child(2) {
+            width: 2rem;
+            min-width: 2rem;
+            max-width: 2rem;
+        }
+
+        section#timeline article:nth-last-child(2) div.panel::after {
+            display: none;
+        }
+
+        section#timeline article:nth-last-child(2) div.panel div.badge {
+            width: 1rem;
+            height: 1rem;
+            margin: 0 0 0.5rem;
+            background: var(--timeline-accent);
+            box-shadow: none;
+        }
+
+
+        @media (max-width: 42rem) {
+            section#timeline div[class*="group"],
+            section#timeline article {
+                width: 18rem;
+                min-width: 18rem;
+                max-width: 18rem;
+            }
+
+            section#timeline div[class*="group"] {
+                width: 3.5rem;
+                min-width: 3.5rem;
+                max-width: 3.5rem;
+            }
+
+            section#timeline > article > div.panel .panel-body {
+                height: 25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+        <div id="myTimeline" aria-label="Timeline of major events in United States bird conservation"></div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-albe-timeline@4.0.2/jquery-albe-timeline.min.js"></script>
+
+    <script>
+        const timelineData = [
+            {
+                time: "1900-05-01",
+                body: [
+                    {
+                        tag: "p",
+                        content: "Win",
+                        attr: { cssclass: "tl-chip" }
+                    },
+                    {
+                        tag: "time",
+                        content: "May 1900",
+                        attr: { cssclass: "tl-date" }
+                    },
+                    {
+                        tag: "h1",
+                        content: "Passage of the Lacey Act"
+                    },
+                    {
+                        tag: "p",
+                        content: "Signed into law by President William McKinley in May 1900, the Lacey Act became the first U.S. federal law to protect wildlife by making it a federal crime to transport illegally taken game or birds across state lines. Driven largely by public outrage over commercial hunting for the fashion industry, particularly the feather and plume trade, it severely curtailed the open-market slaughter of wild birds and established a precedent for federal wildlife protection."
+                    }
+                ]
+            },
+            {
+                time: "1903-03-01",
+                body: [
+                    {
+                        tag: "p",
+                        content: "Win",
+                        attr: { cssclass: "tl-chip" }
+                    },
+                    {
+                        tag: "time",
+                        content: "March 1903",
+                        attr: { cssclass: "tl-date" }
+                    },
+                    {
+                        tag: "h1",
+                        content: "Pelican Island Federal Bird Reservation Established"
+                    },
+                    {
+                        tag: "p",
+                        content: "In March 1903, President Theodore Roosevelt issued an executive order designating Pelican Island off Florida's Atlantic coast as a protected breeding ground for native birds. Created specifically to protect brown pelicans, egrets, and herons from plume hunters, this single act gave birth to the U.S. National Wildlife Refuge System, which today encompasses hundreds of millions of acres dedicated to wildlife preservation."
+                    }
+                ]
+            },
+            {
+                time: "1914-09-01",
+                body: [
+                    {
+                        tag: "p",
+                        content: "Loss",
+                        attr: { cssclass: "tl-chip tl-chip--loss" }
+                    },
+                    {
+                        tag: "img",
+                        attr: {
+                            src: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Martha_last_passenger_pigeon_1912.jpg/500px-Martha_last_passenger_pigeon_1912.jpg",
+                            alt: "Martha, the last known Passenger Pigeon"
+                        }
+                    },
+                    {
+                        tag: "time",
+                        content: "September 1914",
+                        attr: { cssclass: "tl-date" }
+                    },
+                    {
+                        tag: "h1",
+                        content: "Extinction of the Passenger Pigeon"
+                    },
+                    {
+                        tag: "p",
+                        content: "On September 1, 1914, \"Martha,\" the world's last known Passenger Pigeon, died in captivity at the Cincinnati Zoo. Once the most abundant bird species in North America, numbering an estimated 3 to 5 billion individuals, unregulated commercial hunting, habitat loss from deforestation, and expanding rail networks drove the species to complete extinction in just a few decades. The loss served as a stark, sobering wake-up call for wildlife conservation."
+                    }
+                ]
+            },
+            {
+                time: "1918-02-01",
+                body: [
+                    {
+                        tag: "p",
+                        content: "Loss",
+                        attr: { cssclass: "tl-chip tl-chip--loss" }
+                    },
+                    {
+                        tag: "img",
+                        attr: {
+                            src: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Conuropsis_carolinensis_male_Ulaval.jpg/330px-Conuropsis_carolinensis_male_Ulaval.jpg",
+                            alt: "A Carolina Parakeet"
+                        }
+                    },
+                    {
+                        tag: "time",
+                        content: "February 1918",
+                        attr: { cssclass: "tl-date" }
+                    },
+                    {
+                        tag: "h1",
+                        content: "Extinction of the Carolina Parakeet"
+                    },
+                    {
+                        tag: "p",
+                        content: "In February 1918, \"Incas,\" the last captive Carolina Parakeet, died at the Cincinnati Zoo, marking the extinction of the only native parrot species in the eastern United States. The species suffered a rapid decline due to extensive forest clearing, agricultural retaliatory shooting by farmers who viewed them as fruit pests, and intensive hunting for their vibrant green and yellow feathers."
+                    }
+                ]
+            },
+            {
+                time: "1918-07-01",
+                body: [
+                    {
+                        tag: "p",
+                        content: "Win",
+                        attr: { cssclass: "tl-chip" }
+                    },
+                    {
+                        tag: "time",
+                        content: "July 1918",
+                        attr: { cssclass: "tl-date" }
+                    },
+                    {
+                        tag: "h1",
+                        content: "Ratification of the Migratory Bird Treaty Act"
+                    },
+                    {
+                        tag: "p",
+                        content: "Enacted in July 1918 to fulfill a 1916 treaty between the United States and Great Britain on behalf of Canada, the Migratory Bird Treaty Act made it illegal to pursue, hunt, take, capture, or kill migratory birds, or trade their feathers, eggs, or nests, without a federal permit. It remains one of the strongest legal safeguards for over 1,000 avian species across North America."
+                    }
+                ]
+            },
+            {
+                time: "1972-06-01",
+                body: [
+                    {
+                        tag: "p",
+                        content: "Win",
+                        attr: { cssclass: "tl-chip" }
+                    },
+                    {
+                        tag: "time",
+                        content: "June 1972",
+                        attr: { cssclass: "tl-date" }
+                    },
+                    {
+                        tag: "h1",
+                        content: "EPA Bans Domestic Agricultural Use of DDT"
+                    },
+                    {
+                        tag: "p",
+                        content: "Following years of public advocacy spearheaded by Rachel Carson's 1962 book Silent Spring, the U.S. Environmental Protection Agency banned agricultural use of the synthetic pesticide DDT in June 1972. DDT had contaminated aquatic ecosystems and caused severe eggshell thinning in apex avian predators, causing populations of Bald Eagles, Peregrine Falcons, Ospreys, and Brown Pelicans to crash. The ban ignited massive recoveries across affected species over subsequent decades."
+                    }
+                ]
+            },
+            {
+                time: "1973-12-01",
+                body: [
+                    {
+                        tag: "p",
+                        content: "Win",
+                        attr: { cssclass: "tl-chip" }
+                    },
+                    {
+                        tag: "time",
+                        content: "December 1973",
+                        attr: { cssclass: "tl-date" }
+                    },
+                    {
+                        tag: "h1",
+                        content: "Passage of the Endangered Species Act"
+                    },
+                    {
+                        tag: "p",
+                        content: "Signed into law by President Richard Nixon in December 1973, the Endangered Species Act established comprehensive protection for imperiled plants and animals and their critical habitats. For birds, the law provided the essential federal framework, funding, and critical habitat designations required to launch targeted recovery and reintroduction programs."
+                    }
+                ]
+            },
+            {
+                time: "1987-04-19",
+                body: [
+                    {
+                        tag: "p",
+                        content: "Loss / Turning Point",
+                        attr: { cssclass: "tl-chip tl-chip--turning-point" }
+                    },
+                    {
+                        tag: "img",
+                        attr: {
+                            src: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/California_condor_AC-4_%2823186853134%29.jpg/330px-California_condor_AC-4_%2823186853134%29.jpg",
+                            alt: "California Condor"
+                        }
+                    },
+                    {
+                        tag: "time",
+                        content: "April 1987",
+                        attr: { cssclass: "tl-date" }
+                    },
+                    {
+                        tag: "h1",
+                        content: "Capture of the Last Wild California Condor"
+                    },
+                    {
+                        tag: "p",
+                        content: "On April 19, 1987, biologists captured the last remaining wild California Condor, designated \"AC-9,\" in the southern California mountains. The capture brought the wild population to zero and left only 27 individuals alive in captive breeding facilities. While a tragic loss of the bird in its natural environment, this controversial intervention prevented total extinction and allowed intensive breeding programs to rebuild the population and eventually return condors to the wild."
+                    }
+                ]
+            },
+            {
+                time: "2007-08-01",
+                body: [
+                    {
+                        tag: "p",
+                        content: "Win",
+                        attr: { cssclass: "tl-chip" }
+                    },
+                    {
+                        tag: "img",
+                        attr: {
+                            src: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Bald_eagle_about_to_fly_in_Alaska_%282016%29.jpg/330px-Bald_eagle_about_to_fly_in_Alaska_%282016%29.jpg",
+                            alt: "Bald Eagle"
+                        }
+                    },
+                    {
+                        tag: "time",
+                        content: "August 2007",
+                        attr: { cssclass: "tl-date" }
+                    },
+                    {
+                        tag: "h1",
+                        content: "Official Delisting of the Bald Eagle"
+                    },
+                    {
+                        tag: "p",
+                        content: "In August 2007, the U.S. Department of the Interior officially removed the Bald Eagle from the federal list of Threatened and Endangered Species in the lower 48 states. After plummeting to fewer than 500 nesting pairs in the 1960s, decades of habitat protection, nest monitoring, and the DDT ban allowed populations to rebound to over 10,000 active breeding pairs by the time of delisting."
+                    }
+                ]
+            },
+            {
+                time: "2019-09-01",
+                body: [
+                    {
+                        tag: "p",
+                        content: "Loss / Call to Action",
+                        attr: { cssclass: "tl-chip tl-chip--loss" }
+                    },
+                    {
+                        tag: "time",
+                        content: "September 2019",
+                        attr: { cssclass: "tl-date" }
+                    },
+                    {
+                        tag: "h1",
+                        content: "Publication of the ‘3 Billion Birds Lost’ Study"
+                    },
+                    {
+                        tag: "p",
+                        content: "In September 2019, a landmark study published in Science revealed that North America had lost over 2.9 billion breeding birds since 1970, a net 29% population drop across almost all biomes. The losses included once-abundant generalist species such as sparrows, warblers, and blackbirds. The findings highlighted widespread habitat degradation, agricultural pesticide impacts, and outdoor cat predation, renewing urgent international efforts to update conservation policies."
+                    }
+                ]
+            }
+        ];
+
+        $(document).ready(function () {
+            $.fn.albeTimeline.languages = {
+                "en-US": {
+                    days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                    months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                    shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    msgEmptyContent: "No information to display."
+                }
+            };
+
+            $("#myTimeline").albeTimeline(timelineData, {
+                language: "en-US",
+                sortDesc: false,
+                effect: "fadeInUp",
+                formatDate: "MMM YYYY"
+            });
+        });
+    </script>
+</body>
+</html>
