@@ -1,4 +1,4 @@
-const CSV_PATH = "https://kevinripka-uiowa.github.io/master-detail/iowa-warblers.csv";
+const CSV_PATH = "https://kevinripka-uiowa.github.io/interactive-storytelling/examples/master-detail/iowa-warblers.csv";
 const BIRD_THUMBNAIL_EXTENSION = ".jpg";
 const FOOD_IMAGE_EXTENSION = ".jpg";
 
@@ -76,7 +76,7 @@ function renderGrid() {
     button.setAttribute("aria-label", `View ${bird.name}`);
 
     const image = document.createElement("img");
-    image.src = `https://kevinripka-uiowa.github.io/master-detail/images/thumbnails/${slugify(bird.name)}${BIRD_THUMBNAIL_EXTENSION}`;
+    image.src = `https://kevinripka-uiowa.github.io/interactive-storytelling/examples/master-detail/images/thumbnails/${slugify(bird.name)}${BIRD_THUMBNAIL_EXTENSION}`;
     image.alt = "";
     image.loading = "lazy";
     image.decoding = "async";
@@ -117,7 +117,7 @@ function renderFoodItems(value) {
         <li class="food-item">
           <img
             class="food-image"
-            src="https://kevinripka-uiowa.github.io/master-detail/images/food/${slugify(food)}${FOOD_IMAGE_EXTENSION}"
+            src="https://kevinripka-uiowa.github.io/interactive-storytelling/examples/master-detail/images/food/${slugify(food)}${FOOD_IMAGE_EXTENSION}"
             alt=""
             loading="lazy"
             decoding="async"
