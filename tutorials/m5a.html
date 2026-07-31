@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build a Draw-the-Line Visualization</title>
+  <style>
+    :root {
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --warn:#fff8ed;
+      --shadow:0 14px 35px rgba(23,33,27,.12); --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    img, video, iframe, svg { max-width:100%; }
+    .layout { min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow:auto; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+    .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+    main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+    .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
+    .hero p { max-width:830px; margin:0 0 10px; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:860px; }
+    .concept-callout strong { color:var(--ink); }
+    .overview-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:22px; }
+    .meta-card { padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; min-width:0; }
+    .meta-card h4 { margin:0 0 8px; font-size:1.12rem; }
+    .meta-card p { margin:0; }
+    .video-section { margin-bottom:34px; }
+    .video-card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,26px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .video-card h3 { margin:0 0 8px; font-size:clamp(1.25rem,2.2vw,1.65rem); letter-spacing:-.03em; }
+    .video-card p { margin:0; color:var(--muted); }
+    .video-placeholder { display:grid; place-items:center; min-height:260px; border-radius:16px; background:#17211b; color:#fffdf7; border:1px solid var(--line); text-align:center; padding:24px; }
+    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0 0 12px; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
+    .steps { margin:8px 0 16px; padding-left:1.4rem; color:var(--muted); }
+    .steps li + li { margin-top:6px; }
+    .callout { margin:16px 0; padding:14px 16px; border-radius:16px; border:1px solid var(--line); border-left:5px solid var(--accent-2); background:#fff8ed; color:var(--muted); }
+    .callout strong { display:block; color:var(--ink); margin-bottom:4px; }
+    .callout p { margin:0; }
+    .subsection { margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
+    pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
+    code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
+    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+    button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+    button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+    @media (max-width:860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-text { font-weight:900; }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important; padding:76px 22px 28px; overflow-y:auto!important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
+      .pattern-header { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+      .overview-grid { grid-template-columns:1fr; }
+      .hero { border-radius:20px; }
+    }
+    @media (max-width:520px) {
+      .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+      .demo-frame { padding:14px; }
+    }
+    @media print {
+      @page { margin:0.45in; }
+      * { box-shadow:none!important; text-shadow:none!important; }
+      html, body { overflow:visible!important; background:#fff!important; color:#111!important; font-family:Georgia, "Times New Roman", serif; font-size:10pt!important; line-height:1.22!important; }
+      .sidebar, .mobile-menu-toggle, .mobile-menu-backdrop, .video-section { display:none!important; }
+      main { margin:0!important; width:100%!important; padding:0!important; }
+      main > * { max-width:none!important; }
+      .hero, .pattern, .demo-frame, .meta-card, .callout, .submission-box { border:0!important; background:#fff!important; border-radius:0!important; padding:0!important; color:#111!important; }
+      .hero { margin:0 0 10pt!important; }
+      .hero h2 { font-size:18pt!important; line-height:1.02!important; margin:0 0 5pt!important; }
+      .eyebrow, .tag { color:#333!important; background:transparent!important; border:0!important; padding:0!important; font-size:8pt!important; }
+      p, li, .hero p, .section-group p, .pattern p, .note, .meta-card p, .callout, .submission-box p { color:#111!important; font-size:10pt!important; line-height:1.22!important; }
+      .section-group { margin:12pt 0 4pt!important; padding-top:5pt!important; border-top:0.75pt solid #111!important; break-after:avoid; }
+      .section-group h2 { font-size:13pt!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern { margin:0 0 10pt!important; }
+      .pattern h3 { font-size:11.5pt!important; color:#111!important; margin:0 0 3pt!important; }
+      pre { white-space:pre-wrap!important; font-size:9pt!important; padding:4pt!important; border:0.5pt solid #777!important; background:#f7f7f7!important; color:#111!important; }
+    }
+  </style>
+</head>
+<body>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
+  <div class="layout">
+    <aside class="sidebar" id="siteSidebar" aria-label="Tutorial navigation">
+      <a href="../" class="home-button">&larr; Back to Home</a>
+      <h1>Build a Draw-the-Line Visualization</h1>
+      <p>Tutorial M5A. Create a participatory prediction chart in Flourish and embed it in Tilda.</p>
+      <nav>
+        <div class="nav-group-title">Start here</div>
+        <a href="#overview">Overview</a>
+        <a href="#video">Video</a>
+        <div class="nav-group-title">Tutorial sections</div>
+        <a href="#section-1">Explore participatory templates</a>
+        <a href="#section-2">Start a draw-the-line chart</a>
+        <a href="#section-3">Upload the data</a>
+        <a href="#section-4">Assign the data columns</a>
+        <a href="#section-5">Set the visible starting amount</a>
+        <a href="#section-6">Customize the drawing</a>
+        <a href="#section-7">Revise prompts and feedback</a>
+        <a href="#section-8">Add framing and accessibility</a>
+        <a href="#section-9">Publish and copy the embed</a>
+        <a href="#section-10">Embed it in Tilda</a>
+        <a href="#submission">Submission</a>
+      </nav>
+    </aside>
+
+    <main>
+      <section class="hero" id="overview">
+        <div class="eyebrow">Tutorial M5A</div>
+        <h2>Build a Draw-the-Line Visualization</h2>
+        <p>Create a Flourish visualization that asks viewers to predict a trend before revealing the actual data.</p>
+        <p>The example uses fictional bird-population data. Viewers draw what they think happened, submit their guess, and then compare it with the recorded line.</p>
+        <div class="concept-callout"><strong>This is participatory because the viewer contributes before receiving the answer.</strong> The interaction creates curiosity, and the reveal provides immediate feedback.</div>
+        <div class="overview-grid" aria-label="Tutorial summary">
+          <article class="meta-card"><h4>What you will build</h4><p>A draw-the-line chart about cumulative bird-population loss since 1900.</p></article>
+          <article class="meta-card"><h4>What you will submit</h4><p>A published Tilda page containing the embedded Flourish visualization.</p></article>
+        </div>
+      </section>
+
+      <section class="video-section" id="video">
+        <div class="video-card">
+          <h3>Video walkthrough</h3>
+          <div class="video-embed"><iframe src="https://www.youtube.com/embed/HEbRjWWm-Qg" title="Build a draw-the-line visualization in Flourish" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+        </div>
+      </section>
+
+      <section class="section-group" id="section-1"><h2>Section 1: Explore participatory templates</h2><p>Begin by seeing how Flourish structures interactive templates before choosing the one you will build.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Look at the available interaction patterns</h3></div><span class="tag">Step 1</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Log in to Flourish.</li>
+          <li>Select <strong>New visualization</strong>.</li>
+          <li>Open the quiz template briefly and examine its preview and data sheets.</li>
+          <li>Notice that a quiz may use separate sheets for questions, answers, feedback, and final results.</li>
+          <li>Return to the template gallery rather than building the quiz.</li>
+        </ol>
+        <div class="callout"><strong>Inspect unfamiliar templates before committing</strong><p>Flourish templates may expect particular column names, input types, or multiple sheets. Preview the example and consult the template documentation when the data structure is not obvious.</p></div>
+      </div></section>
+
+      <section class="section-group" id="section-2"><h2>Section 2: Start a draw-the-line chart</h2><p>Choose a template that asks the viewer to predict a line-chart trend.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Create the simple draw-the-line version</h3></div><span class="tag">Step 2</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Select <strong>New visualization</strong>.</li>
+          <li>Find the <strong>Draw the line</strong> templates.</li>
+          <li>Choose the simple version.</li>
+          <li>Test the example by drawing a guess and selecting the completion button.</li>
+          <li>Notice how Flourish reveals the actual line and displays the gap between the prediction and the data.</li>
+        </ol>
+        <div class="callout"><strong>Use this pattern for an ordered trend</strong><p>Draw-the-line charts work best when the horizontal axis has a meaningful sequence, usually time. The viewer predicts how the measure changes across that sequence.</p></div>
+      </div></section>
+
+      <section class="section-group" id="section-3"><h2>Section 3: Upload the data</h2><p>Replace the sample values with the supplied bird-population dataset.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Import the tutorial CSV</h3></div><span class="tag">Step 3</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Open the template's <strong>Data</strong> tab.</li>
+          <li>Select the option to upload or import data.</li>
+          <li>Choose <code>fake-bird-population-loss-1900-2025.csv</code> from the M5A tutorial assets.</li>
+          <li>Confirm the import and replace the sample data.</li>
+          <li>Inspect the available columns, including the population index and cumulative percent lost since 1900.</li>
+        </ol>
+        <div class="callout"><strong>The tutorial data are fictional</strong><p>The dataset is designed to practice the interaction pattern. It does not represent measured bird-population counts and should not be presented as real reporting.</p></div>
+        <div class="callout"><strong>An index is not a raw count</strong><p>A population index expresses change relative to a starting value. The percent-loss column translates that indexed change into a measure that is easier to use for this question.</p></div>
+      </div></section>
+
+      <section class="section-group" id="section-4"><h2>Section 4: Assign the data columns</h2><p>Tell Flourish which column controls time and which line the viewer will predict.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Connect the year and percent-loss columns</h3></div><span class="tag">Step 4</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Use the year column for the horizontal or time axis.</li>
+          <li>Assign the cumulative percent-loss column as the line the user will guess.</li>
+          <li>Leave the <strong>Always visible lines</strong> field empty for this exercise.</li>
+          <li>Return to the preview and confirm that the chart now uses the bird data.</li>
+        </ol>
+        <div class="callout"><strong>The guessed line should answer the prompt</strong><p>The question asks viewers to estimate cumulative population loss, so the guessed series should use the percent-loss column rather than the population index.</p></div>
+      </div></section>
+
+      <section class="section-group" id="section-5"><h2>Section 5: Set the visible starting amount</h2><p>Decide how much of the actual line viewers see before they begin drawing.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Reveal only enough data to establish the starting point</h3></div><span class="tag">Step 5</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Find the setting controlling how much of the line is initially visible.</li>
+          <li>Try values such as 25 percent and 5 percent.</li>
+          <li>Choose a small starting amount that establishes the trend's origin without giving away the outcome.</li>
+          <li>Test the chart again from the beginning.</li>
+        </ol>
+        <div class="callout"><strong>Do not reveal too much</strong><p>The visible segment should orient the viewer and provide a place to begin drawing. If it exposes too much of the trend, the prediction becomes less meaningful.</p></div>
+      </div></section>
+
+      <section class="section-group" id="section-6"><h2>Section 6: Customize the drawing</h2><p>Adjust how the viewer's predicted line appears and behaves.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Test the line controls</h3></div><span class="tag">Step 6</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Find the controls for line width, point radius, and drawing-dash size.</li>
+          <li>Compare straight, stepped, and curved drawing styles.</li>
+          <li>Use the preview to test how each option feels while drawing.</li>
+          <li>Keep the straight line for the tutorial unless another option communicates your data more clearly.</li>
+          <li>Change the drawing color to the course green or another purposeful color from your project.</li>
+        </ol>
+        <div class="callout"><strong>Appearance affects usability</strong><p>The viewer must be able to see the line while drawing it. Use sufficient contrast, an appropriate stroke width, and points that do not obscure the chart.</p></div>
+      </div></section>
+
+      <section class="section-group" id="section-7"><h2>Section 7: Revise prompts and feedback</h2><p>Use concise language to tell viewers what to draw and what happens after they submit.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Write the interaction messages</h3></div><span class="tag">Step 7</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Open the template's message settings.</li>
+          <li>Replace the default drawing prompt with a concise instruction such as <strong>Draw a line: Guess what percent of the bird population has been lost.</strong></li>
+          <li>Keep the prompt short enough to fit comfortably in the visualization.</li>
+          <li>Rename the completion button from <strong>I'm done</strong> to <strong>Check my guess</strong>.</li>
+          <li>Review the result thresholds for great, good, okay, and poor guesses.</li>
+          <li>Customize the feedback text when the default messages do not fit your topic.</li>
+        </ol>
+        <div class="callout"><strong>Prompt the exact action</strong><p>Tell viewers what to draw and what the line represents. Avoid forcing the title, subtitle, and drawing prompt to repeat the same long question.</p></div>
+        <div class="callout"><strong>Feedback can use error thresholds</strong><p>The template compares the viewer's line with the actual data. Its result categories can be adjusted according to how much difference counts as a strong or weak prediction.</p></div>
+      </div></section>
+
+      <section class="section-group" id="section-8"><h2>Section 8: Add framing and accessibility</h2><p>Give the visualization enough context to stand on its own and provide an accessible description.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add the header and accessibility text</h3></div><span class="tag">Step 8</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Open the <strong>Header</strong> settings.</li>
+          <li>Add the title <strong>Bird population loss since 1900</strong>.</li>
+          <li>Add a short subtitle or introductory sentence when the title alone does not explain the task.</li>
+          <li>Check that the drawing prompt is not too long for the available space.</li>
+          <li>Open the accessibility settings.</li>
+          <li>Write a useful description explaining that the chart asks viewers to estimate cumulative bird-population loss before revealing the fictional trend.</li>
+          <li>Review the axis, legend, number formatting, date formatting, and layout settings as needed.</li>
+        </ol>
+        <div class="callout"><strong>Do not rely on the interaction alone</strong><p>The header should frame the subject, and the accessibility description should explain the chart's purpose and content for viewers who cannot use the drawing interaction visually.</p></div>
+      </div></section>
+
+      <section class="section-group" id="section-9"><h2>Section 9: Publish and copy the embed</h2><p>Publish the Flourish project and retrieve the code needed for Tilda.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Publish the visualization</h3></div><span class="tag">Step 9</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Rename the Flourish project to something recognizable, such as <strong>Bird population loss</strong>.</li>
+          <li>Select <strong>Export &amp; publish</strong>.</li>
+          <li>Open <strong>Publish, share, and embed</strong>.</li>
+          <li>Publish the visualization.</li>
+          <li>Copy the responsive embed code.</li>
+        </ol>
+        <div class="callout"><strong>Copy the embed, not the editor address</strong><p>The editor URL is not the public visualization. Use Flourish's published embed code so the interactive can load inside another page.</p></div>
+      </div></section>
+
+      <section class="section-group" id="section-10"><h2>Section 10: Embed it in Tilda</h2><p>Place the published Flourish visualization into the module page and constrain its width.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add the embed to a Tilda HTML block</h3></div><span class="tag">Step 10</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Log in to Tilda and open your course project page.</li>
+          <li>Add a <strong>T123 HTML Code</strong> block where the visualization should appear.</li>
+          <li>Paste the Flourish embed code.</li>
+          <li>Wrap the embed in a div with a maximum width and automatic left and right margins.</li>
+          <li>Place the closing div after the complete embed code.</li>
+          <li>Save, publish, and open the live page.</li>
+          <li>Test drawing and submitting a prediction on the published page.</li>
+        </ol>
+        <pre><code>&lt;div style="max-width: 800px; margin: 0 auto;"&gt;
+  &lt;!-- Paste the complete Flourish embed code here --&gt;
+&lt;/div&gt;</code></pre>
+        <div class="callout"><strong>The wrapper controls the presentation</strong><p>The Flourish embed remains responsive, while the wrapping div prevents it from becoming unnecessarily wide on a large screen.</p></div>
+      </div></section>
+
+      <section class="section-group" id="submission"><h2>Submission</h2></section>
+      <section class="pattern submission-box"><div class="pattern-header"><div><h3>Publish and submit the Tilda page</h3><p>Submit the public page containing your completed draw-the-line visualization.</p></div><span class="tag">Final</span></div><div class="demo-frame">
+        <ul class="steps">
+          <li>The chart uses the supplied fictional bird-population data.</li>
+          <li>The viewer predicts cumulative percent loss rather than the population index.</li>
+          <li>Only a small starting portion of the real line is initially visible.</li>
+          <li>The drawing prompt is concise and understandable.</li>
+          <li>The completion button uses purposeful language such as <strong>Check my guess</strong>.</li>
+          <li>The title, explanatory text, and accessibility description provide sufficient context.</li>
+          <li>The visualization is published from Flourish and embedded in Tilda.</li>
+          <li>The embed is centered and constrained to an appropriate maximum width.</li>
+          <li>The interaction works on the published page.</li>
+        </ul>
+      </div></section>
+    </main>
+  </div>
+  <script>
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const menuBackdrop = document.getElementById('mobileMenuBackdrop');
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      menuToggle?.setAttribute('aria-expanded', 'false');
+      if (menuBackdrop) menuBackdrop.hidden = true;
+    }
+    if (menuToggle && menuBackdrop) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        menuBackdrop.hidden = !isOpen;
+      });
+      menuBackdrop.addEventListener('click', closeMenu);
+      document.querySelectorAll('.sidebar a').forEach(link => link.addEventListener('click', closeMenu));
+    }
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+  </script>
+</body>
+</html>

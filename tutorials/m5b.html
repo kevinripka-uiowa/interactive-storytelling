@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build a Coded Goofy Comparison</title>
+  <style>
+    :root {
+      --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
+      --accent:#37634e; --accent-2:#d8893a; --soft:#edf4ee; --warn:#fff8ed;
+      --shadow:0 14px 35px rgba(23,33,27,.12); --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; width:100%; max-width:100%; overflow-x:hidden; }
+    a { color:inherit; }
+    img, video, iframe, svg { max-width:100%; }
+    .layout { min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; overflow:auto; padding:28px 22px; background:#17211b; color:#fffdf7; z-index:20; }
+    .sidebar h1 { margin:0 0 8px; font-size:1.35rem; line-height:1.15; letter-spacing:-.02em; }
+    .sidebar p { margin:0 0 24px; color:rgba(255,255,255,.72); font-size:.92rem; }
+    .nav-group-title { margin:24px 0 8px; color:#83e4b6; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; font-weight:800; }
+    .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
+    .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
+    .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
+    main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
+    main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
+    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
+    .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
+    .hero p { max-width:830px; margin:0 0 10px; font-size:clamp(1.05rem,2vw,1.25rem); }
+    .concept-callout { margin:22px 0 0; padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff8ed; color:var(--muted); max-width:860px; }
+    .concept-callout strong { color:var(--ink); }
+    .overview-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:22px; }
+    .meta-card { padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; min-width:0; }
+    .meta-card h4 { margin:0 0 8px; font-size:1.12rem; }
+    .meta-card p { margin:0; }
+    .video-section { margin-bottom:34px; }
+    .video-card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,26px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .video-card h3 { margin:0 0 8px; font-size:clamp(1.25rem,2.2vw,1.65rem); letter-spacing:-.03em; }
+    .video-card p { margin:0; color:var(--muted); }
+    .video-placeholder { display:grid; place-items:center; min-height:260px; border-radius:16px; background:#17211b; color:#fffdf7; border:1px solid var(--line); text-align:center; padding:24px; }
+    .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
+    .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
+    .section-group p { margin:0; max-width:820px; }
+    .pattern { scroll-margin-top:24px; margin:26px auto 42px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(20px,3vw,30px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
+    .pattern-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; margin-bottom:18px; }
+    .pattern h3 { margin:0 0 6px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .pattern p { margin:0 0 12px; }
+    .tag { display:inline-block; white-space:nowrap; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.78rem; }
+    .demo-frame { border:1px solid var(--line); border-radius:16px; background:#fff; padding:clamp(16px,3vw,24px); overflow:hidden; }
+    .steps { margin:8px 0 16px; padding-left:1.4rem; color:var(--muted); }
+    .steps li + li { margin-top:6px; }
+    .callout { margin:16px 0; padding:14px 16px; border-radius:16px; border:1px solid var(--line); border-left:5px solid var(--accent-2); background:#fff8ed; color:var(--muted); }
+    .callout strong { display:block; color:var(--ink); margin-bottom:4px; }
+    .callout p { margin:0; }
+    .subsection { margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
+    pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
+    code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
+    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+    button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
+    button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
+    .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
+    @media (max-width:860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+      .mobile-menu-toggle { position:fixed; top:12px; left:12px; z-index:1001; display:inline-flex; align-items:center; gap:9px; padding:10px 13px; border-radius:999px; background:#17211b; color:#fffdf7; box-shadow:0 8px 22px rgba(23,33,27,.24); }
+      .mobile-menu-icon { position:relative; display:block; width:18px; height:12px; border-top:2px solid currentColor; border-bottom:2px solid currentColor; }
+      .mobile-menu-icon::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:2px solid currentColor; transform:translateY(-50%); }
+      .mobile-menu-text { font-weight:900; }
+      .mobile-menu-backdrop { position:fixed; inset:0; z-index:999; display:block; background:rgba(23,33,27,.45); }
+      .mobile-menu-backdrop[hidden] { display:none; }
+      .sidebar { position:fixed!important; top:0!important; left:0; bottom:0; width:min(84vw,340px); height:100vh!important; max-height:100vh!important; padding:76px 22px 28px; overflow-y:auto!important; z-index:1000; transform:translateX(-105%); transition:transform .24s ease; box-shadow:18px 0 36px rgba(0,0,0,.22); }
+      body.menu-open .sidebar { transform:translateX(0); }
+      main { margin-left:0!important; width:100%!important; max-width:1120px; padding:24px 16px 56px; }
+      .pattern-header { grid-template-columns:1fr; }
+      .tag { justify-self:start; white-space:normal; }
+      .overview-grid { grid-template-columns:1fr; }
+      .hero { border-radius:20px; }
+    }
+    @media (max-width:520px) {
+      .hero h2 { font-size:clamp(2rem,12vw,3.2rem); line-height:1; }
+      .demo-frame { padding:14px; }
+    }
+    @media print {
+      @page { margin:0.45in; }
+      * { box-shadow:none!important; text-shadow:none!important; }
+      html, body { overflow:visible!important; background:#fff!important; color:#111!important; font-family:Georgia, "Times New Roman", serif; font-size:10pt!important; line-height:1.22!important; }
+      .sidebar, .mobile-menu-toggle, .mobile-menu-backdrop, .video-section { display:none!important; }
+      main { margin:0!important; width:100%!important; padding:0!important; }
+      main > * { max-width:none!important; }
+      .hero, .pattern, .demo-frame, .meta-card, .callout, .submission-box { border:0!important; background:#fff!important; border-radius:0!important; padding:0!important; color:#111!important; }
+      .hero { margin:0 0 10pt!important; }
+      .hero h2 { font-size:18pt!important; line-height:1.02!important; margin:0 0 5pt!important; }
+      .eyebrow, .tag { color:#333!important; background:transparent!important; border:0!important; padding:0!important; font-size:8pt!important; }
+      p, li, .hero p, .section-group p, .pattern p, .note, .meta-card p, .callout, .submission-box p { color:#111!important; font-size:10pt!important; line-height:1.22!important; }
+      .section-group { margin:12pt 0 4pt!important; padding-top:5pt!important; border-top:0.75pt solid #111!important; break-after:avoid; }
+      .section-group h2 { font-size:13pt!important; color:#111!important; margin:0 0 3pt!important; }
+      .pattern { margin:0 0 10pt!important; }
+      .pattern h3 { font-size:11.5pt!important; color:#111!important; margin:0 0 3pt!important; }
+      pre { white-space:pre-wrap!important; font-size:9pt!important; padding:4pt!important; border:0.5pt solid #777!important; background:#f7f7f7!important; color:#111!important; }
+    }
+  </style>
+</head>
+<body>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden></div>
+  <div class="layout">
+    <aside class="sidebar" id="siteSidebar" aria-label="Tutorial navigation">
+      <a href="../" class="home-button">&larr; Back to Home</a>
+      <h1>Build a Coded Goofy Comparison</h1>
+      <p>Tutorial M5B. Build a small form-driven comparison, then place it in Tilda.</p>
+      <nav>
+        <div class="nav-group-title">Start here</div>
+        <a href="#overview">Overview</a>
+        <a href="#video">Video</a>
+        <div class="nav-group-title">Tutorial sections</div>
+          <a href="#section-1">Create the HTML page</a>
+          <a href="#section-2">Add namespaced CSS</a>
+          <a href="#section-3">Add the wrapper and condor illustration</a>
+          <a href="#section-4">Add the form</a>
+          <a href="#section-5">Add the result and blank state</a>
+          <a href="#section-6">Add the comparison line</a>
+          <a href="#section-7">Connect JavaScript to the page</a>
+          <a href="#section-8">Create the blank state</a>
+          <a href="#section-9">Check the input</a>
+          <a href="#section-10">Process the values</a>
+          <a href="#section-11">Draw the centered line</a>
+          <a href="#section-12">Return feedback</a>
+          <a href="#section-13">Trigger the calculation</a>
+          <a href="#section-14">Move the interactive into Tilda</a>
+          <a href="#submission">Submission</a>
+      </nav>
+    </aside>
+
+    <main>
+      <section class="hero" id="overview">
+        <div class="eyebrow">Tutorial M5B</div>
+        <h2>Build a Coded Goofy Comparison</h2>
+        <p>Build a small participatory interactive that asks viewers for their height and compares it with the 9.5-foot wingspan of a California condor.</p>
+        <p>You will assemble the project gradually so you can see how the form, blank state, error checking, calculation, visual feedback, and written feedback work together.</p>
+        <div class="concept-callout"><strong>You would likely vibe code an interactive like this with AI.</strong> The goal here is not to memorize every line. Building it slowly helps you recognize the parts, test the output, and revise AI-generated code rather than treating it as a black box.</div>
+        <div class="overview-grid" aria-label="Tutorial summary">
+          <article class="meta-card"><h4>What you will build</h4><p>A height form that draws a centered comparison line beneath a trimmed raster image of a California condor and explains the result.</p></article>
+          <article class="meta-card"><h4>What you will submit</h4><p>A published Tilda page containing the completed, working comparison.</p></article>
+        </div>
+      </section>
+
+      <section class="video-section" id="video">
+        <div class="video-card">
+          <h3>Video walkthrough</h3>
+          <p>The tutorial video will be added here.</p>
+          <div class="video-placeholder">YouTube video placeholder</div>
+        </div>
+      </section>
+
+      <section class="section-group" id="section-1"><h2>Section 1: Create the HTML page</h2><p>Begin with a local HTML file so you can build and test the interactive before moving it into Tilda.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Create the project and add the HTML skeleton</h3></div><span class="tag">Step 1</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Create a folder named <code>condor-comparison</code>.</li>
+          <li>Open the folder in Visual Studio Code.</li>
+          <li>Create a file named <code>index.html</code>.</li>
+          <li>Paste the basic HTML skeleton below.</li>
+        </ol>
+        <pre><code>&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;Your Height vs. a California Condor&lt;/title&gt;
+
+  &lt;style&gt;
+    /* CSS will go here */
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;!-- Interactive HTML will go here --&gt;
+
+  &lt;script&gt;
+    // JavaScript will go here
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <div class="callout"><strong>Why start with the skeleton?</strong><p>The skeleton establishes a complete web document. Later, Tilda will provide the outer page, but building locally first makes testing and troubleshooting easier.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-2"><h2>Section 2: Add namespaced CSS</h2><p>Add all of the visual styling now so later steps can focus on JavaScript behavior.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Paste the CSS inside the style element</h3></div><span class="tag">Step 2</span></div><div class="demo-frame">
+        <p>Replace the CSS comment in the <code>&lt;style&gt;</code> element with the following rules.</p>
+        <pre><code>.condor-compare {
+  --cc-bg: #f5f1e8;
+  --cc-panel: #fffdf7;
+  --cc-ink: #17211b;
+  --cc-muted: #5c675f;
+  --cc-line: #d9d2c2;
+  --cc-accent: #37634e;
+  --cc-person: #d8893a;
+  --cc-soft: #edf4ee;
+
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  color: var(--cc-ink);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+.condor-compare,
+.condor-compare * {
+  box-sizing: border-box;
+}
+
+.condor-compare__header {
+  margin-bottom: 24px;
+}
+
+.condor-compare__header h1 {
+  max-width: 760px;
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  line-height: .98;
+  letter-spacing: -.04em;
+  text-wrap: balance;
+}
+
+.condor-compare__header p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--cc-muted);
+}
+
+.condor-compare__eyebrow {
+  margin-bottom: 8px !important;
+  color: var(--cc-accent) !important;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.condor-compare__panel {
+  padding: clamp(20px, 4vw, 34px);
+  border: 1px solid var(--cc-line);
+  border-radius: 24px;
+  background: var(--cc-panel);
+}
+
+.condor-compare__form {
+  margin: 0 0 24px;
+}
+
+.condor-compare__fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.condor-compare__fieldset legend {
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.condor-compare__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: end;
+}
+
+.condor-compare__controls label {
+  display: grid;
+  gap: 6px;
+  color: var(--cc-muted);
+  font-size: .9rem;
+  font-weight: 700;
+}
+
+.condor-compare__controls input {
+  width: 110px;
+  padding: 10px 12px;
+  border: 1px solid var(--cc-line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--cc-ink);
+  font: inherit;
+}
+
+.condor-compare__controls button {
+  padding: 11px 17px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cc-accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.condor-compare__controls input:focus-visible,
+.condor-compare__controls button:focus-visible {
+  outline: 3px solid rgba(216, 137, 58, .45);
+  outline-offset: 3px;
+}
+
+.condor-compare__result {
+  margin-bottom: 24px;
+  padding: 16px 18px;
+  border: 1px solid var(--cc-line);
+  border-radius: 16px;
+  background: var(--cc-soft);
+}
+
+.condor-compare__stage {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1002 / 500;
+  border: 1px solid var(--cc-line);
+  border-radius: 20px;
+  background: linear-gradient(to bottom, #e9f1f4 0 72%, #e8dfcd 72% 100%);
+}
+
+.condor-compare__condor-image {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.condor-compare__overlay {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.condor-compare__person-line,
+.condor-compare__person-cap {
+  stroke: var(--cc-person);
+  stroke-linecap: round;
+}
+
+.condor-compare__person-line {
+  stroke-width: 14;
+}
+
+.condor-compare__person-cap {
+  stroke-width: 3;
+}
+
+.condor-compare__person-label {
+  fill: var(--cc-ink);
+  font-size: 17px;
+  font-weight: 800;
+  text-anchor: middle;
+}
+
+#condorBarGroup[hidden] {
+  display: none;
+}</code></pre>
+        <div class="callout"><strong>Namespace embedded CSS</strong><p>Every class begins with <code>condor-compare</code>, and the variables use the <code>--cc-</code> prefix. This reduces the chance that your rules will restyle Tilda elements or that Tilda's rules will unexpectedly restyle the interactive.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-3"><h2>Section 3: Add the wrapper and condor image</h2><p>Build the static visual structure first. At this point, the page contains a headline and a trimmed raster condor image, but no input or interaction.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add the main section and raster condor image</h3></div><span class="tag">Step 3</span></div><div class="demo-frame">
+        <p>First, place the provided trimmed image file, <code>california-condor-wide.png</code>, in the same folder as your <code>index.html</code> file. Its transparent outer margins have already been removed so the image width closely matches the bird’s true wingspan. Then paste this between the opening and closing <code>&lt;body&gt;</code> tags, above the script.</p>
+        <pre><code>&lt;section class="condor-compare" id="condorCompare"&gt;
+  &lt;header class="condor-compare__header"&gt;
+    &lt;p class="condor-compare__eyebrow"&gt;Goofy comparison&lt;/p&gt;
+    &lt;h1&gt;How do you measure up to a California condor?&lt;/h1&gt;
+    &lt;p&gt;Enter your height to compare it with a 9.5-foot wingspan.&lt;/p&gt;
+  &lt;/header&gt;
+
+  &lt;div class="condor-compare__panel"&gt;
+    &lt;div class="condor-compare__stage"&gt;
+      &lt;img class="condor-compare__condor-image"
+           src="california-condor-wide.png"
+           alt="California condor with its wings fully spread."&gt;
+
+      &lt;svg class="condor-compare__overlay"
+           viewBox="0 0 1002 500"
+           aria-hidden="true"&gt;
+      &lt;/svg&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>e>
+        <div class="callout"><strong>Use a raster image plus an SVG overlay</strong><p>The condor itself is a trimmed PNG image. It is positioned <code>20px</code> from the top of the stage. A second <code>svg</code> sits on top as an invisible overlay that JavaScript can draw into. This is a common pattern when you want a richer illustration but still need precise, scalable graphics on top.</p></div>
+        <div class="callout"><strong>Build the static state first</strong><p>Before adding inputs or JavaScript, make sure the basic illustration appears. Adding one layer at a time makes troubleshooting easier.</p></div><div class="callout"><strong>Why trim the transparent pixels?</strong><p>Because the image has been cropped tightly around the visible bird—including removing the extra transparent space below it—the full image width is a useful stand-in for the condor's wingspan. The shorter <code>1002 / 500</code> stage also keeps the comparison compact.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-4"><h2>Section 4: Add the form</h2><p>Add the controls that collect the viewer's height.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add a real form above the SVG stage</h3></div><span class="tag">Step 4</span></div><div class="demo-frame">
+        <p>Paste this inside <code>&lt;div class="condor-compare__panel"&gt;</code>, immediately before the stage.</p>
+        <pre><code>&lt;form class="condor-compare__form" id="condorForm" novalidate&gt;
+  &lt;fieldset class="condor-compare__fieldset"&gt;
+    &lt;legend&gt;Enter your height&lt;/legend&gt;
+
+    &lt;div class="condor-compare__controls"&gt;
+      &lt;label for="condorFeet"&gt;
+        Feet
+        &lt;input id="condorFeet"
+               name="feet"
+               type="number"
+               min="2"
+               max="9"
+               inputmode="numeric"&gt;
+      &lt;/label&gt;
+
+      &lt;label for="condorInches"&gt;
+        Inches
+        &lt;input id="condorInches"
+               name="inches"
+               type="number"
+               min="0"
+               max="11"
+               inputmode="numeric"&gt;
+      &lt;/label&gt;
+
+      &lt;button type="submit"&gt;Compare&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;</code></pre>
+        <div class="callout"><strong>Why use a form element?</strong><p>The <code>form</code> identifies these controls as one input task. A submit button works with a mouse, keyboard, and mobile keyboard without requiring separate Enter-key code. JavaScript will later intercept submission with <code>preventDefault()</code> so the page does not reload.</p></div>
+        <div class="callout"><strong>Fieldset and legend describe the group</strong><p>The <code>fieldset</code> groups the feet and inches controls, while the <code>legend</code> gives that group an accessible name. Each label is explicitly connected to its input with <code>for</code> and <code>id</code>.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-5"><h2>Section 5: Add the result and blank state</h2><p>Add the region that will first provide instructions and later display validation messages and the personalized comparison.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add a live result region below the form</h3></div><span class="tag">Step 5</span></div><div class="demo-frame">
+        <p>Paste this after the closing <code>&lt;/form&gt;</code> tag and before the SVG stage.</p>
+        <pre><code>&lt;div class="condor-compare__result"
+     id="condorResult"
+     aria-live="polite"&gt;
+  Enter your height to begin the comparison.
+&lt;/div&gt;</code></pre>
+        <div class="callout"><strong>The page begins in a blank state</strong><p>The inputs contain no default values, no personalized line is visible, and the result region gives a neutral instruction. A blank state is not an empty page; it explains what the viewer should do next.</p></div>
+        <div class="callout"><strong>One region can show several states</strong><p>JavaScript will later replace the initial instruction with an error message or a completed comparison. <code>aria-live="polite"</code> tells screen readers to announce those updates at a natural pause.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-6"><h2>Section 6: Add the comparison line</h2><p>Add the SVG elements JavaScript will later reveal, resize, and center according to the viewer's height.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add a hidden line group inside the SVG</h3></div><span class="tag">Step 6</span></div><div class="demo-frame">
+        <p>Paste this inside the empty overlay <code>&lt;svg class="condor-compare__overlay"&gt;</code>, before its closing tag.</p>
+        <pre><code>&lt;g id="condorBarGroup" hidden aria-hidden="true"&gt;
+  &lt;line id="condorPersonBar"
+        class="condor-compare__person-line"
+        y1="400"
+        y2="400"&gt;&lt;/line&gt;
+
+  &lt;line id="condorBarStart"
+        class="condor-compare__person-cap"
+        y1="383"
+        y2="417"&gt;&lt;/line&gt;
+
+  &lt;line id="condorBarEnd"
+        class="condor-compare__person-cap"
+        y1="383"
+        y2="417"&gt;&lt;/line&gt;
+
+  &lt;text id="condorPersonLabel"
+        class="condor-compare__person-label"
+        y="460"&gt;
+    Your height
+  &lt;/text&gt;
+&lt;/g&gt;</code></pre>
+        <div class="callout"><strong>JavaScript will manipulate attributes</strong><p>The line begins without horizontal coordinates. Later, JavaScript will calculate and set its <code>x1</code> and <code>x2</code> values. It will set matching coordinates for the end caps and keep the label at the condor's center.</p></div>
+        <div class="callout"><strong>Keep unavailable output hidden</strong><p>The entire SVG group begins with the <code>hidden</code> attribute because the page does not yet have a height to represent. Since the group is an SVG element, JavaScript will explicitly add or remove that attribute rather than relying on the HTML-only <code>.hidden</code> property.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-7"><h2>Section 7: Connect JavaScript to the page</h2><p>JavaScript must first identify the controls and output elements it will use.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Create constants for the interface</h3></div><span class="tag">Step 7</span></div><div class="demo-frame">
+        <p>Paste this inside the script element.</p>
+        <pre><code>(() =&gt; {
+  const CONDOR_INCHES = 9.5 * 12;
+
+  const form = document.getElementById('condorForm');
+  const feetInput = document.getElementById('condorFeet');
+  const inchesInput = document.getElementById('condorInches');
+  const result = document.getElementById('condorResult');
+
+  const barGroup = document.getElementById('condorBarGroup');
+  const personBar = document.getElementById('condorPersonBar');
+  const barStart = document.getElementById('condorBarStart');
+  const barEnd = document.getElementById('condorBarEnd');
+  const personLabel = document.getElementById('condorPersonLabel');
+})();</code></pre>
+        <div class="callout"><strong>Namespace the JavaScript too</strong><p>The IDs all begin with <code>condor</code>, and the code is wrapped in an immediately invoked function. This keeps its variables out of the global scope when the snippet is pasted into a larger Tilda page.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-8"><h2>Section 8: Create the blank state</h2><p>Make one function responsible for returning the interface to its neutral starting condition.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add a reusable blank-state function</h3></div><span class="tag">Step 8</span></div><div class="demo-frame">
+        <p>Add this below the constants, but still inside the wrapper function.</p>
+        <pre><code>function showBlankState(message = 'Enter your height to begin the comparison.') {
+  barGroup.setAttribute('hidden', '');
+  result.textContent = message;
+}</code></pre>
+        <div class="callout"><strong>A blank state is designed, not empty</strong><p>It tells viewers what to do before data exists. The same function can also hide an old result when new input is incomplete or invalid. <code>setAttribute()</code> is used because the hidden element is an SVG <code>&lt;g&gt;</code>, not a regular HTML element.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-9"><h2>Section 9: Check the input</h2><p>Validate the form before using the viewer's values in a calculation.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Start the comparison function</h3></div><span class="tag">Step 9</span></div><div class="demo-frame">
+        <pre><code>function updateComparison() {
+  const feetText = feetInput.value.trim();
+  const inchesText = inchesInput.value.trim();
+
+  if (feetText === '' || inchesText === '') {
+    showBlankState('Enter both feet and inches.');
+    return;
+  }
+
+  let feet = Number(feetText);
+  let inches = Number(inchesText);
+
+  if (!Number.isFinite(feet) || !Number.isFinite(inches)) {
+    showBlankState('Enter numbers for both fields.');
+    return;
+  }
+
+  if (feet &lt; 2 || feet &gt; 9 || inches &lt; 0 || inches &gt; 11) {
+    showBlankState('Enter 2–9 feet and 0–11 inches.');
+    return;
+  }
+}</code></pre>
+        <div class="callout"><strong>HTML limits are not enough</strong><p>The feet field can allow values through 9 and the inches field through 11, but HTML cannot express a combined maximum of 9 feet 6 inches. JavaScript must check the total height before drawing the comparison.</p></div>
+        <div class="callout"><strong>Why use return?</strong><p>After an error is found, <code>return</code> stops the function. Without it, the code could continue and draw a comparison using incomplete or invalid values.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-10"><h2>Section 10: Process the values</h2><p>Convert the viewer's height into the same unit used for the condor wingspan.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Calculate the ratio</h3></div><span class="tag">Step 10</span></div><div class="demo-frame">
+        <p>Add this at the end of <code>updateComparison()</code>, before its closing brace.</p>
+        <pre><code>feet = Math.round(feet);
+inches = Math.round(inches);
+
+const totalInches = feet * 12 + inches;
+
+if (totalInches > CONDOR_INCHES) {
+  showBlankState('Enter a height no taller than 9 ft 6 in.');
+  return;
+}
+
+const ratio = totalInches / CONDOR_INCHES;
+const percent = Math.round(ratio * 100);</code></pre>
+        <div class="callout"><strong>Compare like units</strong><p>The condor wingspan is converted from feet to inches once. The viewer's feet and inches are also combined into inches. That total makes it possible to reject anything above 114 inches—or 9 feet 6 inches—and then calculate a valid ratio using the same unit.</p></div><div class="callout"><strong>Test the upper limit</strong><p>Enter <code>9</code> feet and <code>6</code> inches. The result should be exactly <code>100%</code>, and the comparison line should span the full width of the condor image.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-11"><h2>Section 11: Draw the centered line</h2><p>Use the ratio to determine the line's width and position it evenly around the condor's center.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Set the SVG line measurements</h3></div><span class="tag">Step 11</span></div><div class="demo-frame">
+        <p>Add this next inside <code>updateComparison()</code>.</p>
+        <pre><code>const condorWidth = 1002;
+const centerX = 501;
+const lineWidth = Math.min(condorWidth * ratio, condorWidth * 1.15);
+const barX = centerX - lineWidth / 2;
+const barEndX = centerX + lineWidth / 2;
+
+barGroup.removeAttribute('hidden');
+
+personBar.setAttribute('x1', barX);
+personBar.setAttribute('x2', barEndX);
+
+barStart.setAttribute('x1', barX);
+barStart.setAttribute('x2', barX);
+
+barEnd.setAttribute('x1', barEndX);
+barEnd.setAttribute('x2', barEndX);
+
+personLabel.setAttribute('x', centerX);
+personLabel.textContent = `Your height: ${feet} ft ${inches} in`;</code></pre>
+        <div class="callout"><strong>Centering requires half the width</strong><p>The overlay SVG uses a <code>1002 × 500</code> coordinate system. Its width matches the trimmed PNG, while its shorter height matches the revised stage. That means the full image width can serve as the scale reference for the condor’s wingspan. Subtracting half the line width finds the left edge; adding half finds the right edge. The line therefore grows equally in both directions. <code>removeAttribute('hidden')</code> makes the SVG group visible after valid input has been processed.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-12"><h2>Section 12: Return feedback</h2><p>Explain the result in words instead of relying only on the visual bar.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Write the personalized comparison</h3></div><span class="tag">Step 12</span></div><div class="demo-frame">
+        <p>Add this after the line code inside <code>updateComparison()</code>.</p>
+        <pre><code>const peopleAcross = CONDOR_INCHES / totalInches;
+
+result.innerHTML = `
+  At &lt;strong&gt;${feet} ft ${inches} in&lt;/strong&gt;,
+  your height is about &lt;strong&gt;${percent}%&lt;/strong&gt;
+  of a California condor's wingspan.
+  About &lt;strong&gt;${peopleAcross.toFixed(1)} people&lt;/strong&gt;
+  your height could fit head-to-toe across the wings.
+`;</code></pre>
+        <div class="callout"><strong>Feedback should teach</strong><p>The result connects directly to the viewer's input, interprets the ratio, and provides a second familiar comparison. The <code>aria-live</code> attribute announces the updated feedback to assistive technology.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-13"><h2>Section 13: Trigger the calculation</h2><p>Use the form submission event to handle both the button and the Enter key.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Listen for form submission</h3></div><span class="tag">Step 13</span></div><div class="demo-frame">
+        <p>Add this after the <code>updateComparison()</code> function.</p>
+        <pre><code>form.addEventListener('submit', event =&gt; {
+  event.preventDefault();
+  updateComparison();
+});
+
+showBlankState();</code></pre>
+        <div class="callout"><strong>Events connect input to behavior</strong><p>The form fires the same submit event whether the viewer clicks the button or presses Enter inside an input. <code>preventDefault()</code> stops the browser from reloading the page. The final line explicitly establishes the blank state when the page loads.</p></div>
+      </div></section>
+
+<section class="section-group" id="section-14"><h2>Section 14: Move the interactive into Tilda</h2><p>After the local version works, copy the parts you built into a Tilda HTML block.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Transfer the completed pieces</h3></div><span class="tag">Step 14</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Open the Tilda page where the interactive belongs.</li>
+          <li>Add a <strong>T123 HTML Code</strong> block.</li>
+          <li>Copy the <code>&lt;section class="condor-compare"&gt;...&lt;/section&gt;</code> markup from your local file.</li>
+          <li>Change the condor image source from <code>california-condor-wide.png</code> to <code>https://static.tildacdn.net/tild3836-6331-4336-a231-303731346562/california-condor-wi.png</code>.</li>
+          <li>Copy the namespaced CSS and place it above the section inside a <code>&lt;style&gt;</code> element.</li>
+          <li>Copy the JavaScript wrapper and place it below the section inside a <code>&lt;script&gt;</code> element.</li>
+          <li>Do not copy the document-level <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, or <code>&lt;body&gt;</code> tags. Tilda already provides those.</li>
+          <li>Save, publish, and test the live page at desktop and mobile widths.</li>
+        </ol>
+        <div class="callout"><strong>Build it instead of pasting a finished answer</strong><p>Your Tilda block should be assembled from the HTML, CSS, and JavaScript you added throughout the tutorial. This makes it easier to identify which part to revise later.</p></div>
+        <div class="callout"><strong>Namespacing matters most after embedding</strong><p>The local file contains only your project. The Tilda page contains many existing classes and scripts. Namespaced selectors, IDs, and JavaScript reduce collisions with the surrounding site.</p></div>
+      </div></section>
+
+<section class="section-group" id="submission"><h2>Submission</h2></section>
+      <section class="pattern submission-box"><div class="pattern-header"><div><h3>Publish and submit the Tilda page</h3><p>Submit the public page containing your completed comparison.</p></div><span class="tag">Final</span></div><div class="demo-frame">
+        <ul class="steps">
+          <li>The feet and inches fields begin blank.</li>
+          <li>The page displays a useful blank-state instruction before input.</li>
+          <li>Missing, nonnumeric, and out-of-range values—including heights above 9 ft 6 in—produce clear error feedback.</li>
+          <li>Valid input draws a centered line proportional to the condor's wingspan.</li>
+          <li>The written result explains the percentage and playful comparison.</li>
+          <li>The comparison works with the button and Enter key.</li>
+          <li>The layout works at desktop and mobile widths.</li>
+          <li>The CSS and JavaScript remain namespaced inside the Tilda block.</li>
+        </ul>
+      </div></section>
+    </main>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const menuBackdrop = document.getElementById('mobileMenuBackdrop');
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      menuToggle?.setAttribute('aria-expanded', 'false');
+      if (menuBackdrop) menuBackdrop.hidden = true;
+    }
+    if (menuToggle && menuBackdrop) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        menuBackdrop.hidden = !isOpen;
+      });
+      menuBackdrop.addEventListener('click', closeMenu);
+      document.querySelectorAll('.sidebar a').forEach(link => link.addEventListener('click', closeMenu));
+    }
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+  </script>
+</body>
+</html>
