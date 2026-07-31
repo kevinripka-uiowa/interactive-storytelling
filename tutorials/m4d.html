@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Build a Scroll-Driven Bird Map with Mapbox</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build a Scroll-Driven Map with Mapbox</title>
 <style>
     :root {
       --bg:#f7f4ec; --panel:#fffdf7; --ink:#17211b; --muted:#5c675f; --line:#d9d2c2;
@@ -117,7 +116,17 @@
       a { text-decoration:none!important; color:#111!important; }
     }
 
-  </style>
+  
+    .resource-list { display:grid; gap:10px; margin:14px 0 0; padding:0; list-style:none; }
+    .resource-list a { display:block; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:#fff; color:var(--accent); font-weight:800; text-decoration:none; }
+    .resource-list a:hover, .resource-list a:focus { text-decoration:underline; }
+    .code-label { margin:14px 0 -4px; font-weight:900; color:var(--ink); }
+    .two-col { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .checklist { list-style:none; padding-left:0; }
+    .checklist li { position:relative; padding-left:1.7rem; }
+    .checklist li::before { content:"✓"; position:absolute; left:0; color:var(--accent); font-weight:900; }
+    @media (max-width:760px) { .two-col { grid-template-columns:1fr; } }
+</style>
 </head>
 <body>
 
@@ -126,161 +135,592 @@
 <div class="layout">
 <aside class="sidebar" id="siteSidebar" aria-label="Tutorial navigation">
 <a href="../" class="home-button">&larr; Back to Home</a>
-<h1>Build a Scroll-Driven Bird Map with Mapbox</h1>
-<p>Tutorial M4 - Guided Map. Create a map story with Mapbox Studio and the Storytelling template.</p>
+<h1>Build a Scroll-Driven Map with Mapbox</h1>
+<p>Tutorial M4D. Build a guided map story with Mapbox Studio, the Mapbox Storytelling template, GitHub Pages, and Tilda.</p>
 <nav>
 <div class="nav-group-title">Start here</div>
-<a href="#overview">Overview</a><a href="#video">Video</a><a href="#before">Before you start</a>
-<div class="nav-group-title">Mapbox Studio</div>
-<a href="#section-1">1. Understand the workflow</a><a href="#section-2">2. Prepare the bird data</a><a href="#section-3">3. Create a custom style</a><a href="#section-4">4. Add and style layers</a><a href="#section-5">5. Prepare layer opacity</a><a href="#section-6">6. Publish the style</a>
-<div class="nav-group-title">Story configuration</div>
-<a href="#section-7">7. Download the template</a><a href="#section-8">8. Add the token and style</a><a href="#section-9">9. Build the opening chapter</a><a href="#section-10">10. Add terrain and 3D views</a><a href="#section-11">11. Change data layers</a><a href="#section-12">12. Add images and credits</a>
-<div class="nav-group-title">Production checks</div>
-<a href="#section-13">13. Test and revise</a><a href="#section-14">14. Publish with GitHub Pages</a><a href="#submission">Submission</a>
-</nav></aside>
+<a href="#overview">Overview</a>
+<a href="#video">Video</a>
+<a href="#before">Before you start</a>
+<div class="nav-group-title">Build the map</div>
+<a href="#download">1. Download the template</a>
+<a href="#token">2. Create a token</a>
+<a href="#studio">3. Build the Studio style</a>
+<a href="#layers">4. Add custom layers</a>
+<a href="#publish-style">5. Publish the style</a>
+<div class="nav-group-title">Build the story</div>
+<a href="#config">6. Configure the project</a>
+<a href="#chapter">7. Construct the first chapter</a>
+<a href="#location-helper">8. Use the location helper</a>
+<a href="#remaining">9. Add remaining chapters</a>
+<div class="nav-group-title">Publish</div>
+<a href="#github">10. Publish to GitHub</a>
+<a href="#tilda">11. Embed in Tilda</a>
+<a href="#submission">Submission</a>
+</nav>
+</aside>
+
 <main>
 <section class="hero" id="overview">
-<div class="eyebrow">Tutorial M4 - Guided Map</div>
-<h2>Build a Scroll-Driven Bird Map with Mapbox</h2>
-<p>In this tutorial, you will create a guided map story about bird migration. As the reader scrolls, the map will move from a continental overview to stopover habitat, an urban hazard, mountain terrain, and a breeding range.</p>
-<p>You will create and style the geographic layers in Mapbox Studio. You will then use the Mapbox Storytelling template and edit only <code>config.js</code> to control the story text, camera position, 3D terrain, and layer visibility.</p>
-<div class="concept-callout"><strong>Mapbox Studio builds the map; <code>config.js</code> directs the story.</strong> Studio controls the basemap and geographic layers. The configuration file controls where the camera moves and which prepared layers become visible in each chapter.</div>
-<div class="overview-grid" aria-label="Tutorial summary">
-<article class="meta-card"><h4>What you will build</h4><p>A full-page, scroll-driven bird migration story with custom points, lines, and polygons; pitched 3D views; mountain terrain; and chapter-based layer changes.</p></article>
-<article class="meta-card"><h4>What you will submit</h4><p>The public GitHub Pages URL and the complete project repository. Your project should use the standard template without adding custom JavaScript.</p></article>
-</div></section>
-<section class="video-section" id="video"><div class="video-card"><h3>Video walkthrough</h3><p>Replace <code>VIDEO_ID</code> with the ID from the recorded tutorial.</p><div class="video-embed"><iframe src="https://www.youtube.com/embed/VIDEO_ID" title="Build a scroll-driven bird map with Mapbox video tutorial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></div></section>
-<section class="section-group" id="before"><h2>Before you start</h2><p>Prepare the accounts, software, story material, and geographic data used in the project.</p></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Preparation checklist</h3></div><span class="tag">Setup</span></div><div class="demo-frame"><ul class="steps">
-<li>Create a Mapbox account and locate your public access token.</li><li>Open <a href="https://studio.mapbox.com/" target="_blank" rel="noopener">Mapbox Studio</a>.</li><li>Install Visual Studio Code and the Live Server extension.</li><li>Create or download three small GeoJSON files: a migration route, bird observation or stopover points, and a breeding or habitat range.</li><li>Prepare a short story of four to six chapters. Each chapter should have a geographic reason to move the map.</li><li>Prepare any photographs and record their sources, licenses, and alt text.</li></ul>
-<div class="callout"><strong>Use a public token, not a secret token</strong><p>A public Mapbox token normally begins with <code>pk.</code>. It will be visible in the published project. Never place a secret token in a public repository.</p></div></div></section>
-<section class="section-group" id="section-1"><h2>Section 1: Understand the workflow</h2><p>This project uses three connected pieces, but you will write story-specific content in only one file.</p></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Separate data, design, and choreography</h3></div><span class="tag">Concept</span></div><div class="demo-frame"><ul class="steps"><li><strong>GeoJSON:</strong> Stores the bird locations, routes, and range boundaries.</li><li><strong>Mapbox Studio:</strong> Uploads the data, converts it into hosted map data, styles each layer, and publishes a custom map style.</li><li><strong><code>config.js</code>:</strong> Stores the story chapters, camera locations, transition settings, and instructions for showing or hiding prepared layers.</li></ul><div class="callout"><strong>Do not add raw GeoJSON in <code>config.js</code></strong><p>The standard Storytelling template expects custom layers to already exist in the Mapbox Studio style. The configuration file changes their opacity as the reader moves through the story.</p></div></div></section>
-<section class="section-group" id="section-2"><h2>Section 2: Prepare the bird data</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Use a different geometry for each story job</h3></div><span class="tag">Step 2</span></div><div class="demo-frame"><ul class="steps"><li><strong>Points:</strong> Stopover sites, nesting locations, collision reports, or notable observations.</li><li><strong>Lines:</strong> A simplified migration route or movement corridor.</li><li><strong>Polygons:</strong> Breeding range, wintering range, wetland habitat, or a conservation area.</li></ul><p>Keep the example data small. Every feature should include useful properties such as <code>name</code>, <code>type</code>, <code>season</code>, or <code>description</code>.</p><pre><code>{
-  "type": "Feature",
-  "properties": {
-    "name": "Iowa River Corridor",
-    "type": "stopover habitat"
-  },
-  "geometry": {
-    "type": "Point",
-    "coordinates": [-91.53, 41.66]
-  }
-}</code></pre><div class="callout"><strong>Use demonstration data responsibly</strong><p>Do not draw a migration route and present it as a precise scientific track. Label simplified or fictional data clearly, or use authoritative data and cite it.</p></div></div></section>
-<section class="section-group" id="section-3"><h2>Section 3: Create a custom Mapbox style</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Start with Mapbox Standard</h3></div><span class="tag">Step 3</span></div><div class="demo-frame"><ol class="steps"><li>In Mapbox Studio, open the <strong>Styles</strong> area.</li><li>Choose <strong>New style</strong>.</li><li>Use Mapbox Standard as the basemap.</li><li>Rename the style something specific, such as <strong>Bird Migration Story</strong>.</li><li>Adjust the basemap theme and label density so the custom bird layers will remain dominant.</li></ol><div class="callout"><strong>Mapbox Standard includes 3D context</strong><p>At a close zoom and high pitch, Standard can display 3D buildings and detailed landmarks without requiring you to add a custom building layer.</p></div></div></section>
-<section class="section-group" id="section-4"><h2>Section 4: Add and style the custom layers</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Upload each dataset and name every layer clearly</h3></div><span class="tag">Step 4</span></div><div class="demo-frame"><ol class="steps"><li>Choose <strong>Add new layer</strong>, then upload the first GeoJSON file.</li><li>Allow Mapbox Studio to convert the uploaded data into a tileset.</li><li>Choose the correct layer type: circle or symbol for points, line for routes, and fill for ranges.</li><li>Give the layer a short ID that will be easy to copy into <code>config.js</code>.</li><li>Repeat for the remaining datasets.</li></ol><pre><code>migration-route
-stopover-sites
-urban-hazards
-breeding-range</code></pre><div class="subsection"><h4>Style for hierarchy</h4><ul class="steps"><li>Make the migration route prominent enough to follow at a continental zoom.</li><li>Give points a visible stroke so they remain legible over varied basemap colors.</li><li>Use partial opacity for polygons so readers can still see geographic context.</li><li>Use more than color when possible. A dashed route or outlined polygon adds a second visual cue.</li></ul></div></div></section>
-<section class="section-group" id="section-5"><h2>Section 5: Prepare the layers for chapter control</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Set story-controlled layers to zero opacity</h3></div><span class="tag">Step 5</span></div><div class="demo-frame"><ol class="steps"><li>Select a custom layer that should be hidden when the story first loads.</li><li>Set its relevant opacity property to <code>0</code>.</li><li>For a circle layer, check both circle opacity and stroke opacity.</li><li>For a line layer, set line opacity to <code>0</code>.</li><li>For a fill layer, set fill opacity to <code>0</code> and consider whether the outline also needs to begin hidden.</li><li>Repeat for every layer that chapters will reveal later.</li></ol><div class="callout"><strong>Do not use the eye icon to hide the layer</strong><p>The Storytelling template changes paint opacity. A layer disabled in Studio may remain unavailable even when <code>config.js</code> tries to reveal it.</p></div></div></section>
-<section class="section-group" id="section-6"><h2>Section 6: Publish the Mapbox style</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Copy the style URL and layer IDs</h3></div><span class="tag">Step 6</span></div><div class="demo-frame"><ol class="steps"><li>Click <strong>Publish</strong> in Mapbox Studio.</li><li>Review the changes and confirm the publication.</li><li>Open the style’s sharing or developer resources.</li><li>Copy the Style URL. It should begin with <code>mapbox://styles/</code>.</li><li>Record the exact IDs of all custom layers. Spelling and capitalization must match.</li></ol><pre><code>mapbox://styles/your-username/your-style-id</code></pre></div></section>
-<section class="section-group" id="section-7"><h2>Section 7: Download and open the Storytelling template</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Use the official Mapbox repository</h3></div><span class="tag">Step 7</span></div><div class="demo-frame"><ol class="steps"><li>Open the <a href="https://github.com/mapbox/storytelling" target="_blank" rel="noopener">Mapbox Storytelling repository</a>.</li><li>Choose <strong>Code</strong>, then <strong>Download ZIP</strong>.</li><li>Unzip the project and rename the folder for your story.</li><li>Open the complete folder in Visual Studio Code.</li><li>Open <code>config.js.template</code> or the supplied configuration example.</li><li>Save a working copy as <code>config.js</code> if the downloaded version does not already include one.</li><li>Start Live Server from <code>index.html</code>.</li></ol><div class="callout"><strong>Leave the template JavaScript alone</strong><p>For this tutorial, do not edit the application code. Your work should be limited to Mapbox Studio, <code>config.js</code>, story images, and minor visual changes only when directed.</p></div></div></section>
-<section class="section-group" id="section-8"><h2>Section 8: Add the access token and custom style</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Configure the story-level settings</h3></div><span class="tag">Step 8</span></div><div class="demo-frame"><pre><code>var config = {
+<div class="eyebrow">Tutorial M4D · Guided Map</div>
+<h2>Build a Scroll-Driven Map with Mapbox</h2>
+<p>Create a guided map story about a hypothetical neotropical migrant. The map will move from winter and breeding ranges to migration routes, a Gulf crossing, urban buildings, and mountain terrain.</p>
+<div class="concept-callout"><strong>Mapbox Studio builds the map; <code>config.js</code> choreographs the story.</strong> Studio controls the basemap and custom geographic layers. The Storytelling template uses Scrollama to connect scrolling chapters to camera movement and layer changes.</div>
+<div class="overview-grid">
+<article class="meta-card"><h4>What you will build</h4><p>A full-page scrollytelling map with custom polygon and line layers, chapter-based opacity changes, pitched 3D views, and an embedded presentation in Tilda.</p></article>
+<article class="meta-card"><h4>What you will submit</h4><p>Your published Tilda page and the public GitHub repository that contains the complete Mapbox Storytelling project.</p></article>
+</div>
+</section>
+
+<section class="video-section" id="video">
+<div class="video-card">
+<h3>Video walkthrough</h3>
+<p>Follow the recorded demonstration while using the written steps and supplied code below.</p>
+<div class="video-embed"><iframe src="https://www.youtube.com/embed/ssnluNb6i34" title="Build a scroll-driven bird map with Mapbox tutorial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+</div>
+</section>
+
+<section class="section-group" id="before"><h2>Before you start</h2><p>Prepare the accounts, software, data, and project materials needed for the tutorial.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Preparation checklist</h3></div><span class="tag">Setup</span></div>
+<div class="demo-frame">
+<ul class="steps checklist">
+<li>Sign in to Mapbox.</li>
+<li>Install Visual Studio Code and the Live Server extension.</li>
+<li>Download the supplied GeoJSON files for the breeding range, winter range, and migration route.</li>
+<li>Download the supplied <code>birds.png</code> image.</li>
+<li>Have a GitHub account and a Tilda page ready.</li>
+</ul>
+<ul class="resource-list">
+<li><a href="https://github.com/mapbox/storytelling" target="_blank" rel="noopener">Mapbox Storytelling template</a></li>
+<li><a href="https://labs.mapbox.com/location-helper/" target="_blank" rel="noopener">Mapbox location helper</a></li>
+</ul>
+</div>
+</section>
+
+<section class="section-group" id="download"><h2>Section 1: Download and inspect the template</h2><p>The template provides the scrolling system, map setup, and chapter logic. Your primary work will happen in <code>config.js</code>.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Open the project in VS Code</h3></div><span class="tag">Step 1</span></div>
+<div class="demo-frame">
+<ol class="steps">
+<li>Download the ZIP from the Mapbox Storytelling repository.</li>
+<li>Unzip it and rename the folder <strong>scroll-map</strong>.</li>
+<li>Open the complete folder in Visual Studio Code.</li>
+<li>Keep <code>index.html</code>, <code>config.js</code>, and the supporting project files. You may remove sample assets you will not use.</li>
+<li>Start Live Server from <code>index.html</code>.</li>
+</ol>
+<div class="callout"><strong>Do not rewrite the template JavaScript</strong><p>The project already loads Mapbox GL JS and Scrollama and contains the code that connects chapters to the map. For this tutorial, edit <code>config.js</code> and use the existing template.</p></div>
+</div>
+</section>
+
+<section class="section-group" id="token"><h2>Section 2: Create a restricted Mapbox token</h2><p>The map will not load until the project has a public Mapbox access token.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Create a project-specific token</h3></div><span class="tag">Step 2</span></div>
+<div class="demo-frame">
+<ol class="steps">
+<li>Open the access-token area of your Mapbox account.</li>
+<li>Create a new public token and give it a clear name such as <strong>M4D Scroll Map</strong>.</li>
+<li>Restrict the token to <code>localhost</code> so the project works with Live Server.</li>
+<li>Add your GitHub Pages domain, such as <code>yourusername.github.io</code>.</li>
+<li>Create the token and paste it into <code>config.js</code>.</li>
+</ol>
+<pre><code>accessToken: 'YOUR_PUBLIC_MAPBOX_TOKEN',</code></pre>
+<div class="callout"><strong>The token will be visible in the browser</strong><p>This is a client-side map, so use a public token with limited permissions and URL restrictions. Do not use a secret token.</p></div>
+</div>
+</section>
+
+<section class="section-group" id="studio"><h2>Section 3: Create a custom Mapbox Studio style</h2><p>The custom style will contain the basemap plus the geographic layers used by the story.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Start with Mapbox Standard</h3></div><span class="tag">Step 3</span></div>
+<div class="demo-frame">
+<ol class="steps">
+<li>Open the Mapbox Studio style editor.</li>
+<li>Create a new style and choose <strong>Mapbox Standard</strong>.</li>
+<li>Leave the default basemap settings unless they interfere with the story.</li>
+<li>Rename the style <strong>Neotropical Birds</strong>.</li>
+</ol>
+<p>You may change label visibility, colors, or other basemap settings later, but the tutorial focuses on adding and controlling custom data layers.</p>
+</div>
+</section>
+
+<section class="section-group" id="layers"><h2>Section 4: Add and style the custom layers</h2><p>Upload three GeoJSON datasets and name the resulting layers exactly as they will appear in <code>config.js</code>.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Add the breeding, winter, and migration layers</h3></div><span class="tag">Step 4</span></div>
+<div class="demo-frame">
+<div class="two-col">
+<div>
+<h4>Polygon layers</h4>
+<ul class="steps">
+<li>Upload <code>breedingrange.geojson</code>.</li>
+<li>Use an orange fill and remove or reduce the stroke.</li>
+<li>Name the layer <code>breeding-range</code>.</li>
+<li>Upload the winter-range file, use a blue fill, and name it <code>winter-range</code>.</li>
+</ul>
+</div>
+<div>
+<h4>Line layer</h4>
+<ul class="steps">
+<li>Upload the migration-route GeoJSON.</li>
+<li>Choose a visible line color and width.</li>
+<li>Name the layer <code>migration-route</code>.</li>
+</ul>
+</div>
+</div>
+<div class="callout"><strong>Set the initial opacity to zero</strong><p>Set the relevant opacity property of all three story-controlled layers to <code>0</code>. The chapters will reveal them later. A fill layer may have separate fill and outline settings.</p></div>
+</div>
+</section>
+
+<section class="section-group" id="publish-style"><h2>Section 5: Publish the style</h2><p>The Storytelling project must point to a published Mapbox style.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Copy the Style URL</h3></div><span class="tag">Step 5</span></div>
+<div class="demo-frame">
+<ol class="steps">
+<li>Click <strong>Save and publish</strong>.</li>
+<li>Wait for the uploaded datasets to finish processing.</li>
+<li>If Studio reports a temporary publishing error, refresh and try again.</li>
+<li>Open the style’s <strong>Share</strong> panel.</li>
+<li>Copy the Style URL beginning with <code>mapbox://styles/</code>.</li>
+</ol>
+<pre><code>style: 'mapbox://styles/your-username/your-style-id',</code></pre>
+</div>
+</section>
+
+<section class="section-group" id="config"><h2>Section 6: Configure the project</h2><p>The main configuration object stores project-wide settings and an array of chapter objects.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Set the story-level properties</h3></div><span class="tag">Step 6</span></div>
+<div class="demo-frame">
+<pre><code>var config = {
   style: 'mapbox://styles/your-username/your-style-id',
   accessToken: 'YOUR_PUBLIC_MAPBOX_TOKEN',
   showMarkers: false,
-  markerColor: '#37634e',
   theme: 'light',
-  use3dTerrain: true,
-  title: 'A Bird\'s Journey North',
-  subtitle: 'Migration connects habitats across a continent',
-  byline: 'By Your Name',
-  footer: 'Sources and image credits go here.',
+  title: 'Dangers of Neotropical Migrants',
+  subtitle: 'Birds face obstacles as they migrate from Central and South America to breed in the United States and Canada',
   chapters: [
-    // Story chapters go here
+    // Chapter objects go here
   ]
-};</code></pre><ul class="steps"><li>Paste your public token into <code>accessToken</code>.</li><li>Paste the published custom Style URL into <code>style</code>.</li><li>Set <code>use3dTerrain</code> to <code>true</code> so pitched mountain views use elevation.</li><li>Use <code>showMarkers: false</code> when custom point layers already identify locations.</li></ul></div></section>
-<section class="section-group" id="section-9"><h2>Section 9: Build the opening chapter</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Introduce the full migration system</h3></div><span class="tag">Step 9</span></div><div class="demo-frame"><pre><code>{
-  id: 'continental-overview',
-  alignment: 'left',
-  hidden: false,
-  title: 'A continental journey',
-  image: './images/warbler.jpg',
-  description: 'Each spring, migratory birds move through a connected chain of habitats.',
+};</code></pre>
+<ul class="steps">
+<li><code>style</code> connects the project to your published Studio style.</li>
+<li><code>showMarkers: false</code> removes the template’s default chapter markers.</li>
+<li><code>theme</code> controls the chapter-card appearance.</li>
+<li><code>title</code> and <code>subtitle</code> create the introduction shown before the chapters.</li>
+<li><code>chapters</code> is an array containing one object for each story section.</li>
+</ul>
+<div class="callout"><strong>Do not add 3D terrain yet</strong><p>You will add <code>use3dTerrain: true</code> later, when the story reaches the mountain chapter and the setting has a clear purpose.</p></div>
+</div>
+</section>
+
+<section class="section-group" id="chapter"><h2>Section 7: Construct the opening chapter</h2><p>Build this first chapter property by property. Do not paste a completed chapter object.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Start the chapter object</h3></div><span class="tag">Step 7A</span></div>
+<div class="demo-frame">
+<p>Inside the <code>chapters</code> array, begin an object with an opening curly brace. Add a unique ID and choose where the text card will appear.</p>
+<pre><code>{
+  id: 'earth',
+  alignment: 'left',</code></pre>
+<ul class="steps">
+<li><code>id</code> identifies the chapter in the template. Use a short, unique name without spaces.</li>
+<li><code>alignment</code> positions the story card. This chapter uses the left side of the screen.</li>
+<li>End each property with a comma because more properties follow.</li>
+</ul>
+</div>
+</section>
+
+<section class="pattern">
+<div class="pattern-header"><div><h3>Add the visible story content</h3></div><span class="tag">Step 7B</span></div>
+<div class="demo-frame">
+<p>Use the values in <code>1.txt</code> to add the chapter title and description. Type the property names yourself, then copy only the supplied values.</p>
+<pre><code>  title: 'Neotropical Migrants',
+  description: 'PASTE THE DESCRIPTION FROM 1.txt',</code></pre>
+<p>Add the supplied bird image after the description:</p>
+<pre><code>  image: 'images/birds.png',</code></pre>
+<div class="callout"><strong>The description supports HTML</strong><p>Add a <code>&lt;br&gt;</code> before the final sentence and wrap that sentence in <code>&lt;b&gt;</code> tags. Because <em>Let’s</em> contains an apostrophe, escape it as <code>Let\'s</code> when the full description uses single quotation marks.</p></div>
+</div>
+</section>
+
+<section class="pattern">
+<div class="pattern-header"><div><h3>Create the nested location object</h3></div><span class="tag">Step 7C</span></div>
+<div class="demo-frame">
+<p>The camera settings belong inside a second object named <code>location</code>. Use the center, zoom, pitch, and bearing values supplied in <code>1.txt</code>.</p>
+<pre><code>  location: {
+    center: [-80.5, 20],
+    zoom: 2,
+    pitch: 0,
+    bearing: 0
+  },</code></pre>
+<ul class="steps">
+<li><code>center</code> is an array in <code>[longitude, latitude]</code> order.</li>
+<li><code>zoom: 2</code> creates a broad geographic view.</li>
+<li><code>pitch: 0</code> looks straight down at the map.</li>
+<li><code>bearing: 0</code> places north at the top.</li>
+</ul>
+</div>
+</section>
+
+<section class="pattern">
+<div class="pattern-header"><div><h3>Add the transition and initial layer states</h3></div><span class="tag">Step 7D</span></div>
+<div class="demo-frame">
+<p>Add the camera transition, then create an array of layer instructions. The first chapter explicitly hides all three custom layers so the story starts from a predictable state.</p>
+<pre><code>  mapAnimation: 'flyTo',
+  onChapterEnter: [
+    { layer: 'breeding-range', opacity: 0 },
+    { layer: 'winter-range', opacity: 0 },
+    { layer: 'migration-route', opacity: 0 }
+  ]
+}</code></pre>
+<ul class="steps">
+<li><code>mapAnimation: 'flyTo'</code> creates a smooth geographic transition.</li>
+<li><code>onChapterEnter</code> is an array because one chapter can change several layers.</li>
+<li>Each item in that array is an object naming a Studio layer and its target opacity.</li>
+<li>The final property does not need a trailing comma.</li>
+</ul>
+<div class="callout"><strong>Check the object before continuing</strong><p>Confirm that the braces and brackets close in the reverse order in which they opened: layer object, array, chapter object.</p></div>
+</div>
+</section>
+
+<section class="section-group" id="location-helper"><h2>Section 8: Use the Mapbox location helper</h2><p>Before adding more chapters, learn how to find the camera values that define each map view.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Find and test a location</h3></div><span class="tag">Step 8</span></div>
+<div class="demo-frame">
+<ol class="steps">
+<li>Open the <a href="https://labs.mapbox.com/location-helper/" target="_blank" rel="noopener">Mapbox location helper</a>.</li>
+<li>Search for a place or move the map to the view you need.</li>
+<li>Zoom to set the geographic scale.</li>
+<li>Hold the appropriate map control and drag to test pitch and bearing.</li>
+<li>Copy the resulting center, zoom, pitch, and bearing values into a chapter’s <code>location</code> object.</li>
+</ol>
+<div class="two-col">
+<div><h4>Position and scale</h4><ul class="steps"><li><strong>Center:</strong> Longitude and latitude at the middle of the map.</li><li><strong>Zoom:</strong> How much geographic area is visible.</li></ul></div>
+<div><h4>Viewing angle</h4><ul class="steps"><li><strong>Pitch:</strong> The angle between a top-down and tilted view.</li><li><strong>Bearing:</strong> The direction the camera faces. North is <code>0</code>, east is <code>90</code>, south is <code>180</code>, and west is <code>270</code>.</li></ul></div>
+</div>
+<div class="callout"><strong>Use camera changes to communicate</strong><p>Zooming out can establish a system, zooming in can reveal a local obstacle, and a high pitch can make terrain or buildings legible. Do not change the camera only for visual novelty.</p></div>
+</div>
+</section>
+
+<section class="section-group" id="remaining"><h2>Section 9: Add and modify the remaining chapters</h2><p>For each stage, paste the base chapter object shown in the tutorial. Then complete the separate addition below it so you understand what changes the map state.</p></section>
+
+<section class="pattern">
+<div class="pattern-header"><div><h3>Chapter 2: Breeding Range</h3></div><span class="tag">Paste + Add</span></div>
+<div class="demo-frame">
+<p><strong>First:</strong> Paste this base chapter after the opening chapter. Make sure a comma separates the two chapter objects.</p>
+<pre><code>{
+  id: 'breeding-range',
+  alignment: 'right',
+  title: 'Breeding Range',
+  description: 'During the summer, our hypothetical neotropical migrant breeds across eastern Canada, where long days and abundant insects provide the food needed to raise young.',
   location: {
-    center: [-96.5, 39.5],
-    zoom: 3.4,
+    center: [-70, 49.88223],
+    zoom: 3,
+    pitch: 0,
+    bearing: 0
+  },
+  mapAnimation: 'flyTo'
+}</code></pre>
+<div class="subsection"><h4>Then add the layer change</h4><p>The base chapter moves the camera, but it does not yet reveal the breeding-range polygon. Add a comma after <code>mapAnimation</code>, then add this property before the chapter’s closing brace:</p>
+<pre><code>onChapterEnter: [
+  { layer: 'breeding-range', opacity: 0.6, duration: 800 }
+]</code></pre>
+<p>This makes the polygon partially opaque over 800 milliseconds so the basemap remains visible beneath it.</p></div>
+</div>
+</section>
+
+<section class="pattern">
+<div class="pattern-header"><div><h3>Chapter 3: Winter Range</h3></div><span class="tag">Paste + Add</span></div>
+<div class="demo-frame">
+<p><strong>First:</strong> Paste this base chapter after the Breeding Range chapter.</p>
+<pre><code>{
+  id: 'winter-range',
+  alignment: 'left',
+  title: 'Winter Range',
+  description: 'When the breeding season ends, the bird returns to its winter range in southern Central America and northern South America, where warmer conditions provide food throughout the colder months.',
+  location: {
+    center: [-74.87590, 8.69840],
+    zoom: 3,
     pitch: 0,
     bearing: 0
   },
   mapAnimation: 'flyTo',
-  rotateAnimation: false,
-  callback: '',
   onChapterEnter: [
-    { layer: 'migration-route', opacity: 0.85, duration: 1000 }
-  ],
-  onChapterExit: []
-}</code></pre><div class="subsection"><h4>Chapter anatomy</h4><ul class="steps"><li><code>id</code> must be unique and should use lowercase words separated by hyphens.</li><li><code>alignment</code> controls where the text panel sits over the map.</li><li><code>location</code> controls center, zoom, pitch, and bearing.</li><li><code>mapAnimation</code> can use <code>flyTo</code>, <code>easeTo</code>, or <code>jumpTo</code>.</li><li><code>onChapterEnter</code> reveals or mutes prepared Studio layers.</li></ul></div><div class="callout"><strong>Longitude comes first</strong><p>Mapbox coordinates use <code>[longitude, latitude]</code>. Reversing them usually sends the camera to the wrong place or outside the valid map range.</p></div></div></section>
-<section class="section-group" id="section-10"><h2>Section 10: Add 3D terrain and city views</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Use pitch and bearing to reveal depth</h3></div><span class="tag">Step 10</span></div><div class="demo-frame"><p>The global <code>use3dTerrain: true</code> setting enables terrain. Individual chapters determine whether the reader can actually see the depth.</p><pre><code>{
-  id: 'mountain-passage',
-  alignment: 'right',
-  title: 'Crossing the mountains',
-  description: 'Elevation changes the route and concentrates birds in usable corridors.',
+  ]
+}</code></pre>
+<div class="subsection"><h4>Then swap the visible range</h4><p>Add these two objects inside the empty <code>onChapterEnter</code> array:</p>
+<pre><code>{ layer: 'breeding-range', opacity: 0 },
+{ layer: 'winter-range', opacity: 0.6, duration: 800 }</code></pre>
+<p>The first instruction hides the previous chapter’s layer. The second reveals the winter range. Each chapter should define the map state the viewer needs at that moment.</p></div>
+</div>
+</section>
+
+<section class="pattern">
+<div class="pattern-header"><div><h3>Chapters 4–6: Migration and the Gulf</h3></div><span class="tag">Paste + Add</span></div>
+<div class="demo-frame">
+<p><strong>First:</strong> Paste these three chapter objects after the Winter Range chapter.</p>
+<pre><code>{
+  id: 'migration',
+  alignment: 'left',
+  title: 'Migration Routes',
+  description: 'Neotropical migrants generally travel north through one of three broad pathways: over land through Mexico, across the Gulf of Mexico, or along the Caribbean islands. Our hypothetical bird follows the trans-Gulf route.',
   location: {
-    center: [-110.75, 43.75],
-    zoom: 9.2,
-    pitch: 65,
-    bearing: 28,
-    speed: 0.7,
-    curve: 1.3
+    center: [-90.94332, 16.37613],
+    zoom: 3,
+    pitch: 0,
+    bearing: 0
   },
   mapAnimation: 'flyTo',
-  rotateAnimation: true,
-  callback: '',
-  onChapterEnter: [],
-  onChapterExit: []
-}</code></pre><p>For an urban chapter, move to a close zoom in a city and keep a high pitch. Mapbox Standard can display 3D buildings automatically where building data is available.</p><pre><code>location: {
-  center: [-87.6298, 41.8781],
-  zoom: 15.5,
-  pitch: 68,
-  bearing: -25
-}</code></pre><div class="callout"><strong>3D should explain something</strong><p>Use mountain relief to discuss terrain or use buildings to discuss urban hazards. Do not add dramatic pitch only because it looks impressive.</p></div></div></section>
-<section class="section-group" id="section-11"><h2>Section 11: Change data layers between chapters</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Reveal one layer and mute another</h3></div><span class="tag">Step 11</span></div><div class="demo-frame"><pre><code>onChapterEnter: [
-  { layer: 'migration-route', opacity: 0.2, duration: 800 },
-  { layer: 'stopover-sites', opacity: 1, duration: 800 },
-  { layer: 'wetland-habitat', opacity: 0.55, duration: 800 }
-],
-onChapterExit: [
-  { layer: 'stopover-sites', opacity: 0, duration: 500 },
-  { layer: 'wetland-habitat', opacity: 0, duration: 500 }
-]</code></pre><ul class="steps"><li>Use the exact layer ID from Mapbox Studio.</li><li>Use values between <code>0</code> and <code>1</code> for opacity.</li><li>Use duration values in milliseconds.</li><li>Keep important context visible at reduced opacity rather than turning everything off.</li><li>Set a layer’s exit state when the next chapter should no longer show it.</li></ul><div class="callout"><strong>The template changes opacity, not arbitrary filters</strong><p>For a config-only project, create separate Studio layers for categories such as spring observations and fall observations. Then reveal the correct layer in each chapter.</p></div></div></section>
-<section class="section-group" id="section-12"><h2>Section 12: Add images, text, and attribution</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Keep story assets inside the project</h3></div><span class="tag">Step 12</span></div><div class="demo-frame"><ol class="steps"><li>Create an <code>images</code> folder inside the Storytelling project.</li><li>Optimize each image before adding it. Use an appropriate display size and compressed JPEG or WebP format.</li><li>Reference the image with a relative path such as <code>./images/warbler.jpg</code>.</li><li>Keep chapter descriptions brief enough that readers can still see the map.</li><li>Add source citations and image credits in the footer or in the relevant chapter descriptions.</li><li>Use meaningful link text instead of pasting raw URLs into the visible story.</li></ol><div class="callout"><strong>The template’s image option does not include a separate alt-text field</strong><p>Inspect the finished output. When accessibility requirements cannot be met through configuration alone, choose images that are supplementary and describe essential information in the chapter text.</p></div></div></section>
-<section class="section-group" id="section-13"><h2>Section 13: Test and revise the story</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Check map behavior and story clarity</h3></div><span class="tag">Step 13</span></div><div class="demo-frame"><ul class="steps"><li>Scroll forward and backward through every chapter.</li><li>Confirm that every chapter moves to the intended place.</li><li>Check that all custom layers appear and disappear at the correct time.</li><li>Look for layer IDs that are misspelled or use the wrong capitalization.</li><li>Check the browser console for errors in <code>config.js</code>.</li><li>Test wide desktop, tablet, and phone widths.</li><li>Reduce pitch or zoom when the text panel blocks the map feature being discussed.</li><li>Confirm that the story still makes sense when motion is reduced.</li><li>Check that the final footer identifies data, map, image, and reporting sources.</li></ul><div class="callout"><strong>Punctuation errors can stop the entire configuration</strong><p>Check commas between chapters, matching braces and brackets, straight quotation marks, and apostrophes inside quoted text.</p></div></div></section>
-<section class="section-group" id="section-14"><h2>Section 14: Publish with GitHub Pages</h2></section>
-<section class="pattern"><div class="pattern-header"><div><h3>Publish the complete project folder</h3></div><span class="tag">Step 14</span></div><div class="demo-frame"><ol class="steps"><li>Create a GitHub repository for the project.</li><li>Commit and sync the complete Storytelling folder, including <code>index.html</code>, <code>config.js</code>, supporting scripts, styles, and images.</li><li>Open the repository settings and enable GitHub Pages from the main branch.</li><li>Open the public Pages URL and test it in a private browser window.</li><li>Confirm that the published map loads with your token and custom style.</li></ol><div class="callout"><strong>Publish this as a full page</strong><p>The Storytelling repository warns that its scroll-driven interface does not work as expected inside an iframe. Link to the full-page project rather than embedding it in another page.</p></div></div></section>
+  onChapterEnter: [
+    { layer: 'winter-range', opacity: 0 },
+    { layer: 'migration-route', opacity: 0.9, duration: 800 }
+  ]
+},
+{
+  id: 'gulf-crossing',
+  alignment: 'right',
+  title: 'Yucatán Peninsula',
+  description: 'Before attempting the Gulf crossing, the bird stops on the Yucatán Peninsula to rest and feed. The energy stored here may have to sustain it through hundreds of miles of flight over open water.',
+  location: {
+    center: [-89.18087, 24.08749],
+    zoom: 6.84,
+    pitch: 79.5,
+    bearing: 0
+  },
+  mapAnimation: 'flyTo',
+  onChapterEnter: [
+    { layer: 'migration-route', opacity: 0 }
+  ]
+},
+{
+  id: 'gulf',
+  alignment: 'left',
+  title: 'Across the Gulf',
+  description: 'The bird leaves the Yucatán and begins a nonstop flight across the Gulf of Mexico. With nowhere to land, it must continue until it reaches the northern Gulf Coast, making weather and wind conditions especially important.',
+  location: {
+    center: [-84.59217, 31.83162],
+    zoom: 6.84,
+    pitch: 70,
+    bearing: 0
+  },
+  mapAnimation: 'flyTo'
+}</code></pre>
+<div class="subsection"><h4>Then direct and slow the Gulf crossing</h4><p>In the <strong>Across the Gulf</strong> chapter, change the existing bearing from <code>0</code> to <code>15</code>. Then add <code>speed</code> inside the same <code>location</code> object:</p>
+<pre><code>bearing: 15,
+speed: 0.25</code></pre>
+<p>The bearing points the camera slightly east of north. The lower speed makes the over-water transition feel like part of the story instead of an instantaneous jump.</p></div>
+</div>
+</section>
+
+<section class="pattern">
+<div class="pattern-header"><div><h3>Chapter 7: Buildings</h3></div><span class="tag">Paste + Add</span></div>
+<div class="demo-frame">
+<p><strong>First:</strong> Paste this base chapter. Its close zoom and high pitch reveal available 3D building forms.</p>
+<pre><code>{
+  id: 'atlanta',
+  alignment: 'right',
+  title: 'Buildings',
+  description: 'After reaching land, the bird encounters a different kind of danger. Glass, artificial light, and dense groups of buildings can confuse migrating birds and lead to fatal collisions, especially during nighttime migration.',
+  location: {
+    center: [-84.38977916429899, 33.757302321064735],
+    zoom: 17,
+    pitch: 80,
+    bearing: 0
+  },
+  mapAnimation: 'flyTo',
+  onChapterEnter: []
+}</code></pre>
+<div class="subsection"><h4>Then add rotation</h4><p>Add this property at the chapter level, before <code>location</code>:</p>
+<pre><code>rotateAnimation: true,</code></pre>
+<p>Keep the empty <code>onChapterEnter</code> array. The template’s rotation behavior may depend on that array being present even when the chapter does not change a custom data layer.</p></div>
+</div>
+</section>
+
+<section class="pattern">
+<div class="pattern-header"><div><h3>Chapter 8: Mountains</h3></div><span class="tag">Paste + Add</span></div>
+<div class="demo-frame">
+<p><strong>First:</strong> Paste this base chapter and preview it before changing the main configuration. The camera should tilt toward the landscape, but the elevation may still look flat.</p>
+<pre><code>{
+  id: 'mountain-terrain',
+  alignment: 'left',
+  title: 'Mountains',
+  description: 'Farther north, the bird must cross mountainous terrain. Cold temperatures, storms, and limited food can slow migration and force birds to spend more time searching for safe places to rest and refuel.',
+  location: {
+    center: [-82.26510, 35.76484],
+    zoom: 14.83,
+    pitch: 79.47,
+    bearing: 0,
+    duration: 5000
+  },
+  mapAnimation: 'flyTo'
+}</code></pre>
+<div class="subsection"><h4>Then enable terrain</h4><p>Return to the main <code>config</code> object, above the <code>chapters</code> array, and add:</p>
+<pre><code>use3dTerrain: true,</code></pre>
+<p>Refresh the project and compare the mountain chapter before and after the setting. This is a global option, but you are adding it now because the story has reached the chapter that requires it.</p></div>
+</div>
+</section>
+
+<section class="pattern">
+<div class="pattern-header"><div><h3>Chapters 9–10: Arrival and Fall Migration</h3></div><span class="tag">Paste + Inspect</span></div>
+<div class="demo-frame">
+<p>Paste these final two chapter objects:</p>
+<pre><code>{
+  id: 'breeding-range2',
+  alignment: 'right',
+  title: 'Breeding Range',
+  description: 'After surviving the journey, the bird reaches its breeding range in eastern Canada. It will spend the summer establishing territory, finding a mate, and raising young before migration begins again.',
+  location: {
+    center: [-70, 49.88223],
+    zoom: 5,
+    pitch: 0,
+    bearing: 0
+  },
+  mapAnimation: 'flyTo',
+  onChapterEnter: [
+    { layer: 'breeding-range', opacity: 0.6, duration: 800 }
+  ]
+},
+{
+  id: 'breeding-range3',
+  alignment: 'right',
+  title: 'Fall Migration',
+  description: 'As summer ends, the bird turns south and retraces the long journey toward its winter range. The return trip brings many of the same hazards, meaning this migration cycle must be survived twice each year.',
+  location: {
+    center: [-70, 20],
+    zoom: 3,
+    pitch: 0,
+    bearing: 180
+  },
+  mapAnimation: 'flyTo',
+  onChapterEnter: [
+    { layer: 'breeding-range', opacity: 0, duration: 800 },
+    { layer: 'winter-range', opacity: 0.6, duration: 800 }
+  ]
+}</code></pre>
+<div class="subsection"><h4>Inspect the map-state logic</h4><ul class="steps">
+<li>The second <strong>Breeding Range</strong> chapter reveals the breeding polygon after the bird completes the northbound journey.</li>
+<li>The <strong>Fall Migration</strong> chapter hides the breeding range, reveals the winter range, and changes the bearing to <code>180</code> so the camera faces south.</li>
+</ul></div>
+<div class="callout"><strong>Test in both directions</strong><p>Scroll forward and backward through every chapter. A layer instruction that works while moving down the page may leave an incorrect state when the viewer scrolls back up.</p></div>
+</div>
+</section>
+
+<section class="section-group" id="github"><h2>Section 10: Publish with GitHub Pages</h2><p>The Tilda page will embed the map from a public GitHub Pages URL.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Push and enable Pages</h3></div><span class="tag">Step 10</span></div>
+<div class="demo-frame">
+<ol class="steps">
+<li>Open Source Control in VS Code and initialize a repository.</li>
+<li>Commit the complete project.</li>
+<li>Publish the branch as a public GitHub repository.</li>
+<li>If GitHub blocks the push because it detects the public Mapbox token, open the provided review link and allow the token only after confirming that it is public, restricted, and intended for the browser.</li>
+<li>Open the repository settings and enable GitHub Pages from the main branch.</li>
+<li>Test the public Pages URL after deployment finishes.</li>
+</ol>
+<div class="callout"><strong>Do not approve an unrestricted or secret token</strong><p>The exception is appropriate only for the deliberately public browser token created for this project and restricted to your allowed domains.</p></div>
+</div>
+</section>
+
+<section class="section-group" id="tilda"><h2>Section 11: Embed the story in Tilda</h2><p>Use a full-height iframe and prevent it from capturing pointer interaction before it reaches the top of the browser.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Add a T123 HTML block</h3></div><span class="tag">Step 11</span></div>
+<div class="demo-frame">
+<ol class="steps">
+<li>Add a custom HTML block to the Tilda page.</li>
+<li>Paste the code below into the block.</li>
+<li>Replace <code>YOUR_MAP_URL</code> with your GitHub Pages URL.</li>
+<li>Publish the Tilda page and test the transition into the iframe.</li>
+</ol>
+<pre><code>&lt;style&gt;
+  #scroll-map-embed {
+    width: 100%;
+    height: 100vh;
+  }
+
+  #scroll-map-embed iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    pointer-events: none;
+  }
+
+  #scroll-map-embed.is-active iframe {
+    pointer-events: auto;
+  }
+&lt;/style&gt;
+
+&lt;script&gt;
+  document.addEventListener('DOMContentLoaded', () =&gt; {
+    const embed = document.getElementById('scroll-map-embed');
+
+    if (!embed) return;
+
+    function updateIframeInteraction() {
+      const top = embed.getBoundingClientRect().top;
+      embed.classList.toggle('is-active', top &lt;= 0);
+    }
+
+    updateIframeInteraction();
+
+    window.addEventListener('scroll', updateIframeInteraction, {
+      passive: true
+    });
+
+    window.addEventListener('resize', updateIframeInteraction);
+  });
+&lt;/script&gt;
+
+&lt;div id="scroll-map-embed"&gt;
+  &lt;iframe
+    src="YOUR_MAP_URL"
+    title="Dangers of Neotropical Migrants"&gt;
+  &lt;/iframe&gt;
+&lt;/div&gt;</code></pre>
+<div class="callout"><strong>Why disable pointer events?</strong><p>Before the iframe reaches the top of the viewport, wheel and touch interaction should continue moving the Tilda page. Once the embed reaches the top, the script enables interaction inside the map story.</p></div>
+</div>
+</section>
+
 <section class="section-group" id="submission"><h2>Submission</h2></section>
-<section class="pattern submission-box"><div class="pattern-header"><div><h3>Submit the published bird map story</h3><p>Your final project should demonstrate both geographic storytelling and responsible production.</p></div><span class="tag">Final</span></div><div class="demo-frame"><ul class="steps"><li>Submit the public GitHub Pages URL.</li><li>Submit the GitHub repository URL.</li><li>Include at least four chapters with meaningful camera changes.</li><li>Include at least three custom Mapbox Studio layers representing more than one geometry type.</li><li>Use at least one pitched 3D terrain or building view.</li><li>Change the visibility or emphasis of custom layers between chapters.</li><li>Credit all data, map, reporting, and image sources.</li><li>Do not add custom JavaScript for this tutorial.</li></ul></div></section>
-</main></div>
+<section class="pattern submission-box">
+<div class="pattern-header"><div><h3>Submit the published scroll map</h3><p>Your project should demonstrate a complete guided map sequence and responsible publishing practices.</p></div><span class="tag">Final</span></div>
+<div class="demo-frame">
+<ul class="steps checklist">
+<li>Submit the published Tilda page URL.</li>
+<li>Submit the public GitHub repository URL.</li>
+<li>Use the supplied breeding-range, winter-range, and migration-route layers.</li>
+<li>Include the complete chapter sequence.</li>
+<li>Use at least one slowed transition, one pitched building view, and one 3D terrain view.</li>
+<li>Restrict the public Mapbox token to the required domains.</li>
+<li>Confirm that the iframe does not capture interaction before it reaches the top of the browser.</li>
+<li>Credit the map, data, reporting, and images used in the final project.</li>
+</ul>
+</div>
+</section>
+</main>
+</div>
 <script>
-    const menuToggle = document.getElementById('mobileMenuToggle');
-    const menuBackdrop = document.getElementById('mobileMenuBackdrop');
-    function closeMenu() {
-      document.body.classList.remove('menu-open');
-      menuToggle?.setAttribute('aria-expanded', 'false');
-      if (menuBackdrop) menuBackdrop.hidden = true;
-    }
-    if (menuToggle && menuBackdrop) {
-      menuToggle.addEventListener('click', () => {
-        const isOpen = document.body.classList.toggle('menu-open');
-        menuToggle.setAttribute('aria-expanded', String(isOpen));
-        menuBackdrop.hidden = !isOpen;
-      });
-      menuBackdrop.addEventListener('click', closeMenu);
-      document.querySelectorAll('.sidebar a').forEach(link => link.addEventListener('click', closeMenu));
-    }
-    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
-  </script>
+  const menuToggle = document.getElementById('mobileMenuToggle');
+  const menuBackdrop = document.getElementById('mobileMenuBackdrop');
+
+  function closeMenu() {
+    document.body.classList.remove('menu-open');
+    menuToggle?.setAttribute('aria-expanded', 'false');
+    if (menuBackdrop) menuBackdrop.hidden = true;
+  }
+
+  if (menuToggle && menuBackdrop) {
+    menuToggle.addEventListener('click', () => {
+      const isOpen = document.body.classList.toggle('menu-open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      menuBackdrop.hidden = !isOpen;
+    });
+
+    menuBackdrop.addEventListener('click', closeMenu);
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+  }
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeMenu();
+  });
+</script>
+
 </body>
 </html>

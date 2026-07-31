@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Choices and Branching Structures</title>
+<style>
+:root{--bg:#f7f4ec;--panel:#fffdf7;--ink:#17211b;--muted:#5c675f;--line:#d9d2c2;--accent:#37634e;--accent-2:#d8893a;--soft:#edf4ee;--shadow:0 14px 35px rgba(23,33,27,.12);--radius:18px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;width:100%;max-width:100%;overflow-x:hidden}a{color:inherit}button,input,select,textarea{font:inherit}button,.button{border:0;background:var(--accent);color:#fff;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}button.secondary{background:#eef3ef;color:var(--ink);border:1px solid var(--line)}button.ghost{background:#fffdf7;color:var(--accent);border:1px solid var(--line)}button:hover{filter:brightness(.96)}button:focus-visible,a:focus-visible{outline:3px solid rgba(216,137,58,.5);outline-offset:3px}
+.layout{display:block;min-height:100vh}.sidebar{position:fixed;top:0;left:0;width:280px;height:100vh;overflow-y:auto;overflow-x:hidden;z-index:20;padding:28px 22px;background:#17211b;color:#fffdf7}.sidebar h1{margin:0 0 8px;font-size:1.35rem;line-height:1.15;letter-spacing:-.02em}.sidebar p{margin:0 0 24px;color:rgba(255,255,255,.72);font-size:.92rem}.nav-group-title{margin:24px 0 8px;color:#83e4b6;text-transform:uppercase;font-size:.72rem;letter-spacing:.08em;font-weight:800}.sidebar a{display:block;padding:8px 10px;margin:2px 0;border-radius:10px;text-decoration:none;color:rgba(255,255,255,.88);font-size:.94rem}.sidebar a:hover,.sidebar a:focus{background:rgba(255,255,255,.1);outline:none}.home-button{border:1px solid #636363;margin-bottom:1rem!important;display:block}
+main{margin-left:280px;width:calc(100% - 280px);max-width:none;padding:44px 36px 80px}main>*{max-width:1120px;margin-left:auto;margin-right:auto}.hero{background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%);border:1px solid var(--line);border-radius:28px;padding:clamp(28px,5vw,56px);box-shadow:var(--shadow);margin-bottom:34px}.eyebrow{display:inline-flex;margin:0 0 12px;color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem}.hero h2{margin:0 0 14px;font-size:clamp(2rem,5vw,4.4rem);line-height:.98;letter-spacing:-.02em;max-width:900px}.hero p,.section-group p,.pattern p{color:var(--muted)}.hero p{max-width:820px;margin:0;font-size:clamp(1.05rem,2vw,1.25rem)}.concept-callout{margin:22px 0 0;padding:16px 18px;border-radius:18px;border:1px solid var(--line);background:#fff8ed;color:var(--muted);max-width:900px}.concept-callout strong{color:var(--ink)}
+.section-group{margin:54px 0 24px;padding-top:10px;border-top:2px solid var(--ink)}.section-group h2{margin:0 0 8px;font-size:clamp(1.55rem,3vw,2.2rem);letter-spacing:-.03em;color:var(--accent)}.section-group p{margin:0;max-width:840px}.pattern{scroll-margin-top:24px;margin:26px 0 42px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(20px,3vw,30px);box-shadow:0 8px 20px rgba(23,33,27,.06)}.pattern-header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start;margin-bottom:18px}.pattern h3{margin:0 0 6px;font-size:clamp(1.35rem,2.4vw,1.85rem);letter-spacing:-.03em}.pattern p{margin:0}.tag{display:inline-block;white-space:nowrap;padding:6px 10px;border-radius:999px;background:var(--soft);color:var(--accent);font-weight:800;font-size:.78rem}.definition-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}.definition-card{padding:16px;border:1px solid var(--line);border-radius:15px;background:#f6f1e7}.definition-card h4{margin:0 0 6px;color:var(--accent);font-size:1rem}.definition-card p{margin:0;color:var(--ink);font-size:.95rem}.definition-card .example{display:block;margin-top:8px;color:var(--muted);font-size:.9rem}.interaction-card{margin:18px 0 20px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff8ed}.interaction-card h4{margin:0 0 5px;color:var(--accent);font-size:.82rem;letter-spacing:.07em;text-transform:uppercase}.interaction-card p,.interaction-card ul{margin:0;color:var(--ink)}.interaction-card ul{padding-left:20px}.demo-frame{border:1px solid var(--line);border-radius:16px;background:#fff;padding:clamp(16px,3vw,24px);overflow:hidden}.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.choice-grid button{border-radius:14px;padding:13px;text-align:left;justify-content:flex-start;background:#eef3ef;color:var(--ink);border:1px solid var(--line)}.choice-grid button.selected{background:#dff1e6;border-color:#7db28d}.output-card{margin-top:14px;padding:16px;border-radius:16px;border:1px solid var(--line);background:var(--soft)}.output-card h4{margin:0 0 6px}.output-card p{margin:0;color:var(--ink)}
+.axis-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}.axis-card{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.axis-card h4{margin:0 0 8px}.axis-card ol{margin:0;padding-left:20px}.axis-card li{margin:6px 0}.structure-diagram{margin-top:18px;padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.structure-diagram svg{display:block;width:100%;height:auto;max-height:360px}.node{fill:#fffdf7;stroke:#37634e;stroke-width:2}.node.end{fill:#fff8ed;stroke:#d8893a}.edge{stroke:#5c675f;stroke-width:2;fill:none}.edge.dashed{stroke-dasharray:7 6}.diagram-label{font-size:12px;font-weight:700;fill:#17211b;text-anchor:middle;dominant-baseline:middle}.diagram-note{margin:10px 0 0;color:var(--muted);font-size:.92rem}.comparison-table{width:100%;border-collapse:collapse;margin-top:18px;background:#fff}.comparison-table th,.comparison-table td{padding:12px 14px;border:1px solid var(--line);text-align:left;vertical-align:top}.comparison-table th{background:#edf4ee;color:var(--accent)}.comparison-table td:first-child{font-weight:800;white-space:nowrap}.checklist{display:grid;gap:10px;margin-top:14px}.checklist div{padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fffdf7}.mobile-menu-toggle,.mobile-menu-backdrop{display:none}
+@media(max-width:860px){body{padding-top:64px}body.menu-open{overflow:hidden}.mobile-menu-toggle{position:fixed;top:12px;left:12px;z-index:1001;display:inline-flex;align-items:center;gap:9px;padding:10px 13px;border-radius:999px;background:#17211b;color:#fffdf7;box-shadow:0 8px 22px rgba(23,33,27,.24)}.mobile-menu-icon{position:relative;display:block;width:18px;height:12px;border-top:2px solid currentColor;border-bottom:2px solid currentColor}.mobile-menu-icon::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid currentColor;transform:translateY(-50%)}.mobile-menu-backdrop{position:fixed;inset:0;z-index:999;display:block;background:rgba(23,33,27,.45)}.mobile-menu-backdrop[hidden]{display:none}.sidebar{position:fixed!important;top:0!important;left:0;bottom:0;width:min(84vw,340px);height:100vh!important;padding:76px 22px 28px;overflow-y:auto!important;z-index:1000;transform:translateX(-105%);transition:transform .24s ease;box-shadow:18px 0 36px rgba(0,0,0,.22)}body.menu-open .sidebar{transform:translateX(0)}main{margin-left:0!important;width:100%!important;max-width:1120px;padding:24px 16px 56px}}
+@media(max-width:760px){.pattern-header,.definition-grid,.axis-grid,.choice-grid{grid-template-columns:1fr}.tag{justify-self:start;white-space:normal}.comparison-table{display:block;overflow-x:auto}.comparison-table td:first-child{white-space:normal}}
+</style>
+</head>
+<body>
+<button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span>Menu</span></button>
+<div class="mobile-menu-backdrop" hidden id="mobileMenuBackdrop"></div>
+<div class="layout">
+<aside aria-label="Page navigation" class="sidebar" id="siteSidebar">
+<a class="home-button" href="../">← Back to Home</a>
+<h1>Choices and Branching Structures</h1>
+<p>How choices function, how they feel to a player, and how they create different narrative shapes.</p>
+<nav>
+<div class="nav-group-title">Choice dimensions</div>
+<a href="#two-dimensions">Two dimensions of choice</a>
+<a href="#what-choice-changes">What the choice changes</a>
+<a href="#how-choice-feels">How the choice feels</a>
+<a href="#choice-quality">Choice quality check</a>
+<div class="nav-group-title">Branching structures</div>
+<a href="#fork">Fork</a>
+<a href="#time-cave">Time cave</a>
+<a href="#gauntlet">Gauntlet</a>
+<a href="#branch-bottleneck">Branch and bottleneck</a>
+<a href="#quest">Quest</a>
+<a href="#state-based">State-based system</a>
+<a href="#structure-comparison">Compare structures</a>
+</nav>
+</aside>
+<main>
+<section class="hero" id="intro">
+<div class="eyebrow">Participate and Engage</div>
+<h2>Choices and Branching Structures</h2>
+<p>Choice-based interactives let viewers influence what happens next, what information they encounter, or how a system responds. To design them clearly, separate the function of a choice from the experience of making it.</p>
+<div class="concept-callout"><strong>Core distinction:</strong> “Moral choice,” “fake choice,” and “resource choice” are not competing categories. They describe different dimensions. One asks what the choice changes; another asks how the choice is experienced.</div>
+</section>
+
+<section class="section-group" id="two-dimensions">
+<h2>Two dimensions of choice</h2>
+<p>Classify a choice in two passes. First identify what changes in the interactive. Then describe how the choice feels to the viewer.</p>
+</section>
+<section class="pattern">
+<div class="axis-grid">
+<div class="axis-card"><h4>1. What does the choice change?</h4><ol><li>The next content viewed</li><li>The viewer’s expressed position</li><li>A path through the narrative</li><li>A resource, score, or hidden state</li><li>A later consequence or ending</li></ol></div>
+<div class="axis-card"><h4>2. How does the choice feel?</h4><ol><li>Informed or uncertain</li><li>Meaningful or weak</li><li>Visible or invisible</li><li>Expressive or consequential</li><li>Moral, strategic, or a dilemma</li></ol></div>
+</div>
+<div class="interaction-card"><h4>Example</h4><p>Choosing whether to repair a car before accepting another rideshare trip may be a <strong>resource choice</strong> because it changes money, a <strong>consequential choice</strong> because it affects later outcomes, and a <strong>dilemma</strong> because every option has a cost.</p></div>
+</section>
+
+<section class="section-group" id="what-choice-changes"><h2>What the choice changes</h2><p>These categories describe the choice’s function inside the interactive system. A single choice may fit more than one category.</p></section>
+<section class="pattern" id="functional-types">
+<div class="definition-grid">
+<div class="definition-card"><h4>Navigational choice</h4><p>Controls which information the viewer sees next without necessarily changing the underlying story.</p><span class="example"><strong>Example:</strong> Choose housing, transportation, or health to explore first.</span></div>
+<div class="definition-card"><h4>Interpretive choice</h4><p>Asks the viewer to make a judgment, prediction, or explanation before receiving evidence or feedback.</p><span class="example"><strong>Example:</strong> Which factor best explains the trend?</span></div>
+<div class="definition-card"><h4>Expressive choice</h4><p>Lets the viewer state an identity, preference, attitude, or style. It may not affect the system much, but it can create ownership.</p><span class="example"><strong>Example:</strong> Choose how your character responds in a conversation.</span></div>
+<div class="definition-card"><h4>Branching choice</h4><p>Sends the viewer to a different scene, passage, or sequence of information.</p><span class="example"><strong>Example:</strong> Verify the tip first or publish immediately.</span></div>
+<div class="definition-card"><h4>Resource choice</h4><p>Changes a limited quantity such as money, time, health, trust, energy, or opportunities.</p><span class="example"><strong>Example:</strong> Spend $200 on repairs or keep the money for rent.</span></div>
+<div class="definition-card"><h4>Accumulating choice</h4><p>Adds to a hidden or visible state that affects later options or outcomes.</p><span class="example"><strong>Example:</strong> Several small credibility decisions determine whether a source trusts you later.</span></div>
+<div class="definition-card"><h4>Consequential choice</h4><p>Changes a later event, condition, relationship, score, or ending.</p><span class="example"><strong>Example:</strong> Skipping maintenance increases the chance of a breakdown later.</span></div>
+<div class="definition-card"><h4>Ending choice</h4><p>Determines or strongly influences the final outcome, often near the end of an otherwise shared narrative.</p><span class="example"><strong>Example:</strong> Publish the investigation or hold it for more reporting.</span></div>
+</div>
+<div class="demo-frame">
+<h4>Classify the function</h4>
+<p>“You have $40 left. Buy gas so you can keep working, or buy groceries for your family.” Which function is most central?</p>
+<div class="choice-grid" id="functionChoices">
+<button type="button" data-answer="nav">Navigational choice</button>
+<button type="button" data-answer="resource">Resource choice</button>
+<button type="button" data-answer="expressive">Expressive choice</button>
+<button type="button" data-answer="interpretive">Interpretive choice</button>
+</div>
+<div class="output-card" id="functionOutput" aria-live="polite"><h4>Choose an answer</h4><p>The same decision can have several qualities, but one function is most central.</p></div>
+</div>
+</section>
+
+<section class="section-group" id="how-choice-feels"><h2>How the choice feels</h2><p>These categories describe the viewer’s experience of the decision. They can be layered onto any functional choice type.</p></section>
+<section class="pattern" id="experiential-types">
+<div class="definition-grid">
+<div class="definition-card"><h4>Informed choice</h4><p>The viewer has enough information to anticipate likely consequences and make a reasoned decision.</p><span class="example"><strong>Use when:</strong> The purpose is strategy, tradeoffs, or systems thinking.</span></div>
+<div class="definition-card"><h4>Unfair choice</h4><p>The consequences are difficult or impossible to predict from the available information. This can create uncertainty, but it may also frustrate viewers.</p><span class="example"><strong>Use carefully:</strong> It is strongest when uncertainty is itself part of the real-world experience.</span></div>
+<div class="definition-card"><h4>Visible choice</h4><p>The viewer clearly understands that a decision is being made and that the system will respond.</p><span class="example"><strong>Example:</strong> Two labeled buttons with stated tradeoffs.</span></div>
+<div class="definition-card"><h4>Invisible choice</h4><p>The system tracks an action or pattern the viewer may not recognize as a formal decision.</p><span class="example"><strong>Example:</strong> Repeatedly prioritizing speed quietly lowers a trust score.</span></div>
+<div class="definition-card"><h4>Meaningful choice</h4><p>The alternatives produce noticeably different information, states, consequences, or interpretations.</p><span class="example"><strong>Test:</strong> Would the experience change if this choice were removed?</span></div>
+<div class="definition-card"><h4>Weak choice</h4><p>The alternatives technically differ, but the consequences are minor, repetitive, or uninteresting.</p><span class="example"><strong>Problem:</strong> The interface pauses the viewer without adding agency or insight.</span></div>
+<div class="definition-card"><h4>Fake choice</h4><p>Different options lead to essentially the same result while implying that the viewer has meaningful control.</p><span class="example"><strong>Distinction:</strong> A branch that deliberately reconverges is not automatically fake if the path still changes context or state.</span></div>
+<div class="definition-card"><h4>Moral choice</h4><p>Presents alternatives with recognizable ethical implications, often framed as better, worse, or neutral.</p><span class="example"><strong>Example:</strong> Protect a vulnerable source or publish identifying details.</span></div>
+<div class="definition-card"><h4>Dilemma</h4><p>Forces a tradeoff in which every option carries a meaningful cost. There may be no clearly correct answer.</p><span class="example"><strong>Example:</strong> Work while sick or miss a rent payment.</span></div>
+</div>
+<div class="interaction-card"><h4>Important distinction</h4><p><strong>Expressive choice</strong> describes what the viewer contributes. <strong>Fake choice</strong> and <strong>weak choice</strong> evaluate how much that contribution matters. An expressive choice can be intentionally low-consequence without being deceptive.</p></div>
+</section>
+
+<section class="section-group" id="choice-quality"><h2>Choice quality check</h2><p>Use these questions to decide whether a choice belongs in the experience.</p></section>
+<section class="pattern">
+<div class="checklist">
+<div><strong>Clarity:</strong> Does the viewer understand what they are deciding?</div>
+<div><strong>Difference:</strong> Do the alternatives create meaningfully different paths, states, or interpretations?</div>
+<div><strong>Information:</strong> Does the viewer have an appropriate amount of information for the intended experience?</div>
+<div><strong>Consequence:</strong> Is the result visible now, accumulated for later, or deliberately hidden?</div>
+<div><strong>Purpose:</strong> Does making the choice help communicate the subject, or does it only add clicking?</div>
+<div><strong>Fairness:</strong> When consequences are unpredictable, does that uncertainty reflect the real system being explained?</div>
+</div>
+</section>
+
+<section class="section-group" id="branching-structures"><h2>Branching structures</h2><p>A branching structure describes how passages, scenes, choices, and outcomes connect. The structures below range from one local split to full narrative systems.</p></section>
+
+<section class="pattern" id="fork">
+<div class="pattern-header"><div><h3>Fork</h3><p>The simplest branching unit. One choice separates the experience into two or more paths.</p></div><span class="tag">Basic building block</span></div>
+<div class="interaction-card"><h4>Best for</h4><p>A single comparison, a small scenario, or the first decision in a larger structure. A fork becomes another structure depending on whether paths continue, end, or rejoin.</p></div>
+<div class="structure-diagram"><svg viewBox="0 0 720 230" role="img" aria-label="One starting node branches into three paths"><path class="edge" d="M360 65 L180 160"/><path class="edge" d="M360 65 L360 160"/><path class="edge" d="M360 65 L540 160"/><rect class="node" x="300" y="25" width="120" height="55" rx="12"/><rect class="node end" x="120" y="150" width="120" height="55" rx="12"/><rect class="node end" x="300" y="150" width="120" height="55" rx="12"/><rect class="node end" x="480" y="150" width="120" height="55" rx="12"/><text class="diagram-label" x="360" y="52">Choice</text><text class="diagram-label" x="180" y="177">Path A</text><text class="diagram-label" x="360" y="177">Path B</text><text class="diagram-label" x="540" y="177">Path C</text></svg></div>
+</section>
+
+<section class="pattern" id="time-cave">
+<div class="pattern-header"><div><h3>Time cave</h3><p>A heavily branching tree in which choices repeatedly create separate timelines with little or no rejoining.</p></div><span class="tag">Broad and expensive</span></div>
+<div class="interaction-card"><h4>Characteristics</h4><ul><li>Many choices have roughly equal structural importance.</li><li>The number of passages and endings grows rapidly.</li><li>Earlier decisions remain visible because paths rarely reconverge.</li></ul></div>
+<div class="structure-diagram"><svg viewBox="0 0 760 330" role="img" aria-label="A branching tree that expands into many endings"><path class="edge" d="M380 48 L250 115 M380 48 L510 115 M250 140 L155 215 M250 140 L300 215 M510 140 L460 215 M510 140 L605 215 M155 240 L105 305 M155 240 L195 305 M300 240 L265 305 M300 240 L340 305 M460 240 L420 305 M460 240 L500 305 M605 240 L565 305 M605 240 L650 305"/><rect class="node" x="330" y="20" width="100" height="52" rx="12"/><rect class="node" x="200" y="110" width="100" height="52" rx="12"/><rect class="node" x="460" y="110" width="100" height="52" rx="12"/><rect class="node" x="105" y="205" width="100" height="52" rx="12"/><rect class="node" x="250" y="205" width="100" height="52" rx="12"/><rect class="node" x="410" y="205" width="100" height="52" rx="12"/><rect class="node" x="555" y="205" width="100" height="52" rx="12"/><circle class="node end" cx="105" cy="307" r="20"/><circle class="node end" cx="195" cy="307" r="20"/><circle class="node end" cx="265" cy="307" r="20"/><circle class="node end" cx="340" cy="307" r="20"/><circle class="node end" cx="420" cy="307" r="20"/><circle class="node end" cx="500" cy="307" r="20"/><circle class="node end" cx="565" cy="307" r="20"/><circle class="node end" cx="650" cy="307" r="20"/><text class="diagram-label" x="380" y="46">Start</text><text class="diagram-label" x="250" y="136">A</text><text class="diagram-label" x="510" y="136">B</text></svg><p class="diagram-note">Strength: strong path ownership. Limitation: content multiplies quickly.</p></div>
+</section>
+
+<section class="pattern" id="gauntlet">
+<div class="pattern-header"><div><h3>Gauntlet</h3><p>A mostly linear central path with side branches that fail, loop back, or quickly rejoin.</p></div><span class="tag">Long, not broad</span></div>
+<div class="interaction-card"><h4>Characteristics</h4><ul><li>The main sequence stays manageable.</li><li>Incorrect or risky choices may produce short endings.</li><li>If multiple major endings exist, they often come from a final choice.</li></ul></div>
+<div class="structure-diagram"><svg viewBox="0 0 760 250" role="img" aria-label="A linear path with short branches that end or return"><path class="edge" d="M100 125 L230 125 L360 125 L490 125 L620 125"/><path class="edge" d="M230 125 L230 55"/><path class="edge" d="M360 125 C360 205 490 205 490 125"/><path class="edge" d="M490 125 L490 55"/><rect class="node" x="55" y="98" width="90" height="54" rx="12"/><rect class="node" x="185" y="98" width="90" height="54" rx="12"/><rect class="node" x="315" y="98" width="90" height="54" rx="12"/><rect class="node" x="445" y="98" width="90" height="54" rx="12"/><rect class="node end" x="575" y="98" width="90" height="54" rx="12"/><rect class="node end" x="185" y="15" width="90" height="48" rx="12"/><rect class="node end" x="445" y="15" width="90" height="48" rx="12"/><text class="diagram-label" x="100" y="125">Start</text><text class="diagram-label" x="230" y="125">1</text><text class="diagram-label" x="360" y="125">2</text><text class="diagram-label" x="490" y="125">3</text><text class="diagram-label" x="620" y="125">End</text><text class="diagram-label" x="230" y="39">Fail</text><text class="diagram-label" x="490" y="39">Fail</text></svg><p class="diagram-note">Strength: efficient to build. Risk: repeated failure branches can feel punitive or like a quiz.</p></div>
+</section>
+
+<section class="pattern" id="branch-bottleneck">
+<div class="pattern-header"><div><h3>Branch and bottleneck</h3><p>The narrative repeatedly branches, then reconverges around events that occur in every version of the story.</p></div><span class="tag">Controlled variation</span></div>
+<div class="interaction-card"><h4>Characteristics</h4><ul><li>Branches provide different experiences without multiplying forever.</li><li>Bottlenecks make production manageable.</li><li>State tracking can preserve effects from earlier choices after paths rejoin.</li></ul></div>
+<div class="structure-diagram"><svg viewBox="0 0 760 290" role="img" aria-label="Branches split and repeatedly reconverge at bottlenecks"><path class="edge" d="M90 145 L210 75 M90 145 L210 215 M210 75 L350 145 M210 215 L350 145 M350 145 L500 75 M350 145 L500 215 M500 75 L650 145 M500 215 L650 145"/><rect class="node" x="45" y="118" width="90" height="54" rx="12"/><rect class="node" x="165" y="48" width="90" height="54" rx="12"/><rect class="node" x="165" y="188" width="90" height="54" rx="12"/><rect class="node end" x="305" y="118" width="90" height="54" rx="12"/><rect class="node" x="455" y="48" width="90" height="54" rx="12"/><rect class="node" x="455" y="188" width="90" height="54" rx="12"/><rect class="node end" x="605" y="118" width="90" height="54" rx="12"/><text class="diagram-label" x="90" y="145">Start</text><text class="diagram-label" x="210" y="75">A</text><text class="diagram-label" x="210" y="215">B</text><text class="diagram-label" x="350" y="145">Event</text><text class="diagram-label" x="500" y="75">C</text><text class="diagram-label" x="500" y="215">D</text><text class="diagram-label" x="650" y="145">Event</text></svg><p class="diagram-note">A reconvergence is not a fake choice when paths change information, state, relationships, or later options.</p></div>
+</section>
+
+<section class="pattern" id="quest">
+<div class="pattern-header"><div><h3>Quest</h3><p>A modular structure made of distinct clusters or tasks that can often be approached in different orders before converging on a small number of outcomes.</p></div><span class="tag">Modular exploration</span></div>
+<div class="interaction-card"><h4>Characteristics</h4><ul><li>Each cluster acts like a small local network.</li><li>Viewers may choose the order of tasks or routes.</li><li>Paths interconnect within clusters more than between clusters.</li></ul></div>
+<div class="structure-diagram"><svg viewBox="0 0 760 300" role="img" aria-label="A central hub connects to several task clusters that converge at an ending"><path class="edge" d="M110 150 L230 70 M110 150 L230 150 M110 150 L230 230 M300 70 L430 150 M300 150 L430 150 M300 230 L430 150 M500 150 L640 150"/><path class="edge dashed" d="M230 70 L300 150 M230 150 L300 230 M230 230 L300 70"/><rect class="node" x="60" y="123" width="100" height="54" rx="12"/><rect class="node" x="205" y="43" width="95" height="54" rx="12"/><rect class="node" x="205" y="123" width="95" height="54" rx="12"/><rect class="node" x="205" y="203" width="95" height="54" rx="12"/><rect class="node" x="405" y="123" width="95" height="54" rx="12"/><rect class="node end" x="595" y="123" width="95" height="54" rx="12"/><text class="diagram-label" x="110" y="150">Hub</text><text class="diagram-label" x="252" y="70">Task A</text><text class="diagram-label" x="252" y="150">Task B</text><text class="diagram-label" x="252" y="230">Task C</text><text class="diagram-label" x="452" y="150">Final task</text><text class="diagram-label" x="642" y="150">Outcome</text></svg><p class="diagram-note">This includes the useful idea behind “hub and spoke,” but allows more connection and recombination than a simple menu.</p></div>
+</section>
+
+<section class="pattern" id="state-based">
+<div class="pattern-header"><div><h3>State-based system</h3><p>Choices change variables such as money, trust, time, health, or reputation. Those states determine later feedback, available choices, and outcomes.</p></div><span class="tag">System-driven</span></div>
+<div class="interaction-card"><h4>Characteristics</h4><ul><li>The same passage can produce different results depending on prior decisions.</li><li>Some choices may be invisible because the system quietly tracks behavior.</li><li>The narrative can remain compact while still remembering the viewer’s history.</li></ul></div>
+<div class="structure-diagram"><svg viewBox="0 0 760 280" role="img" aria-label="A sequence of scenes interacts with tracked variables that affect later choices"><path class="edge" d="M100 95 L275 95 L450 95 L625 95"/><path class="edge dashed" d="M275 125 L275 215 M450 125 L450 215 M625 125 L625 215"/><rect class="node" x="50" y="68" width="100" height="54" rx="12"/><rect class="node" x="225" y="68" width="100" height="54" rx="12"/><rect class="node" x="400" y="68" width="100" height="54" rx="12"/><rect class="node end" x="575" y="68" width="100" height="54" rx="12"/><rect class="node" x="205" y="205" width="140" height="50" rx="12"/><rect class="node" x="380" y="205" width="140" height="50" rx="12"/><rect class="node" x="555" y="205" width="140" height="50" rx="12"/><text class="diagram-label" x="100" y="95">Scene 1</text><text class="diagram-label" x="275" y="95">Scene 2</text><text class="diagram-label" x="450" y="95">Scene 3</text><text class="diagram-label" x="625" y="95">Outcome</text><text class="diagram-label" x="275" y="230">Money / time</text><text class="diagram-label" x="450" y="230">Trust / health</text><text class="diagram-label" x="625" y="230">Final state</text></svg><p class="diagram-note">State-based systems describe logic rather than a single visual shape. They are often layered onto gauntlets, quests, or branch-and-bottleneck narratives.</p></div>
+</section>
+
+<section class="section-group" id="structure-comparison"><h2>Compare structures</h2><p>Choose a structure based on the experience you want and the amount of content and logic you can realistically produce.</p></section>
+<section class="pattern">
+<table class="comparison-table">
+<thead><tr><th>Structure</th><th>Path shape</th><th>Strength</th><th>Main limitation</th></tr></thead>
+<tbody>
+<tr><td>Fork</td><td>One local split</td><td>Simple and clear</td><td>Not a full narrative system by itself</td></tr>
+<tr><td>Time cave</td><td>Repeated branching with little rejoining</td><td>Strong sense of unique paths</td><td>Content expands rapidly</td></tr>
+<tr><td>Gauntlet</td><td>Linear spine with short side branches</td><td>Efficient and easy to follow</td><td>May feel restrictive or punitive</td></tr>
+<tr><td>Branch and bottleneck</td><td>Repeated splits and reconvergence</td><td>Balances agency with manageable scope</td><td>Needs state tracking to preserve earlier effects</td></tr>
+<tr><td>Quest</td><td>Modular clusters with flexible order</td><td>Supports exploration and multiple approaches</td><td>Can become difficult to orient</td></tr>
+<tr><td>State-based system</td><td>Any shape plus tracked variables</td><td>Creates accumulated consequences</td><td>Requires more logic and testing</td></tr>
+</tbody>
+</table>
+<div class="interaction-card"><h4>For a first Twine project</h4><p>Use a small <strong>fork</strong>, <strong>gauntlet</strong>, or <strong>branch-and-bottleneck</strong>. Add one tracked variable only after the passage structure works clearly without it.</p></div>
+</section>
+</main>
+</div>
+<script>
+const menuButton=document.getElementById('mobileMenuToggle');
+const backdrop=document.getElementById('mobileMenuBackdrop');
+function closeMenu(){document.body.classList.remove('menu-open');menuButton?.setAttribute('aria-expanded','false');if(backdrop)backdrop.hidden=true}
+function openMenu(){document.body.classList.add('menu-open');menuButton?.setAttribute('aria-expanded','true');if(backdrop)backdrop.hidden=false}
+menuButton?.addEventListener('click',()=>document.body.classList.contains('menu-open')?closeMenu():openMenu());
+backdrop?.addEventListener('click',closeMenu);
+document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',closeMenu));
+const functionOutput=document.getElementById('functionOutput');
+document.querySelectorAll('#functionChoices button').forEach(button=>button.addEventListener('click',()=>{
+ document.querySelectorAll('#functionChoices button').forEach(b=>b.classList.remove('selected'));
+ button.classList.add('selected');
+ const correct=button.dataset.answer==='resource';
+ functionOutput.innerHTML=correct?'<h4>Resource choice</h4><p>The decision allocates a scarce resource: the same $40 cannot satisfy both needs. It is also consequential and functions as a dilemma, but resource allocation is the central system action.</p>':'<h4>Look at what changes</h4><p>The choice is not mainly about navigation, self-expression, or interpreting evidence. It changes how a limited resource is allocated.</p>';
+}));
+</script>
+</body>
+</html>

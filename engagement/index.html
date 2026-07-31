@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Engagement Techniques</title>
+<style>
+:root{--bg:#f7f4ec;--panel:#fffdf7;--ink:#17211b;--muted:#5c675f;--line:#d9d2c2;--accent:#37634e;--accent-2:#d8893a;--soft:#edf4ee;--shadow:0 14px 35px rgba(23,33,27,.12);--radius:18px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;width:100%;max-width:100%;overflow-x:hidden}
+a{color:inherit}
+button,input,select,textarea{font:inherit}
+button,.button{border:0;background:var(--accent);color:#fff;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+button.secondary{background:#eef3ef;color:var(--ink);border:1px solid var(--line)}
+button.ghost{background:#fffdf7;color:var(--accent);border:1px solid var(--line)}
+button:hover{filter:brightness(.96)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(216,137,58,.5);outline-offset:3px}
+.layout{display:block;min-height:100vh}
+.sidebar{position:fixed;top:0;left:0;width:280px;height:100vh;overflow-y:auto;overflow-x:hidden;z-index:20;padding:28px 22px;background:#17211b;color:#fffdf7}
+.sidebar h1{margin:0 0 8px;font-size:1.35rem;line-height:1.15;letter-spacing:-.02em}
+.sidebar p{margin:0 0 24px;color:rgba(255,255,255,.72);font-size:.92rem}
+.nav-group-title{margin:24px 0 8px;color:#83e4b6;text-transform:uppercase;font-size:.72rem;letter-spacing:.08em;font-weight:800}
+.sidebar a{display:block;padding:8px 10px;margin:2px 0;border-radius:10px;text-decoration:none;color:rgba(255,255,255,.88);font-size:.94rem}
+.sidebar a:hover,.sidebar a:focus{background:rgba(255,255,255,.1);outline:none}
+.home-button{border:1px solid #636363;margin-bottom:1rem!important;display:block}
+main{margin-left:280px;width:calc(100% - 280px);max-width:none;padding:44px 36px 80px}
+main>*{max-width:1120px;margin-left:auto;margin-right:auto}
+.hero{background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%);border:1px solid var(--line);border-radius:28px;padding:clamp(28px,5vw,56px);box-shadow:var(--shadow);margin-bottom:34px}
+.eyebrow{display:inline-flex;margin:0 0 12px;color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem}
+.hero h2{margin:0 0 14px;font-size:clamp(2rem,5vw,4.4rem);line-height:.98;letter-spacing:-.02em;max-width:900px}
+.hero p,.section-group p,.pattern p{color:var(--muted)}
+.hero p{max-width:790px;margin:0;font-size:clamp(1.05rem,2vw,1.25rem)}
+.concept-callout{margin:22px 0 0;padding:16px 18px;border-radius:18px;border:1px solid var(--line);background:#fff8ed;color:var(--muted);max-width:850px}
+.concept-callout strong{color:var(--ink)}
+.section-group{margin:54px 0 24px;padding-top:10px;border-top:2px solid var(--ink)}
+.section-group h2{margin:0 0 8px;font-size:clamp(1.55rem,3vw,2.2rem);letter-spacing:-.03em;color:var(--accent)}
+.section-group p{margin:0;max-width:780px}
+.pattern{scroll-margin-top:24px;margin:26px 0 42px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(20px,3vw,30px);box-shadow:0 8px 20px rgba(23,33,27,.06)}
+.pattern-header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start;margin-bottom:18px}
+.pattern h3{margin:0 0 6px;font-size:clamp(1.35rem,2.4vw,1.85rem);letter-spacing:-.03em}
+.pattern p{margin:0}
+.tag{display:inline-block;white-space:nowrap;padding:6px 10px;border-radius:999px;background:var(--soft);color:var(--accent);font-weight:800;font-size:.78rem}
+.pattern-analysis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0 20px}
+.pattern-analysis-card,.interaction-card{padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#f6f1e7}
+.pattern-analysis-card h4,.interaction-card h4{margin:0 0 5px;color:var(--accent);font-size:.82rem;letter-spacing:.07em;text-transform:uppercase}
+.pattern-analysis-card p,.interaction-card p{margin:0;color:var(--ink);font-size:.94rem;line-height:1.35}
+.interaction-card{margin:0 0 20px;background:#fff8ed}
+.demo-frame{border:1px solid var(--line);border-radius:16px;background:#fff;padding:clamp(16px,3vw,24px);overflow:hidden}
+.demo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.demo-panel{border:1px solid var(--line);border-radius:16px;background:#fffdf7;padding:16px}
+.demo-panel h4{margin:0 0 8px}
+.control-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 14px}
+.control-row label{font-weight:900;color:var(--ink)}
+select,input[type="number"],input[type="text"]{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fffdf7;color:var(--ink);min-width:160px}
+input[type="range"]{width:min(100%,340px);accent-color:var(--accent)}
+.output-card{margin-top:14px;padding:16px;border-radius:16px;border:1px solid var(--line);background:var(--soft)}
+.output-card h4{margin:0 0 6px}.output-card p{margin:0;color:var(--ink)}
+.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.choice-grid button{border-radius:14px;padding:13px;text-align:left;justify-content:flex-start;background:#eef3ef;color:var(--ink);border:1px solid var(--line)}
+.progress-track{height:18px;border-radius:999px;background:#e7dfd0;overflow:hidden;margin:14px 0}
+.progress-fill{height:100%;width:0;background:var(--accent);transition:width .25s ease}
+.badge-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.badge{padding:8px 11px;border-radius:999px;background:#ece8de;color:var(--muted);font-weight:800;font-size:.86rem;border:1px solid var(--line)}
+.badge.earned{background:#dff1e6;color:var(--accent);border-color:#7db28d}
+.card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.reveal-card{min-height:120px;border:1px solid var(--line);border-radius:14px;background:#fffdf7;padding:14px;display:grid;align-content:center}
+.reveal-card strong{display:block;color:var(--accent);margin-bottom:5px}
+.poll-bar{display:grid;grid-template-columns:110px 1fr 48px;gap:10px;align-items:center;margin:10px 0}
+.poll-track{height:16px;border-radius:999px;background:#e7dfd0;overflow:hidden}.poll-fill{height:100%;background:var(--accent);width:0;transition:width .3s ease}
+.role-card{padding:20px;border-radius:18px;background:linear-gradient(135deg,#edf4ee,#fff8ed);border:1px solid var(--line)}
+.role-card h4{margin:0 0 8px;font-size:1.35rem}.role-card p{margin:0 0 14px}
+.mobile-menu-toggle,.mobile-menu-backdrop{display:none}
+@media(max-width:860px){body{padding-top:64px}body.menu-open{overflow:hidden}.mobile-menu-toggle{position:fixed;top:12px;left:12px;z-index:1001;display:inline-flex;align-items:center;gap:9px;padding:10px 13px;border-radius:999px;background:#17211b;color:#fffdf7;box-shadow:0 8px 22px rgba(23,33,27,.24)}.mobile-menu-icon{position:relative;display:block;width:18px;height:12px;border-top:2px solid currentColor;border-bottom:2px solid currentColor}.mobile-menu-icon::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid currentColor;transform:translateY(-50%)}.mobile-menu-backdrop{position:fixed;inset:0;z-index:999;display:block;background:rgba(23,33,27,.45)}.mobile-menu-backdrop[hidden]{display:none}.sidebar{position:fixed!important;top:0!important;left:0;bottom:0;width:min(84vw,340px);height:100vh!important;padding:76px 22px 28px;overflow-y:auto!important;z-index:1000;transform:translateX(-105%);transition:transform .24s ease;box-shadow:18px 0 36px rgba(0,0,0,.22)}body.menu-open .sidebar{transform:translateX(0)}main{margin-left:0!important;width:100%!important;max-width:1120px;padding:24px 16px 56px}}
+@media(max-width:760px){.pattern-header,.pattern-analysis,.demo-grid,.choice-grid,.card-grid{grid-template-columns:1fr}.tag{justify-self:start;white-space:normal}.poll-bar{grid-template-columns:90px 1fr 40px}}
+</style>
+</head>
+<body>
+<button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span>Menu</span></button>
+<div class="mobile-menu-backdrop" hidden id="mobileMenuBackdrop"></div>
+<div class="layout">
+<aside aria-label="Engagement navigation" class="sidebar" id="siteSidebar">
+<a class="home-button" href="../">← Back to Home</a>
+<h1>Engagement Techniques</h1>
+<p>Ways to motivate viewers to begin, continue, and complete an interaction.</p>
+<nav>
+<div class="nav-group-title">Relevance and agency</div>
+<a href="#personal-relevance">Personal relevance</a>
+<a href="#agency-consequence">Agency and consequence</a>
+<a href="#social-comparison">Social comparison</a>
+<div class="nav-group-title">Challenge and progress</div>
+<a href="#game-mechanics">Game mechanics</a>
+<a href="#challenge">Challenge</a>
+<a href="#completion">Collection and completion</a>
+<div class="nav-group-title">Curiosity and play</div>
+<a href="#delayed-reveal">Curiosity and delayed reveal</a>
+<a href="#goofy-comparison">Goofy comparison</a>
+<a href="#randomness">Randomness and surprise</a>
+<a href="#role-play">Narrative framing and role-play</a>
+</nav>
+</aside>
+<main>
+<section class="hero" id="intro">
+<div class="eyebrow">Interactive storytelling concepts</div>
+<h2>Engagement Techniques</h2>
+<p>Engagement techniques motivate viewers to begin, continue, and complete an interaction. They are not separate storytelling patterns. They can strengthen quizzes, calculators, branching paths, maps, generators, and other interactive formats.</p>
+<div class="concept-callout"><strong>Core idea:</strong> engagement should support understanding. Humor, points, competition, surprise, and personalization are useful only when they help the viewer notice, interpret, or remember something meaningful.</div>
+</section>
+
+<section class="section-group" id="relevance-agency"><h2>Relevance and agency</h2><p>These techniques make an interaction feel connected to the viewer or responsive to their choices.</p></section>
+
+<section class="pattern" id="personal-relevance">
+<div class="pattern-header"><div><h3>Personal relevance</h3><p>Personal relevance connects the topic to the viewer’s own location, habits, preferences, identity, or circumstances.</p></div><span class="tag">Make it apply to me</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>How it engages</h4><p>The viewer has a reason to care because the result changes based on information they provide.</p></div><div class="pattern-analysis-card"><h4>Works well with</h4><p>Calculators, matchers, local maps, self-assessments, and personalized explainers.</p></div><div class="pattern-analysis-card"><h4>Watch for</h4><p>Ask only for information the story needs and explain how it affects the result.</p></div></div>
+<div class="demo-frame"><h4>Find your migration-viewing window</h4><p>Choose a month to see why it may matter for bird migration in the Midwest.</p><div class="control-row"><label for="monthSelect">Month</label><select id="monthSelect"><option value="march">March</option><option value="april">April</option><option value="may">May</option><option value="september">September</option><option value="october">October</option></select><button id="monthButton" type="button">Show my result</button></div><div class="output-card" id="monthOutput"><h4>Your result</h4><p>Choose a month to see a personalized explanation.</p></div></div>
+</section>
+
+<section class="pattern" id="agency-consequence">
+<div class="pattern-header"><div><h3>Agency and consequence</h3><p>Agency lets viewers make a meaningful choice. Consequence shows how that choice changes the outcome.</p></div><span class="tag">Choice changes result</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>How it engages</h4><p>The viewer sees that their decision matters rather than merely advancing the interface.</p></div><div class="pattern-analysis-card"><h4>Works well with</h4><p>Branching paths, simulations, policy explainers, and decision-based stories.</p></div><div class="pattern-analysis-card"><h4>Watch for</h4><p>Choices should produce meaningfully different outcomes, not cosmetic variation.</p></div></div>
+<div class="demo-frame"><h4>Choose a habitat action</h4><div class="choice-grid" id="agencyChoices"><button data-action="prairie">Restore native prairie</button><button data-action="wetland">Protect a wetland</button><button data-action="lighting">Reduce nighttime lighting</button><button data-action="glass">Treat reflective windows</button></div><div class="output-card" id="agencyOutput"><h4>Consequence</h4><p>Choose an action to see what changes.</p></div></div>
+</section>
+
+<section class="pattern" id="social-comparison">
+<div class="pattern-header"><div><h3>Social comparison</h3><p>Social comparison shows how a viewer’s response compares with responses from a larger group.</p></div><span class="tag">Compare with others</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>How it engages</h4><p>The viewer becomes curious about whether their judgment is typical or unusual.</p></div><div class="pattern-analysis-card"><h4>Works well with</h4><p>Polls, predictions, opinion questions, and benchmark comparisons.</p></div><div class="pattern-analysis-card"><h4>Watch for</h4><p>Clearly identify where comparison data comes from. Do not present invented results as real.</p></div></div>
+<div class="demo-frame"><h4>Which habitat would you protect first?</h4><div class="choice-grid" id="pollChoices"><button data-poll="Prairie">Prairie</button><button data-poll="Wetland">Wetland</button><button data-poll="Forest">Forest</button><button data-poll="Urban green space">Urban green space</button></div><div class="output-card" id="pollOutput"><h4>Classroom demonstration</h4><p>Choose an answer to compare it with a fictional demonstration dataset.</p></div><div id="pollBars" hidden><div class="poll-bar"><span>Prairie</span><div class="poll-track"><div class="poll-fill" data-value="34"></div></div><strong>34%</strong></div><div class="poll-bar"><span>Wetland</span><div class="poll-track"><div class="poll-fill" data-value="29"></div></div><strong>29%</strong></div><div class="poll-bar"><span>Forest</span><div class="poll-track"><div class="poll-fill" data-value="23"></div></div><strong>23%</strong></div><div class="poll-bar"><span>Urban</span><div class="poll-track"><div class="poll-fill" data-value="14"></div></div><strong>14%</strong></div></div></div>
+</section>
+
+<section class="section-group" id="challenge-progress"><h2>Challenge and progress</h2><p>These techniques give viewers a task, goal, or visible sense of advancement.</p></section>
+
+<section class="pattern" id="game-mechanics">
+<div class="pattern-header"><div><h3>Game mechanics and gamification</h3><p>Game mechanics add structures such as points, progress, levels, attempts, or badges to a non-game experience.</p></div><span class="tag">Rules and rewards</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Game mechanic</h4><p>One structural feature such as scoring, progress, or limited attempts.</p></div><div class="pattern-analysis-card"><h4>Gamification</h4><p>Using several game mechanics to motivate participation in a non-game activity.</p></div><div class="pattern-analysis-card"><h4>Game</h4><p>A complete rule-based experience with goals, challenges, and outcomes.</p></div></div>
+<div class="demo-frame"><h4>Migration checkpoint challenge</h4><p>Answer three quick questions. Progress and score are game mechanics layered onto a simple quiz.</p><div class="progress-track"><div class="progress-fill" id="gameProgress"></div></div><div id="gameQuestion"></div><div class="output-card" id="gameFeedback"><h4>Score: 0</h4><p>Choose an answer to begin.</p></div></div>
+</section>
+
+<section class="pattern" id="challenge">
+<div class="pattern-header"><div><h3>Challenge</h3><p>A challenge gives viewers a clear task that requires effort, judgment, observation, or problem solving.</p></div><span class="tag">Give viewers a task</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>How it engages</h4><p>The viewer has a concrete goal and can test their skill or perception.</p></div><div class="pattern-analysis-card"><h4>Works well with</h4><p>Identification, sorting, spotting errors, drawing predictions, and simulations.</p></div><div class="pattern-analysis-card"><h4>Watch for</h4><p>The challenge should teach something, not merely make the task harder.</p></div></div>
+<div class="demo-frame"><h4>Spot the best field mark</h4><p>A male Red-winged Blackbird is most easily recognized by which feature?</p><div class="choice-grid" id="challengeChoices"><button data-correct="false">White eye ring</button><button data-correct="true">Red shoulder patches</button><button data-correct="false">Forked tail</button><button data-correct="false">Blue wing bars</button></div><div class="output-card" id="challengeOutput"><h4>Your result</h4><p>Choose the feature you think is most useful.</p></div></div>
+</section>
+
+<section class="pattern" id="completion">
+<div class="pattern-header"><div><h3>Collection and completion</h3><p>Collection and completion encourage viewers to discover every item, finish a set, or reach a visible endpoint.</p></div><span class="tag">Complete the set</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>How it engages</h4><p>Visible progress creates momentum and makes viewers curious about what remains.</p></div><div class="pattern-analysis-card"><h4>Works well with</h4><p>Explorable diagrams, maps, galleries, clue hunts, and multi-part explainers.</p></div><div class="pattern-analysis-card"><h4>Watch for</h4><p>Do not reward meaningless clicking. Each discovery should add useful information.</p></div></div>
+<div class="demo-frame"><h4>Discover three migration needs</h4><div class="card-grid" id="collectionCards"><button class="reveal-card ghost" data-item="Food"><strong>?</strong><span>Reveal item</span></button><button class="reveal-card ghost" data-item="Shelter"><strong>?</strong><span>Reveal item</span></button><button class="reveal-card ghost" data-item="Safe passage"><strong>?</strong><span>Reveal item</span></button></div><div class="badge-row"><span class="badge" id="collectionBadge">0 of 3 discovered</span></div></div>
+</section>
+
+<section class="section-group" id="curiosity-play"><h2>Curiosity and play</h2><p>These techniques create an information gap, a playful framing, or an element of surprise.</p></section>
+
+<section class="pattern" id="delayed-reveal">
+<div class="pattern-header"><div><h3>Curiosity and delayed reveal</h3><p>Delayed reveal creates an information gap by asking viewers to make a judgment before showing the answer.</p></div><span class="tag">Commit before reveal</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>How it engages</h4><p>The act of guessing makes viewers more attentive to the eventual explanation.</p></div><div class="pattern-analysis-card"><h4>Works well with</h4><p>Quizzes, estimates, predictions, before-and-after comparisons, and data reveals.</p></div><div class="pattern-analysis-card"><h4>Watch for</h4><p>Do not delay information so long that the interaction feels obstructive.</p></div></div>
+<div class="demo-frame"><h4>Guess the peak month</h4><div class="control-row"><label for="revealGuess">Peak Midwest spring migration</label><select id="revealGuess"><option>March</option><option>April</option><option>May</option><option>June</option></select><button id="revealButton" type="button">Reveal answer</button></div><div class="output-card" id="revealOutput"><h4>Your reveal</h4><p>Make a choice before seeing the explanation.</p></div></div>
+</section>
+
+<section class="pattern" id="goofy-comparison">
+<div class="pattern-header"><div><h3>Goofy comparison</h3><p>A goofy comparison translates an abstract scale into something familiar, surprising, or humorous.</p></div><span class="tag">Playful scale</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>How it engages</h4><p>Humor and familiarity make an otherwise abstract number easier to imagine.</p></div><div class="pattern-analysis-card"><h4>Works well with</h4><p>Calculators, generators, data stories, and explanatory result screens.</p></div><div class="pattern-analysis-card"><h4>Watch for</h4><p>The comparison must clarify the number. The joke should not overpower the information.</p></div></div>
+<div class="demo-frame"><h4>Compare a migration to campus walks</h4><p>Move the slider to choose the length of one walk.</p><div class="control-row"><label for="walkRange">Walk length: <span id="walkLabel">2</span> miles</label><input id="walkRange" type="range" min="1" max="8" value="2"></div><div class="output-card"><h4 id="goofyTitle">That is 1,000 campus walks.</h4><p id="goofyText">A 2,000-mile migration equals about 1,000 walks of 2 miles each.</p></div></div>
+</section>
+
+<section class="pattern" id="randomness">
+<div class="pattern-header"><div><h3>Randomness and surprise</h3><p>Randomness introduces controlled variation so viewers can receive a different prompt, result, or example each time.</p></div><span class="tag">Try again</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>How it engages</h4><p>Uncertainty and novelty encourage repeated interaction.</p></div><div class="pattern-analysis-card"><h4>Works well with</h4><p>Generators, scenario prompts, exploratory collections, and repeatable activities.</p></div><div class="pattern-analysis-card"><h4>Watch for</h4><p>Random results should still be meaningful and drawn from a carefully designed set.</p></div></div>
+<div class="demo-frame"><h4>Draw a bird-story prompt</h4><button id="randomButton" type="button">Generate a prompt</button><div class="output-card" id="randomOutput"><h4>Your prompt</h4><p>Generate a scenario to begin.</p></div></div>
+</section>
+
+<section class="pattern" id="role-play">
+<div class="pattern-header"><div><h3>Narrative framing and role-play</h3><p>Narrative framing gives the viewer a role, situation, or objective that makes an interaction feel more coherent.</p></div><span class="tag">Give the viewer a role</span></div>
+<div class="pattern-analysis"><div class="pattern-analysis-card"><h4>How it engages</h4><p>The viewer understands why they are making choices and what perspective they should adopt.</p></div><div class="pattern-analysis-card"><h4>Works well with</h4><p>Branching stories, simulations, decision trees, and scenario-based explainers.</p></div><div class="pattern-analysis-card"><h4>Watch for</h4><p>The role should clarify the issue rather than trivialize real people or consequences.</p></div></div>
+<div class="demo-frame"><div class="role-card" id="roleCard"><h4>You are managing a migration stopover site.</h4><p>A storm is approaching and thousands of birds may arrive overnight. You can fund only one immediate action.</p><div class="choice-grid"><button data-role="food">Protect food-rich habitat</button><button data-role="lights">Reduce nearby nighttime lighting</button></div></div></div>
+</section>
+</main>
+</div>
+<script>
+const menuButton=document.getElementById('mobileMenuToggle');const backdrop=document.getElementById('mobileMenuBackdrop');function closeMenu(){document.body.classList.remove('menu-open');menuButton?.setAttribute('aria-expanded','false');if(backdrop)backdrop.hidden=true}function openMenu(){document.body.classList.add('menu-open');menuButton?.setAttribute('aria-expanded','true');if(backdrop)backdrop.hidden=false}menuButton?.addEventListener('click',()=>document.body.classList.contains('menu-open')?closeMenu():openMenu());backdrop?.addEventListener('click',closeMenu);document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',closeMenu));
+
+const monthText={march:'March can bring early migrants such as waterfowl and blackbirds, but many insect-eating songbirds have not yet arrived.',april:'April brings a broader mix of migrants as temperatures rise and insects become more available.',may:'May is often the busiest period for many small songbirds moving through the Midwest.',september:'September is a strong fall-migration month for many warblers, vireos, and thrushes.',october:'October often shifts toward sparrows, waterfowl, and later-moving migrants.'};
+document.getElementById('monthButton').addEventListener('click',()=>{const v=document.getElementById('monthSelect').value;document.getElementById('monthOutput').innerHTML=`<h4>${document.getElementById('monthSelect').selectedOptions[0].text}</h4><p>${monthText[v]}</p>`});
+
+const agency={prairie:['More grassland habitat','Restored prairie can increase nesting and feeding habitat for meadowlarks, bobolinks, and grassland sparrows.'],wetland:['More stopover habitat','Protected wetlands provide food and shelter for waterfowl, shorebirds, rails, and other migrants.'],lighting:['Safer nighttime migration','Reducing unnecessary light can lessen attraction and disorientation during nocturnal migration.'],glass:['Lower collision risk','Exterior patterns, screens, or films can make reflective and transparent glass more visible to birds.']};
+document.querySelectorAll('#agencyChoices button').forEach(b=>b.addEventListener('click',()=>{const [h,p]=agency[b.dataset.action];document.getElementById('agencyOutput').innerHTML=`<h4>${h}</h4><p>${p}</p>`}));
+
+document.querySelectorAll('#pollChoices button').forEach(b=>b.addEventListener('click',()=>{document.getElementById('pollOutput').innerHTML=`<h4>You chose ${b.dataset.poll}</h4><p>These percentages are fictional demonstration data used to show the mechanics of social comparison.</p>`;const bars=document.getElementById('pollBars');bars.hidden=false;requestAnimationFrame(()=>document.querySelectorAll('.poll-fill').forEach(el=>el.style.width=el.dataset.value+'%'))}));
+
+const gameData=[{q:'Which habitat is most associated with rails?',a:'Wetland',o:['Wetland','Prairie','Open ocean','Urban plaza']},{q:'Which feature best identifies many woodpeckers?',a:'Chisel-like bill',o:['Webbed feet','Chisel-like bill','Forked tail','Long shorebird legs']},{q:'Which month is often strongest for Midwest spring songbird migration?',a:'May',o:['January','March','May','July']}];let gameIndex=0,gameScore=0;
+function renderGame(){const item=gameData[gameIndex];document.getElementById('gameProgress').style.width=(gameIndex/gameData.length*100)+'%';document.getElementById('gameQuestion').innerHTML=`<h4>${item.q}</h4><div class="choice-grid">${item.o.map(o=>`<button type="button" data-game="${o}">${o}</button>`).join('')}</div>`;document.querySelectorAll('[data-game]').forEach(b=>b.addEventListener('click',()=>{const correct=b.dataset.game===item.a;if(correct)gameScore++;gameIndex++;if(gameIndex<gameData.length){document.getElementById('gameFeedback').innerHTML=`<h4>Score: ${gameScore}</h4><p>${correct?'Correct.':'Not quite.'} Continue to the next checkpoint.</p>`;renderGame()}else{document.getElementById('gameProgress').style.width='100%';document.getElementById('gameQuestion').innerHTML='<h4>Challenge complete</h4><button id="restartGame" type="button">Play again</button>';document.getElementById('gameFeedback').innerHTML=`<h4>Final score: ${gameScore} of ${gameData.length}</h4><p>The score, progress bar, and completion state are the game mechanics.</p>`;document.getElementById('restartGame').addEventListener('click',()=>{gameIndex=0;gameScore=0;renderGame()})}}))}
+renderGame();
+
+document.querySelectorAll('#challengeChoices button').forEach(b=>b.addEventListener('click',()=>{document.getElementById('challengeOutput').innerHTML=b.dataset.correct==='true'?'<h4>Correct</h4><p>The red-and-yellow shoulder patches are the most distinctive field mark on an adult male.</p>':'<h4>Not quite</h4><p>The strongest answer is the red-and-yellow shoulder patches.</p>'}));
+
+const collectionInfo={Food:'Migrating birds need abundant insects, fruit, seeds, or aquatic invertebrates to replace energy.',Shelter:'Vegetation provides protection from weather and predators while birds rest.','Safe passage':'Dark skies, visible glass, and connected habitat reduce hazards along the route.'};let found=new Set();document.querySelectorAll('#collectionCards button').forEach(b=>b.addEventListener('click',()=>{const item=b.dataset.item;found.add(item);b.innerHTML=`<strong>${item}</strong><span>${collectionInfo[item]}</span>`;b.disabled=true;document.getElementById('collectionBadge').textContent=`${found.size} of 3 discovered`;if(found.size===3)document.getElementById('collectionBadge').classList.add('earned')}));
+
+document.getElementById('revealButton').addEventListener('click',()=>{const guess=document.getElementById('revealGuess').value;document.getElementById('revealOutput').innerHTML=`<h4>${guess==='May'?'Good estimate':'The intended answer is May'}</h4><p>You chose <strong>${guess}</strong>. May is often the busiest period for many small songbirds moving through the Midwest.</p>`});
+
+const walk=document.getElementById('walkRange');function updateGoofy(){const miles=Number(walk.value);const trips=Math.ceil(2000/miles);document.getElementById('walkLabel').textContent=miles;document.getElementById('goofyTitle').textContent=`That is ${trips.toLocaleString()} campus walks.`;document.getElementById('goofyText').textContent=`A 2,000-mile migration equals about ${trips.toLocaleString()} walks of ${miles} mile${miles===1?'':'s'} each.`}walk.addEventListener('input',updateGoofy);
+
+const prompts=['Explain migration from the perspective of a bird crossing a brightly lit city.','Design a choice-based story about protecting one of three habitats.','Build a playful comparison that makes a 2,000-mile journey understandable.','Ask viewers to predict where a bird will stop during migration.','Create a short challenge that teaches one field-identification clue.'];document.getElementById('randomButton').addEventListener('click',()=>{const p=prompts[Math.floor(Math.random()*prompts.length)];document.getElementById('randomOutput').innerHTML=`<h4>Generated prompt</h4><p>${p}</p>`});
+
+document.querySelectorAll('[data-role]').forEach(b=>b.addEventListener('click',()=>{document.getElementById('roleCard').innerHTML=b.dataset.role==='food'?'<h4>You protect food-rich habitat.</h4><p>Birds arrive with places to feed and rest. The role gives the choice a purpose and makes the consequence easier to understand.</p><button type="button" onclick="location.reload()">Restart</button>':'<h4>You reduce nighttime lighting.</h4><p>The darker sky lowers attraction and disorientation near the stopover site. The role turns an abstract policy choice into a concrete decision.</p><button type="button" onclick="location.reload()">Restart</button>'}));
+</script>
+</body>
+</html>
