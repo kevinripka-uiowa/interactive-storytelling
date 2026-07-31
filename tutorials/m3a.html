@@ -407,7 +407,6 @@
 <div class="nav-title">Finish</div>
 <a href="#accessibility">Accessibility and responsive checks</a>
 <a href="#publish">Publish and embed in Tilda</a>
-<a href="#submission">Submission checklist</a>
 </aside>
 <main>
 <section class="hero" id="overview">
@@ -617,30 +616,10 @@
     title="YOUR ACCESSIBLE CHART TITLE"&gt;
   &lt;/iframe&gt;
 &lt;/div&gt;</code></pre>
-<div class="note warning"><strong>Check the percentage carefully</strong>Use <code>width: 100%</code>, not <code>1000%</code>. A mistyped percentage will make the chart overflow the page.</div>
+
 <div class="note"><strong>Why use both width and max-width?</strong><code>width: 100%</code> lets the iframe shrink with the available space. <code>max-width: 1160px</code> prevents it from becoming excessively wide. <code>margin: 0 auto</code> centers it, while the wrapper padding preserves 20 pixels of space on the left and right.</div>
 </section>
-<section class="section-header" id="submission">
-<h2>Submission checklist</h2>
-<p>Your chart should demonstrate all four parts of the explanatory method.</p>
-</section>
-<section class="card">
-<div class="card-header">
-<div>
-<h3>What the finished graphic must include</h3>
-</div>
-<span class="tag">Deliverable</span>
-</div>
-<ul>
-<li><strong>Headline:</strong> A claim-driven title and a useful description.</li>
-<li><strong>Highlight:</strong> Albania, Bosnia and Herzegovina, and Greece emphasized in dark green against consistently light-gray background lines.</li>
-<li><strong>Callout:</strong> A text annotation connected to a specific point and a labeled range highlight.</li>
-<li><strong>Context:</strong> A clearly styled benchmark line. For final reporting, it must be calculated honestly rather than created by relabeling another series.</li>
-<li>An alternative description for screen-reader users.</li>
-<li>A responsive and color-blindness check.</li>
-<li>A published Datawrapper iframe embedded in Tilda, centered at a maximum width of 1160 pixels and wrapped in a div with <code>padding: 0 20px;</code>.</li>
-</ul>
-</section>
+
 </main>
 <script>
     const button = document.getElementById("mobileToggle");

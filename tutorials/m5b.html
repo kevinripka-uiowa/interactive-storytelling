@@ -131,7 +131,6 @@
           <a href="#section-12">Return feedback</a>
           <a href="#section-13">Trigger the calculation</a>
           <a href="#section-14">Move the interactive into Tilda</a>
-          <a href="#submission">Submission</a>
       </nav>
     </aside>
 
@@ -144,7 +143,6 @@
         <div class="concept-callout"><strong>You would likely vibe code an interactive like this with AI.</strong> The goal here is not to memorize every line. Building it slowly helps you recognize the parts, test the output, and revise AI-generated code rather than treating it as a black box.</div>
         <div class="overview-grid" aria-label="Tutorial summary">
           <article class="meta-card"><h4>What you will build</h4><p>A height form that draws a centered comparison line beneath a trimmed raster image of a California condor and explains the result.</p></article>
-          <article class="meta-card"><h4>What you will submit</h4><p>A published Tilda page containing the completed, working comparison.</p></article>
         </div>
       </section>
 
@@ -388,9 +386,8 @@
       &lt;/svg&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-&lt;/section&gt;</code></pre>e>
-        <div class="callout"><strong>Use a raster image plus an SVG overlay</strong><p>The condor itself is a trimmed PNG image. It is positioned <code>20px</code> from the top of the stage. A second <code>svg</code> sits on top as an invisible overlay that JavaScript can draw into. This is a common pattern when you want a richer illustration but still need precise, scalable graphics on top.</p></div>
-        <div class="callout"><strong>Build the static state first</strong><p>Before adding inputs or JavaScript, make sure the basic illustration appears. Adding one layer at a time makes troubleshooting easier.</p></div><div class="callout"><strong>Why trim the transparent pixels?</strong><p>Because the image has been cropped tightly around the visible bird—including removing the extra transparent space below it—the full image width is a useful stand-in for the condor's wingspan. The shorter <code>1002 / 500</code> stage also keeps the comparison compact.</p></div>
+&lt;/section&gt;</code></pre>
+        
       </div></section>
 
 <section class="section-group" id="section-4"><h2>Section 4: Add the form</h2><p>Add the controls that collect the viewer's height.</p></section>
@@ -568,7 +565,7 @@ barEnd.setAttribute('x2', barEndX);
 
 personLabel.setAttribute('x', centerX);
 personLabel.textContent = `Your height: ${feet} ft ${inches} in`;</code></pre>
-        <div class="callout"><strong>Centering requires half the width</strong><p>The overlay SVG uses a <code>1002 × 500</code> coordinate system. Its width matches the trimmed PNG, while its shorter height matches the revised stage. That means the full image width can serve as the scale reference for the condor’s wingspan. Subtracting half the line width finds the left edge; adding half finds the right edge. The line therefore grows equally in both directions. <code>removeAttribute('hidden')</code> makes the SVG group visible after valid input has been processed.</p></div>
+       
       </div></section>
 
 <section class="section-group" id="section-12"><h2>Section 12: Return feedback</h2><p>Explain the result in words instead of relying only on the visual bar.</p></section>
@@ -583,7 +580,7 @@ result.innerHTML = `
   About &lt;strong&gt;${peopleAcross.toFixed(1)} people&lt;/strong&gt;
   your height could fit head-to-toe across the wings.
 `;</code></pre>
-        <div class="callout"><strong>Feedback should teach</strong><p>The result connects directly to the viewer's input, interprets the ratio, and provides a second familiar comparison. The <code>aria-live</code> attribute announces the updated feedback to assistive technology.</p></div>
+        <div class="callout"><strong>Feedback should teach</strong><p>The result connects directly to the viewer's input, interprets the ratio, and provides a second familiar comparison.</p></div>
       </div></section>
 
 <section class="section-group" id="section-13"><h2>Section 13: Trigger the calculation</h2><p>Use the form submission event to handle both the button and the Enter key.</p></section>
@@ -610,23 +607,9 @@ showBlankState();</code></pre>
           <li>Do not copy the document-level <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, or <code>&lt;body&gt;</code> tags. Tilda already provides those.</li>
           <li>Save, publish, and test the live page at desktop and mobile widths.</li>
         </ol>
-        <div class="callout"><strong>Build it instead of pasting a finished answer</strong><p>Your Tilda block should be assembled from the HTML, CSS, and JavaScript you added throughout the tutorial. This makes it easier to identify which part to revise later.</p></div>
-        <div class="callout"><strong>Namespacing matters most after embedding</strong><p>The local file contains only your project. The Tilda page contains many existing classes and scripts. Namespaced selectors, IDs, and JavaScript reduce collisions with the surrounding site.</p></div>
       </div></section>
 
-<section class="section-group" id="submission"><h2>Submission</h2></section>
-      <section class="pattern submission-box"><div class="pattern-header"><div><h3>Publish and submit the Tilda page</h3><p>Submit the public page containing your completed comparison.</p></div><span class="tag">Final</span></div><div class="demo-frame">
-        <ul class="steps">
-          <li>The feet and inches fields begin blank.</li>
-          <li>The page displays a useful blank-state instruction before input.</li>
-          <li>Missing, nonnumeric, and out-of-range values—including heights above 9 ft 6 in—produce clear error feedback.</li>
-          <li>Valid input draws a centered line proportional to the condor's wingspan.</li>
-          <li>The written result explains the percentage and playful comparison.</li>
-          <li>The comparison works with the button and Enter key.</li>
-          <li>The layout works at desktop and mobile widths.</li>
-          <li>The CSS and JavaScript remain namespaced inside the Tilda block.</li>
-        </ul>
-      </div></section>
+
     </main>
   </div>
 
