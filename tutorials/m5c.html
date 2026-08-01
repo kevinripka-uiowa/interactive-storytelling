@@ -36,11 +36,13 @@
     .meta-card { padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffdf7; min-width:0; }
     .meta-card h4 { margin:0 0 8px; font-size:1.12rem; }
     .meta-card p { margin:0; }
-    .video-section { margin-bottom:34px; }
+     .video-section { margin-bottom:34px; }
     .video-card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,26px); box-shadow:0 8px 20px rgba(23,33,27,.06); }
-    .video-card h3 { margin:0 0 8px; font-size:clamp(1.25rem,2.2vw,1.65rem); letter-spacing:-.03em; }
-    .video-card p { margin:0; color:var(--muted); }
-    .video-placeholder { display:grid; place-items:center; min-height:260px; border-radius:16px; background:#17211b; color:#fffdf7; border:1px solid var(--line); text-align:center; padding:24px; }
+    .video-card h3 { margin:0 0 8px; font-size:clamp(1.35rem,2.4vw,1.85rem); letter-spacing:-.03em; }
+    .video-wrap { position:relative; width:100%; aspect-ratio:16 / 9; overflow:hidden; border-radius:16px; border:1px solid var(--line); background:#17211b; margin-top:16px; }
+    .video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .video-note { margin-top:12px; font-size:.92rem; color:var(--muted); }
+    .video-note code { background:#f0eadf; border:1px solid var(--line); border-radius:7px; padding:.08rem .32rem; }
     .section-group { margin:54px auto 24px; padding-top:10px; border-top:2px solid var(--ink); scroll-margin-top:24px; }
     .section-group h2 { margin:0 0 8px; font-size:clamp(1.55rem,3vw,2.2rem); letter-spacing:-.03em; color:var(--accent); }
     .section-group p { margin:0; max-width:820px; }
@@ -117,16 +119,17 @@
         <a href="#overview">Overview</a>
         <a href="#video">Video</a>
         <div class="nav-group-title">Tutorial sections</div>
-        <a href="#section-1">Create the story</a>
-        <a href="#section-2">Plan the structure</a>
-        <a href="#section-3">Build the opening</a>
-        <a href="#section-4">Add the first decision</a>
-        <a href="#section-5">Track energy</a>
-        <a href="#section-6">Complete the gauntlet</a>
-        <a href="#section-7">Create conditional endings</a>
-        <a href="#section-8">Test the story</a>
-        <a href="#section-9">Back up and move the story</a>
-        <a href="#section-10">Publish the game</a>
+        <a href="#section-1">Open Twine</a>
+        <a href="#section-2">Create a Chapbook story</a>
+        <a href="#section-3">Plan the structure</a>
+        <a href="#section-4">Build the opening slowly</a>
+        <a href="#section-5">Add the first decision</a>
+        <a href="#section-6">Choose stopover days</a>
+        <a href="#section-7">Complete the gauntlet</a>
+        <a href="#section-8">Create conditional endings</a>
+        <a href="#section-9">Add custom CSS</a>
+        <a href="#section-10">Test the story</a>
+        <a href="#section-11">Save and move the story</a>
         <a href="#submission">Submission</a>
       </nav>
     </aside>
@@ -135,77 +138,108 @@
       <section class="hero" id="overview">
         <div class="eyebrow">Tutorial M5C</div>
         <h2>Build a Migration Game in Twine</h2>
-        <p>Create a short interactive story in which a warbler must conserve enough energy to complete its spring migration.</p>
-        <p>You will use Twine’s Chapbook story format to connect passages, remember choices with one variable, and send the player to different endings.</p>
-        <div class="concept-callout"><strong>This story uses a gauntlet structure.</strong> The player makes a choice, experiences a consequence, and returns to the main route. The paths repeatedly branch and then merge, keeping the project manageable.</div>
+        <p>Create a short interactive story in which a Blackburnian Warbler must balance energy against the time needed to complete its spring migration.</p>
+        <p>You will use Twine’s Chapbook story format to connect passages, track energy and elapsed days, collect a player-selected stopover length, and reveal an ending based on the combined results.</p>
+        <div class="concept-callout"><strong>This story uses a gauntlet structure.</strong> Each choice creates a short branch that returns to the main route. This gives the player meaningful consequences without creating an unmanageable number of passages.</div>
         <div class="overview-grid" aria-label="Tutorial summary">
-          <article class="meta-card"><h4>What you will build</h4><p>A compact bird-migration game with three decisions, an energy score, and three possible endings.</p></article>
-          <article class="meta-card"><h4>What you will submit</h4><p>The published HTML story and a screenshot of the complete Twine story map.</p></article>
+          <article class="meta-card"><h4>What you will build</h4><p>A compact bird-migration game with three decisions, two tracked variables, a stopover dropdown, an opening image, custom styling, and four possible outcomes.</p></article>
+          <article class="meta-card"><h4>What you will submit</h4><p>Your published Twine HTML file named <code>survive-migration.html</code>.</p></article>
         </div>
       </section>
 
       <section class="video-section" id="video">
         <div class="video-card">
           <h3>Video walkthrough</h3>
-          <div class="video-placeholder"><div><strong>Video will be added after the tutorial is recorded.</strong><br>This written tutorial contains the complete build.</div></div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/AzvlVhNLAhU" title="Narrative Newsgame with Twine" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
         </div>
       </section>
 
-      <section class="section-group" id="section-1"><h2>Section 1: Create the story</h2><p>Use the desktop version of Twine and explicitly select Chapbook before adding content.</p></section>
-      <section class="pattern"><div class="pattern-header"><div><h3>Start a new Chapbook story</h3></div><span class="tag">Step 1</span></div><div class="demo-frame">
+      <section class="section-group" id="section-1"><h2>Section 1: Open Twine</h2><p>Twine is available as a desktop application and as a browser-based tool. Either version can create the same kind of story.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Choose how you will open Twine</h3></div><span class="tag">Step 1</span></div><div class="demo-frame">
         <ol class="steps">
-          <li>Open the desktop Twine application.</li>
-          <li>Under the <strong>Story</strong> toolbar tab, select <strong>New</strong>.</li>
-          <li>Name the story <strong>Survive Migration</strong>.</li>
-          <li>Open the story settings and choose <strong>Chapbook</strong> as the story format.</li>
+          <li>Go to <a href="https://twinery.org/" target="_blank" rel="noopener"><strong>twinery.org</strong></a>.</li>
+          <li>Select <strong>Use in your browser</strong> to work online.</li>
+        </ol>
+        <div class="callout"><strong>Online and desktop Twine store stories differently</strong><p>The online version saves stories in the local storage of the browser and profile you are using. The desktop version stores its story library on that computer. Neither version automatically synchronizes your work between computers.</p></div>
+        <div class="callout"><strong>Plan for moving between computers</strong><p>A different browser, browser profile, or computer will have a separate Twine library. Publish or archive your story before leaving the computer so you can import it and continue elsewhere. Clearing browser data can remove stories saved in the online version.</p></div>
+      </div></section>
+
+      <section class="section-group" id="section-2"><h2>Section 2: Create a Chapbook story</h2><p>Create the project, then select the story format that determines how your passages, variables, conditions, and styling will work.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Start the story and select Chapbook</h3></div><span class="tag">Step 2</span></div><div class="demo-frame">
+        <ol class="steps">
+          <li>Create a new story named <strong>Survive Migration</strong>.</li>
+          <li>Open the story.</li>
+          <li>Open <strong>Story &gt; Details</strong>.</li>
+          <li>Set the story format to <strong>Chapbook</strong>.</li>
           <li>Open the starting passage and rename it <strong>Start</strong>.</li>
         </ol>
-        <div class="callout"><strong>Story formats use different syntax</strong><p>This tutorial uses Chapbook. Harlowe or SugarCube examples found online may look similar, but their variable and conditional code will not necessarily work in this project.</p></div>
+        <div class="callout"><strong>Use Chapbook syntax throughout this tutorial</strong><p>Story formats act like different engines for Twine. Harlowe or SugarCube commands may not work in a Chapbook story.</p></div>
+        <div class="callout"><strong>Keep the Chapbook Guide open</strong><p>Use the <a href="https://klembot.github.io/chapbook/guide/en/" target="_blank" rel="noopener"><strong>Chapbook Guide</strong></a> when you need syntax beyond this tutorial. Its sections cover links, variables and state, conditional display, images, player input, testing, and customization.</p></div>
       </div></section>
 
-      <section class="section-group" id="section-2"><h2>Section 2: Plan the structure</h2><p>Keep the branching small enough to build, test, and revise during one class period.</p></section>
-      <section class="pattern"><div class="pattern-header"><div><h3>Use branches and bottlenecks</h3></div><span class="tag">Step 2</span></div><div class="demo-frame">
-        <p>The story follows this route:</p>
+      <section class="section-group" id="section-3"><h2>Section 3: Plan the structure</h2><p>Use the passage map to keep the experience compact and make every decision lead somewhere intentional.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Build a branching gauntlet</h3></div><span class="tag">Step 3</span></div><div class="demo-frame">
         <pre><code>Start
   ↓
-Departure decision
+Departure
   ↙          ↘
-Cross Gulf   Follow coast
+Cross Gulf   Follow Coast
   ↘          ↙
-Stopover decision
+Stopover
+  ↓
+Rest
+  ↓
+Final Push
   ↙          ↘
-Rest         Keep flying
-  ↘          ↙
-Final push decision
-  ↙          ↘
-Night flight Day flight
+Night Flight Day Flight
        ↓
-Evaluate energy
-  ↙      ↓       ↘
-Strong   Late    Exhausted</code></pre>
-        <div class="callout"><strong>Branching does not require endless branches</strong><p>Each decision creates a short divergence, but the routes merge at a bottleneck before the next decision. The player experiences consequences without forcing you to write dozens of unique paths.</p></div>
+Evaluate</code></pre>
+        <p>The routes split and reconnect before the next major decision. The game remembers consequences through the <code>energy</code> and <code>days</code> variables, while the stopover passage lets the player choose a value from one to seven days.</p>
       </div></section>
 
-      <section class="section-group" id="section-3"><h2>Section 3: Build the opening</h2><p>Initialize the energy variable and explain the player’s role.</p></section>
-      <section class="pattern"><div class="pattern-header"><div><h3>Add the Start passage</h3></div><span class="tag">Step 3</span></div><div class="demo-frame">
-        <p>Open the <strong>Start</strong> passage and enter:</p>
-        <pre><code>energy: 100
-config.header.right: "Energy: {energy}"
---
-# Survive Migration
+      <section class="section-group" id="section-4"><h2>Section 4: Build the opening slowly</h2><p>The first passage establishes the starting energy, the interface header, the player’s role, the opening image, and the first link.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Add the Start passage one piece at a time</h3></div><span class="tag">Step 4</span></div><div class="demo-frame">
+        <div class="subsection"><h4>1. Set the starting variables</h4>
+          <p>At the top of the <strong>Start</strong> passage, enter:</p>
+          <pre><code>energy: 100
+days: 0</code></pre>
+          <p>This creates an <code>energy</code> variable with a starting value of 100 and a <code>days</code> variable with a starting value of 0.</p>
+        </div>
+        <div class="subsection"><h4>2. Show both variables in the header</h4>
+          <p>On the next line, enter:</p>
+          <pre><code>config.header.right: "Energy: {energy} | Days: {days}"</code></pre>
+          <p>This places both values in the right side of Chapbook’s header. The numbers inside <code>{energy}</code> and <code>{days}</code> update as the player makes choices.</p>
+        </div>
+        <div class="subsection"><h4>3. Separate variables from visible content</h4>
+          <p>Add a double hyphen on its own line:</p>
+          <pre><code>--</code></pre>
+          <p>Everything above the double hyphen belongs to the passage’s variable section. Everything below it is visible to the player.</p>
+        </div>
+        <div class="subsection"><h4>4. Add the headline</h4>
+          <pre><code># Survive Migration</code></pre>
+          <p>The single number sign creates the main heading for the passage.</p>
+        </div>
+        <div class="subsection"><h4>5. Add the opening image</h4>
+          <pre><code>{embed image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Blackburnian_warbler_%2871064%29.jpg/960px-Blackburnian_warbler_%2871064%29.jpg', alt: 'Blackburnian Warbler perched on a branch'}</code></pre>
+          <p>The image URL tells Chapbook what image to display. The <code>alt</code> text briefly describes the image for people who cannot see it.</p>
+        </div>
+        <div class="subsection"><h4>6. Explain the player’s role and goal</h4>
+          <pre><code>You are a Blackburnian Warbler migrating north toward your breeding grounds. Your destination is still hundreds of miles away, and every choice will affect your energy and arrival time.
 
-You are a migratory warbler preparing to migrate north. Your destination is still hundreds of miles away, and every choice will affect the energy you have left.
-
-Reach the breeding grounds with as much energy as possible.
-
-[[Begin the journey-&gt;Departure]]</code></pre>
-        <div class="callout"><strong>The vars section comes first</strong><p>In Chapbook, variable assignments appear above the double hyphen. The passage text that the player sees appears below it.</p></div>
-        <div class="callout"><strong>A link can use different display text</strong><p>The player sees “Begin the journey,” but the link opens a passage named <code>Departure</code>. Twine creates that destination passage automatically when you close the editor.</p></div>
+Reach the breeding grounds early enough—and with enough energy—to defend a territory and find a mate.</code></pre>
+        </div>
+        <div class="subsection"><h4>7. Add the first passage link</h4>
+          <pre><code>[[Begin the journey-&gt;Departure]]</code></pre>
+          <p>The player sees <strong>Begin the journey</strong>. Selecting it opens a passage named <strong>Departure</strong>. Twine creates that passage automatically.</p>
+        </div>
+        <div class="callout"><strong>Check the Start passage</strong><p>Test the story. You should see the title, bird image, introductory text, energy and day values, and one link that opens the Departure passage.</p></div>
       </div></section>
 
-      <section class="section-group" id="section-4"><h2>Section 4: Add the first decision</h2><p>Create two choices with different costs, then merge both routes into the next decision.</p></section>
-      <section class="pattern"><div class="pattern-header"><div><h3>Choose a migration route</h3></div><span class="tag">Step 4</span></div><div class="demo-frame">
-        <p>Open <strong>Departure</strong> and enter:</p>
+      <section class="section-group" id="section-5"><h2>Section 5: Add the first decision</h2><p>Give the player two routes that trade speed against energy, then reconnect both routes at the stopover.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Choose a migration route</h3></div><span class="tag">Step 5</span></div><div class="demo-frame">
+        <div class="subsection"><h4>Departure</h4>
         <pre><code># The first major decision
 
 A strong south wind could carry you directly across the Gulf of Mexico. The crossing is shorter, but there is nowhere to rest if the weather changes.
@@ -214,50 +248,57 @@ Following the coastline is safer, but it adds hundreds of miles.
 
 [[Cross the Gulf-&gt;Cross Gulf]]
 
-[[Follow the coastline-&gt;Follow Coast]]</code></pre>
-        <p>Create the two consequence passages:</p>
+[[Follow the coastline-&gt;Follow Coast]]</code></pre></div>
         <div class="subsection"><h4>Cross Gulf</h4>
         <pre><code>energy: energy - 35
+days: days + 1
 --
 A storm forms during the crossing. You fight the wind for hours before finally reaching land.
 
 [[Search for a stopover-&gt;Stopover]]</code></pre></div>
         <div class="subsection"><h4>Follow Coast</h4>
         <pre><code>energy: energy - 20
+days: days + 3
 --
 The coastal route takes longer, but you find favorable winds and avoid the storm over open water.
 
 [[Search for a stopover-&gt;Stopover]]</code></pre></div>
-        <div class="callout"><strong>The choice changes state</strong><p>Both routes continue to the same passage, but they subtract different amounts from <code>energy</code>. That remembered consequence can affect the ending later.</p></div>
+        <p>Both routes open <strong>Stopover</strong>, but the Gulf route is faster and more exhausting while the coastal route takes longer and preserves more energy.</p>
       </div></section>
 
-      <section class="section-group" id="section-5"><h2>Section 5: Track energy</h2><p>Add a second decision that lets the player recover energy or risk continuing immediately.</p></section>
-      <section class="pattern"><div class="pattern-header"><div><h3>Balance time against recovery</h3></div><span class="tag">Step 5</span></div><div class="demo-frame">
+      <section class="section-group" id="section-6"><h2>Section 6: Choose stopover days</h2><p>Let the player decide how long to rest, then use that selection to increase both elapsed time and recovered energy.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Balance arrival time against recovery</h3></div><span class="tag">Step 6</span></div><div class="demo-frame">
         <div class="subsection"><h4>Stopover</h4>
-        <pre><code># A shrinking stopover
+        <pre><code>stopoverDays: 1
+--
+# A shrinking stopover
 
-You reach a patch of shrubs surrounded by roads and buildings. There are insects here, but stopping will delay your arrival.
+You reach a patch of shrubs surrounded by roads and buildings. There are insects here, but every day you remain delays your arrival.
 
-[[Rest and feed-&gt;Rest]]
+Choose how many days to rest:
 
-[[Keep flying-&gt;Keep Flying]]</code></pre></div>
+{dropdown menu for: 'stopoverDays', choices: [1, 2, 3, 4, 5, 6, 7]}
+
+[[Rest for that many days-&gt;Rest]]</code></pre>
+        <p>The dropdown saves the selected number to <code>stopoverDays</code>. Setting it to 1 above the double hyphen gives the menu a starting value.</p></div>
         <div class="subsection"><h4>Rest</h4>
-        <pre><code>energy: energy + 25
+        <pre><code>stopoverDays: Number(stopoverDays)
+days: days + stopoverDays
+energy: energy + (stopoverDays * 8)
+energy (energy &gt; 100): 100
 --
-You spend the day feeding and recover some of the energy lost during the first leg.
+You remain at the stopover for {stopoverDays} days, feeding on insects and rebuilding fat reserves.
 
-[[Continue north-&gt;Final Push]]</code></pre></div>
-        <div class="subsection"><h4>Keep Flying</h4>
-        <pre><code>energy: energy - 20
---
-You continue without stopping. You gain time, but your wingbeats become slower and less efficient.
+Your energy is now {energy}.  
+Your migration has taken {days} days.
 
-[[Continue north-&gt;Final Push]]</code></pre></div>
-        <div class="callout"><strong>A meaningful choice involves a tradeoff</strong><p>“Rest” is not simply correct and “keep flying” is not simply wrong. One protects energy; the other protects time. Strong choices ask players to prioritize competing goals.</p></div>
+[[Continue north-&gt;Final Push]]</code></pre>
+        <p>Each stopover day adds one day and restores eight energy points. The final conditional assignment prevents energy from rising above 100.</p></div><div class="callout"><strong>Convert the selection before calculating</strong><p>The dropdown stores the selected value as text. <code>Number(stopoverDays)</code> converts it to a number so adding it to <code>days</code> performs arithmetic instead of joining text values.</p></div>
+        <div class="callout"><strong>Test the input</strong><p>Choose several different stopover lengths. Confirm that one day adds 8 energy and seven days add 56 energy, while the total never exceeds 100.</p></div>
       </div></section>
 
-      <section class="section-group" id="section-6"><h2>Section 6: Complete the gauntlet</h2><p>Add one final decision and route both choices to the shared evaluation passage.</p></section>
-      <section class="pattern"><div class="pattern-header"><div><h3>Choose when to make the final flight</h3></div><span class="tag">Step 6</span></div><div class="demo-frame">
+      <section class="section-group" id="section-7"><h2>Section 7: Complete the gauntlet</h2><p>Add one final choice and send both outcomes to the shared evaluation passage.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Choose when to make the final flight</h3></div><span class="tag">Step 7</span></div><div class="demo-frame">
         <div class="subsection"><h4>Final Push</h4>
         <pre><code># The final push
 
@@ -268,99 +309,157 @@ The breeding grounds are within reach. You can travel overnight in cooler air or
 [[Wait for daylight-&gt;Day Flight]]</code></pre></div>
         <div class="subsection"><h4>Night Flight</h4>
         <pre><code>energy: energy - 25
+days: days + 1
 --
 You fly through darkness and shifting winds, using the stars and Earth’s magnetic field to stay on course.
 
 [[See how the migration ends-&gt;Evaluate]]</code></pre></div>
         <div class="subsection"><h4>Day Flight</h4>
         <pre><code>energy: energy - 15
+days: days + 2
 --
 You wait for daylight. The route is easier to read, though you spend more time avoiding predators.
 
 [[See how the migration ends-&gt;Evaluate]]</code></pre></div>
       </div></section>
 
-      <section class="section-group" id="section-7"><h2>Section 7: Create conditional endings</h2><p>Use the final energy value to reveal one of three outcomes.</p></section>
-      <section class="pattern"><div class="pattern-header"><div><h3>Evaluate the accumulated consequences</h3></div><span class="tag">Step 7</span></div><div class="demo-frame">
+      <section class="section-group" id="section-8"><h2>Section 8: Create conditional endings</h2><p>Use both final values to show one outcome based on the bird’s arrival time and remaining energy.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Evaluate the accumulated consequences</h3></div><span class="tag">Step 8</span></div><div class="demo-frame">
         <p>Open <strong>Evaluate</strong> and enter:</p>
-        <pre><code>[if energy &gt;= 70]
-# A strong arrival
+        <pre><code>[if energy &gt;= 70 &amp;&amp; days &lt;= 6]
+## An early, strong arrival
 
-You reach the breeding grounds with enough energy to establish a territory quickly.
+You reach the breeding grounds with enough energy to defend a territory and attract a mate.
 
-**Final energy: {energy}**
+Final energy: {energy}  
+Migration time: {days} days
 
-[else if energy &gt;= 45]
-# A late arrival
+[if energy &gt;= 70 &amp;&amp; days &gt; 6]
+## A strong but late arrival
 
-You complete the migration, but you need time to recover before competing for a territory.
+You arrive with energy to spare, but many of the best territories have already been claimed.
 
-**Final energy: {energy}**
+Final energy: {energy}  
+Migration time: {days} days
 
-[else]
-# An exhausted arrival
+[if energy &gt;= 55 &amp;&amp; energy &lt; 70]
+## A difficult arrival
 
-You reach the region depleted. The journey is over, but surviving the next few days will still be difficult.
+You complete the migration, but your remaining energy makes the breeding season more difficult.
 
-**Final energy: {energy}**</code></pre>
-        <div class="callout"><strong>The ending checks the current state</strong><p>Chapbook reads the conditions from top to bottom. The first true condition displays its section. The final <code>[else]</code> catches any remaining energy value.</p></div>
-        <div class="callout"><strong>Test the thresholds</strong><p>Play several routes and confirm that each ending is possible. Adjust the costs or thresholds when one ending can never be reached.</p></div>
-      </div></section>
+Final energy: {energy}  
+Migration time: {days} days
 
-      <section class="section-group" id="section-8"><h2>Section 8: Test the story</h2><p>Use Chapbook’s testing tools to inspect variables and check every route.</p></section>
-      <section class="pattern"><div class="pattern-header"><div><h3>Test choices, links, and energy</h3></div><span class="tag">Step 8</span></div><div class="demo-frame">
+[if energy &lt; 55]
+## An exhausted arrival
+
+You reach the breeding grounds depleted. Recovering must come before defending a territory or finding a mate.
+
+Final energy: {energy}  
+Migration time: {days} days</code></pre>
+        <p>Each condition describes a separate, non-overlapping range. Because only one condition can be true, Chapbook displays only one ending.</p>
+      
+</div></section>
+
+      <section class="section-group" id="section-9"><h2>Section 9: Add custom CSS</h2><p>Use the story stylesheet to change the visual presentation without editing every passage.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Style the page, links, and image</h3></div><span class="tag">Step 9</span></div><div class="demo-frame">
         <ol class="steps">
-          <li>Select <strong>Test</strong> rather than only using Play.</li>
-          <li>Use Chapbook’s Backstage panel to watch the <code>energy</code> variable change.</li>
-          <li>Complete at least three playthroughs using different combinations of choices.</li>
-          <li>Confirm that every passage has a way forward.</li>
-          <li>Confirm that links lead to the intended passages and that all three endings can appear.</li>
-          <li>Review the story map for accidental duplicate or disconnected passages.</li>
+          <li>Open the story’s <strong>Stylesheet</strong> editor.</li>
+          <li>Paste the CSS below.</li>
+          <li>Test the story and confirm that the changes appear throughout the game.</li>
         </ol>
-        <div class="callout"><strong>Test the system, not just the prose</strong><p>A story can read well and still contain broken links, impossible endings, or incorrect variable changes. Deliberately test the strongest and weakest possible routes.</p></div>
+        <pre><code>body,
+body * {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+#backdrop {
+  background: #ffcc00;
+}
+
+main {
+  max-width: 760px;
+}
+
+img {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin: 1rem 0 1.5rem;
+}
+
+
+passage-link {
+  display: block;
+  width: 100%;
+  margin: 0.65rem 0;
+  padding: 0.85rem 1rem;
+  border: 2px solid #37634e;
+  border-radius: 12px;
+  background: #37634e!important;
+  color: white!important;
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none!important;
+}
+
+passage-link:hover {
+  background: white!important;
+  color: #37634e!important;
+  transform: translateY(-1px);
+}
+
+passage-link:focus-visible {
+  outline: 3px solid #d8893a;
+  outline-offset: 3px;
+}
+
+theme-switcher {
+  display:none;
+}
+</code></pre>
+        <p>These rules add a pale green backdrop, limit the reading width, crop large images consistently, round the image corners, and emphasize links.</p>
       </div></section>
 
-      <section class="section-group" id="section-9"><h2>Section 9: Back up and move the story</h2><p>Your Twine library belongs to one computer or one browser. Export a file before changing machines.</p></section>
-      <section class="pattern"><div class="pattern-header"><div><h3>Do not assume the story follows your login</h3></div><span class="tag">Step 9</span></div><div class="demo-frame">
-        <div class="subsection"><h4>Desktop Twine</h4>
-          <p>The desktop application stores its story library as files on that computer. It does not automatically synchronize the library to another lab computer.</p>
-        </div>
-        <div class="subsection"><h4>Browser Twine</h4>
-          <p>The online version stores stories in that browser’s local storage. A different browser, browser profile, or computer has a different library. Clearing browser data can erase the stories stored there.</p>
-        </div>
-        <div class="subsection"><h4>To continue on another computer</h4>
-          <ol class="steps">
-            <li>In the Story Map, open the <strong>Build</strong> toolbar tab.</li>
-            <li>Select <strong>Publish to File</strong> and save the HTML file somewhere you control, such as OneDrive, Google Drive, or a USB drive.</li>
-            <li>On the second computer, open Twine.</li>
-            <li>Under the <strong>Library</strong> toolbar tab, choose <strong>Import</strong>.</li>
-            <li>Select the published HTML file. Twine will add the editable story to that computer’s library.</li>
-          </ol>
-        </div>
-        <div class="callout"><strong>Publishing also creates a backup</strong><p>A published Twine HTML file is playable in a browser and can be imported back into Twine for editing. Save a new copy whenever you complete substantial work.</p></div>
-        <div class="callout"><strong>Archive is useful for multiple stories</strong><p>The Library’s Archive command exports the entire story library. Use it when moving or backing up several Twine projects at once.</p></div>
-      </div></section>
-
-      <section class="section-group" id="section-10"><h2>Section 10: Publish the game</h2><p>Create the final self-contained HTML file that can be opened or hosted as a webpage.</p></section>
-      <section class="pattern"><div class="pattern-header"><div><h3>Export the finished story</h3></div><span class="tag">Step 10</span></div><div class="demo-frame">
+      <section class="section-group" id="section-10"><h2>Section 10: Test the story</h2><p>Test several routes and stopover lengths while watching both variables for broken links, incorrect calculations, or incorrect outcomes.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Check every part of the system</h3></div><span class="tag">Step 10</span></div><div class="demo-frame">
         <ol class="steps">
-          <li>Rename the story if its current title is not ready for publication.</li>
-          <li>Test the complete story one final time.</li>
+          <li>Select <strong>Test</strong> so Chapbook opens its Backstage panel.</li>
+          <li>Watch the <code>energy</code>, <code>days</code>, and <code>stopoverDays</code> variables change after each choice.</li>
+          <li>Complete several playthroughs using different routes, stopover lengths, and final-flight choices.</li>
+          <li>Confirm that every passage has a working way forward.</li>
+          <li>Confirm that only one ending appears in <strong>Evaluate</strong>.</li>
+          <li>Check the story map for disconnected or accidental duplicate passages.</li>
+        </ol>
+      </div></section>
+
+      <section class="section-group" id="section-11"><h2>Section 11: Save and move the story</h2><p>Online Twine saves the story only in the current browser and profile. Export a copy before switching computers or submitting your work.</p></section>
+      <section class="pattern"><div class="pattern-header"><div><h3>Publish a portable Twine file</h3></div><span class="tag">Step 11</span></div><div class="demo-frame">
+        <ol class="steps">
           <li>Open the <strong>Build</strong> toolbar tab.</li>
           <li>Select <strong>Publish to File</strong>.</li>
           <li>Name the file <code>survive-migration.html</code>.</li>
-          <li>Open the exported file in a browser and complete one more playthrough.</li>
+          <li>Save it to a location you control, such as OneDrive, Google Drive, or a USB drive.</li>
+          <li>Open the file in a browser and complete one final playthrough.</li>
         </ol>
-        <div class="callout"><strong>The published file is self-contained</strong><p>Twine packages the passages, Chapbook format, variables, and styling into one HTML file. The file can be opened locally or uploaded to web hosting.</p></div>
+        <div class="subsection"><h4>Continue on another computer</h4>
+          <ol class="steps">
+            <li>Open Twine on the second computer.</li>
+            <li>Choose <strong>Import</strong> from the Library tools.</li>
+            <li>Select <code>survive-migration.html</code>.</li>
+            <li>Open the imported story and continue editing.</li>
+          </ol>
+        </div>
+        <div class="subsection"><h4>Keep a backup while you work</h4>
+          <p>Publish a fresh HTML copy after major changes. The exported file can be opened as a playable story and imported back into Twine if you need to continue on another computer.</p>
+        </div>
       </div></section>
 
-      <section class="section-group" id="submission"><h2>Submission</h2><p>Submit evidence that both the branching structure and published experience work.</p></section>
+      <section class="section-group" id="submission"><h2>Submission</h2><p>Submit the exported story file after completing and testing the game.</p></section>
       <section class="pattern submission-box"><div class="pattern-header"><div><h3>What to submit</h3></div><span class="tag">Complete</span></div><div class="demo-frame">
-        <ol class="steps">
-          <li>Your published <code>survive-migration.html</code> file.</li>
-          <li>A screenshot showing the complete Twine story map.</li>
-        </ol>
-        <p>Your project should include three decisions, visible consequences, one energy variable, branches that merge at bottlenecks, and three conditional outcomes.</p>
+        <p>Submit your published <code>survive-migration.html</code> Twine file to the Module 5 &amp; 6 Participation Grade.</p>
       </div></section>
     </main>
   </div>

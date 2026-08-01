@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Height vs. a California Condor</title>
+
+
+</head>
+<body>
+
+  <style>
+    .condor-compare {
+  --cc-bg: #f5f1e8;
+  --cc-panel: #fffdf7;
+  --cc-ink: #17211b;
+  --cc-muted: #5c675f;
+  --cc-line: #d9d2c2;
+  --cc-accent: #37634e;
+  --cc-person: #d8893a;
+  --cc-soft: #edf4ee;
+
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  color: var(--cc-ink);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+.condor-compare,
+.condor-compare * {
+  box-sizing: border-box;
+}
+
+.condor-compare__header {
+  margin-bottom: 24px;
+}
+
+.condor-compare__header h1 {
+  max-width: 760px;
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  line-height: .98;
+  letter-spacing: -.04em;
+  text-wrap: balance;
+}
+
+.condor-compare__header p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--cc-muted);
+}
+
+.condor-compare__eyebrow {
+  margin-bottom: 8px !important;
+  color: var(--cc-accent) !important;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.condor-compare__panel {
+  padding: clamp(20px, 4vw, 34px);
+  border: 1px solid var(--cc-line);
+  border-radius: 24px;
+  background: var(--cc-panel);
+}
+
+.condor-compare__form {
+  margin: 0 0 24px;
+}
+
+.condor-compare__fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.condor-compare__fieldset legend {
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.condor-compare__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: end;
+}
+
+.condor-compare__controls label {
+  display: grid;
+  gap: 6px;
+  color: var(--cc-muted);
+  font-size: .9rem;
+  font-weight: 700;
+}
+
+.condor-compare__controls input {
+  width: 110px;
+  padding: 10px 12px;
+  border: 1px solid var(--cc-line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--cc-ink);
+  font: inherit;
+}
+
+.condor-compare__controls button {
+  padding: 11px 17px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cc-accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.condor-compare__controls input:focus-visible,
+.condor-compare__controls button:focus-visible {
+  outline: 3px solid rgba(216, 137, 58, .45);
+  outline-offset: 3px;
+}
+
+.condor-compare__result {
+  margin-bottom: 24px;
+  padding: 16px 18px;
+  border: 1px solid var(--cc-line);
+  border-radius: 16px;
+  background: var(--cc-soft);
+}
+
+.condor-compare__stage {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1002 / 500;
+  border: 1px solid var(--cc-line);
+  border-radius: 20px;
+  background: linear-gradient(to bottom, #e9f1f4 0 72%, #e8dfcd 72% 100%);
+}
+
+.condor-compare__condor-image {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.condor-compare__overlay {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.condor-compare__person-line,
+.condor-compare__person-cap {
+  stroke: var(--cc-person);
+  stroke-linecap: round;
+}
+
+.condor-compare__person-line {
+  stroke-width: 14;
+}
+
+.condor-compare__person-cap {
+  stroke-width: 3;
+}
+
+.condor-compare__person-label {
+  fill: var(--cc-ink);
+  font-size: 17px;
+  font-weight: 800;
+  text-anchor: middle;
+}
+
+#condorBarGroup[hidden] {
+  display: none;
+}
+  </style>
+
+  <section class="condor-compare" id="condorCompare">
+  <header class="condor-compare__header">
+    <p class="condor-compare__eyebrow">Goofy comparison</p>
+    <h1>How do you measure up to a California condor?</h1>
+    <p>Enter your height to compare it with a 9.5-foot wingspan.</p>
+  </header>
+
+  <div class="condor-compare__panel">
+
+    <form class="condor-compare__form" id="condorForm" novalidate>
+  <fieldset class="condor-compare__fieldset">
+    <legend>Enter your height</legend>
+
+    <div class="condor-compare__controls">
+      <label for="condorFeet">
+        Feet
+        <input id="condorFeet"
+               name="feet"
+               type="number"
+               min="2"
+               max="9"
+               inputmode="numeric">
+      </label>
+
+      <label for="condorInches">
+        Inches
+        <input id="condorInches"
+               name="inches"
+               type="number"
+               min="0"
+               max="11"
+               inputmode="numeric">
+      </label>
+
+      <button type="submit">Compare</button>
+    </div>
+  </fieldset>
+</form>
+
+<div class="condor-compare__result"
+     id="condorResult"
+     aria-live="polite">
+  Enter your height to begin the comparison.
+</div>
+
+
+    <div class="condor-compare__stage">
+      <img class="condor-compare__condor-image"
+           src="california-condor-wide.png"
+           alt="California condor with its wings fully spread.">
+
+      <svg class="condor-compare__overlay"
+           viewBox="0 0 1002 500"
+           aria-hidden="true">
+
+           <g id="condorBarGroup" hidden aria-hidden="true">
+                <line id="condorPersonBar"
+                        class="condor-compare__person-line"
+                        y1="400"
+                        y2="400"></line>
+
+                <line id="condorBarStart"
+                        class="condor-compare__person-cap"
+                        y1="383"
+                        y2="417"></line>
+
+                <line id="condorBarEnd"
+                        class="condor-compare__person-cap"
+                        y1="383"
+                        y2="417"></line>
+
+                <text id="condorPersonLabel"
+                        class="condor-compare__person-label"
+                        y="460">
+                    Your height
+                </text>
+                </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+  <script>
+
+    (() => {
+        const CONDOR_INCHES = 9.5 * 12;
+
+        const form = document.getElementById('condorForm');
+        const feetInput = document.getElementById('condorFeet');
+        const inchesInput = document.getElementById('condorInches');
+        const result = document.getElementById('condorResult');
+
+        const barGroup = document.getElementById('condorBarGroup');
+        const personBar = document.getElementById('condorPersonBar');
+        const barStart = document.getElementById('condorBarStart');
+        const barEnd = document.getElementById('condorBarEnd');
+        const personLabel = document.getElementById('condorPersonLabel');
+
+        function showBlankState(message = 'Enter your height to begin the comparison.') {
+            barGroup.setAttribute('hidden', '');
+            result.textContent = message;
+        }
+
+        function updateComparison() {
+            const feetText = feetInput.value.trim();
+            const inchesText = inchesInput.value.trim();
+
+            if (feetText === '' || inchesText === '') {
+                showBlankState('Enter both feet and inches.');
+                return;
+            }
+
+            let feet = Number(feetText);
+            let inches = Number(inchesText);
+
+            if (!Number.isFinite(feet) || !Number.isFinite(inches)) {
+                showBlankState('Enter numbers for both fields.');
+                return;
+            }
+
+            if (feet < 2 || feet > 9 || inches < 0 || inches > 11) {
+                showBlankState('Enter 2–9 feet and 0–11 inches.');
+                return;
+            }
+
+            feet = Math.round(feet);
+            inches = Math.round(inches);
+
+            const totalInches = feet * 12 + inches;
+
+            if (totalInches > CONDOR_INCHES) {
+            showBlankState('Enter a height no taller than 9 ft 6 in.');
+            return;
+            }
+
+            const ratio = totalInches / CONDOR_INCHES;
+            const percent = Math.round(ratio * 100);
+
+            const condorWidth = 1002;
+            const centerX = 501;
+            const lineWidth = Math.min(condorWidth * ratio, condorWidth * 1.15);
+            const barX = centerX - lineWidth / 2;
+            const barEndX = centerX + lineWidth / 2;
+
+            barGroup.removeAttribute('hidden');
+
+            personBar.setAttribute('x1', barX);
+            personBar.setAttribute('x2', barEndX);
+
+            barStart.setAttribute('x1', barX);
+            barStart.setAttribute('x2', barX);
+
+            barEnd.setAttribute('x1', barEndX);
+            barEnd.setAttribute('x2', barEndX);
+
+            personLabel.setAttribute('x', centerX);
+            personLabel.textContent = `Your height: ${feet} ft ${inches} in`;
+
+            const peopleAcross = CONDOR_INCHES / totalInches;
+
+            result.innerHTML = `
+            At <strong>${feet} ft ${inches} in</strong>,
+            your height is about <strong>${percent}%</strong>
+            of a California condor's wingspan.
+            About <strong>${peopleAcross.toFixed(1)} people</strong>
+            your height could fit head-to-toe across the wings.
+            `;
+
+
+        }
+
+        form.addEventListener('submit', event => {
+            event.preventDefault();
+            updateComparison();
+        });
+
+        showBlankState();
+
+
+
+
+    })();
+
+
+  </script>
+</body>
+</html>
