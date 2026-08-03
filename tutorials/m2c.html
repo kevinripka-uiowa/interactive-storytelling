@@ -135,11 +135,11 @@
 <a href="#video">Video</a>
 <a href="#before">Before you start</a>
 <a href="#section-1">Plan the interaction</a>
-<a href="#section-2">Write the prompt</a>
-<a href="#section-3">Set production context</a>
+<a href="#section-2">Start the prompt</a>
+<a href="#section-3">Add production context</a>
 <a href="#section-4">Describe content and layout</a>
 <a href="#section-5">Add requirements</a>
-<a href="#section-6">Generate code</a>
+<a href="#section-6">Send the prompt</a>
 <a href="#section-7">Paste into Tilda</a>
 <a href="#section-8">Publish and inspect</a>
 <a href="#section-9">Use Tilda image URLs</a>
@@ -195,53 +195,123 @@
       </section>
 
       <section class="pattern" id="section-2">
-        <div class="pattern-header"><div><h3>Section 2: Write a detailed prompt</h3></div><span class="tag">Prompting</span></div>
+        <div class="pattern-header"><div><h3>Section 2: Start the prompt with the interaction and code format</h3></div><span class="tag">Prompting</span></div>
         <div class="demo-frame">
-<p>Do not ask only for “make flip cards.” A useful prompt describes the interaction, host platform, content, layout, accessibility, and output format.</p><ol class="steps"><li>Open a blank text document or note.</li><li>Start with the interaction: “I want to create a flippable cards interactive where a user clicks to flip a card to reveal information on the back.”</li><li>Add the host context: the code will be pasted into a Tilda custom HTML block.</li><li>Ask for a self-contained HTML snippet with embedded CSS and JavaScript.</li><li>Tell the AI not to include a full HTML document unless necessary.</li><li>Require scoped CSS so the snippet does not interfere with the rest of the Tilda page.</li><li>Tell the AI not to use external libraries unless there is a strong reason.</li></ol><pre><code>I want to create a flippable cards interactive where a user clicks to flip a card to reveal information on the back.
-
-I will paste this into a custom HTML block in Tilda. Give me a self-contained HTML snippet with embedded CSS and JavaScript. Do not include a full HTML document unless necessary. Scope all CSS to this interactive so it does not affect the rest of the page. Do not use external libraries unless there is a strong reason.</code></pre>
+<p>Begin by defining what the viewer does and how the code needs to be delivered. Add this first part to your working prompt.</p>
+<ol class="steps">
+<li>Describe the interaction: the viewer clicks a card to reveal information on the back.</li>
+<li>Identify the host platform: a Tilda custom HTML block.</li>
+<li>Ask for one self-contained snippet with embedded HTML, CSS, and JavaScript.</li>
+<li>Tell the AI not to create a full HTML document unless it is necessary.</li>
+<li>Require scoped CSS so the code does not change other parts of the Tilda page.</li>
+<li>Avoid unnecessary external libraries.</li>
+</ol>
+<pre><code>I want to create a flippable cards interactive where a user clicks to flip a card to reveal information on the back. I will paste this into a custom HTML block in Tilda. Give me a self-contained HTML snippet with embedded CSS and JavaScript. Do not include a full HTML document unless necessary. Scope all CSS to this interactive so it does not affect the rest of the page. Do not use external libraries unless there is a strong reason.</code></pre>
         </div>
       </section>
 
       <section class="pattern" id="section-3">
-        <div class="pattern-header"><div><h3>Section 3: Set the production context</h3></div><span class="tag">Tilda</span></div>
+        <div class="pattern-header"><div><h3>Section 3: Add the production context and repeatable structure</h3></div><span class="tag">Tilda</span></div>
         <div class="demo-frame">
-<p>The code should be written for the place it will actually live. In this case, it needs to fit inside Tilda’s content area.</p><ol class="steps"><li>Tell the AI the interactive should be centered horizontally on the page.</li><li>Tell it to fit inside Tilda’s grid: about 1160 pixels of content with margins on each side.</li><li>Ask for three cards per row on desktop, two on tablet, and one on mobile.</li><li>Require the snippet to be easy to paste into one custom HTML block.</li></ol><pre><code>I want this entire thing centered horizontally on the page. It should fit inside Tilda&#x27;s grid, which is about 1160px of content with margins left and right.
+<p>Next, explain how the interactive should fit into Tilda and how the repeated cards should be organized. Add this below the first part of your prompt.</p>
+<ol class="steps">
+<li>Center the interactive within Tilda’s content grid.</li>
+<li>Use the approximate grid width and margins supplied in the prompt.</li>
+<li>Set the number of cards per row for desktop, tablet, and mobile.</li>
+<li>Require a repeated HTML pattern that a beginner can edit.</li>
+<li>Ask for comments marking the beginning and end of each card.</li>
+<li>Specify that the content should stay in HTML rather than being moved into a JavaScript object or array.</li>
+</ol>
+<pre><code>I want this entire thing to be centered horizontally on the page. But I need to wrap the parts in Tilda's grid which is 1160px of content and 20px margin left and right.
 
-Use three cards per row on desktop, two on tablet, and one on mobile.</code></pre><div class="callout"><strong>Production context matters</strong><p>A custom code block does not exist in isolation. It sits inside a builder page, so width, spacing, fonts, and responsive behavior should match the page environment.</p></div>
+I want 3 cards per row on desktop, 2 on tablet, and 1 on mobile.
+
+Make the content easy for a beginner to edit later using a repeatable HTML pattern.
+
+Use clearly commented HTML units that I can copy, paste, delete, or reorder. Each repeated item should have comments showing where one item starts and ends.
+
+Example comment style:
+&lt;!-- ITEM 1 START: copy this whole block to add another item --&gt;
+&lt;!-- ITEM 1 END --&gt;
+
+Use only this repeatable HTML pattern approach. Do not also create a JavaScript object or array for the content.</code></pre>
+<div class="callout"><strong>Production context matters</strong><p>A custom code block sits inside a larger page. Width, spacing, responsive behavior, and the way repeated content is organized should all match the environment where the code will be used.</p></div>
         </div>
       </section>
 
       <section class="pattern" id="section-4">
         <div class="pattern-header"><div><h3>Section 4: Describe the content and layout</h3></div><span class="tag">Content</span></div>
         <div class="demo-frame">
-<p>Give the AI enough content direction so it creates the right structure instead of guessing.</p><ol class="steps"><li>On the front of each card, ask for a square image and the title of the bird bill type.</li><li>Place the title over the image at the bottom, not underneath the image.</li><li>On the back, ask for a short description and a separate section for the types of birds that have that bill type.</li><li>Ask for a small attribution line.</li><li>Tell the AI that the back text should center vertically.</li><li>Paste the sample content from the asset file into the prompt.</li></ol><pre><code>On the front of the cards I want a square image and a title of the type of bird bill.
+<p>Now describe what appears above the cards, what belongs on each side of a card, and the sample content the AI should use. Add this below the production context.</p>
+<ol class="steps">
+<li>Provide the title and instructional paragraph that should appear above the cards.</li>
+<li>Describe the square image and bottom-aligned title on the front.</li>
+<li>Describe the explanation, bird examples, and attribution on the back.</li>
+<li>Specify that the back text should center vertically.</li>
+<li>Paste the supplied sample content into the prompt rather than asking the AI to invent it.</li>
+</ol>
+<pre><code>I want a title "Bird Bills and Functions" and an instructional paragraph "Bird bills are shaped by what birds eat and how they find food. Flip each card to see how a bill’s shape helps a bird survive." Above the cards.
 
-On the back I want a sentence of description and another section that tells what types of birds have this bill type. I also want a small attribution.
+On the front of the cards I want a square image and a title of the type of bird bill. On the back I want a sentence of description and another section that tells what types of birds have this bill type. I also want a small attribution. I want the text on front to be over the image, not under it, but at the bottom of the image. Text on the back should center vertically. Here is some sample content:
 
-I want the text on the front to be over the image, not under it, and placed at the bottom of the image. Text on the back should center vertically.
+Seed-cracking bill
 
-Here is the sample content:</code></pre>
+Front text:
+Thick, cone-shaped bill
+
+Back text:
+A short, strong cone-shaped bill helps birds crack seeds. Cardinals and finches use this kind of bill to grip and break open seed shells.
+
+Birds with this Bill: Northern Cardinal, House Finch, or American Goldfinch
+
+Photo: The Cosmonaut, CC BY-SA 2.5 CA &lt;https://creativecommons.org/licenses/by-sa/2.5/ca/deed.en&gt;, via Wikimedia Commons</code></pre>
         </div>
       </section>
 
       <section class="pattern" id="section-5">
-        <div class="pattern-header"><div><h3>Section 5: Add production requirements</h3></div><span class="tag">5 A’s</span></div>
+        <div class="pattern-header"><div><h3>Section 5: Add assets and production requirements</h3></div><span class="tag">5 A’s</span></div>
         <div class="demo-frame">
-<p>Use the prompt to require the production features you would otherwise have to fix later.</p><ol class="steps"><li>Appearance: ask for a clear title and short instructional paragraph above the cards.</li><li>Asset optimization: use replaceable image paths or a temporary placeholder image URL; do not use Base64 images.</li><li>All devices: require a responsive layout and touch-friendly controls.</li><li>Accessibility: require semantic HTML, buttons for actions, keyboard access, visible focus states, and alt text fields.</li><li>Attribution: include a small attribution area for each card or image.</li></ol><pre><code>Add a clear title and short instructional paragraph above the cards.
+<p>Finish the requirements by identifying the temporary image, responsive behavior, accessibility needs, motion preference, and overall attribution. Add this below the content description.</p>
+<ol class="steps">
+<li>Provide the temporary image URL.</li>
+<li>Prohibit Base64 assets and ask for lightweight code.</li>
+<li>Require responsive behavior without hover-only interaction.</li>
+<li>Require touch-friendly controls and a simplified small-screen layout.</li>
+<li>Require semantic HTML, real buttons, keyboard access, visible focus states, and useful alt text placeholders.</li>
+<li>Use ARIA only where it supports state or labeling.</li>
+<li>Require more than color alone to communicate meaning.</li>
+<li>Respect reduced-motion preferences.</li>
+<li>Include the supplied source and AI-use attribution beneath the interactive.</li>
+</ol>
+<pre><code>For the images, use this source for now: https://optim.tildacdn.net/tild3133-3661-4666-a334-316561313038/-/format/webp/cardinal.jpg.webp
 
-Use replaceable image URLs. Do not use Base64 images.
+Do not use base64 assets. Keep the code lightweight.
 
-Make the interaction keyboard accessible. Use semantic HTML and real buttons for actions. Include visible focus states and alt text areas for images.
+Make it responsive for desktop and mobile. Avoid hover-only interactions. Make buttons and controls easy to tap. Stack or simplify the layout on small screens.
 
-Include small attribution text for each card.</code></pre>
+Use semantic HTML. Use real buttons for actions. Make it keyboard accessible. Add visible focus states. Include useful alt text placeholders. Use ARIA only when needed for state or labeling. Do not rely only on color to communicate meaning. Respect reduced-motion preferences.
+
+Include a small readable credit/source line at the bottom. "Attribution for Under Interactive:
+
+Source: Information summarized from Cornell Lab of Ornithology.
+AI tools were used to help develop and troubleshoot the code for this element. The reporting, data selection, design decisions, testing, editing, and final responsibility for the work are the author’s."</code></pre>
         </div>
       </section>
 
       <section class="pattern" id="section-6">
-        <div class="pattern-header"><div><h3>Section 6: Generate one code snippet</h3></div><span class="tag">AI assistance</span></div>
+        <div class="pattern-header"><div><h3>Section 6: Send the completed prompt</h3></div><span class="tag">AI assistance</span></div>
         <div class="demo-frame">
-<p>After the prompt is complete, paste it into the AI tool and ask for one usable snippet.</p><ol class="steps"><li>Paste the complete prompt into the AI assistant.</li><li>If the response splits the code into separate pieces, ask it to combine everything into one code snippet.</li><li>Copy the full snippet only after you confirm that it includes HTML, CSS, and JavaScript in one block.</li><li>Do not copy extra explanation into Tilda; copy only the code.</li></ol><pre><code>Make this one code snippet I can cut and paste.</code></pre><div class="callout"><strong>AI can structure code strangely</strong><p>If the first output is broken, split apart, or missing a requirement, ask for a targeted revision. Do not start over unless the structure is unusable.</p></div>
+<p>After you have assembled and reviewed all the prompt sections, add the final output instruction and send the complete prompt to the AI tool.</p>
+<ol class="steps">
+<li>Read the complete prompt from beginning to end.</li>
+<li>Remove contradictions, repeated instructions, or accidental omissions.</li>
+<li>Add the final instruction below.</li>
+<li>Paste the complete prompt into the AI assistant.</li>
+<li>Confirm that the response contains only one code block with the HTML, CSS, and JavaScript needed for the Tilda block.</li>
+<li>If the response includes explanation outside the code, copy only the code into Tilda.</li>
+</ol>
+<pre><code>Provide only the code I should paste into the custom HTML block.</code></pre>
+<div class="callout"><strong>Keep the staged thinking process</strong><p>The separate prompt sections help you make decisions about interaction, production context, content, layout, accessibility, and attribution before asking for code. Combine them only when you are ready to send the completed prompt.</p></div>
         </div>
       </section>
 
@@ -287,13 +357,28 @@ Include small attribution text for each card.</code></pre>
       <section class="pattern" id="section-12">
         <div class="pattern-header"><div><h3>Section 12: Ask AI to revise your changed code</h3></div><span class="tag">Revision workflow</span></div>
         <div class="demo-frame">
-<p>If you have already edited the code, make the AI start from your current version, not from the original draft.</p><ol class="steps"><li>Open the custom HTML block and copy your current full code.</li><li>Tell the AI that you have changed the code and it should use your pasted version as the starting point.</li><li>Ask for specific changes rather than a broad rewrite.</li><li>For this tutorial, ask for individual background colors on each card using CSS variables.</li><li>Ask for sans-serif typography with TildaSans as the preferred font.</li><li>Paste the changed code after the instruction.</li></ol><pre><code>Revise this code, but I have changed it, so start with my changed code that I will paste.
+<p>If you have already edited the code, make the AI start from your current version rather than rebuilding the original prompt from scratch.</p>
+<ol class="steps">
+<li>Open the custom HTML block and copy your current full code.</li>
+<li>Tell the AI to use that pasted version as the starting point.</li>
+<li>Describe only the changes you need.</li>
+<li>For this tutorial, request individual card colors using CSS variables.</li>
+<li>Request sans-serif typography with TildaSans as the preferred font.</li>
+<li>Require the response to contain only the revised code.</li>
+<li>Paste your current code after the revision instructions.</li>
+</ol>
+<pre><code>Revise this code, but I have changed it, so start with my changed code that I will paste.
 
 I want to add individual background colors to each card. Please use CSS variables.
 
-I also want the typography to be sans-serif fonts, using TildaSans as the preferred sans-serif.
+I also want the typography to use sans-serif fonts, with TildaSans as the preferred sans-serif.
 
-Here is the code:</code></pre><div class="callout"><strong>Do not lose your edits</strong><p>If you ask AI to revise from memory or from an earlier version, it may remove the images, content, or extra card you already added. Always paste the current code when asking for revisions.</p></div>
+Keep the existing content, images, repeatable commented HTML pattern, responsive behavior, accessibility features, and attribution unless a requested change requires otherwise.
+
+Provide only the revised code.
+
+Here is the code:</code></pre>
+<div class="callout"><strong>Do not lose your edits</strong><p>If you ask AI to revise from memory or from an earlier version, it may remove the images, content, accessibility work, or extra cards you already added. Always paste the current code when asking for revisions.</p></div>
         </div>
       </section>
 

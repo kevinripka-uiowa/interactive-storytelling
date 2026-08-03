@@ -141,22 +141,23 @@
 <a href="#overview">Overview</a>
 <a href="#before">Before you start</a>
 <div class="nav-group-title">Build the model</div>
-<a href="#open-model">1. Open the model</a>
+<a href="#upload">1. Upload and credit the model</a>
 <a href="#initial-view">2. Set the initial view</a>
-<a href="#annotation-one">3. Annotate the bill</a>
-<a href="#annotation-two">4. Annotate the tail</a>
-<a href="#annotation-three">5. Compare color forms</a>
-<a href="#annotation-four">6. Explain the pattern</a>
-<a href="#order">7. Order and test</a>
+<a href="#appearance">3. Explore presentation settings</a>
+<a href="#annotation-one">4. Annotate the bill</a>
+<a href="#annotation-two">5. Annotate the tail</a>
+<a href="#annotation-three">6. Compare color forms</a>
+<a href="#annotation-four">7. Explain the pattern</a>
+<a href="#order">8. Order and test</a>
 <div class="nav-group-title">Publish</div>
-<a href="#embed">8. Embed in Tilda</a>
-<a href="#accessibility">9. Add context</a>
+<a href="#embed">9. Publish and embed in Tilda</a>
+<a href="#accessibility">10. Add context</a>
 </nav>
 </aside>
 
 <main>
 <section class="hero" id="overview">
-<div class="eyebrow">Tutorial · 3D Object</div>
+<div class="eyebrow">M6B</div>
 <h2>Annotate a Northern Flicker in Sketchfab</h2>
 <p>Use a 3D model to explain how the Northern Flicker’s body supports its unusual behavior and how its appearance varies across North America.</p>
 <div class="concept-callout"><strong>The annotation sequence should work as a short guided tour.</strong> Each marker needs a meaningful location, a composed camera view, and concise explanatory text. The order should move viewers through the bird rather than feel random.</div>
@@ -166,37 +167,41 @@
 </div>
 </section>
 
+<section class="video-section" aria-labelledby="video-title">
+<div class="video-card">
+<h3 id="video-title">Video walkthrough</h3>
+<p>Watch the complete process, then use the written steps below as a reference while you work.</p>
+<div class="video-embed">
+<iframe src="https://www.youtube.com/embed/gALxye4XkJo" title="Annotate a Northern Flicker in Sketchfab video tutorial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
+</div>
+</section>
+
 <section class="section-group" id="before"><h2>Before you start</h2><p>Prepare the model, account, and image needed for the annotation sequence.</p></section>
 <section class="pattern">
 <div class="pattern-header"><div><h3>Preparation checklist</h3></div><span class="tag">Setup</span></div>
 <div class="demo-frame">
 <ul class="steps checklist">
-<li>Sign in to Sketchfab.</li>
-<li>Open the supplied Northern Flicker model or upload it to your account if required.</li>
-<li>Confirm that you have permission to use and republish the model. Keep the creator and license information for attribution.</li>
-<li>Open a Tilda page and add a T123 HTML block for the finished embed.</li>
+<li>Sign in to <a href="https://sketchfab.com/" target="_blank" rel="noopener">Sketchfab</a>.</li>
+<li>Download the supplied Northern Flicker model files from ICON.</li>
 </ul>
-<ul class="resource-list">
-<li><a href="https://sketchfab.com/" target="_blank" rel="noopener">Sketchfab</a></li>
-<li><a href="https://www.allaboutbirds.org/guide/Northern_Flicker/overview" target="_blank" rel="noopener">Northern Flicker overview from the Cornell Lab</a></li>
-<li><a href="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Northern_flicker_on_Seeskadee_National_Wildlife_Refuge_%2834055485266%29.jpg/500px-Northern_flicker_on_Seeskadee_National_Wildlife_Refuge_%2834055485266%29.jpg" target="_blank" rel="noopener">Red-shafted Northern Flicker image</a></li>
-</ul>
-<div class="callout"><strong>Sketchfab annotations use Markdown</strong><p>You can add formatted text, links, and externally hosted images. Do not paste an iframe or arbitrary HTML into an annotation.</p></div>
 </div>
 </section>
 
-<section class="section-group" id="open-model"><h2>Section 1: Open the model in the 3D Editor</h2><p>The 3D Editor controls the model’s presentation, camera, and annotations.</p></section>
+<section class="section-group" id="upload"><h2>Section 1: Upload and credit the model</h2><p>Upload the supplied files, add the source credit, and open the model in Sketchfab’s 3D Editor.</p></section>
 <section class="pattern">
-<div class="pattern-header"><div><h3>Inspect the Northern Flicker</h3></div><span class="tag">Step 1</span></div>
+<div class="pattern-header"><div><h3>Create the model page</h3></div><span class="tag">Step 1</span></div>
 <div class="demo-frame">
 <ol class="steps">
-<li>Open the Northern Flicker model on Sketchfab.</li>
-<li>Choose <strong>Edit 3D Settings</strong> or the equivalent option for opening the 3D Editor.</li>
-<li>Rotate around the bird and inspect the bill, tail, underwings, breast, and belly.</li>
-<li>Check the model’s orientation. The bird should appear upright and should rotate around a sensible pivot.</li>
-<li>Make only modest lighting or background adjustments. The model should remain easy to examine.</li>
+<li>Sign in to Sketchfab and choose <strong>Upload</strong>.</li>
+<li>Select the supplied Northern Flicker model files. If the download contains several related files, upload them together.</li>
+<li>Give the model a clear title: <strong>Northern Flicker</strong>.</li>
+<li>Add the model attribution to the description. Sketchfab accepts Markdown, so the creator and source can be linked.</li>
+<li>Save the draft, then choose <strong>Edit 3D Settings</strong>.</li>
 </ol>
-<div class="callout"><strong>Do not let the background compete with the bird</strong><p>Use a neutral background and enough contrast to keep the edges of the bill, tail, and wings visible.</p></div>
+<p class="code-label">Attribution for the model description</p>
+<pre><code>3D model: [Northern Flicker](https://sketchfab.com/3d-models/northern-flicker-c1ce69a0b2974f729445eff31f8f4423) by [RISD Nature Lab](https://sketchfab.com/RISDNaturelab), licensed under Creative Commons Attribution.</code></pre>
+<div class="callout"><strong>Keep the model in draft while you work</strong><p>You can edit the model before publishing it. Publish only after the initial view, presentation settings, and annotations are complete.</p></div>
 </div>
 </section>
 
@@ -214,7 +219,30 @@
 </div>
 </section>
 
-<section class="section-group" id="annotation-one"><h2>Section 3: Annotation 1 — The bill</h2><p>Begin at the head because the bill immediately introduces how the flicker differs from many other woodpeckers.</p></section>
+<section class="section-group" id="appearance"><h2>Section 3: Explore the presentation settings</h2><p>Use the 3D Editor to make the model clear and believable, but do not spend the class trying to master every advanced material control.</p></section>
+<section class="pattern">
+<div class="pattern-header"><div><h3>Make restrained visual adjustments</h3></div><span class="tag">Step 3</span></div>
+<div class="demo-frame">
+<ol class="steps">
+<li>Explore the <strong>Scene</strong>, <strong>Lighting</strong>, <strong>Materials</strong>, <strong>Background</strong>, and <strong>Post-processing</strong> panels.</li>
+<li>Try a few lighting environments and background colors. Choose settings that separate the bird from the background and preserve feather detail.</li>
+<li>Keep <strong>Lit</strong> rendering unless the model’s textures already contain baked lighting. Shadeless rendering removes lighting and shadows.</li>
+<li>Avoid making feathers look metallic or highly glossy. Use restrained material changes that suit a taxidermy bird.</li>
+<li>Check the model from several angles before settling on the settings.</li>
+</ol>
+<div class="two-col">
+<div class="meta-card"><h4>Lighting</h4><p>Sketchfab recommends Lit mode for most models. Environmental lighting and shadows are enabled by default, and the lighting environment can be rotated or adjusted.</p></div>
+<div class="meta-card"><h4>Orientation and pivot</h4><p>The bird should be upright, rest sensibly in the scene, and rotate around a useful center rather than swinging out of view.</p></div>
+</div>
+<ul class="resource-list">
+<li><a href="https://sketchfab.com/blogs/community/7-essential-settings-to-make-your-uploads-look-great/" target="_blank" rel="noopener">Sketchfab: Seven essential 3D Editor settings</a></li>
+<li><a href="https://sketchfab.com/blogs/community/how-to-fine-tune-your-lighting-and-shadows-on-sketchfab/" target="_blank" rel="noopener">Sketchfab: Lighting and shadows</a></li>
+</ul>
+<div class="callout"><strong>Explore, then make a decision</strong><p>The goal is not to use every effect. The goal is a neutral, legible presentation in which the bill, tail, underwings, and plumage patterns remain easy to inspect.</p></div>
+</div>
+</section>
+
+<section class="section-group" id="annotation-one"><h2>Section 4: Annotation 1 — The bill</h2><p>Begin at the head because the bill immediately introduces how the flicker differs from many other woodpeckers.</p></section>
 <section class="pattern">
 <div class="pattern-header"><div><h3>Place the marker and save the view</h3></div><span class="tag">Annotation 1</span></div>
 <div class="demo-frame">
@@ -232,7 +260,7 @@
 </div>
 </section>
 
-<section class="section-group" id="annotation-two"><h2>Section 4: Annotation 2 — The tail</h2><p>Move from the head to the rear of the bird and explain a structural feature shared with other woodpeckers.</p></section>
+<section class="section-group" id="annotation-two"><h2>Section 5: Annotation 2 — The tail</h2><p>Move from the head to the rear of the bird and explain a structural feature shared with other woodpeckers.</p></section>
 <section class="pattern">
 <div class="pattern-header"><div><h3>Show the stiff tail feathers</h3></div><span class="tag">Annotation 2</span></div>
 <div class="demo-frame">
@@ -250,7 +278,7 @@
 </div>
 </section>
 
-<section class="section-group" id="annotation-three"><h2>Section 5: Annotation 3 — Yellow-shafted and red-shafted forms</h2><p>Use the underwing color to compare the eastern and western forms of the same species.</p></section>
+<section class="section-group" id="annotation-three"><h2>Section 6: Annotation 3 — Yellow-shafted and red-shafted forms</h2><p>Use the underwing color to compare the eastern and western forms of the same species.</p></section>
 <section class="pattern">
 <div class="pattern-header"><div><h3>Add an image with Markdown</h3></div><span class="tag">Annotation 3</span></div>
 <div class="demo-frame">
@@ -273,7 +301,7 @@
 </div>
 </section>
 
-<section class="section-group" id="annotation-four"><h2>Section 6: Annotation 4 — Spots and bars</h2><p>End with a whole-body pattern that connects appearance to the bird’s ground-foraging behavior.</p></section>
+<section class="section-group" id="annotation-four"><h2>Section 7: Annotation 4 — Spots and bars</h2><p>End with a whole-body pattern that connects appearance to the bird’s ground-foraging behavior.</p></section>
 <section class="pattern">
 <div class="pattern-header"><div><h3>Reframe the patterned body</h3></div><span class="tag">Annotation 4</span></div>
 <div class="demo-frame">
@@ -291,9 +319,9 @@
 </div>
 </section>
 
-<section class="section-group" id="order"><h2>Section 7: Order and test the guided sequence</h2><p>The annotation list determines the path viewers follow through the model.</p></section>
+<section class="section-group" id="order"><h2>Section 8: Order and test the guided sequence</h2><p>The annotation list determines the path viewers follow through the model.</p></section>
 <section class="pattern">
-<div class="pattern-header"><div><h3>Arrange the annotations</h3></div><span class="tag">Step 7</span></div>
+<div class="pattern-header"><div><h3>Arrange the annotations</h3></div><span class="tag">Step 8</span></div>
 <div class="demo-frame">
 <ol class="steps">
 <li>Drag the annotations into this order: <strong>bill, tail, color forms, spots and bars</strong>.</li>
@@ -311,26 +339,38 @@
 </div>
 </section>
 
-<section class="section-group" id="embed"><h2>Section 8: Embed the model in Tilda</h2><p>Use Sketchfab’s embed code inside a T123 HTML block.</p></section>
+<section class="section-group" id="embed"><h2>Section 9: Publish and embed the model in Tilda</h2><p>Use Sketchfab’s embed code inside a T123 HTML block.</p></section>
 <section class="pattern">
-<div class="pattern-header"><div><h3>Copy and place the embed</h3></div><span class="tag">Step 8</span></div>
+<div class="pattern-header"><div><h3>Publish, copy, and place the embed</h3></div><span class="tag">Step 9</span></div>
 <div class="demo-frame">
 <ol class="steps">
+<li>Save the 3D settings and publish the model.</li>
 <li>Open the published model page and choose <strong>Embed</strong>.</li>
-<li>Keep the annotation controls visible.</li>
-<li>Copy the complete iframe code.</li>
+<li>Keep the annotation controls visible and copy the complete embed code.</li>
 <li>Add a T123 HTML block to your Tilda page and paste the embed code.</li>
-<li>Wrap the iframe so the model is centered and does not become excessively wide.</li>
+<li>Add the CSS below inside the same T123 block. Sketchfab’s embed includes a wrapper named <code>sketchfab-embed-wrapper</code>.</li>
 <li>Publish the Tilda page before testing the embed.</li>
 </ol>
-<pre><code>&lt;div style="width:100%; max-width:800px; margin:0 auto;"&gt;
-  PASTE THE SKETCHFAB IFRAME HERE
-&lt;/div&gt;</code></pre>
+<pre><code>&lt;style&gt;
+  .sketchfab-embed-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .sketchfab-embed-wrapper iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+&lt;/style&gt;
+
+PASTE THE SKETCHFAB EMBED CODE HERE</code></pre>
 <div class="callout"><strong>Give the iframe a useful title</strong><p>The embed should have a title such as <code>Annotated 3D model of a Northern Flicker</code>, not a generic label such as <code>Sketchfab model</code>.</p></div>
 </div>
 </section>
 
-<section class="section-group" id="accessibility"><h2>Section 9: Add context outside the model</h2><p>A 3D viewer is highly visual and may be difficult for some people to navigate. The surrounding page should preserve the essential information.</p></section>
+<section class="section-group" id="accessibility"><h2>Section 10: Add context outside the model</h2><p>A 3D viewer is highly visual and may be difficult for some people to navigate. The surrounding page should preserve the essential information.</p></section>
 <section class="pattern">
 <div class="pattern-header"><div><h3>Build an accessible presentation</h3></div><span class="tag">Final check</span></div>
 <div class="demo-frame">
