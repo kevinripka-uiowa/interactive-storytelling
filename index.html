@@ -259,10 +259,155 @@
       .page-grid { grid-template-columns:1fr; }
       .page-card { min-height:0; }
     }
-  </style>
+  
+    .layout { min-height:100vh; }
+
+    .sidebar {
+      position:fixed;
+      top:0;
+      left:0;
+      width:280px;
+      height:100vh;
+      overflow:auto;
+      padding:28px 22px;
+      background:#17211b;
+      color:#fffdf7;
+      z-index:20;
+    }
+
+    .sidebar h1 {
+      margin:0 0 8px;
+      font-size:1.35rem;
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+
+    .sidebar p {
+      margin:0 0 24px;
+      color:rgba(255,255,255,.72);
+      font-size:.92rem;
+    }
+
+    .nav-group-title {
+      margin:24px 0 8px;
+      color:#83e4b6;
+      text-transform:uppercase;
+      font-size:.72rem;
+      letter-spacing:.08em;
+      font-weight:800;
+    }
+
+    .sidebar a {
+      display:block;
+      padding:8px 10px;
+      margin:2px 0;
+      border-radius:10px;
+      text-decoration:none;
+      color:rgba(255,255,255,.88);
+      font-size:.94rem;
+    }
+
+    .sidebar a:hover,
+    .sidebar a:focus-visible {
+      background:rgba(255,255,255,.1);
+      outline:none;
+    }
+
+    main {
+      margin-left:280px;
+      width:calc(100% - 280px);
+      max-width:none;
+    }
+
+    .mobile-menu-toggle,
+    .mobile-menu-backdrop { display:none; }
+
+    section[id] { scroll-margin-top:24px; }
+
+    @media (max-width:860px) {
+      body { padding-top:64px; }
+      body.menu-open { overflow:hidden; }
+
+      .mobile-menu-toggle {
+        position:fixed;
+        top:12px;
+        left:12px;
+        z-index:1001;
+        display:inline-flex;
+        align-items:center;
+        gap:9px;
+        padding:10px 13px;
+        border:0;
+        border-radius:999px;
+        background:#17211b;
+        color:#fffdf7;
+        box-shadow:0 8px 22px rgba(23,33,27,.24);
+        font:inherit;
+        font-weight:900;
+        cursor:pointer;
+      }
+
+      .mobile-menu-icon {
+        position:relative;
+        display:block;
+        width:18px;
+        height:12px;
+        border-top:2px solid currentColor;
+        border-bottom:2px solid currentColor;
+      }
+
+      .mobile-menu-icon::before {
+        content:"";
+        position:absolute;
+        left:0;
+        right:0;
+        top:50%;
+        border-top:2px solid currentColor;
+        transform:translateY(-50%);
+      }
+
+      .mobile-menu-backdrop {
+        position:fixed;
+        inset:0;
+        z-index:999;
+        display:block;
+        background:rgba(23,33,27,.45);
+      }
+
+      .mobile-menu-backdrop[hidden] { display:none; }
+
+      .sidebar {
+        position:fixed;
+        top:0;
+        left:0;
+        bottom:0;
+        width:min(84vw,340px);
+        height:100vh;
+        max-height:100vh;
+        padding:76px 22px 28px;
+        overflow-y:auto;
+        z-index:1000;
+        transform:translateX(-105%);
+        transition:transform .24s ease;
+        box-shadow:18px 0 36px rgba(0,0,0,.22);
+      }
+
+      body.menu-open .sidebar { transform:translateX(0); }
+
+      main {
+        margin-left:0;
+        width:100%;
+        max-width:1120px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior:auto; }
+      .sidebar { transition:none; }
+    }
+</style>
 </head>
-<body>
-<main>
+<body><button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span class="mobile-menu-text">Menu</span></button><div class="mobile-menu-backdrop" hidden="" id="mobileMenuBackdrop"></div><div class="layout"><aside aria-label="Course page navigation" class="sidebar" id="siteSidebar"><h1>Interactive Storytelling</h1><p>Course pages, patterns, and tutorials.</p><nav><div class="nav-group-title">Course</div><a href="#core-concepts">Core concepts</a><a href="#patterns">Patterns</a><div class="nav-group-title">Tutorials</div><a href="#module-2">Module 2</a><a href="#module-3">Module 3</a><a href="#module-4">Module 4</a><a href="#module-5">Module 5</a><a href="#module-6">Module 6</a></nav></aside><main>
 <section class="hero">
 <div class="hero-content">
 <div class="eyebrow">JMC 3600:0002</div>
@@ -270,8 +415,8 @@
 <p>Course pages for planning, prototyping, and building interactive stories. Start with the concepts, study useful patterns, then choose the tools and production approach that fit the story.</p>
 </div>
 </section>
-<section aria-labelledby="course-pages-title" class="section-heading">
-<h2 id="course-pages-title">Core Concepts &amp; Information</h2>
+<section aria-labelledby="course-pages-title" class="section-heading" id="core-concepts">
+<h2 id="core-concepts-title">Core Concepts &amp; Information</h2>
 <p>These are the core concepts and information you'll need throughout the course.</p>
 </section>
 <section aria-label="Interactive storytelling course page links" class="page-grid">
@@ -386,77 +531,76 @@
 </div>
 </a>
 <a class="page-card" href="engagement/">
-  <div class="card-top">
-    <span class="card-number">11</span>
-  </div>
-  <div class="card-body">
-    <h3>Engagement</h3>
-    <p>Use relevance, challenge, play, progress, and feedback to motivate viewers to participate and continue.</p>
-    <div class="card-tags">
-      <span class="tag">gamification</span>
-      <span class="tag">personal relevance</span>
-      <span class="tag">challenge</span>
-    </div>
-    <div class="card-link-note">
-      <span>Open page</span>
-      <span aria-hidden="true">→</span>
-    </div>
-  </div>
+<div class="card-top">
+<span class="card-number">11</span>
+</div>
+<div class="card-body">
+<h3>Engagement</h3>
+<p>Use relevance, challenge, play, progress, and feedback to motivate viewers to participate and continue.</p>
+<div class="card-tags">
+<span class="tag">gamification</span>
+<span class="tag">personal relevance</span>
+<span class="tag">challenge</span>
+</div>
+<div class="card-link-note">
+<span>Open page</span>
+<span aria-hidden="true">→</span>
+</div>
+</div>
 </a>
-
 <a class="page-card" href="choices-branches/">
-  <div class="card-top">
-    <span class="card-number">12</span>
-  </div>
-  <div class="card-body">
-    <h3>Choices &amp; Branching</h3>
-    <p>Design meaningful choices and organize the paths, consequences, and outcomes they create.</p>
-    <div class="card-tags">
-      <span class="tag">choice types</span>
-      <span class="tag">branching narratives</span>
-      <span class="tag">Twine</span>
-    </div>
-    <div class="card-link-note">
-      <span>Open page</span>
-      <span aria-hidden="true">→</span>
-    </div>
-  </div>
+<div class="card-top">
+<span class="card-number">12</span>
+</div>
+<div class="card-body">
+<h3>Choices &amp; Branching</h3>
+<p>Design meaningful choices and organize the paths, consequences, and outcomes they create.</p>
+<div class="card-tags">
+<span class="tag">choice types</span>
+<span class="tag">branching narratives</span>
+<span class="tag">Twine</span>
+</div>
+<div class="card-link-note">
+<span>Open page</span>
+<span aria-hidden="true">→</span>
+</div>
+</div>
 </a>
 <a class="page-card" href="360-cameras/">
-  <div class="card-top">
-    <span class="card-number">13</span>
-  </div>
-  <div class="card-body">
-    <h3>Using Our 360 Equipment</h3>
-    <p>Connect and use our 360 cameras</p>
-    <div class="card-tags">
-      <span class="tag">Immersive</span>
-    </div>
-    <div class="card-link-note">
-      <span>Open page</span>
-      <span aria-hidden="true">→</span>
-    </div>
-  </div>
+<div class="card-top">
+<span class="card-number">13</span>
+</div>
+<div class="card-body">
+<h3>Using Our 360 Equipment</h3>
+<p>Connect and use our 360 cameras</p>
+<div class="card-tags">
+<span class="tag">Immersive</span>
+</div>
+<div class="card-link-note">
+<span>Open page</span>
+<span aria-hidden="true">→</span>
+</div>
+</div>
 </a>
 <a class="page-card" href="3d-apps/">
-  <div class="card-top">
-    <span class="card-number">14</span>
-  </div>
-  <div class="card-body">
-    <h3>3D Model Apps</h3>
-    <p>Use apps to make a 3D model from reality</p>
-    <div class="card-tags">
-      <span class="tag">3D</span>
-    </div>
-    <div class="card-link-note">
-      <span>Open page</span>
-      <span aria-hidden="true">→</span>
-    </div>
-  </div>
+<div class="card-top">
+<span class="card-number">14</span>
+</div>
+<div class="card-body">
+<h3>3D Model Apps</h3>
+<p>Use apps to make a 3D model from reality</p>
+<div class="card-tags">
+<span class="tag">3D</span>
+</div>
+<div class="card-link-note">
+<span>Open page</span>
+<span aria-hidden="true">→</span>
+</div>
+</div>
 </a>
 </section>
-<section aria-labelledby="course-pages-title" class="section-heading" style="margin-top:2rem">
-<h2 id="course-pages-title">Patterns</h2>
+<section aria-labelledby="course-pages-title" class="section-heading" id="patterns" style="margin-top:2rem">
+<h2 id="patterns-title">Patterns</h2>
 <p>Explore these patterns for your projects.</p>
 </section>
 <section aria-label="Interactive storytelling course page links" class="page-grid">
@@ -516,12 +660,12 @@
 </div>
 </a>
 </section>
-<section aria-labelledby="course-pages-title" class="section-heading" style="margin-top:2rem;margin-bottom: 0;">
-<h2 id="course-pages-title">Tutorials</h2>
+<section aria-labelledby="course-pages-title" class="section-heading" id="tutorials" style="margin-top:2rem;margin-bottom: 0;">
+<h2 id="tutorials-title">Tutorials</h2>
 <p>The class tutorials.</p>
 </section>
-<section aria-labelledby="course-pages-title" class="section-heading" style="margin-top:0rem;border-top:0">
-<h3 id="course-pages-title">Module 2</h3>
+<section aria-labelledby="course-pages-title" class="section-heading" id="module-2" style="margin-top:0rem;border-top:0">
+<h3 id="module-2-title">Module 2</h3>
 </section>
 <section aria-label="Interactive storytelling course page links" class="page-grid">
 <a class="page-card" href="tutorials/m2a.html">
@@ -565,8 +709,8 @@
 </div>
 </a>
 </section>
-<section aria-labelledby="course-pages-title" class="section-heading" style="margin-top:2rem;border-top:0">
-<h3 id="course-pages-title">Module 3</h3>
+<section aria-labelledby="course-pages-title" class="section-heading" id="module-3" style="margin-top:2rem;border-top:0">
+<h3 id="module-3-title">Module 3</h3>
 </section>
 <section aria-label="Interactive storytelling course page links" class="page-grid">
 <a class="page-card" href="tutorials/m3a.html">
@@ -610,8 +754,8 @@
 </div>
 </a>
 </section>
-<section aria-labelledby="course-pages-title" class="section-heading" style="margin-top:2rem;border-top:0">
-<h3 id="course-pages-title">Module 4</h3>
+<section aria-labelledby="course-pages-title" class="section-heading" id="module-4" style="margin-top:2rem;border-top:0">
+<h3 id="module-4-title">Module 4</h3>
 </section>
 <section aria-label="Interactive storytelling course page links" class="page-grid">
 <a class="page-card" href="tutorials/m4a.html">
@@ -655,54 +799,52 @@
 </div>
 </a>
 </section>
-<section aria-labelledby="course-pages-title" class="section-heading" style="margin-top:2rem;border-top:0">
-<h3 id="course-pages-title">Module 5</h3>
+<section aria-labelledby="course-pages-title" class="section-heading" id="module-5" style="margin-top:2rem;border-top:0">
+<h3 id="module-5-title">Module 5</h3>
 </section>
 <section aria-label="Interactive storytelling course page links" class="page-grid">
 <a class="page-card" href="tutorials/m5a.html">
-  <div class="card-top">
-    <span class="card-number">M5A</span>
-  </div>
-  <div class="card-body">
-    <h3>Draw the Line Visualization</h3>
-    <p>Use Flourish to create a participatory chart that asks viewers to draw or predict a trend before revealing the actual data.</p>
-    <div class="card-link-note">
-      <span>Open page</span>
-      <span aria-hidden="true">→</span>
-    </div>
-  </div>
+<div class="card-top">
+<span class="card-number">M5A</span>
+</div>
+<div class="card-body">
+<h3>Draw the Line Visualization</h3>
+<p>Use Flourish to create a participatory chart that asks viewers to draw or predict a trend before revealing the actual data.</p>
+<div class="card-link-note">
+<span>Open page</span>
+<span aria-hidden="true">→</span>
+</div>
+</div>
 </a>
-
 <a class="page-card" href="tutorials/m5b.html">
-  <div class="card-top">
-    <span class="card-number">M5B</span>
-  </div>
-  <div class="card-body">
-    <h3>Coded Goofy Comparison</h3>
-    <p>Build a small HTML and JavaScript interactive that accepts a viewer’s input and converts it into a playful comparison that helps explain scale.</p>
-    <div class="card-link-note">
-      <span>Open page</span>
-      <span aria-hidden="true">→</span>
-    </div>
-  </div>
+<div class="card-top">
+<span class="card-number">M5B</span>
+</div>
+<div class="card-body">
+<h3>Coded Goofy Comparison</h3>
+<p>Build a small HTML and JavaScript interactive that accepts a viewer’s input and converts it into a playful comparison that helps explain scale.</p>
+<div class="card-link-note">
+<span>Open page</span>
+<span aria-hidden="true">→</span>
+</div>
+</div>
 </a>
-
 <a class="page-card" href="tutorials/m5c.html">
-  <div class="card-top">
-    <span class="card-number">M5C</span>
-  </div>
-  <div class="card-body">
-    <h3>Branching Narrative with Twine</h3>
-    <p>Create a choice-based experience in Twine where viewer decisions lead to different passages, consequences, and outcomes.</p>
-    <div class="card-link-note">
-      <span>Open page</span>
-      <span aria-hidden="true">→</span>
-    </div>
-  </div>
+<div class="card-top">
+<span class="card-number">M5C</span>
+</div>
+<div class="card-body">
+<h3>Branching Narrative with Twine</h3>
+<p>Create a choice-based experience in Twine where viewer decisions lead to different passages, consequences, and outcomes.</p>
+<div class="card-link-note">
+<span>Open page</span>
+<span aria-hidden="true">→</span>
+</div>
+</div>
 </a>
 </section>
-<section aria-labelledby="course-pages-title" class="section-heading" style="margin-top:2rem;border-top:0">
-<h3 id="course-pages-title">Module 6</h3>
+<section aria-labelledby="course-pages-title" class="section-heading" id="module-6" style="margin-top:2rem;border-top:0">
+<h3 id="module-6-title">Module 6</h3>
 </section>
 <section aria-label="Interactive storytelling course page links" class="page-grid">
 <a class="page-card" href="tutorials/m6a.html">
@@ -726,6 +868,31 @@
 </div>
 </a>
 </section>
-</main>
-</body>
+</main></div><script>
+  const menuToggle = document.getElementById('mobileMenuToggle');
+  const menuBackdrop = document.getElementById('mobileMenuBackdrop');
+
+  function closeMenu() {
+    document.body.classList.remove('menu-open');
+    menuToggle?.setAttribute('aria-expanded', 'false');
+    if (menuBackdrop) menuBackdrop.hidden = true;
+  }
+
+  if (menuToggle && menuBackdrop) {
+    menuToggle.addEventListener('click', () => {
+      const isOpen = document.body.classList.toggle('menu-open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      menuBackdrop.hidden = !isOpen;
+    });
+
+    menuBackdrop.addEventListener('click', closeMenu);
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+  }
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeMenu();
+  });
+</script></body>
 </html>
