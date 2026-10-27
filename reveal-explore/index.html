@@ -24,7 +24,7 @@
     .sidebar a { display:block; padding:8px 10px; margin:2px 0; border-radius:10px; text-decoration:none; color:rgba(255,255,255,.88); font-size:.94rem; }
     .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
     main { max-width:1120px; width:100%; margin:0 auto; padding:44px 36px 80px; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:850px; }
     .hero p, .section-group p, .pattern p { color:var(--muted); }
@@ -1031,6 +1031,7 @@ main {
   }
 }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 <button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button">
@@ -1070,10 +1071,9 @@ main {
 </aside>
 <main>
 <section class="hero" id="intro">
-<div class="eyebrow">Interactive storytelling demo</div>
 <h2>Reveal, Explore, and Compare Patterns</h2>
 <p>Digital stories do not have to show everything at once. These patterns use interaction to reveal information, compare versions, browse collections, and move through visual space.</p>
-<div class="concept-callout"><strong>Core idea:</strong> these patterns often use more than one affordance. Reveal and browse patterns rely on layered information. Pan, zoom, and guided focus use spatial structure. Buttons, tabs, sliders, and filters give the reader participatory control. Anything that changes based on input also uses procedural behavior.</div>
+<div class="concept-callout">These patterns often use more than one affordance. Reveal and browse patterns rely on layered information. Pan, zoom, and guided focus use spatial structure. Buttons, tabs, sliders, and filters give the reader participatory control. Anything that changes based on input also uses procedural behavior.</div>
 </section>
 <section class="section-group" id="reveal-hidden-information">
 <h2>Reveal information</h2>

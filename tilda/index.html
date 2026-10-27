@@ -40,7 +40,7 @@ button:focus-visible, .button:focus-visible, a:focus-visible, input:focus-visibl
 main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
 main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
 .hero {
-  background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px;
+  background:#fffdf7; border:1px solid var(--line); border-radius:28px;
   padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px;
 }
 .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
@@ -145,6 +145,7 @@ main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
   .demo-frame { padding:14px; }
 }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 <button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span class="mobile-menu-text">Menu</span></button>
@@ -165,10 +166,9 @@ main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
 </aside>
 <main>
 <section class="hero" id="intro">
-  <div class="eyebrow">Tool guide</div>
   <h2>Tilda: Blocks, Custom HTML, and Zero Block</h2>
   <p>Tilda gives you three useful levels of control: native blocks for fast production, Custom HTML for embeds and code snippets, and Zero Block for custom-designed layouts.</p>
-  <div class="concept-callout"><strong>Core idea:</strong> start with the lowest-control option that can do the job well. Use native blocks when they fit the pattern, use Custom HTML when the interactive already exists as an embed or code snippet, and use Zero Block when the layout itself needs custom design control.</div>
+  <div class="concept-callout">Start with the lowest-control option that can do the job well. Use native blocks when they fit the pattern, use Custom HTML when the interactive already exists as an embed or code snippet, and use Zero Block when the layout itself needs custom design control.</div>
 </section>
 
 <section class="section-group" id="native-blocks-section">

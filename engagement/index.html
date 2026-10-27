@@ -26,7 +26,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .home-button{border:1px solid #636363;margin-bottom:1rem!important;display:block}
 main{margin-left:280px;width:calc(100% - 280px);max-width:none;padding:44px 36px 80px}
 main>*{max-width:1120px;margin-left:auto;margin-right:auto}
-.hero{background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%);border:1px solid var(--line);border-radius:28px;padding:clamp(28px,5vw,56px);box-shadow:var(--shadow);margin-bottom:34px}
+.hero{background:#fffdf7;border:1px solid var(--line);border-radius:28px;padding:clamp(28px,5vw,56px);box-shadow:var(--shadow);margin-bottom:34px}
 .eyebrow{display:inline-flex;margin:0 0 12px;color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem}
 .hero h2{margin:0 0 14px;font-size:clamp(2rem,5vw,4.4rem);line-height:.98;letter-spacing:-.02em;max-width:900px}
 .hero p,.section-group p,.pattern p{color:var(--muted)}
@@ -69,7 +69,7 @@ input[type="range"]{width:min(100%,340px);accent-color:var(--accent)}
 .discovery-card strong{display:block;color:var(--accent);margin-bottom:5px}
 .poll-bar{display:grid;grid-template-columns:110px 1fr 48px;gap:10px;align-items:center;margin:10px 0}
 .poll-track{height:16px;border-radius:999px;background:#e7dfd0;overflow:hidden}.poll-fill{height:100%;background:var(--accent);width:0;transition:width .3s ease}
-.role-card{padding:20px;border-radius:18px;background:linear-gradient(135deg,#edf4ee,#fff8ed);border:1px solid var(--line)}
+.role-card{padding:20px;border-radius:18px;background:#edf4ee;border:1px solid var(--line)}
 .role-card h4{margin:0 0 8px;font-size:1.35rem}.role-card p{margin:0 0 14px}
 .principle-callout{margin:20px 0 0;padding:16px 18px;border-left:5px solid var(--accent-2);background:#fff8ed;border-radius:0 14px 14px 0;color:var(--muted)}
 .principle-callout strong{color:var(--ink)}
@@ -77,6 +77,7 @@ input[type="range"]{width:min(100%,340px);accent-color:var(--accent)}
 @media(max-width:860px){body{padding-top:64px}body.menu-open{overflow:hidden}.mobile-menu-toggle{position:fixed;top:12px;left:12px;z-index:1001;display:inline-flex;align-items:center;gap:9px;padding:10px 13px;border-radius:999px;background:#17211b;color:#fffdf7;box-shadow:0 8px 22px rgba(23,33,27,.24)}.mobile-menu-icon{position:relative;display:block;width:18px;height:12px;border-top:2px solid currentColor;border-bottom:2px solid currentColor}.mobile-menu-icon::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid currentColor;transform:translateY(-50%)}.mobile-menu-backdrop{position:fixed;inset:0;z-index:999;display:block;background:rgba(23,33,27,.45)}.mobile-menu-backdrop[hidden]{display:none}.sidebar{position:fixed!important;top:0!important;left:0;bottom:0;width:min(84vw,340px);height:100vh!important;padding:76px 22px 28px;overflow-y:auto!important;z-index:1000;transform:translateX(-105%);transition:transform .24s ease;box-shadow:18px 0 36px rgba(0,0,0,.22)}body.menu-open .sidebar{transform:translateX(0)}main{margin-left:0!important;width:100%!important;max-width:1120px;padding:24px 16px 56px}}
 @media(max-width:760px){.pattern-header,.pattern-analysis,.demo-grid,.choice-grid,.discovery-grid{grid-template-columns:1fr}.tag{justify-self:start;white-space:normal}.poll-bar{grid-template-columns:90px 1fr 40px}}
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 <button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span>Menu</span></button>
@@ -103,10 +104,9 @@ input[type="range"]{width:min(100%,340px);accent-color:var(--accent)}
 </aside>
 <main>
 <section class="hero" id="intro">
-<div class="eyebrow">Interactive storytelling concepts</div>
 <h2>Engagement Techniques</h2>
 <p>Engagement techniques motivate viewers to begin, continue, and complete an interaction. They are not separate storytelling patterns. They can strengthen quizzes, calculators, branching narratives, visualizations, and other interactive formats.</p>
-<div class="concept-callout"><strong>Core idea:</strong> engagement should support understanding. Relevance, curiosity, and challenge are useful when they help viewers notice, interpret, or remember the information.</div>
+<div class="concept-callout">Engagement should support understanding. Relevance, curiosity, and challenge are useful when they help viewers notice, interpret, or remember the information.</div>
 </section>
 
 <section class="section-group" id="relevance">

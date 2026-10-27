@@ -24,7 +24,7 @@ a { color:inherit; }
 .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
 main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
 main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-.hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+.hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
 .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
 .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:850px; }
 .hero p, .section-group p, .pattern p { color:var(--muted); }
@@ -158,6 +158,7 @@ button:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px
   .pano-hotspot::after { max-width:130px; white-space:normal; line-height:1.15; }
 }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 <button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span class="mobile-menu-text">Menu</span></button>
@@ -182,10 +183,9 @@ button:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px
 </aside>
 <main>
 <section class="hero" id="intro">
-<div class="eyebrow">Interactive storytelling demo</div>
 <h2>Spatial and Immersive Media</h2>
 <p>Spatial and immersive media help viewers feel positioned inside a scene or near an object. The story job is usually Experience, but these tools can also Reveal, Explain, Locate, or Compare when the interaction helps viewers inspect details.</p>
-<div class="concept-callout"><strong>Core idea:</strong> immersion is not enough by itself. A 360 photo or 3D model needs a reason to be interactive: moving through a place, inspecting evidence, opening annotations, comparing views, understanding scale, or entering a fully immersive VR environment.</div>
+<div class="concept-callout">Immersion is not enough by itself. A 360 photo or 3D model needs a reason to be interactive: moving through a place, inspecting evidence, opening annotations, comparing views, understanding scale, or entering a fully immersive VR environment.</div>
 </section>
 
 <section class="section-group" id="photos-360">

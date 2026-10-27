@@ -24,7 +24,7 @@
     .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
     main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:850px; }
     .hero p, .section-group p, .tool-card p, .note, td { color:var(--muted); }
@@ -96,6 +96,7 @@
       display: block;
     }
   </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 <button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button">
@@ -125,10 +126,9 @@
 </aside>
 <main>
 <section class="hero" id="intro">
-<div class="eyebrow">Interactive storytelling course</div>
 <h2>Tools for Building Interactive Stories</h2>
 <p>This page compares the main ways students can build and publish interactive projects: storytelling builders, general web builders, code-based hosting, embedded visualization tools, and AI-assisted coding workflows.</p>
-<div class="concept-callout"><strong>Core idea:</strong> the tool is not the assignment. Choose the tool that gives enough control for the story while keeping the technical responsibility manageable.</div>
+<div class="concept-callout">The tool is not the assignment. Choose the tool that gives enough control for the story while keeping the technical responsibility manageable.</div>
 </section>
 <section class="section-group" id="building-project">
 <h2>Building the project</h2>

@@ -15,7 +15,7 @@ a{color:inherit}img,video,iframe,svg{max-width:100%}.layout{display:block;min-he
 .sidebar a{display:block;padding:8px 10px;margin:2px 0;border-radius:10px;text-decoration:none;color:rgba(255,255,255,.88);font-size:.94rem}
 .sidebar a:hover,.sidebar a:focus{background:rgba(255,255,255,.1);outline:none}.home-button{border:1px solid #636363;margin-bottom:1rem!important;display:block}
 main{margin-left:280px;width:calc(100% - 280px);max-width:none;padding:44px 36px 80px}main>*{max-width:1120px;margin-left:auto;margin-right:auto}
-.hero{background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%);border:1px solid var(--line);border-radius:28px;padding:clamp(28px,5vw,56px);box-shadow:var(--shadow);margin-bottom:34px}
+.hero{background:#fffdf7;border:1px solid var(--line);border-radius:28px;padding:clamp(28px,5vw,56px);box-shadow:var(--shadow);margin-bottom:34px}
 .eyebrow{display:inline-flex;margin:0 0 12px;color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem}
 .hero h2{margin:0 0 14px;font-size:clamp(2rem,5vw,4.4rem);line-height:.98;letter-spacing:-.02em;max-width:900px}
 .hero p,.section-group p,.pattern p,.card p,.note p,li,td{color:var(--muted)}.hero p{max-width:780px;margin:0;font-size:clamp(1.05rem,2vw,1.25rem)}
@@ -37,6 +37,7 @@ main{margin-left:280px;width:calc(100% - 280px);max-width:none;padding:44px 36px
 @media(max-width:860px){body{padding-top:64px}body.menu-open{overflow:hidden}.mobile-menu-toggle{position:fixed;top:12px;left:12px;z-index:1001;display:inline-flex;align-items:center;gap:9px;padding:10px 13px;border-radius:999px;background:#17211b;color:#fffdf7;box-shadow:0 8px 22px rgba(23,33,27,.24)}.mobile-menu-icon{position:relative;display:block;width:18px;height:12px;border-top:2px solid currentColor;border-bottom:2px solid currentColor}.mobile-menu-icon::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid currentColor;transform:translateY(-50%)}.mobile-menu-text{font-weight:900}.mobile-menu-backdrop{position:fixed;inset:0;z-index:999;display:block;background:rgba(23,33,27,.45)}.mobile-menu-backdrop[hidden]{display:none}.sidebar{position:fixed!important;top:0!important;left:0;bottom:0;width:min(84vw,340px);height:100vh!important;max-height:100vh!important;padding:76px 22px 28px;overflow-y:auto!important;overflow-x:hidden;z-index:1000;transform:translateX(-105%);transition:transform .24s ease;box-shadow:18px 0 36px rgba(0,0,0,.22)}body.menu-open .sidebar{transform:translateX(0)}main{margin-left:0!important;width:100%!important;max-width:1120px;padding:24px 16px 56px}}
 @media(max-width:520px){.hero{border-radius:20px}.hero h2{font-size:clamp(2rem,12vw,3.2rem);line-height:1}.section-group h2{font-size:clamp(1.45rem,8vw,2rem)}.pattern h3{font-size:clamp(1.25rem,7vw,1.7rem)}.pattern{padding:18px}.step-list li{padding-left:48px}th,td{padding:12px;font-size:.9rem}}
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
@@ -62,10 +63,9 @@ main{margin-left:280px;width:calc(100% - 280px);max-width:none;padding:44px 36px
 </aside>
 <main>
 <section class="hero" id="intro">
-<div class="eyebrow">Production workflow</div>
 <h2>Building and Inserting Interactives Into Projects</h2>
 <p>Interactive elements can enter a story in different ways. The right approach depends on where your story is built, what kind of interactive you are adding, and how much control the element needs.</p>
-<div class="concept-callout"><strong>Core idea:</strong> Start with the simplest method that does the job while allowing the control you need.</div>
+<div class="concept-callout">Start with the simplest method that does the job while allowing the control you need.</div>
 </section>
 
 <section class="section-group" id="decision">
@@ -105,7 +105,7 @@ main{margin-left:280px;width:calc(100% - 280px);max-width:none;padding:44px 36px
 <p>Native blocks are interactive elements already provided by the builder. This is usually the lowest-responsibility option when the built-in pattern is good enough for your story purpose.</p>
 </section>
 <section class="pattern">
-<div class="pattern-header"><div><h3>Use the builder’s own feature first when it fits</h3><p>If Shorthand, Tilda, Wix, WordPress, Squarespace, or another builder already has the pattern, test that before jumping to custom code.</p></div><span class="tag">Lowest friction</span></div>
+<div class="pattern-header"><div><h3>Use the builder’s own feature first when it fits</h3><p>If Tilda, Wix, WordPress, Squarespace, or another builder already has the pattern, test that before jumping to custom code.</p></div><span class="tag">Lowest friction</span></div>
 <div class="grid three">
 <article class="card"><h4>What you add</h4><p>Add content inside the builder interface: text, photos, captions, labels, links, map points, timeline entries, or blocks.</p></article>
 <article class="card"><h4>What the builder handles</h4><p>Most layout, hosting, responsive behavior, basic styling, and publishing.</p></article>
@@ -139,7 +139,7 @@ main{margin-left:280px;width:calc(100% - 280px);max-width:none;padding:44px 36px
   frameborder="0"
   scrolling="no"&gt;
 &lt;/iframe&gt;</code></div>
-<div class="concept-callout"><strong>In plain terms:</strong> the iframe is a window. The interactive lives somewhere else, and the story page displays it through that window.</div>
+<div class="concept-callout">The iframe is a window. The interactive lives somewhere else, and the story page displays it through that window.</div>
 </section>
 <section class="pattern">
 <div class="pattern-header"><div><h3>Embedded builder workflow</h3><p>Your main task is copying the correct embed code and placing it in a block that accepts embeds, custom HTML, or iframe code.</p></div><span class="tag">Iframe embed</span></div>
@@ -210,7 +210,7 @@ Include:
 - the JavaScript inside a &lt;script&gt; tag
 - comments showing where I can add more items
 - class names unlikely to conflict with the rest of the page</code></div>
-<div class="concept-callout"><strong>Class rule:</strong> if you are pasting into a custom HTML block inside a builder, the AI should produce a block-safe snippet unless the builder specifically asks for a full HTML document.</div>
+<div class="concept-callout">If you are pasting into a custom HTML block inside a builder, the AI should produce a block-safe snippet unless the builder specifically asks for a full HTML document.</div>
 </section>
 <section class="pattern">
 <div class="pattern-header"><div><h3>Custom HTML block checks</h3><p>Custom snippets can be powerful, but they can also break because they live inside a larger platform page.</p></div><span class="tag">Responsibility rises</span></div>

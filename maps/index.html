@@ -30,7 +30,7 @@ button:focus-visible, .button:focus-visible, a:focus-visible, select:focus-visib
 .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
 main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
 main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-.hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+.hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
 .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
 .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:850px; }
 .hero p, .section-group p, .pattern p, .type-card p { color:var(--muted); }
@@ -134,6 +134,7 @@ main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
 
 @media (max-width:520px) { .hero { border-radius:20px; } .demo-frame { padding:14px; } .map-demo, .scrolly-map { min-height:340px; } }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 <button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span class="mobile-menu-text">Menu</span></button>
@@ -147,10 +148,9 @@ main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
 </aside>
 <main>
 <section class="hero" id="intro">
-<div class="eyebrow">Interactive storytelling module</div>
 <h2>Locate: Map Patterns</h2>
 <p>Maps help viewers understand where something happens, how places relate, and why geography changes the meaning of a story. Begin by choosing the map’s job, then choose a map form, the interactions readers need, and whether the map should be explored freely or presented as a guided sequence.</p>
-<div class="concept-callout"><strong>Core idea:</strong> first decide what the viewer needs to understand. A map can orient the viewer, reveal a spatial pattern, or explain movement and change. Interaction should support that job rather than being added for its own sake.</div><div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Orient</h4><p>Answer “Where is this?” with points, routes, boundaries, and geographic context.</p></div><div class="pattern-analysis-card"><h4>Show a spatial pattern</h4><p>Use mapped evidence to reveal concentration, distribution, regional difference, or connection.</p></div><div class="pattern-analysis-card"><h4>Explain movement or change</h4><p>Connect place with time, sequence, routes, changing values, or changing geographic conditions.</p></div></div>
+<div class="concept-callout">First decide what the viewer needs to understand. A map can orient the viewer, reveal a spatial pattern, or explain movement and change. Interaction should support that job rather than being added for its own sake.</div><div class="pattern-analysis"><div class="pattern-analysis-card"><h4>Orient</h4><p>Answer “Where is this?” with points, routes, boundaries, and geographic context.</p></div><div class="pattern-analysis-card"><h4>Show a spatial pattern</h4><p>Use mapped evidence to reveal concentration, distribution, regional difference, or connection.</p></div><div class="pattern-analysis-card"><h4>Explain movement or change</h4><p>Connect place with time, sequence, routes, changing values, or changing geographic conditions.</p></div></div>
 </section><section class="section-group" id="map-forms"><h2>Map Forms</h2><p>Choose the underlying map form according to the geographic question: orient the viewer, show a spatial pattern, or explain change over time.</p></section><section class="section-group" id="locator-maps">
 <h2>Locator Maps</h2>
 <p>Use locator maps when the reader first needs to understand where the story takes place. The mapped feature may be a point, route, boundary, or custom geographic area.</p>

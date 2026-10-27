@@ -25,7 +25,7 @@
     .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
@@ -61,7 +61,7 @@
     .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
     pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
     code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
-    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+    .submission-box { background:#fffdf7; }
     button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
     button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
     .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
@@ -117,6 +117,7 @@
     }
 
   </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
@@ -153,7 +154,6 @@
     </aside>
     <main>
       <section class="hero" id="overview">
-        <div class="eyebrow">Tutorial M2 - B</div>
         <h2>Build an Interactive Hotspot Infographic in Genially</h2>
         <p>In this tutorial, you will use Genially to build an interactive hotspot infographic and then embed it in a Tilda page. The goal is not only to learn where the Genially tools live, but also to practice making decisions when a hosted embed builder gives you some control but not full control.</p><p>The example infographic explains wood thrush habits. You will add a background image, create clickable hotspot markers, build pop-up windows with text and media, add alt text, create a mobile version, embed both versions in Tilda, and test the final page on desktop and mobile.</p>
         <div class="concept-callout"><strong>Hosted embed builders are useful, but they still set limits.</strong> A hosted embed builder gives you more interactive features than many native blocks, but it is still not the same as writing the code yourself. Genially can make hotspots, windows, videos, and embedded media fairly quickly. It can also create problems with scale, responsiveness, spacing, and media support. Use the builder when it fits the job, but test early so you know where the limits are.</div>
@@ -203,7 +203,7 @@
       <section class="pattern">
         <div class="pattern-header"><div><h3>Add the desktop background image</h3></div><span class="tag">Step 3</span></div>
         <div class="demo-frame"><ol class="steps"><li>Click Insert.</li><li>Choose Image.</li><li>Choose Image from device.</li><li>Upload the desktop background image, such as background.jpeg.</li><li>Resize and position the image so it fills the entire canvas.</li><li>Confirm that the image was prepared at a large enough resolution for this canvas.</li></ol>
-<div class="callout"><strong>Do not confuse canvas size with image quality</strong><p>The Genially canvas controls how the project is laid out. The image file still needs to be large enough to look sharp. Start with a reasonable web image that is at least as large as the display size, and preferably a bit larger.</p></div></div>
+<div class="callout is-warning"><strong>Do not confuse canvas size with image quality</strong><p>The Genially canvas controls how the project is laid out. The image file still needs to be large enough to look sharp. Start with a reasonable web image that is at least as large as the display size, and preferably a bit larger.</p></div></div>
       </section>
       <section class="section-group" id="section-4-create-the-first-hotspot-window">
         <h2>Section 4: Create the first hotspot window</h2>
@@ -279,7 +279,7 @@
       <section class="pattern">
         <div class="pattern-header"><div><h3>Embed the desktop Genially project in Tilda</h3></div><span class="tag">Step 10</span></div>
         <div class="demo-frame"><ol class="steps"><li>In Genially, click Share.</li><li>Choose See all or the full sharing options.</li><li>Find the iframe embed option.</li><li>Copy the iframe embed code.</li><li>Go to your Tilda page editor.</li><li>Add a new block where the interactive should appear.</li><li>Search for HTML or choose the custom HTML block from the Other block category.</li><li>Open the block Content panel.</li><li>Paste the Genially iframe code.</li><li>Save and close the block.</li><li>Publish the Tilda page. Tilda usually will not fully preview custom HTML in the editor, so you need to publish to test it.</li><li>Open the published page and confirm that the Genially project loads.</li></ol>
-<div class="callout"><strong>Preview is not the same as published</strong><p>Tilda often requires publishing before custom HTML and iframe embeds can be tested accurately. If you are working on a real live page, create a staging or practice page first, then copy the finished block to the live page.</p></div></div>
+<div class="callout is-warning"><strong>Preview is not the same as published</strong><p>Tilda often requires publishing before custom HTML and iframe embeds can be tested accurately. If you are working on a real live page, create a staging or practice page first, then copy the finished block to the live page.</p></div></div>
       </section>
       <section class="section-group" id="section-11-constrain-the-desktop-embed-width">
         <h2>Section 11: Constrain the desktop embed width</h2>

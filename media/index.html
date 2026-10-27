@@ -38,7 +38,7 @@ button:focus-visible, .button:focus-visible, a:focus-visible, input:focus-visibl
 main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
 main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
 .hero {
-  background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px;
+  background:#fffdf7; border:1px solid var(--line); border-radius:28px;
   padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px;
 }
 .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
@@ -124,6 +124,7 @@ td strong { color:var(--ink); }
   .pattern { padding:18px; }
 }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 <button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span class="mobile-menu-text">Menu</span></button>
@@ -148,10 +149,9 @@ td strong { color:var(--ink); }
 </aside>
 <main>
 <section class="hero" id="intro">
-<div class="eyebrow">Production guide</div>
 <h2>Finding and Using Open Source Media</h2>
 <p>Open media can help you build richer stories without creating every image, video clip, sound, icon, font, or dataset yourself. The key is to use material that is actually reusable and to credit it clearly.</p>
-<div class="concept-callout"><strong>Core idea:</strong> “online” does not mean “free to use.” Look for a clear license or public-domain statement, save the source link, and attribute the creator in the format the license requires.</div>
+<div class="concept-callout">“Online” does not mean “free to use.” Look for a clear license or public-domain statement, save the source link, and attribute the creator in the format the license requires.</div>
 </section>
 <section class="section-group" id="where-to-look">
 <h2>Where to find usable media</h2>

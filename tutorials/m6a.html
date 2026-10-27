@@ -25,7 +25,7 @@
     .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
@@ -61,7 +61,7 @@
     .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
     pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
     code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
-    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+    .submission-box { background:#fffdf7; }
     button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
     button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
     .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
@@ -127,6 +127,7 @@
     .checklist li::before { content:"✓"; position:absolute; left:0; color:var(--accent); font-weight:900; }
     @media (max-width:760px) { .two-col { grid-template-columns:1fr; } }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 
@@ -155,7 +156,6 @@
 
 <main>
 <section class="hero" id="overview">
-<div class="eyebrow">Challenge · 360 Tour</div>
 <h2>Build a Two-Scene 360 Tour</h2>
 <p>Use the supplied template to create a short spatial story from two equirectangular 360 images. You will decide what deserves annotation, place hotspots where they make visual sense, and connect the scenes into one tour.</p>
 <div class="concept-callout"><strong>This is a challenge, not a click-by-click tutorial.</strong> Use the template README as your technical reference. Your job is to understand the configuration well enough to replace the sample content and make intentional editorial choices.</div>
@@ -200,7 +200,7 @@
 <li><a href="https://github.com/kevinripka-uiowa/360-hotspots-template" target="_blank" rel="noopener">360 Hotspots Template on GitHub</a></li>
 </ul>
 <p>Keep the README open while working. Use it to check scene properties, hotspot types, embedded-media code, descriptions, teleport destinations, scene thumbnails, and accessibility fields.</p>
-<div class="callout"><strong>Do not depend on the sample coordinates</strong><p>The template coordinates match the sample images. Once you replace those images, the sample hotspots will point to unrelated parts of your scenes.</p></div>
+<div class="callout is-warning"><strong>Do not depend on the sample coordinates</strong><p>The template coordinates match the sample images. Once you replace those images, the sample hotspots will point to unrelated parts of your scenes.</p></div>
 </div>
 </section>
 
@@ -215,7 +215,7 @@
 <li>Open the complete folder in Visual Studio Code.</li>
 <li>Use Live Server to preview <code>index.html</code>.</li>
 </ol>
-<div class="callout"><strong>Keep the project together</strong><p>Do not open or move only <code>index.html</code>. The image paths depend on the project folder and its supporting files.</p></div>
+<div class="callout is-warning"><strong>Keep the project together</strong><p>Do not open or move only <code>index.html</code>. The image paths depend on the project folder and its supporting files.</p></div>
 </div>
 </section>
 
@@ -281,7 +281,7 @@
 <li>Reload and confirm that the hotspot appears beside the intended feature.</li>
 <li>Repeat for every hotspot in both scenes.</li>
 </ol>
-<div class="callout"><strong>Do not leave the sample hotspots in place</strong><p>A technically working hotspot is not enough. Its position must communicate a clear relationship to something viewers can see in the panorama.</p></div>
+<div class="callout is-warning"><strong>Do not leave the sample hotspots in place</strong><p>A technically working hotspot is not enough. Its position must communicate a clear relationship to something viewers can see in the panorama.</p></div>
 </div>
 </section>
 
@@ -301,7 +301,7 @@
   max-width: 800px;
   margin: 0 auto;
 }</code></pre>
-<div class="callout"><strong>Recheck image paths after moving to Tilda</strong><p>Local relative paths such as <code>images/scene-one.jpg</code> will not work unless those images are also hosted online. Use public image URLs or another hosting method supported by your project.</p></div>
+<div class="callout is-warning"><strong>Recheck image paths after moving to Tilda</strong><p>Local relative paths such as <code>images/scene-one.jpg</code> will not work unless those images are also hosted online. Use public image URLs or another hosting method supported by your project.</p></div>
 </div>
 </section>
 

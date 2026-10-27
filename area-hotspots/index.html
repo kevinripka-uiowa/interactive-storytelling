@@ -26,7 +26,7 @@
 
     main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .card p, .pattern p { color:var(--muted); }
@@ -76,7 +76,7 @@
     .code-note strong { color:var(--ink); }
 
     .responsibility-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
-    .responsibility-list .card { background:linear-gradient(180deg,#fffdf7,#f8f3e9); }
+    .responsibility-list .card { background:#fffdf7; }
     .syntax-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
     .object-demo { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
     .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:16px; background:#fffdf7; }
@@ -139,6 +139,7 @@
       display: block;
     }
   </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false">
@@ -180,10 +181,9 @@
 
     <main>
       <section class="hero" id="intro">
-        <div class="eyebrow">Interactive storytelling reference</div>
         <h2>Turn regions of an image into interactive hotspots</h2>
         <p>Area-based hotspots let users select meaningful regions of a visual and reveal an annotation, popup, comparison, or explanation. You can build them with a raster image and an HTML image map, or with an inline SVG whose individual shapes remain available to CSS and JavaScript.</p>
-        <div class="concept-callout"><strong>Core idea:</strong> choose the simplest method that matches the visual. Use an HTML image map when you already have a finished raster image and mainly need clickable regions. Use inline SVG when the graphic needs responsive shapes, visual state changes, animation, or more precise control.</div>
+        <div class="concept-callout">Choose the simplest method that matches the visual. Use an HTML image map when you already have a finished raster image and mainly need clickable regions. Use inline SVG when the graphic needs responsive shapes, visual state changes, animation, or more precise control.</div>
       </section>
 
 
@@ -212,7 +212,7 @@
           </article>
         </div>
 
-        <div class="code-note"><strong>Working rule:</strong> do not redraw a complex raster illustration as SVG only to create hotspots. An HTML image map may be the more efficient production choice.</div>
+        <div class="code-note">Do not redraw a complex raster illustration as SVG only to create hotspots. An HTML image map may be the more efficient production choice.</div>
       </section>
 
       <section class="section-group" id="html-image-maps">
@@ -378,7 +378,7 @@ document
           </article>
         </div>
 
-        <div class="code-note"><strong>Accessibility warning:</strong> image-map areas can receive keyboard focus, but the active region is not always visually obvious. Provide meaningful <code>alt</code> text, visible focus treatment where possible, and an equivalent list of buttons or links when the information is important.</div>
+        <div class="code-note is-warning"><strong>Accessibility warning:</strong> image-map areas can receive keyboard focus, but the active region is not always visually obvious. Provide meaningful <code>alt</code> text, visible focus treatment where possible, and an equivalent list of buttons or links when the information is important.</div>
       </section>
 
 
@@ -523,7 +523,7 @@ document
 &lt;/g&gt;</code></pre>
         </div>
 
-        <div class="code-note"><strong>Working rule:</strong> name layers by meaning, not appearance. <code>factories</code> is more useful than <code>blue-shapes</code>.</div>
+        <div class="code-note">Name layers by meaning, not appearance. <code>factories</code> is more useful than <code>blue-shapes</code>.</div>
       </section>
 
       <section class="pattern">
@@ -544,7 +544,7 @@ document
 &lt;/g&gt;</code></pre>
         </div>
 
-        <div class="code-note"><strong>Student strategy:</strong> preserve the important groups and IDs, but do not expect exported SVG code to look as clean as hand-written HTML.</div>
+        <div class="code-note">Preserve the important groups and IDs, but do not expect exported SVG code to look as clean as hand-written HTML.</div>
       </section>
 
       <section class="section-group" id="inline-vs-image">
@@ -624,7 +624,7 @@ document
           </div>
         </div>
 
-        <div class="code-note"><strong>Working rule:</strong> test labels, hotspots, and touch targets at phone sizes. A graphic can technically scale while still becoming too dense to use.</div>
+        <div class="code-note">Test labels, hotspots, and touch targets at phone sizes. A graphic can technically scale while still becoming too dense to use.</div>
       </section>
 
       <section class="section-group" id="accessibility">

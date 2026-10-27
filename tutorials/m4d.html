@@ -25,7 +25,7 @@
     .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
@@ -61,7 +61,7 @@
     .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
     pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
     code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
-    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+    .submission-box { background:#fffdf7; }
     button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
     button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
     .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
@@ -127,6 +127,7 @@
     .checklist li::before { content:"✓"; position:absolute; left:0; color:var(--accent); font-weight:900; }
     @media (max-width:760px) { .two-col { grid-template-columns:1fr; } }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 
@@ -161,7 +162,6 @@
 
 <main>
 <section class="hero" id="overview">
-<div class="eyebrow">Tutorial M4D · Guided Map</div>
 <h2>Build a Scroll-Driven Map with Mapbox</h2>
 <p>Create a guided map story about a hypothetical neotropical migrant. The map will move from winter and breeding ranges to migration routes, a Gulf crossing, urban buildings, and mountain terrain.</p>
 <div class="concept-callout"><strong>Mapbox Studio builds the map; <code>config.js</code> choreographs the story.</strong> Studio controls the basemap and custom geographic layers. The Storytelling template uses Scrollama to connect scrolling chapters to camera movement and layer changes.</div>
@@ -210,7 +210,7 @@
 <li>Keep <code>index.html</code>, <code>config.js</code>, and the supporting project files. You may remove sample assets you will not use.</li>
 <li>Start Live Server from <code>index.html</code>.</li>
 </ol>
-<div class="callout"><strong>Do not rewrite the template JavaScript</strong><p>The project already loads Mapbox GL JS and Scrollama and contains the code that connects chapters to the map. For this tutorial, edit <code>config.js</code> and use the existing template.</p></div>
+<div class="callout is-warning"><strong>Do not rewrite the template JavaScript</strong><p>The project already loads Mapbox GL JS and Scrollama and contains the code that connects chapters to the map. For this tutorial, edit <code>config.js</code> and use the existing template.</p></div>
 </div>
 </section>
 
@@ -226,7 +226,7 @@
 <li>Create the token and paste it into <code>config.js</code>.</li>
 </ol>
 <pre><code>accessToken: 'YOUR_PUBLIC_MAPBOX_TOKEN',</code></pre>
-<div class="callout"><strong>The token will be visible in the browser</strong><p>This is a client-side map, so use a public token with limited permissions and URL restrictions. Do not use a secret token.</p></div>
+<div class="callout is-warning"><strong>The token will be visible in the browser</strong><p>This is a client-side map, so use a public token with limited permissions and URL restrictions. Do not use a secret token.</p></div>
 </div>
 </section>
 
@@ -308,7 +308,7 @@
 <li><code>title</code> and <code>subtitle</code> create the introduction shown before the chapters.</li>
 <li><code>chapters</code> is an array containing one object for each story section.</li>
 </ul>
-<div class="callout"><strong>Do not add 3D terrain yet</strong><p>You will add <code>use3dTerrain: true</code> later, when the story reaches the mountain chapter and the setting has a clear purpose.</p></div>
+<div class="callout is-warning"><strong>Do not add 3D terrain yet</strong><p>You will add <code>use3dTerrain: true</code> later, when the story reaches the mountain chapter and the setting has a clear purpose.</p></div>
 </div>
 </section>
 
@@ -614,7 +614,7 @@ speed: 0.25</code></pre>
 <li>Open the repository settings and enable GitHub Pages from the main branch.</li>
 <li>Test the public Pages URL after deployment finishes.</li>
 </ol>
-<div class="callout"><strong>Do not approve an unrestricted or secret token</strong><p>The exception is appropriate only for the deliberately public browser token created for this project and restricted to your allowed domains.</p></div>
+<div class="callout is-warning"><strong>Do not approve an unrestricted or secret token</strong><p>The exception is appropriate only for the deliberately public browser token created for this project and restricted to your allowed domains.</p></div>
 </div>
 </section>
 

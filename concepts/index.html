@@ -83,7 +83,7 @@
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
 
     .hero {
-      background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%);
+      background:#fffdf7;
       border:1px solid var(--line);
       border-radius:28px;
       padding:clamp(28px,5vw,56px);
@@ -468,6 +468,7 @@
     }
 
   </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false">
@@ -510,7 +511,6 @@
 
     <main>
       <section class="hero" id="framework">
-        <div class="eyebrow">Critical Vocabulary</div>
         <h2>Interactive Media<br />3P Framework</h2>
         <p>This interactive guide turns the critical vocabulary deck into a reference page students can click through, revisit, and use while planning story elements.</p>
         <div class="framework-strip" aria-label="The 3P framework">
@@ -518,7 +518,7 @@
           <div class="framework-pill"><strong>Pattern</strong><span>What kind of interaction best creates that takeaway?</span></div>
           <div class="framework-pill"><strong>Production</strong><span>How will the element be built responsibly on the web?</span></div>
         </div>
-        <div class="concept-callout"><strong>Core rule:</strong> Do not start with “I want to make a map.” Start with “What should the viewer understand?” Then choose the form that fits.</div>
+        <div class="concept-callout">Do not start with “I want to make a map.” Start with “What should the viewer understand?” Then choose the form that fits.</div>
       </section>
 
       <section class="section-group" id="purpose">
@@ -715,13 +715,13 @@
           <article class="info-card"><h4>Usefulness</h4><p>Does it help them find information, understand the point, complete a task, make a decision, or get something they need?</p></article>
           <article class="info-card"><h4>Usability</h4><p>Can they actually use it without confusion, friction, broken layouts, unclear instructions, or inaccessible controls?</p></article>
         </div>
-        <div class="concept-callout"><strong>Production implication:</strong> the tool choice matters only because it affects the final viewer experience. Native blocks, embedded builders, custom code blocks, and hosted code are all acceptable when they produce a useful, usable result.</div>
+        <div class="concept-callout">The tool choice matters only because it affects the final viewer experience. Native blocks, embedded builders, custom code blocks, and hosted code are all acceptable when they produce a useful, usable result.</div>
       </section>
 
       <section class="pattern">
         <div class="pattern-header"><div><h3>First production question: where is the page built?</h3><p>The build environment shapes what is easy, what is possible, and what the student is responsible for.</p></div><span class="tag">Build context</span></div>
         <div class="demo-frame card-grid">
-          <article class="info-card"><h4>Storytelling builder</h4><p>Tilda, Vev, Shorthand, and similar platforms designed for visual storytelling pages.</p></article>
+          <article class="info-card"><h4>Storytelling builder</h4><p>Tilda, Vev, and similar platforms designed for visual storytelling pages.</p></article>
           <article class="info-card"><h4>General builder</h4><p>Wix, WordPress, Squarespace, and similar site-building systems.</p></article>
           <article class="info-card"><h4>Code-based</h4><p>Plain HTML/CSS/JavaScript, React, Vue, Svelte, or another code framework.</p></article>
         </div>

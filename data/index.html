@@ -30,7 +30,7 @@ button:focus-visible, .button:focus-visible, a:focus-visible, select:focus-visib
 .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
 main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
 main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-.hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+.hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
 .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
 .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
 .hero p, .section-group p, .pattern p { color:var(--muted); }
@@ -141,7 +141,7 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 .type-card-body { padding:14px; }
 .type-card h4 { margin:0 0 6px; color:var(--accent); font-size:1rem; letter-spacing:-.02em; }
 .type-card p { margin:0; color:var(--muted); font-size:.94rem; }
-.placeholder-viz { position:relative; display:grid; place-items:center; min-height:170px; padding:16px; background:linear-gradient(135deg,#edf4ee,#fff8ed); border-bottom:1px solid var(--line); overflow:hidden; }
+.placeholder-viz { position:relative; display:grid; place-items:center; min-height:170px; padding:16px; background:#edf4ee; border-bottom:1px solid var(--line); overflow:hidden; }
 .placeholder-viz svg { width:100%; height:auto; max-height:150px; }
 .interaction-list { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; margin-top:14px; }
 .interaction-chip { padding:11px 12px; border-radius:14px; background:#f6f1e7; border:1px solid var(--line); color:var(--ink); font-size:.94rem; }
@@ -178,7 +178,7 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
   position:relative;
   display:block;
   min-height:190px;
-  background:linear-gradient(135deg,#edf4ee,#fff8ed);
+  background:#edf4ee;
   border-bottom:1px solid var(--line);
   overflow:hidden;
 }
@@ -415,7 +415,8 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
   font-weight:900;
   font-size:.86rem;
 }
-</style></head>
+</style>  <link rel="stylesheet" href="../assets/plain.css" />
+</head>
 <body>
 <button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button"><span aria-hidden="true" class="mobile-menu-icon"></span><span class="mobile-menu-text">Menu</span></button>
 <div class="mobile-menu-backdrop" hidden="" id="mobileMenuBackdrop"></div>
@@ -442,10 +443,9 @@ select { min-width:180px; padding:10px 12px; border-radius:12px; border:1px soli
 </aside>
 <main>
 <section class="hero" id="intro">
-<div class="eyebrow">Module 3</div>
 <h2>Explain a Pattern, Process, or Change</h2>
 <p>Data visualizations and information graphics help viewers understand what is happening, how it varies, how it changes over time, and how parts connect. Start by choosing a visual form, then decide whether the experience should explain, invite exploration, or guide viewers through an argument.</p>
-<div class="concept-callout"><strong>Core idea:</strong> this module is not just about making charts. It is about choosing the right visual explanation: a suitable visualization type, an explanatory chart, an exploratory view, a guided data story, a timeline, or a diagram.</div>
+<div class="concept-callout">This module is not just about making charts. It is about choosing the right visual explanation: a suitable visualization type, an explanatory chart, an exploratory view, a guided data story, a timeline, or a diagram.</div>
 </section>
 <section class="section-group" id="data-viz-types-section">
 <h2>Data visualization types by job</h2>

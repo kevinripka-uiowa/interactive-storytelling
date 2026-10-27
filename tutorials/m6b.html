@@ -25,7 +25,7 @@
     .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
@@ -61,7 +61,7 @@
     .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
     pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
     code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
-    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+    .submission-box { background:#fffdf7; }
     button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
     button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
     .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
@@ -127,6 +127,7 @@
     .checklist li::before { content:"✓"; position:absolute; left:0; color:var(--accent); font-weight:900; }
     @media (max-width:760px) { .two-col { grid-template-columns:1fr; } }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
@@ -157,7 +158,6 @@
 
 <main>
 <section class="hero" id="overview">
-<div class="eyebrow">M6B</div>
 <h2>Annotated 3D Model with SketchFab</h2>
 <p>Use a 3D model to explain how the Northern Flicker’s body supports its unusual behavior and how its appearance varies across North America.</p>
 <div class="concept-callout"><strong>The annotation sequence should work as a short guided tour.</strong> Each marker needs a meaningful location, a composed camera view, and concise explanatory text. The order should move viewers through the bird rather than feel random.</div>

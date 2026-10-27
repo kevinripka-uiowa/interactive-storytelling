@@ -24,7 +24,7 @@
     .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
     main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .step p, .note, li { color:var(--muted); }
@@ -80,6 +80,7 @@
       .step-number { width:36px; height:36px; }
     }
   </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 <button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button">
@@ -94,6 +95,7 @@
 <p>A step-by-step prompt for full-page interactives hosted on GitHub and embedded by iframe.</p>
 <nav><div class="nav-group-title">Walkthrough</div>
 <a href="#intro">Intro</a>
+<a href="#step-0">0. Headline and subhead</a>
 <a href="#step-1">1. Pattern</a>
 <a href="#step-2">2. Production context</a>
 <a href="#step-3">3. Iframe behavior</a>
@@ -112,14 +114,20 @@
 </aside>
 <main>
 <section class="hero" id="intro">
-<div class="eyebrow">Interactive storytelling course</div>
 <h2>Prompting AI for Custom Interactives</h2>
 <p>Use this walkthrough when asking AI to write a full custom interactive that will live as its own web page, be hosted on GitHub Pages, and be placed inside a story page with an iframe.</p>
-<div class="concept-callout"><strong>Working rule:</strong> this is not a custom HTML-block snippet. Ask for a complete <span class="inline-code">index.html</span> file with the full HTML wrapper, viewport setup, scoped code, replaceable assets, and an iframe-friendly layout that fills the available space.</div>
+<div class="concept-callout">This is not a custom HTML-block snippet. Ask for a complete <span class="inline-code">index.html</span> file with the full HTML wrapper, viewport setup, scoped code, replaceable assets, and an iframe-friendly layout that fills the available space.</div>
 </section>
 <section class="section-group">
 <h2>Step-by-step prompt walkthrough</h2>
 <p>Each section below gives students one part of the prompt to fill in. By the end, they should have a complete production prompt for a GitHub-hosted interactive.</p>
+</section>
+<section class="step" id="step-0">
+<div class="step-header"><div class="step-number">0</div><div><h3>Your headline and subhead</h3><p>Paste the takeaway headline and subhead you wrote for your explainer. You write these words. The AI only places them.</p></div><span class="tag">Headline</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" type="button" data-copy="step0">Copy</button></div>
+<pre><code id="step0">Use my headline and subhead exactly as written. Do not rewrite, shorten, or add to them.
+Headline: [Paste your takeaway headline.]
+Subhead: [Paste your subhead.]</code></pre></div>
 </section>
 <section class="step" id="step-1">
 <div class="step-header"><div class="step-number">1</div><div><h3>Pattern</h3><p>Name the type of interactive and describe what the reader does.</p></div><span class="tag">Pattern</span></div>
@@ -180,11 +188,12 @@ Comment the data structure so I know what each field controls. Keep the field na
 Use only this JavaScript object or array approach. Do not also create repeatable HTML content units.</code></pre></div>
 </section>
 <section class="step" id="step-6">
-<div class="step-header"><div class="step-number">6</div><div><h3>Appearance</h3><p>This is where students describe the visual style, hierarchy, and instructions for the reader.</p></div><span class="tag">Appearance</span></div>
+<div class="step-header"><div class="step-number">6</div><div><h3>Appearance</h3><p>Describe the visual style and hierarchy. The intro and explanation belong in your article, so the only text the AI writes is instructions for using the interactive.</p></div><span class="tag">Appearance</span></div>
 <div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" data-copy="step6" type="button">Copy</button></div>
 <pre><code id="step6">[Describe visual style, hierarchy, colors, spacing, tone, and whether it should match the larger story page.]
-
-Include a clear title for the interactive and a short intro or instructional text that tells the reader how to use it. Keep the interface clean enough to work inside an iframe without feeling cramped.</code></pre></div>
+Use my headline and subhead from step 0 exactly as written. The only text you may write is short instructions that tell the reader how to use the interactive, such as "Select a year to compare." Do not write an intro, summary, or explanation. That belongs in my article.
+Do not add eyebrow labels, summary or takeaway boxes, or decorative gradients.
+Keep the interface clean enough to work inside an iframe without feeling cramped.</code></pre></div>
 </section>
 <section class="step" id="step-7">
 <div class="step-header"><div class="step-number">7</div><div><h3>Asset optimization</h3><p>GitHub Pages can host static assets, but students still need clean file paths and lightweight media.</p></div><span class="tag">Asset optimization</span></div>

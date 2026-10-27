@@ -27,7 +27,7 @@
 
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
@@ -176,6 +176,7 @@
     .warning-card { background:var(--warn); border-left:5px solid var(--accent-2); }
     @media print { .code-block { white-space:pre-wrap; background:#fff!important; color:#111!important; border:0!important; padding:0!important; } }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
@@ -209,7 +210,6 @@
 
     <main>
       <section class="hero" id="overview">
-        <div class="eyebrow">Tutorial M4 - B</div>
         <h2>Build a Slippy Locator Map in Flourish</h2>
         <p>In this tutorial, you will build a tiled locator map of birding destinations in Johnson County, Iowa. You will import point locations, add a county boundary from GeoJSON, create an inset map, customize popups, constrain the pan-and-zoom area, and embed the finished map in Tilda.</p>
         <div class="concept-callout"><strong>A slippy map is built for exploration.</strong> Instead of showing one fixed map view, it loads map tiles as the reader pans and zooms. That added agency also creates more production decisions about bounds, zoom levels, labels, and interaction.</div>
@@ -298,7 +298,7 @@
             <li>If the points do not appear, refresh the Flourish editor page.</li>
             <li>Return to Preview and confirm that the map now frames the imported locations.</li>
           </ol>
-          <div class="callout"><strong>This is an editor glitch, not a data problem:</strong> Auto viewport should fit all points, but the editor may need a refresh before recalculating the view.</div>
+          <div class="callout is-warning"><strong>This is an editor glitch, not a data problem:</strong> Auto viewport should fit all points, but the editor may need a refresh before recalculating the view.</div>
         </div>
       </section>
 
@@ -433,7 +433,7 @@
           <pre class="code-block"><code>&lt;b&gt;{{ species_seen }} species seen&lt;/b&gt;
 &lt;p&gt;{{ info }}&lt;/p&gt;</code></pre>
           <div class="callout"><strong>Popups can include richer media:</strong> HTML can also display linked images, video, or other embedded content when the necessary URLs and accessible descriptions are stored in the data.</div>
-          <div class="callout"><strong>Do not overload the popup:</strong> Include details that help readers evaluate or understand the location. Avoid turning every popup into a miniature article.</div>
+          <div class="callout is-warning"><strong>Do not overload the popup:</strong> Include details that help readers evaluate or understand the location. Avoid turning every popup into a miniature article.</div>
         </div>
       </section>
 

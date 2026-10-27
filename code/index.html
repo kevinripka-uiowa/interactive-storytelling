@@ -26,7 +26,7 @@
 
     main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .card p, .pattern p { color:var(--muted); }
@@ -76,7 +76,7 @@
     .code-note strong { color:var(--ink); }
 
     .responsibility-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
-    .responsibility-list .card { background:linear-gradient(180deg,#fffdf7,#f8f3e9); }
+    .responsibility-list .card { background:#fffdf7; }
     .syntax-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
     .object-demo { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
     .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:16px; background:#fffdf7; }
@@ -112,6 +112,7 @@
       display: block;
     }
   </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false">
@@ -158,10 +159,9 @@
 
     <main>
       <section class="hero" id="intro">
-        <div class="eyebrow">Interactive storytelling reference</div>
         <h2>Coding basics for interactive storytelling</h2>
         <p>You do not need to become a full-time programmer to make useful interactive elements. But you do need enough code literacy to edit embed codes, adjust builder snippets, make small style fixes, understand AI-assisted code, avoid breaking the page, and explain what your interactive is doing.</p>
-        <div class="concept-callout"><strong>Core idea:</strong> code may come from a hosted tool, a builder, a library, a tutorial, an embed code, or AI. Wherever it comes from, you remain responsible for the content, structure, usability, accessibility, attribution, and final testing.</div>
+        <div class="concept-callout">Code may come from a hosted tool, a builder, a library, a tutorial, an embed code, or AI. Wherever it comes from, you remain responsible for the content, structure, usability, accessibility, attribution, and final testing.</div>
       </section>
 
       <section class="section-group" id="responsibilities">
@@ -198,13 +198,13 @@
         </div>
         <div class="grid two">
           <article class="card"><h4>Embed codes</h4><p>Hosted tools often give you an <code>&lt;iframe&gt;</code> or script embed. Students may need to edit width, height, border, loading behavior, or surrounding spacing.</p></article>
-          <article class="card"><h4>Builder custom HTML blocks</h4><p>Tools like Tilda, Shorthand, WordPress, or other builders may provide a block where students paste HTML, CSS, or JavaScript snippets.</p></article>
+          <article class="card"><h4>Builder custom HTML blocks</h4><p>Tools like Tilda, WordPress, or other builders may provide a block where students paste HTML, CSS, or JavaScript snippets.</p></article>
           <article class="card"><h4>Hosted files</h4><p>A GitHub Pages, Netlify, or class-hosted file may include full HTML, CSS, and JavaScript. Students may edit content, styles, data arrays, or repeated sections.</p></article>
           <article class="card"><h4>Tool-generated code</h4><p>Flourish, Datawrapper, maps, galleries, timelines, and other tools may expose settings, embed code, custom CSS, or small configuration snippets.</p></article>
           <article class="card"><h4>Library-based examples</h4><p>Examples using D3, Leaflet, Pannellum, Mapbox, or similar libraries often require editing configuration, data paths, labels, and container sizes.</p></article>
           <article class="card"><h4>AI-assisted prototypes</h4><p>AI can generate a starting point or help debug. Students still need to understand what layer they are changing and verify that the result works.</p></article>
         </div>
-        <div class="code-note"><strong>Working rule:</strong> do not paste every kind of code into every kind of place. A full HTML page, a custom HTML snippet, an iframe embed, and a library configuration are different things.</div>
+        <div class="code-note">Do not paste every kind of code into every kind of place. A full HTML page, a custom HTML snippet, an iframe embed, and a library configuration are different things.</div>
       </section>
 
       <section class="pattern" id="code-editing-mindset">
@@ -385,7 +385,7 @@
             <li><strong>Do not paste a full CSS block into the style attribute.</strong> The style attribute only accepts declarations like <code>width:100%;</code>, not selectors like <code>.card { ... }</code>.</li>
             <li><strong>Be careful with fixed heights.</strong> A height that works on desktop may be too tall or too short on a phone. Test the iframe at mobile widths.</li>
           </ul>
-          <div class="code-note"><strong>Student strategy:</strong> use the style attribute for small, specific embed fixes. Use the main CSS when the change should apply to many elements or needs responsive rules.</div>
+          <div class="code-note">Use the style attribute for small, specific embed fixes. Use the main CSS when the change should apply to many elements or needs responsive rules.</div>
         </div>
       </section>
 
@@ -496,7 +496,7 @@
             </ul>
           </div>
         </div>
-        <div class="code-note"><strong>Student strategy:</strong> separate “data I can edit” from “code that makes the interaction work.” If using AI, ask it to label those sections clearly. Then add new objects by copying one whole object, including its commas and braces.</div>
+        <div class="code-note">Separate “data I can edit” from “code that makes the interaction work.” If using AI, ask it to label those sections clearly. Then add new objects by copying one whole object, including its commas and braces.</div>
       </section>
 
       <section class="pattern" id="object-editing">
@@ -535,7 +535,7 @@
           <article class="card"><h4>The library provides</h4><p>Prewritten tools for jobs such as drawing map layers, binding data to SVG shapes, animating elements, parsing CSV files, creating 3D scenes, or adding interface widgets.</p></article>
           <article class="card"><h4>Your code provides</h4><p>The container, data, labels, story logic, settings, event handlers, styling, accessibility work, and decisions about what the user should be able to do.</p></article>
         </div>
-        <div class="code-note"><strong>Useful mental model:</strong> a library is not a finished interactive. It is a vocabulary of capabilities your own JavaScript can call.</div>
+        <div class="code-note">A library is not a finished interactive. It is a vocabulary of capabilities your own JavaScript can call.</div>
       </section>
 
       <section class="pattern" id="library-choice">
@@ -586,7 +586,7 @@
 
 &lt;!-- Then load your code that uses it --&gt;
 &lt;script src="js/interactive.js"&gt;&lt;/script&gt;</code></pre>
-          <div class="code-note"><strong>Order matters:</strong> your own script cannot use the library until the browser has loaded the library.</div>
+          <div class="code-note is-warning"><strong>Order matters:</strong> your own script cannot use the library until the browser has loaded the library.</div>
         </div>
 
         <div class="demo-frame" style="margin-top:16px;">
@@ -622,7 +622,7 @@
           <article class="card"><h4>Local files are useful when</h4><p>You want tighter control over the exact files, need the project to avoid a third-party runtime dependency, or are preserving a self-contained project.</p></article>
         </div>
 
-        <div class="code-note"><strong>Do not invent the URL or filename.</strong> Copy installation code from the library’s official documentation. Libraries differ in filenames, module formats, required CSS, plugins, and initialization steps.</div>
+        <div class="code-note is-warning"><strong>Do not invent the URL or filename.</strong> Copy installation code from the library’s official documentation. Libraries differ in filenames, module formats, required CSS, plugins, and initialization steps.</div>
       </section>
 
       <section class="pattern" id="library-table">
@@ -654,7 +654,7 @@
             </tbody>
           </table>
         </div>
-        <div class="code-note"><strong>Important distinction:</strong> libraries can work together. For example, Papa Parse can read a CSV, D3 can transform the data, and Leaflet can display the results on a map.</div>
+        <div class="code-note is-warning"><strong>Important distinction:</strong> libraries can work together. For example, Papa Parse can read a CSV, D3 can transform the data, and Leaflet can display the results on a map.</div>
       </section>
 
       <section class="pattern" id="library-reading-code">

@@ -25,7 +25,7 @@
     .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .pattern p, .meta-card p, li { color:var(--muted); }
@@ -98,6 +98,7 @@
       .pattern h3 { font-size:11.5pt!important; color:#111!important; margin:0 0 3pt!important; }
     }
   </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
@@ -121,7 +122,6 @@
 
     <main>
       <section class="hero" id="overview">
-        <div class="eyebrow">3D object capture</div>
         <h2>Creating 3D Models with Mobile Scanning Apps</h2>
         <p>A mobile scanning app can turn a physical object into a digital model that viewers can rotate, zoom, and inspect.</p>
         <p>KIRI Engine builds a model from overlapping photographs. 3D Scanner App can use the LiDAR sensor on a compatible iPhone Pro or iPad Pro to measure the surface directly.</p>
@@ -147,7 +147,7 @@
             <article class="control-card"><h4>Use even light</h4><p>Soft, consistent light helps the app match images. Avoid hard shadows, glare, and lighting that changes while you move.</p></article>
             <article class="control-card"><h4>Leave room to move</h4><p>You need a clear path around the object. Remove clutter that could block the camera or cause you to change distance abruptly.</p></article>
           </div>
-          <div class="callout"><strong>Do not rotate the object during the main scan.</strong><p>Move the phone around a stationary object. Changing the object's position also changes its relationship to the background, which can confuse photogrammetry.</p></div>
+          <div class="callout is-warning"><strong>Do not rotate the object during the main scan.</strong><p>Move the phone around a stationary object. Changing the object's position also changes its relationship to the background, which can confuse photogrammetry.</p></div>
         </div>
       </section>
 

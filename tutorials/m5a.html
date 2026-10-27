@@ -25,7 +25,7 @@
     .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
@@ -61,7 +61,7 @@
     .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
     pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
     code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
-    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+    .submission-box { background:#fffdf7; }
     button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
     button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
     .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
@@ -105,6 +105,7 @@
       pre { white-space:pre-wrap!important; font-size:9pt!important; padding:4pt!important; border:0.5pt solid #777!important; background:#f7f7f7!important; color:#111!important; }
     }
   </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
@@ -134,7 +135,6 @@
 
     <main>
       <section class="hero" id="overview">
-        <div class="eyebrow">Tutorial M5A</div>
         <h2>Build a Draw-the-Line Visualization</h2>
         <p>Create a Flourish visualization that asks viewers to predict a trend before revealing the actual data.</p>
         <p>The example uses fictional bird-population data. Viewers draw what they think happened, submit their guess, and then compare it with the recorded line.</p>
@@ -188,7 +188,7 @@
           <li>Confirm the import and replace the sample data.</li>
           <li>Inspect the available columns, including the population index and cumulative percent lost since 1900.</li>
         </ol>
-        <div class="callout"><strong>The tutorial data are fictional</strong><p>The dataset is designed to practice the interaction pattern. It does not represent measured bird-population counts and should not be presented as real reporting.</p></div>
+        <div class="callout is-warning"><strong>The tutorial data are fictional</strong><p>The dataset is designed to practice the interaction pattern. It does not represent measured bird-population counts and should not be presented as real reporting.</p></div>
         <div class="callout"><strong>An index is not a raw count</strong><p>A population index expresses change relative to a starting value. The percent-loss column translates that indexed change into a measure that is easier to use for this question.</p></div>
       </div></section>
 
@@ -211,7 +211,7 @@
           <li>Choose a small starting amount that establishes the trend's origin without giving away the outcome.</li>
           <li>Test the chart again from the beginning.</li>
         </ol>
-        <div class="callout"><strong>Do not reveal too much</strong><p>The visible segment should orient the viewer and provide a place to begin drawing. If it exposes too much of the trend, the prediction becomes less meaningful.</p></div>
+        <div class="callout is-warning"><strong>Do not reveal too much</strong><p>The visible segment should orient the viewer and provide a place to begin drawing. If it exposes too much of the trend, the prediction becomes less meaningful.</p></div>
       </div></section>
 
       <section class="section-group" id="section-6"><h2>Section 6: Customize the drawing</h2><p>Adjust how the viewer's predicted line appears and behaves.</p></section>
@@ -251,7 +251,7 @@
           <li>Write a useful description explaining that the chart asks viewers to estimate cumulative bird-population loss before revealing the fictional trend.</li>
           <li>Review the axis, legend, number formatting, date formatting, and layout settings as needed.</li>
         </ol>
-        <div class="callout"><strong>Do not rely on the interaction alone</strong><p>The header should frame the subject, and the accessibility description should explain the chart's purpose and content for viewers who cannot use the drawing interaction visually.</p></div>
+        <div class="callout is-warning"><strong>Do not rely on the interaction alone</strong><p>The header should frame the subject, and the accessibility description should explain the chart's purpose and content for viewers who cannot use the drawing interaction visually.</p></div>
       </div></section>
 
       <section class="section-group" id="section-9"><h2>Section 9: Publish and copy the embed</h2><p>Publish the Flourish project and retrieve the code needed for Tilda.</p></section>
@@ -263,7 +263,7 @@
           <li>Publish the visualization.</li>
           <li>Copy the responsive embed code.</li>
         </ol>
-        <div class="callout"><strong>Copy the embed, not the editor address</strong><p>The editor URL is not the public visualization. Use Flourish's published embed code so the interactive can load inside another page.</p></div>
+        <div class="callout is-warning"><strong>Copy the embed, not the editor address</strong><p>The editor URL is not the public visualization. Use Flourish's published embed code so the interactive can load inside another page.</p></div>
       </div></section>
 
       <section class="section-group" id="section-10"><h2>Section 10: Embed it in Tilda</h2><p>Place the published Flourish visualization into the module page and constrain its width.</p></section>

@@ -23,7 +23,7 @@
     .sidebar a:hover, .sidebar a:focus { background:rgba(255,255,255,.1); outline:none; }
     main { margin-left:280px; width:calc(100% - 280px); max-width:none; padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .step p, .note, li { color:var(--muted); }
@@ -79,6 +79,7 @@
       .step-number { width:36px; height:36px; }
     }
   </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
 <button aria-controls="siteSidebar" aria-expanded="false" class="mobile-menu-toggle" id="mobileMenuToggle" type="button">
@@ -94,6 +95,7 @@
 <nav>
 <div class="nav-group-title">Walkthrough</div>
 <a href="#intro">Intro</a>
+<a href="#step-0">0. Headline and subhead</a>
 <a href="#step-1">1. Pattern</a>
 <a href="#step-2">2. Production context</a>
 <a href="#step-3">3. Content</a>
@@ -111,10 +113,9 @@
 </aside>
 <main>
 <section class="hero" id="intro">
-<div class="eyebrow">Interactive storytelling course</div>
 <h2>Prompting AI for Custom HTML Blocks</h2>
 <p>Use this walkthrough when asking AI to write code for an interactive element that will be pasted into a custom HTML block in a builder like Tilda.</p>
-<div class="concept-callout"><strong>Working rule:</strong> build the prompt in order. Tell the AI the pattern, where the code will go, what content it should use, how the content should be edited, and how the code should satisfy the 5 As.</div>
+<div class="concept-callout">Build the prompt in order. Give the AI your headline and subhead, then tell it the pattern, where the code will go, what content it should use, how the content should be edited, and how the code should satisfy the 5 As.</div>
 </section>
 
 <section class="section-group">
@@ -122,6 +123,13 @@
 <p>Each section below gives students one part of the prompt to fill in. By the end, they should have a complete production prompt.</p>
 </section>
 
+<section class="step" id="step-0">
+<div class="step-header"><div class="step-number">0</div><div><h3>Your headline and subhead</h3><p>Paste the takeaway headline and subhead you wrote for your explainer. You write these words. The AI only places them.</p></div><span class="tag">Headline</span></div>
+<div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" type="button" data-copy="step0">Copy</button></div>
+<pre><code id="step0">Use my headline and subhead exactly as written. Do not rewrite, shorten, or add to them.
+Headline: [Paste your takeaway headline.]
+Subhead: [Paste your subhead.]</code></pre></div>
+</section>
 <section class="step" id="step-1">
 <div class="step-header"><div class="step-number">1</div><div><h3>Pattern</h3><p>Name the type of interactive and describe what the reader does.</p></div><span class="tag">Pattern</span></div>
 <div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" type="button" data-copy="step1">Copy</button></div>
@@ -171,10 +179,11 @@ Use only this JavaScript object or array approach. Do not also create repeatable
 </section>
 
 <section class="step" id="step-5">
-<div class="step-header"><div class="step-number">5</div><div><h3>Appearance</h3><p>This is where students describe the visual style, hierarchy, and instructions for the reader.</p></div><span class="tag">Appearance</span></div>
+<div class="step-header"><div class="step-number">5</div><div><h3>Appearance</h3><p>Describe the visual style and hierarchy. The intro and explanation belong in your article, so the only text the AI writes is instructions for using the interactive.</p></div><span class="tag">Appearance</span></div>
 <div class="prompt-wrap"><div class="prompt-toolbar"><h4>Prompt section</h4><button class="copy-button" type="button" data-copy="step5">Copy</button></div>
 <pre><code id="step5">[Describe visual style, hierarchy, colors, spacing, tone, and whether it should match the page.]
-Include a clear title for the interactive and a short intro or instructional text that tells the reader how to use it.</code></pre></div>
+Use my headline and subhead from step 0 exactly as written. The only text you may write is short instructions that tell the reader how to use the interactive, such as "Select a year to compare." Do not write an intro, summary, or explanation. That belongs in my article.
+Do not add eyebrow labels, summary or takeaway boxes, or decorative gradients.</code></pre></div>
 </section>
 
 <section class="step" id="step-6">

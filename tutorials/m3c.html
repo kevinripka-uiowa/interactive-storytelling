@@ -27,7 +27,7 @@
 
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
@@ -176,6 +176,7 @@
     .warning-card { background:var(--warn); border-left:5px solid var(--accent-2); }
     @media print { .code-block { white-space:pre-wrap; background:#fff!important; color:#111!important; border:0!important; padding:0!important; } }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
@@ -212,7 +213,6 @@
 
     <main>
       <section class="hero" id="overview">
-        <div class="eyebrow">Tutorial M3 - C</div>
         <h2>Build Interactive Timelines with JavaScript Libraries</h2>
         <p>In this tutorial, you will build two interactive timelines from existing code libraries. The timeline is the product, but the larger goal is learning how to evaluate documentation, load dependencies, copy the required structure, configure a plugin, and adapt it to your own content.</p>
         <div class="concept-callout"><strong>A library gives you a head start, not a finished project.</strong> It supplies reusable code and expected patterns. You still need to understand the required files, markup, initialization code, configuration options, data structure, and CSS.</div>
@@ -243,7 +243,7 @@
             <li>Add a basic HTML5 page wrapper to each file.</li>
             <li>Start Live Server so you can inspect changes as you work.</li>
           </ol>
-          <div class="callout"><strong>Keep the whole project together:</strong> You will submit the folder as a ZIP file rather than embedding these timelines in Tilda.</div>
+          <div class="callout is-warning"><strong>Keep the whole project together:</strong> You will submit the folder as a ZIP file rather than embedding these timelines in Tilda.</div>
         </div>
       </section>
 
@@ -342,7 +342,7 @@
             <li>Save and inspect the finished horizontal timeline.</li>
             <li>Resize the browser below 800 pixels and confirm that it becomes vertical.</li>
           </ol>
-          <div class="callout"><strong>CSS order matters:</strong> Your custom CSS should come after the library CSS so it wins when both styles target the same element.</div>
+          <div class="callout is-warning"><strong>CSS order matters:</strong> Your custom CSS should come after the library CSS so it wins when both styles target the same element.</div>
         </div>
       </section>
 
@@ -434,7 +434,7 @@
     language: 'en-US'
   });
 });</code></pre>
-          <div class="callout"><strong>Documentation may be incomplete:</strong> Setting a language code does not work unless that language has actually been defined for the plugin.</div>
+          <div class="callout is-warning"><strong>Documentation may be incomplete:</strong> Setting a language code does not work unless that language has actually been defined for the plugin.</div>
         </div>
       </section>
 
@@ -471,7 +471,7 @@
   tag: 'p',
   content: 'Your event description goes here.'
 }</code></pre></div>
-          <div class="callout"><strong>Escape quotation marks inside strings:</strong> A quotation mark that belongs inside quoted text must be preceded by a backslash, such as <code>\"quoted words\"</code>. Otherwise, JavaScript interprets it as the end of the string.</div>
+          <div class="callout is-warning"><strong>Escape quotation marks inside strings:</strong> A quotation mark that belongs inside quoted text must be preceded by a backslash, such as <code>\"quoted words\"</code>. Otherwise, JavaScript interprets it as the end of the string.</div>
         </div>
       </section>
 

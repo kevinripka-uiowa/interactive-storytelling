@@ -25,7 +25,7 @@
     .home-button { border:1px solid #636363; margin-bottom:1rem!important; display:block; }
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
@@ -61,7 +61,7 @@
     .subsection h4 { margin:0 0 8px; font-size:1.05rem; color:var(--accent); }
     pre { margin:12px 0 16px; padding:16px; border-radius:16px; background:#17211b; color:#fffdf7; overflow:auto; }
     code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
-    .submission-box { background:linear-gradient(135deg,#fffdf7 0%,#fff8ed 100%); }
+    .submission-box { background:#fffdf7; }
     button { border:0; background:var(--accent); color:white; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; font:inherit; }
     button:focus-visible, a:focus-visible { outline:3px solid rgba(216,137,58,.5); outline-offset:3px; }
     .mobile-menu-toggle, .mobile-menu-backdrop { display:none; }
@@ -117,6 +117,7 @@
     }
 
   </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false">
@@ -152,7 +153,6 @@
     </aside>
     <main>
       <section class="hero" id="overview">
-        <div class="eyebrow">Tutorial M2 - C</div>
         <h2>Build Flip Cards in a Tilda Custom HTML Block</h2>
         <p>In this tutorial, you will use code in a Tilda custom HTML block to build a set of flippable cards. The goal is not to become a full-time programmer. The goal is to practice code literacy: describing what you need, using AI or reference code carefully, editing repeated content, replacing image URLs, and testing the final result.</p>
         <div class="concept-callout"><strong>Custom code gives more control and more responsibility.</strong> A custom HTML block can create interactions that a native block may not provide, but you are responsible for the code, layout, accessibility, assets, and final testing.</div>
@@ -318,7 +318,7 @@ AI tools were used to help develop and troubleshoot the code for this element. T
       <section class="pattern" id="section-7">
         <div class="pattern-header"><div><h3>Section 7: Paste the code into Tilda</h3></div><span class="tag">Custom HTML</span></div>
         <div class="demo-frame">
-<ol class="steps"><li>Open your Tilda tutorial page.</li><li>Add a new block where the flip-card interactive should appear.</li><li>Choose the Custom HTML block from the Other block category.</li><li>Open the block Content panel.</li><li>Paste the single code snippet into the custom HTML field.</li><li>Save and close the block.</li><li>Publish the page. Custom HTML often needs the published page to test accurately.</li></ol><div class="callout"><strong>Preview is not enough</strong><p>The editor preview may not fully run custom HTML, CSS, JavaScript, or iframe content. Publish to a practice page and test the real public page.</p></div>
+<ol class="steps"><li>Open your Tilda tutorial page.</li><li>Add a new block where the flip-card interactive should appear.</li><li>Choose the Custom HTML block from the Other block category.</li><li>Open the block Content panel.</li><li>Paste the single code snippet into the custom HTML field.</li><li>Save and close the block.</li><li>Publish the page. Custom HTML often needs the published page to test accurately.</li></ol><div class="callout is-warning"><strong>Preview is not enough</strong><p>The editor preview may not fully run custom HTML, CSS, JavaScript, or iframe content. Publish to a practice page and test the real public page.</p></div>
         </div>
       </section>
 
@@ -350,7 +350,7 @@ AI tools were used to help develop and troubleshoot the code for this element. T
 &lt;article class=&quot;flip-card&quot;&gt;
   ...
 &lt;/article&gt;
-&lt;!-- END: Duplicate this whole card to add another item --&gt;</code></pre><div class="callout"><strong>Do not break the wrapper</strong><p>The grid container wraps all the cards. If you paste a new card outside that wrapper, the layout may break. If you delete the wrapper’s closing tag, the whole interactive may fail.</p></div>
+&lt;!-- END: Duplicate this whole card to add another item --&gt;</code></pre><div class="callout is-warning"><strong>Do not break the wrapper</strong><p>The grid container wraps all the cards. If you paste a new card outside that wrapper, the layout may break. If you delete the wrapper’s closing tag, the whole interactive may fail.</p></div>
         </div>
       </section>
 
@@ -378,7 +378,7 @@ Keep the existing content, images, repeatable commented HTML pattern, responsive
 Provide only the revised code.
 
 Here is the code:</code></pre>
-<div class="callout"><strong>Do not lose your edits</strong><p>If you ask AI to revise from memory or from an earlier version, it may remove the images, content, accessibility work, or extra cards you already added. Always paste the current code when asking for revisions.</p></div>
+<div class="callout is-warning"><strong>Do not lose your edits</strong><p>If you ask AI to revise from memory or from an earlier version, it may remove the images, content, accessibility work, or extra cards you already added. Always paste the current code when asking for revisions.</p></div>
         </div>
       </section>
 

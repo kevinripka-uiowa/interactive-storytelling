@@ -27,7 +27,7 @@
 
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
@@ -176,6 +176,7 @@
     .warning-card { background:var(--warn); border-left:5px solid var(--accent-2); }
     @media print { .code-block { white-space:pre-wrap; background:#fff!important; color:#111!important; border:0!important; padding:0!important; } }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
@@ -207,7 +208,6 @@
 
     <main>
       <section class="hero" id="overview">
-        <div class="eyebrow">Tutorial M4 - A</div>
         <h2>Build a Choropleth Map in Datawrapper</h2>
         <p>In this tutorial, you will create an interactive world map showing population density by country. You will match spreadsheet data to geographic regions, refine a color scale affected by extreme values, customize the tooltips, add an annotation, and embed the finished map in Tilda.</p>
         <div class="concept-callout"><strong>Choropleth maps are easy to make and easy to misuse.</strong> The mapped value, geographic units, color scale, and visual framing all affect what the reader believes the map shows.</div>
@@ -322,7 +322,7 @@
             <li>Compare their density values with the values for most other countries.</li>
             <li>Notice that very high values stretch the scale and leave much of the map in similar light colors.</li>
           </ol>
-          <div class="callout"><strong>Do not delete valid outliers just to improve the map:</strong> Macau, Monaco, Singapore, and Hong Kong are part of the data. Solve the display problem through the scale rather than by removing inconvenient observations.</div>
+          <div class="callout is-warning"><strong>Do not delete valid outliers just to improve the map:</strong> Macau, Monaco, Singapore, and Hong Kong are part of the data. Solve the display problem through the scale rather than by removing inconvenient observations.</div>
         </div>
       </section>
 

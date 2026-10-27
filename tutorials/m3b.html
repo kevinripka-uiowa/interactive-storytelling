@@ -27,7 +27,7 @@
 
     main { margin-left:280px; width:calc(100% - 280px); padding:44px 36px 80px; }
     main > * { max-width:1120px; margin-left:auto; margin-right:auto; }
-    .hero { background:linear-gradient(135deg,#fffdf7 0%,#edf4ee 100%); border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
+    .hero { background:#fffdf7; border:1px solid var(--line); border-radius:28px; padding:clamp(28px,5vw,56px); box-shadow:var(--shadow); margin-bottom:34px; }
     .eyebrow { display:inline-flex; margin:0 0 12px; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
     .hero h2 { margin:0 0 14px; font-size:clamp(2rem,5vw,4.4rem); line-height:.98; letter-spacing:-.02em; max-width:900px; }
     .hero p, .section-group p, .pattern p, .note, .meta-card p, li { color:var(--muted); }
@@ -176,6 +176,7 @@
     .warning-card { background:var(--warn); border-left:5px solid var(--accent-2); }
     @media print { .code-block { white-space:pre-wrap; background:#fff!important; color:#111!important; border:0!important; padding:0!important; } }
 </style>
+  <link rel="stylesheet" href="../assets/plain.css" />
 </head>
 <body>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="siteSidebar" aria-expanded="false"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="mobile-menu-text">Menu</span></button>
@@ -207,7 +208,6 @@
 
     <main>
       <section class="hero" id="overview">
-        <div class="eyebrow">Tutorial M3 - B</div>
         <h2>Build an Exploratory Data Visualization in Flourish</h2>
         <p>In this tutorial, you will use Flourish’s Data Explorer template to create a searchable and filterable visualization of the top 100 Major League Baseball players by career wins above replacement, or WAR.</p>
         <div class="concept-callout"><strong>Exploration still needs a purpose.</strong> Do not present a data dump and expect the reader to find the story. Frame the visualization around a question, then provide controls that help the reader investigate it.</div>
@@ -236,7 +236,7 @@
             <li>The reader should be able to reorder the players by different statistics and consider how those statistics relate to WAR.</li>
             <li>The visualization should support an explanatory story rather than function as an unframed database.</li>
           </ul>
-          <div class="callout"><strong>Data warning:</strong> Only the player list and career WAR are intended as real data. Treat the other values as fabricated tutorial data and label them clearly.</div>
+          <div class="callout is-warning"><strong>Data warning:</strong> Only the player list and career WAR are intended as real data. Treat the other values as fabricated tutorial data and label them clearly.</div>
         </div>
       </section>
 
@@ -431,7 +431,7 @@
     &lt;/noscript&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
-          <div class="callout"><strong>Set the height twice:</strong> The wrapper reserves 800 pixels of space on the page, while <code>data-height="800px"</code> tells Flourish how tall to render the visualization.</div>
+          <div class="callout is-warning"><strong>Set the height twice:</strong> The wrapper reserves 800 pixels of space on the page, while <code>data-height="800px"</code> tells Flourish how tall to render the visualization.</div>
           <div class="callout"><strong>Republishing matters:</strong> Updating Flourish refreshes the hosted visualization. Updating this wrapper requires saving and republishing the Tilda page.</div>
         </div>
       </section>
